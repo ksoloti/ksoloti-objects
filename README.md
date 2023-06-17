@@ -1,2 +1,2 @@
-# noloti-factory
-Axoloti factory objects branch for Noloti core board
+# ksoloti-factory
+Axoloti factory objects branch for Ksoloti core board
