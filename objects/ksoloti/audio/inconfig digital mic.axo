@@ -1,0 +1,19 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="inconfig digital mic" uuid="a8f5bfcb-73fd-4546-9aa6-57ae88005b81">
+      <sDescription>Turn on digital (PDM) microphone on the Ksoloti Core board.
+The regular audio inputs will be disabled and the factory audio/in left object will pass the mic signal instead.
+The digital mic and regular audio inputs cannot be used simultaneously (hardware limitation).</sDescription>
+      <author>sebiik</author>
+      <license>GPL</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <depends>
+         <depend>ADAU1361</depend>
+      </depends>
+      <code.init><![CDATA[ADAU1961_WriteRegister(0x4019, 0x37); /* Turn on PDM microphone */]]></code.init>
+      <code.dispose><![CDATA[ADAU1961_WriteRegister(0x4019, 0x13); /* Turn off PDM microphone, restore default input via codec ADCs */]]></code.dispose>
+   </obj.normal>
+</objdefs>
