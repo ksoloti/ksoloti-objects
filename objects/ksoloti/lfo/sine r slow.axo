@@ -1,0 +1,56 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="sine r slow" uuid="e00eb6f9-9a34-4023-b5c1-dcb4ec0fc1d1">
+      <sDescription>sine wave LFO, linear interpolated table. Pitch, reset, and phase inputs. Time divisor allows for very slow cycles. Note that the frequency display will only display the base frequency and not the one after time division.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>lfo.axh</helpPatch>
+      <inlets>
+         <frac32.bipolar name="pitch" description="pitch"/>
+         <bool32.rising name="reset" description="reset phase"/>
+         <frac32.bipolar name="phase" description="phase for reset"/>
+      </inlets>
+      <outlets>
+         <frac32.bipolar name="wave" description="sine wave"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.lfopitch name="pitch" noLabel="true"/>
+      </params>
+      <attribs>
+         <combo name="divisor">
+            <MenuEntries>
+               <string>/1</string>
+               <string>/2</string>
+               <string>/4</string>
+               <string>/8</string>
+               <string>/16</string>
+               <string>/32</string>
+            </MenuEntries>
+            <CEntries>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[uint32_t Phase;
+uint32_t r;]]></code.declaration>
+      <code.init><![CDATA[Phase = 0;
+r = 1;]]></code.init>
+      <code.krate><![CDATA[if (inlet_reset && r) {
+         Phase = inlet_phase << 4;
+         r = 0;
+      } else {
+         if (!inlet_reset) r = 1;
+     }   {      int32_t freq;
+      MTOFEXTENDED(param_pitch + inlet_pitch,freq);
+      Phase += freq>>(attr_divisor);
+      int32_t r;
+      SINE2TINTERP(Phase,r)
+      outlet_wave= (r>>4);
+   }]]></code.krate>
+   </obj.normal>
+</objdefs>
