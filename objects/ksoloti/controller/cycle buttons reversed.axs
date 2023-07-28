@@ -1,5 +1,5 @@
-<patch-1.0 appVersion="1.0.10">
-   <obj type="patch/bankindex" uuid="943bd281-10a5-4994-9876-11a3b1fbde8a" name="bankindex_1" x="70" y="28">
+<patch-1.0 appVersion="1.0.12">
+   <obj type="patch/bankindex" uuid="943bd281-10a5-4994-9876-11a3b1fbde8a" name="bankindex_1" x="14" y="28">
       <params/>
       <attribs/>
    </obj>
@@ -7,7 +7,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/-1" uuid="13c1a4574bb81783beb8839e81782b9a34e3fc17" name="-1_1" x="126" y="84">
+   <obj type="math/+1" uuid="13c1a4574bb81783beb8839e81782b9a34e3fc17" name="-1_1" x="126" y="84">
       <params/>
       <attribs/>
    </obj>
@@ -19,7 +19,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+1" uuid="5fd46bab471bb6509ae83de702dea72933683a98" name="+1_1" x="126" y="140">
+   <obj type="math/-1" uuid="5fd46bab471bb6509ae83de702dea72933683a98" name="+1_1" x="126" y="140">
       <params/>
       <attribs/>
    </obj>
@@ -60,15 +60,15 @@
       <Author>Johannes Taelman, sebiik</Author>
       <License>BSD</License>
    </settings>
-   <notes><![CDATA[Controller object. To use this: in file->preferences, enter "cycle buttons" in the "controller object" field.
+   <notes><![CDATA[Controller object. To use this: in file->preferences, enter "cycle buttons reversed" in the "controller object" field.
 Cycles through patches in a patch bank by using buttons S1/S2. Button behaviour is reversed:
 Push S1 to launch the PREVIOUS patch in the patch bank.
 Push S2 to launch the NEXT patch in the patch bank.
 ]]></notes>
    <windowPos>
-      <x>629</x>
-      <y>749</y>
-      <width>823</width>
-      <height>400</height>
+      <x>-8</x>
+      <y>-8</y>
+      <width>1296</width>
+      <height>705</height>
    </windowPos>
 </patch-1.0>
