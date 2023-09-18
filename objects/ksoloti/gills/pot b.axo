@@ -1,6 +1,7 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="pot" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89">
-      <sDescription>Reads a pot on Ksoloti Gills. Pins:
+   <obj.normal id="pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8a">
+      <sDescription>Reads a pot on Ksoloti Gills. Bipolar output.
+Pins:
 PA0, PA1, PA2, PA3, PA6,
 PA7, PB0, PB1, PC4, PC5.</sDescription>
       <author>Johannes Taelman, sebiik</author>
@@ -8,7 +9,7 @@ PA7, PB0, PB1, PC4, PC5.</sDescription>
       <helpPatch>analog.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32 name="out" description="pot value"/>
+         <frac32.bipolar name="out"/>
       </outlets>
       <displays/>
       <params/>
@@ -40,6 +41,6 @@ PA7, PB0, PB1, PC4, PC5.</sDescription>
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[outlet_out= adcvalues[attr_pot]<<15;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= (adcvalues[attr_pot]<<16)-(1<<27);]]></code.krate>
    </obj.normal>
 </objdefs>
