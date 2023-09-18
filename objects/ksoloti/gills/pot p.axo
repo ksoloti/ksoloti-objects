@@ -41,6 +41,6 @@ PA7, PB0, PB1, PC4, PC5.</sDescription>
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[outlet_out = adcvalues[attr_pot]<<15;]]></code.krate>
+      <code.krate><![CDATA[outlet_out = adcvalues[attr_pot] << 15;]]></code.krate>
    </obj.normal>
 </objdefs>
