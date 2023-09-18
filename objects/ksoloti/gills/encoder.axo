@@ -1,0 +1,76 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="encoder" uuid="8d8c7129-cce1-491f-98b4-6ecb6355cfee">
+      <sDescription>Reads the rotary encoder on Ksoloti Gills.
+&quot;min&quot;, &quot;max&quot; set the range. Default is 0 to 127.
+When the &quot;set&quot; inlet changes, the value is set directly (good for setting init or preset values, modulation).</sDescription>
+      <author>Gavin, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
+      <inlets>
+         <int32.bipolar name="set" description="set value directly"/>
+      </inlets>
+      <outlets>
+         <int32.bipolar name="out" description="encoder value"/>
+         <bool32 name="sw" description="switch output"/>
+      </outlets>
+      <displays>
+         <int32.label name="value" description="encoder value"/>
+         <bool32 name="switch" description="switch output"/>
+      </displays>
+      <params/>
+      <attribs>
+         <spinner name="min" MinValue="-65536" MaxValue="65535" DefaultValue="0"/>
+         <spinner name="max" MinValue="-65536" MaxValue="65535" DefaultValue="127"/>
+      </attribs>
+      <code.declaration><![CDATA[#define ENC_PORT GPIOC
+#define ENC_A_PIN 7
+#define ENC_B_PIN 1
+#define ENC_SW_PORT GPIOA
+#define ENC_SW_PIN 9
+
+int32_t encoder_val = 0;
+int32_t set_last = 0;
+
+bool_t a = true;
+bool_t a_last = true;]]></code.declaration>
+      <code.init><![CDATA[/* Configure encoder pins as input */
+palSetPadMode(ENC_PORT, ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(ENC_PORT, ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
+
+/* Configure encoder switch as input */
+palSetPadMode(ENC_SW_PORT, ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
+      <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
+if (inlet_set != set_last) {
+	set_last = encoder_val = inlet_set;
+	encoder_val = encoder_val > attr_max ? attr_max : encoder_val;
+	encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
+}
+
+
+a = palReadPad(ENC_PORT, ENC_A_PIN);
+
+/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
+
+if (!a && a_last) {
+	/* If pin A is low but wasn't before, we have caught an event. */
+		
+	if (palReadPad(ENC_PORT, ENC_B_PIN)) {
+		/* If pin B is currently HIGH it means we're turning counterclockwise */
+		if (encoder_val > attr_min) encoder_val -= 1;
+	}
+	else {
+		/* If pin B is currently LOW it means we're turning clockwise */
+		if (encoder_val < attr_max) encoder_val += 1;
+	}
+}
+
+/* Register changes */
+a_last = a;
+outlet_out = disp_value = encoder_val;
+
+
+
+/* Now read encoder switch */
+outlet_sw = disp_switch = palReadPad(GPIOA, 9)<<27;]]></code.krate>
+   </obj.normal>
+</objdefs>

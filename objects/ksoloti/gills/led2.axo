@@ -1,0 +1,20 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led2" uuid="320eed040f6c55bb24c56416596ac2e67d0c82c0">
+      <sDescription>Controls LED2 (red, PC6) on Ksoloti Gills.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="in" description="positive = true"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+      </attribs>
+      <code.init><![CDATA[
+      sysmon_disable_blinker();
+      palSetPadMode(GPIOC,6, PAL_MODE_OUTPUT_PUSHPULL);
+      ]]></code.init>
+      <code.krate><![CDATA[palWritePad(GPIOC,6, (inlet_in > 0));]]></code.krate>
+   </obj.normal>
+</objdefs>

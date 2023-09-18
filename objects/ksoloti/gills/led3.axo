@@ -1,0 +1,24 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led3" uuid="320eed040f6c55bb24c56416596ac2e67d0c82c1">
+      <sDescription>Controls LED 3 (dual-color) on Ksoloti Gills.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="incolor1" description="positive = true"/>
+         <bool32 name="incolor2" description="positive = true"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+      </attribs>
+      <code.init><![CDATA[
+      palSetPadMode(GPIOB,3, PAL_MODE_OUTPUT_PUSHPULL);
+      palSetPadMode(GPIOB,4, PAL_MODE_OUTPUT_PUSHPULL);
+      ]]></code.init>
+      <code.krate><![CDATA[
+      palWritePad(GPIOB,3, (inlet_incolor1 > 0));
+      palWritePad(GPIOB,4, (inlet_incolor2 > 0));
+      ]]></code.krate>
+   </obj.normal>
+</objdefs>
