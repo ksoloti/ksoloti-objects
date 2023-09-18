@@ -1,6 +1,6 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="digital" uuid="320eed040f6c55bb24c56416596ac2e67d0c82bd">
-      <sDescription>External digital output pin control. Object compatible with the Noloti board only!</sDescription>
+      <sDescription>External digital output pin control. Object compatible with the Ksoloti board only.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
       <inlets>
