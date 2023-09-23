@@ -38,10 +38,10 @@ PWMD3.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;]]></code.init>
 pwmStop(&PWMD3);
 palSetPadMode(GPIOB, 3, PAL_MODE_INPUT_PULLDOWN);
 palSetPadMode(GPIOB, 4, PAL_MODE_INPUT_PULLDOWN);]]></code.dispose>
-      <code.krate><![CDATA[/* Pin 1, usually red */
+      <code.krate><![CDATA[/* Pin 1, usually red. */
 pwmEnableChannel(&PWMD2, 1, (pwmcnt_t)(inlet_incolor1>=0?inlet_incolor1>>15:0));
 
-/* Pin 2, usually green. Usually brighter than pin1 so signal is being attenuated (>>16) */
-pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_incolor2>=0?inlet_incolor2>>16:0));]]></code.krate>
+/* Pin 2, usually green. */
+pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_incolor2>=0?inlet_incolor2>>15:0));]]></code.krate>
    </obj.normal>
 </objdefs>

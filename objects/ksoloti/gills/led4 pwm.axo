@@ -34,10 +34,10 @@ PWMD4.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP | STM32_TIM_CCER_
       <code.dispose><![CDATA[pwmStop(&PWMD4);
 palSetPadMode(GPIOB, 6, PAL_MODE_INPUT_PULLDOWN);
 palSetPadMode(GPIOB, 7, PAL_MODE_INPUT_PULLDOWN);]]></code.dispose>
-      <code.krate><![CDATA[/* Pin 1, usually red */
+      <code.krate><![CDATA[/* Pin 1, usually red. */
 pwmEnableChannel(&PWMD4, 0, (pwmcnt_t)(inlet_incolor1>=0?inlet_incolor1>>15:0));
 
-/* Pin 2, usually green. Usually brighter than pin1 so signal is being attenuated (>>16) */
-pwmEnableChannel(&PWMD4, 1, (pwmcnt_t)(inlet_incolor2>=0?inlet_incolor2>>16:0));]]></code.krate>
+/* Pin 2, usually green. */
+pwmEnableChannel(&PWMD4, 1, (pwmcnt_t)(inlet_incolor2>=0?inlet_incolor2>>15:0));]]></code.krate>
    </obj.normal>
 </objdefs>
