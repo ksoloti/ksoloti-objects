@@ -1,6 +1,6 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="inconfig digital mic" uuid="a8f5bfcb-73fd-4546-9aa6-57ae88005b81">
-      <sDescription>Turn on digital (PDM) microphone on the Ksoloti Core board.
+      <sDescription>Connect up to two digital (PDM) microphone modules to the Ksoloti Core board (pins GND, 3.3V, MIC_CLK, MIC_DAT).
 The regular audio inputs will be disabled and the factory audio/in objects will pass the (one or two) mic signals instead.
 The digital mic and analog audio inputs cannot be used simultaneously (hardware limitation).</sDescription>
       <author>sebiik</author>
