@@ -28,17 +28,16 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
 
 int calc_cv_bipolar(int in, int offs) {
 	int val = -((in >> 1) + offs) + (1<<26);
-	if ((val <= hi_limit) && (val > 0)) return val;
-	else if (val <= 0) return 0;
-	else return hi_limit;
-	//return __SSAT(val, 28); probably
+	return __SSAT(val, 28);
 }]]></code.declaration>
       <code.init><![CDATA[palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
 palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
 RCC->APB1ENR |= 0x20000000;
 DAC->CR |= 0x00010001;]]></code.init>
       <code.dispose><![CDATA[DAC->CR = 0x0;
-RCC->APB1ENR &= ~0x20000000;]]></code.dispose>
+RCC->APB1ENR &= ~0x20000000;
+palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);]]></code.dispose>
       <code.krate><![CDATA[DAC->DHR12R1 = calc_cv_bipolar(inlet_cv1, attr_offset)>>15;
 DAC->DHR12R2 = calc_cv_bipolar(inlet_cv2, attr_offset)>>15;]]></code.krate>
    </obj.normal>
