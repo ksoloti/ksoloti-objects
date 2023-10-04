@@ -17,14 +17,14 @@
          <frac32.s.map.lfopitch name="pitch" noLabel="true"/>
       </params>
       <attribs>
-         <combo name="divisor">
+         <combo name="divisor" description="LFO is slowed down by this divisor. /2 means half as fast etc.">
             <MenuEntries>
-               <string>/1</string>
-               <string>/2</string>
-               <string>/4</string>
-               <string>/8</string>
-               <string>/16</string>
-               <string>/32</string>
+               <string>/1 (7.83 s)</string>
+               <string>/2 (15.66 s)</string>
+               <string>/4 (31.32 s)</string>
+               <string>/8 (62.64 s)</string>
+               <string>/16 (125.28 s)</string>
+               <string>/32 (250.56 s)</string>
             </MenuEntries>
             <CEntries>
                <string>2</string>
@@ -47,7 +47,7 @@ r = 1;]]></code.init>
          if (!inlet_reset) r = 1;
      }   {      int32_t freq;
       MTOFEXTENDED(param_pitch + inlet_pitch,freq);
-      Phase += freq>>(attr_divisor);
+      Phase += freq >> attr_divisor;
       int32_t r;
       SINE2TINTERP(Phase,r)
       outlet_wave= (r>>4);

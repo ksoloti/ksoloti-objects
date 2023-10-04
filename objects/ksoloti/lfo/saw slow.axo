@@ -1,14 +1,15 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="sine slow" uuid="75f7330c26a13953215dccc3b7b9008545c9daa0">
-      <sDescription>sine wave LFO, linear interpolated table, pitch input. Time divisor allows for very slow cycles. Note that the frequency display will only display the base frequency and not the one after time division.</sDescription>
+   <obj.normal id="saw slow" uuid="0c159304-6945-45ac-89c9-816d1fa152d6">
+      <sDescription>saw wave LFO, rising slope, pitch input. Time divisor allows for very slow cycles. Note that the frequency display will only display the base frequency and not the one after time division.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
       <helpPatch>lfo.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitch" description="pitch"/>
+         <bool32.rising name="reset" description="reset phase"/>
       </inlets>
       <outlets>
-         <frac32.bipolar name="wave" description="sine wave"/>
+         <frac32.positive name="wave" description="saw wave"/>
       </outlets>
       <displays/>
       <params>
@@ -34,14 +35,21 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
-      <code.init><![CDATA[Phase = 0;]]></code.init>
-      <code.krate><![CDATA[{      int32_t freq;
-      MTOFEXTENDED(param_pitch + inlet_pitch,freq);
-      Phase += freq >> attr_divisor;
-      int32_t r;
-      SINE2TINTERP(Phase,r)
-      outlet_wave= (r>>4);
+      <code.declaration><![CDATA[uint32_t Phase;
+uint32_t r;]]></code.declaration>
+      <code.init><![CDATA[Phase = 0;
+   r = 1;]]></code.init>
+      <code.krate><![CDATA[{
+      if (inlet_reset && r) {
+         Phase = 0;
+         r = 0;
+      } else {
+         if (!inlet_reset) r = 1;
+         int32_t freq;
+         MTOFEXTENDED(param_pitch + inlet_pitch,freq);
+         Phase += freq >> attr_divisor;
+      }
+      outlet_wave= (Phase>>5);
    }]]></code.krate>
    </obj.normal>
 </objdefs>
