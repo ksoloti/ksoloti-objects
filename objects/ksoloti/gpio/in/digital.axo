@@ -1,6 +1,8 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c">
-      <sDescription>Reads a digital input pin. 3.3V logic maximum! Object compatible with the Ksoloti board only.</sDescription>
+      <sDescription>Reads a digital input pin. 3.3V logic maximum!
+Object compatible with the Ksoloti board only.
+Note that PA9 pullup does not work due to a ChibiOS bug.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
       <inlets/>

@@ -1,4 +1,4 @@
-<objdefs appVersion="1.0.11">
+<objdefs appVersion="1.0.12">
    <obj.normal id="pwm led2" uuid="3e491ae7-4200-4b96-95e7-cc42c168d0fe">
       <sDescription>PWM output to LED2 (red, PC6) using hardware timer 8
 at a fixed frequency of 97.65 Hz. Note that PWM only works on LED2, not LED1, which is why no PWM object exists for LED1 (green).</sDescription>
@@ -12,6 +12,9 @@ at a fixed frequency of 97.65 Hz. Note that PWM only works on LED2, not LED1, wh
       <displays/>
       <params/>
       <attribs/>
+      <depends>
+         <depend>PWMD8</depend>
+      </depends>
       <code.init><![CDATA[static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency.  */
 	4096, /* PWM period is 128 cycles.    */
 	NULL, 
