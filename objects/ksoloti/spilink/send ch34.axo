@@ -1,0 +1,22 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="send ch34" uuid="eb9cbec4-79a1-485f-bf64-ff8087b9d5c5">
+      <sDescription>Very experimental!
+Send/receive audio between linked boards.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>GPL</license>
+      <inlets>
+         <frac32buffer name="ch3" description="channel 3"/>
+         <frac32buffer name="ch4" description="channel 4"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int i;
+for(i=0; i<BUFSIZE; i++)
+{
+	spilink_tx_samples->channel[2].samples[i] = inlet_ch3[i];
+	spilink_tx_samples->channel[3].samples[i] = inlet_ch4[i];
+}]]></code.krate>
+   </obj.normal>
+</objdefs>

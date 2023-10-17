@@ -1,2 +1,2 @@
 # ksoloti-factory
-Objects for Ksoloti core board
+Objects for Ksoloti Core board
