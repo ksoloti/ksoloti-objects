@@ -1,216 +1,243 @@
-<patch-1.0>
-   <comment type="patch/comment" x="14" y="14" text="test for all analog inputs"/>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="14" y="42">
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="14" y="0" text="Test for all analog inputs on Ksoloti Core"/>
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_1" x="14" y="28">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="154" y="42">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU1" x="154" y="28">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead5" x="238" y="42">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_5" x="238" y="28">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA4 (ADC1_IN4)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU5" x="378" y="42">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU5" x="378" y="28">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead9" x="462" y="42">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_9" x="462" y="28">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PB0 (ADC1_IN8)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU9" x="602" y="42">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU9" x="602" y="28">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead13" x="686" y="42">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_14" x="686" y="28">
       <params/>
       <attribs>
-         <combo attributeName="channel" selection="PC2 (ADC1_IN12)"/>
+         <combo attributeName="channel" selection="PF6 (ADC3_IN4)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU13" x="826" y="42">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU14" x="826" y="28">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="14" y="154">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_2" x="14" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA1 (ADC1_IN1)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="154" y="154">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU2" x="154" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead6" x="238" y="154">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_6" x="238" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA5 (ADC1_IN5)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU6" x="378" y="154">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU6" x="378" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead10" x="462" y="154">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_10" x="462" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PB1 (ADC1_IN9)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU10" x="602" y="154">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU10" x="602" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead14" x="686" y="154">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_15" x="686" y="154">
       <params/>
       <attribs>
-         <combo attributeName="channel" selection="PC3 (ADC1_IN13)"/>
+         <combo attributeName="channel" selection="PF7 (ADC3_IN5)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU14" x="826" y="154">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU15" x="826" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3" x="14" y="280">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_16" x="686" y="266">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PF8 (ADC3_IN6)"/>
+      </attribs>
+   </obj>
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU16" x="826" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_3" x="14" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA2 (ADC1_IN2)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU3" x="154" y="280">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU3" x="154" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead7" x="238" y="280">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_7" x="238" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA6 (ADC1_IN6)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU7" x="378" y="280">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU7" x="378" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead11" x="462" y="280">
-      <params/>
-      <attribs>
-         <combo attributeName="channel" selection="PC0 (ADC1_IN10)"/>
-      </attribs>
-   </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU11" x="602" y="280">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead15" x="686" y="280">
-      <params/>
-      <attribs>
-         <combo attributeName="channel" selection="PC4 (ADC1_IN14)"/>
-      </attribs>
-   </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU15" x="826" y="280">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4" x="14" y="392">
-      <params/>
-      <attribs>
-         <combo attributeName="channel" selection="PA3 (ADC1_IN3)"/>
-      </attribs>
-   </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU4" x="154" y="392">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead8" x="238" y="392">
-      <params/>
-      <attribs>
-         <combo attributeName="channel" selection="PA7 (ADC1_IN7)"/>
-      </attribs>
-   </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU8" x="378" y="392">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead12" x="462" y="392">
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_11" x="462" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC1 (ADC1_IN11)"/>
       </attribs>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU12" x="602" y="392">
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU11" x="602" y="280">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="686" y="406" text="channel 15 is occupied by vrefint..."/>
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_4" x="14" y="392">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA3 (ADC1_IN3)"/>
+      </attribs>
+   </obj>
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU4" x="154" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_8" x="238" y="392">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA7 (ADC1_IN7)"/>
+      </attribs>
+   </obj>
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU8" x="378" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_12" x="462" y="392">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC4 (ADC1_IN14)"/>
+      </attribs>
+   </obj>
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU12" x="602" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_17" x="686" y="392">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PF9 (ADC3_IN7)"/>
+      </attribs>
+   </obj>
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU17" x="826" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/analog" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac88" name="analog_13" x="462" y="504">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC5 (ADC1_IN15)"/>
+      </attribs>
+   </obj>
+   <obj type="disp/chart p" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="scopeU13" x="602" y="504">
+      <params/>
+      <attribs/>
+   </obj>
    <nets>
       <net>
-         <source obj="analogRead1" outlet="out"/>
+         <source obj="analog_1" outlet="out"/>
          <dest obj="scopeU1" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead2" outlet="out"/>
+         <source obj="analog_2" outlet="out"/>
          <dest obj="scopeU2" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead3" outlet="out"/>
+         <source obj="analog_3" outlet="out"/>
          <dest obj="scopeU3" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead4" outlet="out"/>
+         <source obj="analog_4" outlet="out"/>
          <dest obj="scopeU4" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead5" outlet="out"/>
+         <source obj="analog_5" outlet="out"/>
          <dest obj="scopeU5" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead6" outlet="out"/>
+         <source obj="analog_6" outlet="out"/>
          <dest obj="scopeU6" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead7" outlet="out"/>
+         <source obj="analog_7" outlet="out"/>
          <dest obj="scopeU7" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead8" outlet="out"/>
+         <source obj="analog_8" outlet="out"/>
          <dest obj="scopeU8" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead9" outlet="out"/>
+         <source obj="analog_9" outlet="out"/>
          <dest obj="scopeU9" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead10" outlet="out"/>
+         <source obj="analog_10" outlet="out"/>
          <dest obj="scopeU10" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead11" outlet="out"/>
+         <source obj="analog_11" outlet="out"/>
          <dest obj="scopeU11" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead12" outlet="out"/>
+         <source obj="analog_12" outlet="out"/>
          <dest obj="scopeU12" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead13" outlet="out"/>
+         <source obj="analog_13" outlet="out"/>
          <dest obj="scopeU13" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead14" outlet="out"/>
+         <source obj="analog_14" outlet="out"/>
          <dest obj="scopeU14" inlet="in"/>
       </net>
       <net>
-         <source obj="analogRead15" outlet="out"/>
+         <source obj="analog_15" outlet="out"/>
          <dest obj="scopeU15" inlet="in"/>
+      </net>
+      <net>
+         <source obj="analog_16" outlet="out"/>
+         <dest obj="scopeU16" inlet="in"/>
+      </net>
+      <net>
+         <source obj="analog_17" outlet="out"/>
+         <dest obj="scopeU17" inlet="in"/>
       </net>
    </nets>
    <settings>
@@ -218,9 +245,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>208</x>
-      <y>66</y>
-      <width>1136</width>
-      <height>702</height>
+      <x>2303</x>
+      <y>153</y>
+      <width>1016</width>
+      <height>774</height>
    </windowPos>
 </patch-1.0>
