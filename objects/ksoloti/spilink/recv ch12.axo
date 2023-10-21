@@ -1,7 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="recv ch12" uuid="21538ebe-379c-4d87-9652-b19c09ccd2a5">
-      <sDescription>Very experimental!
-Send/receive audio between linked boards.</sDescription>
+      <sDescription>Send/receive audio between linked boards.
+NOTE: X/Y placement of spilink objects within your patch is important due to the tight timing. Try to place the spilink objects at the top of your canvas if you encounter noise or aliasing.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>GPL</license>
       <inlets/>
