@@ -5,6 +5,7 @@ Object compatible with the Ksoloti board only.
 Note that PA9 pullup does not work due to a ChibiOS bug.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
+      <helpPatch>in-digital.axh</helpPatch>
       <inlets/>
       <outlets>
          <bool32 name="out" description="external digital input"/>
