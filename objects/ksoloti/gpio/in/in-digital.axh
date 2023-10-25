@@ -1,0 +1,540 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="28" y="0" text="&lt;html&gt;&lt;h3&gt;Test for all digital inputs on Ksoloti Core. &quot;hi-z&quot; means floating, so unconnected pins will &quot;flutter&quot; between low and high.&lt;/h3&gt;&lt;/html&gt;"/>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_1" x="28" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA0"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_1" x="154" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_11" x="280" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB0"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_11" x="406" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_21" x="532" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PC1"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_21" x="658" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_29" x="784" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PF6"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_29" x="910" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_2" x="28" y="112">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA1"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_2" x="154" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_12" x="280" y="112">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB1"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_12" x="406" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_22" x="532" y="112">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PC4"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_22" x="658" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_30" x="784" y="112">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PF7"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_30" x="910" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_3" x="28" y="182">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA2"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_3" x="154" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_13" x="280" y="182">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB3"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_13" x="406" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_23" x="532" y="182">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PC5"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_23" x="658" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_31" x="784" y="182">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PF8"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_31" x="910" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_4" x="28" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA3"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_4" x="154" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_14" x="280" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB4"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_14" x="406" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_24" x="532" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PC7"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_24" x="658" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_32" x="784" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PF9"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_32" x="910" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_5" x="28" y="350">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA4"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_5" x="154" y="350">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_15" x="280" y="350">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB6"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_15" x="406" y="350">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_25" x="532" y="350">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PD3"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_25" x="658" y="350">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_33" x="784" y="350">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PG10"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_33" x="910" y="350">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_6" x="28" y="420">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA5"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_6" x="154" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_16" x="280" y="420">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB7"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_16" x="406" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_26" x="532" y="420">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PD4"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_26" x="658" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_34" x="784" y="420">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PG11"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_34" x="910" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_7" x="28" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA6"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_7" x="154" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_17" x="280" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB8"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_17" x="406" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_27" x="532" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PD5"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_27" x="658" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_35" x="784" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PG12"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_35" x="910" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_8" x="28" y="560">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB7"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_8" x="154" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_18" x="280" y="560">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB9"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_18" x="406" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_28" x="532" y="560">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PD6"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_28" x="658" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_9" x="28" y="644">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA9"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_9" x="154" y="644">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_19" x="280" y="644">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB12"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_19" x="406" y="644">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_10" x="28" y="714">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PA15"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_10" x="154" y="714">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/in/digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1c" name="digital_20" x="280" y="714">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB13"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_20" x="406" y="714">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="digital_1" outlet="out"/>
+         <dest obj="bool_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_8" outlet="out"/>
+         <dest obj="bool_8" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_7" outlet="out"/>
+         <dest obj="bool_7" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_6" outlet="out"/>
+         <dest obj="bool_6" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_5" outlet="out"/>
+         <dest obj="bool_5" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_4" outlet="out"/>
+         <dest obj="bool_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_3" outlet="out"/>
+         <dest obj="bool_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_2" outlet="out"/>
+         <dest obj="bool_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_9" outlet="out"/>
+         <dest obj="bool_9" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_16" outlet="out"/>
+         <dest obj="bool_16" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_15" outlet="out"/>
+         <dest obj="bool_15" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_14" outlet="out"/>
+         <dest obj="bool_14" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_13" outlet="out"/>
+         <dest obj="bool_13" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_12" outlet="out"/>
+         <dest obj="bool_12" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_11" outlet="out"/>
+         <dest obj="bool_11" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_10" outlet="out"/>
+         <dest obj="bool_10" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_18" outlet="out"/>
+         <dest obj="bool_18" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_17" outlet="out"/>
+         <dest obj="bool_17" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_20" outlet="out"/>
+         <dest obj="bool_20" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_19" outlet="out"/>
+         <dest obj="bool_19" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_26" outlet="out"/>
+         <dest obj="bool_26" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_25" outlet="out"/>
+         <dest obj="bool_25" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_24" outlet="out"/>
+         <dest obj="bool_24" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_23" outlet="out"/>
+         <dest obj="bool_23" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_22" outlet="out"/>
+         <dest obj="bool_22" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_21" outlet="out"/>
+         <dest obj="bool_21" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_28" outlet="out"/>
+         <dest obj="bool_28" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_27" outlet="out"/>
+         <dest obj="bool_27" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_32" outlet="out"/>
+         <dest obj="bool_32" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_31" outlet="out"/>
+         <dest obj="bool_31" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_30" outlet="out"/>
+         <dest obj="bool_30" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_29" outlet="out"/>
+         <dest obj="bool_29" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_35" outlet="out"/>
+         <dest obj="bool_35" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_34" outlet="out"/>
+         <dest obj="bool_34" inlet="in"/>
+      </net>
+      <net>
+         <source obj="digital_33" outlet="out"/>
+         <dest obj="bool_33" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>1915</x>
+      <y>-5</y>
+      <width>1930</width>
+      <height>1053</height>
+   </windowPos>
+</patch-1.0>
