@@ -1,0 +1,35 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="recv 2" uuid="902ab129-3090-427d-90d9-a49d62dd5ec1">
+      <sDescription>Send/receive audio between linked boards.
+NOTE: X/Y placement of spilink objects within your patch is important due to the tight timing. If you encounter noise or aliasing, try to place the spilink objects at the top of your canvas and the send objects higher than the receive objects.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>GPL</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="outA" description="output A"/>
+         <frac32buffer name="outB" description="output B"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="channels">
+            <MenuEntries>
+               <string>1 | 2</string>
+               <string>3 | 4</string>
+               <string>5 | 6</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>2</string>
+               <string> 4</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[int i;
+for(i=0; i<BUFSIZE; i++)
+{
+	outlet_outA[i] = spilink_rx_samples->channel[attr_channels].samples[i];
+	outlet_outB[i] = spilink_rx_samples->channel[attr_channels+1].samples[i];
+}]]></code.krate>
+   </obj.normal>
+</objdefs>

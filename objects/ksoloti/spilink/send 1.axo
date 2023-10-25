@@ -1,0 +1,39 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="send 1" uuid="541d8d7a-d045-4824-ae83-62b4a13a82eb">
+      <sDescription>Send/receive audio between linked boards.
+NOTE: X/Y placement of spilink objects within your patch is important due to the tight timing. If you encounter noise or aliasing, try to place the spilink objects at the top of your canvas and the send objects higher than the receive objects.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>GPL</license>
+      <inlets>
+         <frac32buffer name="in" description="input A"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="channel">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[int i;
+for(i=0; i<BUFSIZE; i++)
+{
+	spilink_tx_samples->channel[attr_channel].samples[i] = inlet_in[i];
+}]]></code.krate>
+   </obj.normal>
+</objdefs>
