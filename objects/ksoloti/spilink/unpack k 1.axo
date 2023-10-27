@@ -1,9 +1,10 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="unpack k" uuid="f403ac90-d3ed-41e2-8bad-7e9ec528e4b7">
+   <obj.normal id="unpack k 1" uuid="f403ac90-d3ed-41e2-8bad-7e9ec528e4b7">
       <sDescription>Use one spilink audio channel to send/receive up to 16 control rate values between linked boards.
 NOTE: X/Y placement of spilink objects within your patch is important due to the tight timing. If you encounter noise or aliasing, try to place the spilink objects at the top of your canvas and the send objects higher than the receive objects.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>GPL</license>
+      <helpPatch>spilink.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32 name="out"/>
@@ -17,16 +18,12 @@ NOTE: X/Y placement of spilink objects within your patch is important due to the
                <string>2</string>
                <string>3</string>
                <string>4</string>
-               <string>5</string>
-               <string>6</string>
             </MenuEntries>
             <CEntries>
                <string>0</string>
                <string>1</string>
                <string>2</string>
                <string>3</string>
-               <string>4</string>
-               <string>5</string>
             </CEntries>
          </combo>
          <combo name="slot">

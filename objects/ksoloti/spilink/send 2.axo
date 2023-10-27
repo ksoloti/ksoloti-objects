@@ -4,6 +4,7 @@
 NOTE: X/Y placement of spilink objects within your patch is important due to the tight timing. If you encounter noise or aliasing, try to place the spilink objects at the top of your canvas and the send objects higher than the receive objects.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>GPL</license>
+      <helpPatch>spilink.axh</helpPatch>
       <inlets>
          <frac32buffer name="inA" description="input A"/>
          <frac32buffer name="inB" description="input B"/>
@@ -16,12 +17,10 @@ NOTE: X/Y placement of spilink objects within your patch is important due to the
             <MenuEntries>
                <string>1 | 2</string>
                <string>3 | 4</string>
-               <string>5 | 6</string>
             </MenuEntries>
             <CEntries>
                <string>0</string>
                <string>2</string>
-               <string>4</string>
             </CEntries>
          </combo>
       </attribs>

@@ -1,0 +1,56 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="pack k 2" uuid="fdf0cb2b-5f0c-4246-a092-c5844870a835">
+      <sDescription>Use one spilink audio channel to send/receive up to 16 control rate values between linked boards.
+NOTE: X/Y placement of spilink objects within your patch is important due to the tight timing. If you encounter noise or aliasing, try to place the spilink objects at the top of your canvas and the send objects higher than the receive objects.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>GPL</license>
+      <helpPatch>spilink.axh</helpPatch>
+      <inlets>
+         <frac32 name="inA"/>
+         <frac32 name="inB"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="channel">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+            </CEntries>
+         </combo>
+         <combo name="slots">
+            <MenuEntries>
+               <string>1 | 2</string>
+               <string>3 | 4</string>
+               <string>5 | 6</string>
+               <string>7 | 8</string>
+               <string>9 | 10</string>
+               <string>11 | 12</string>
+               <string>13 | 14</string>
+               <string>15 | 16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>2</string>
+               <string>4</string>
+               <string>6</string>
+               <string>8</string>
+               <string>10</string>
+               <string>12</string>
+               <string>14</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[spilink_tx_samples->channel[attr_channel].samples[attr_slots] = inlet_inA;
+spilink_tx_samples->channel[attr_channel].samples[attr_slots+1] = inlet_inB;]]></code.krate>
+   </obj.normal>
+</objdefs>

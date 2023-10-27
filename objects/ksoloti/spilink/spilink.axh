@@ -1,0 +1,189 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="210" y="0" text="&lt;html&gt;&lt;h3&gt;How to set up spilink between two Cores:&lt;/h3&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="210" y="42" text="&lt;html&gt;&lt;h4&gt;First of all make sure you download and flash the &quot;spilink&quot; branch of the Ksoloti firmware!&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="210" y="84" text="&lt;html&gt;&lt;h4&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open, the Synced Core should have it closed.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="210" y="126" text="&lt;html&gt;&lt;h4&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core then power it directly via a 5V pin and Ground from the Master Core.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="210" y="168" text="&lt;html&gt;&lt;h4&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="210" y="210" text="&lt;html&gt;&lt;h4&gt;4. Connect pin 1 of header X4 (the square marked pin, closest to the board edge) of both Cores together. This is the codec master clock.&lt;/h4&gt;&lt;/html&gt;"/>
+   <obj type="ksoloti/spilink/send 2" uuid="cae1c5ae-6da2-4a7b-918e-bd52fe6033bc" name="send_1" x="168" y="308">
+      <params/>
+      <attribs>
+         <combo attributeName="channels" selection="1 | 2"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="308" y="308" text="&lt;- To avoid timing issues, place send objects at the top of the canvas..."/>
+   <obj type="ksoloti/spilink/send 1" uuid="541d8d7a-d045-4824-ae83-62b4a13a82eb" name="send_2" x="168" y="378">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="3"/>
+      </attribs>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="28" y="462">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/spilink/recv 2" uuid="902ab129-3090-427d-90d9-a49d62dd5ec1" name="recv_1" x="182" y="462">
+      <params/>
+      <attribs>
+         <combo attributeName="channels" selection="1 | 2"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="308" y="462" text="&lt;- ... and recv objects below any send objects."/>
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="322" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="476" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="630" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/spilink/pack k 4" uuid="67f977be-eaa3-4f82-b2c3-81219c911b8f" name="pack_3" x="938" y="518">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="1"/>
+         <combo attributeName="slots" selection="13 - 16"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/spilink/unpack k 4" uuid="4caf3061-a70e-4164-86c8-68c0c028ecd3" name="unpack_3" x="1064" y="518">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="1"/>
+         <combo attributeName="slots" selection="13 - 16"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/spilink/recv 1" uuid="dca54b00-5b02-41d0-a78c-4a02f672f8bd" name="recv_2" x="182" y="532">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="3"/>
+      </attribs>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="28" y="574">
+      <params>
+         <frac32.s.map name="pitch" value="12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="28" y="686">
+      <params>
+         <frac32.s.map name="pitch" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="168" y="714" text="You can also use any of the spilink channels to send/receive up to 16 control values each."/>
+   <comment type="patch/comment" x="658" y="714" text="... and here we receive three control values from the other Core."/>
+   <comment type="patch/comment" x="168" y="728" text="Here we are sending three control values via channel 4 (as only channels 1 to 3 are used for audio)."/>
+   <comment type="patch/comment" x="658" y="728" text="The channel and slots must match whatever the other Core sends on."/>
+   <comment type="patch/comment" x="168" y="742" text="Slots 9 to 11 have been selected arbitrarily."/>
+   <obj type="ksoloti/spilink/unpack k 2" uuid="f96a9093-762d-423c-953d-000eb8f03b03" name="unpack_1" x="658" y="742">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="4"/>
+         <combo attributeName="slots" selection="9 | 10"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_3" x="798" y="742">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/spilink/unpack k 1" uuid="f403ac90-d3ed-41e2-8bad-7e9ec528e4b7" name="unpack_2" x="882" y="742">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="4"/>
+         <combo attributeName="slot" selection="11"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_6" x="1022" y="742">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="drj/lfo/sin_4_b" uuid="75f7330c26a13333215dccc3ba3b9008545c1daa9" name="sin_4_b_1" x="168" y="756">
+      <params>
+         <frac32.s.map name="pitch" value="-28.459999561309814"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/spilink/pack k 2" uuid="fdf0cb2b-5f0c-4246-a092-c5844870a835" name="pack_1" x="280" y="756">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="4"/>
+         <combo attributeName="slots" selection="9 | 10"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/spilink/pack k 1" uuid="3e1f5f6e-565a-4ec1-a9f9-6f0ecafe2c7c" name="pack_2" x="420" y="756">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="4"/>
+         <combo attributeName="slot" selection="11"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_4" x="798" y="826">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="send_1" inlet="inA"/>
+      </net>
+      <net>
+         <source obj="sine_2" outlet="wave"/>
+         <dest obj="send_1" inlet="inB"/>
+      </net>
+      <net>
+         <source obj="recv_1" outlet="outA"/>
+         <dest obj="scope_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="recv_1" outlet="outB"/>
+         <dest obj="scope_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="sine_3" outlet="wave"/>
+         <dest obj="send_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="recv_2" outlet="out"/>
+         <dest obj="scope_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="unpack_1" outlet="outA"/>
+         <dest obj="dial_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="unpack_1" outlet="outB"/>
+         <dest obj="dial_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="unpack_2" outlet="out"/>
+         <dest obj="dial_6" inlet="in"/>
+      </net>
+      <net>
+         <source obj="sin_4_b_1" outlet="0"/>
+         <dest obj="pack_1" inlet="inA"/>
+      </net>
+      <net>
+         <source obj="sin_4_b_1" outlet="90"/>
+         <dest obj="pack_1" inlet="inB"/>
+      </net>
+      <net>
+         <source obj="sin_4_b_1" outlet="180"/>
+         <dest obj="pack_2" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>1915</x>
+      <y>-5</y>
+      <width>1930</width>
+      <height>1053</height>
+   </windowPos>
+</patch-1.0>
