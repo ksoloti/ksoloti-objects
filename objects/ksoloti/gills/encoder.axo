@@ -7,7 +7,7 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
       <license>BSD</license>
       <helpPatch>logic.axh</helpPatch>
       <inlets>
-         <int32.bipolar name="set" description="set value directly"/>
+         <int32.bipolar name="set" description="Set value directly. Useful for presets, modulation"/>
       </inlets>
       <outlets>
          <int32.bipolar name="out" description="encoder value"/>
@@ -23,8 +23,8 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
          <spinner name="max" MinValue="-65536" MaxValue="65535" DefaultValue="127"/>
       </attribs>
       <code.declaration><![CDATA[#define ENC_PORT GPIOC
-#define ENC_A_PIN 7
-#define ENC_B_PIN 1
+#define ENC_A_PIN 1
+#define ENC_B_PIN 7
 #define ENC_SW_PORT GPIOA
 #define ENC_SW_PIN 9
 
@@ -42,15 +42,14 @@ palSetPadMode(ENC_SW_PORT, ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
       <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
 if (inlet_set != set_last) {
 	set_last = encoder_val = inlet_set;
+	/* Limit value to min, max attributes */
 	encoder_val = encoder_val > attr_max ? attr_max : encoder_val;
 	encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
 }
 
-
 a = palReadPad(ENC_PORT, ENC_A_PIN);
 
 /* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
-
 if (!a && a_last) {
 	/* If pin A is low but wasn't before, we have caught an event. */
 		
@@ -67,7 +66,6 @@ if (!a && a_last) {
 /* Register changes */
 a_last = a;
 outlet_out = disp_value = encoder_val;
-
 
 
 /* Now read encoder switch */
