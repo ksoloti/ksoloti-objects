@@ -1,0 +1,37 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="pwm t2 pa15" uuid="bbf9c0ff-9efe-4f1c-8d58-da54990762a5">
+      <sDescription>PWM output to PA15 using hardware timer 2
+at a fixed frequency of 97.65 Hz.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>pwm.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="pa15" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <depends>
+         <depend>PWMD2</depend>
+         <depend>PWMD8</depend>
+      </depends>
+      <code.init><![CDATA[static const PWMConfig pwm2cfg = {
+	400000, /* 400kHz PWM clock frequency.  */
+	4096, /* PWM period is 128 cycles.    */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+
+pwmStart(&PWMD2, &pwm2cfg);
+palSetPadMode(GPIOA, 15, PAL_MODE_ALTERNATE(1));
+]]></code.init>
+      <code.dispose><![CDATA[pwmStop(&PWMD2);]]></code.dispose>
+      <code.krate><![CDATA[//PWMD2.tim->CNT = 0; /* Sync with every k-rate cycle? */
+pwmEnableChannel(&PWMD2, 0, (pwmcnt_t)(inlet_pa15>=0?inlet_pa15>>15:0));]]></code.krate>
+   </obj.normal>
+</objdefs>
