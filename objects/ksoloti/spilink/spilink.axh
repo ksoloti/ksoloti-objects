@@ -1,18 +1,18 @@
 <patch-1.0 appVersion="1.0.12">
-   <comment type="patch/comment" x="210" y="0" text="&lt;html&gt;&lt;h3&gt;How to set up spilink between two Cores:&lt;/h3&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="210" y="42" text="&lt;html&gt;&lt;h4&gt;First of all make sure you download and flash the &quot;spilink&quot; branch of the Ksoloti firmware!&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="210" y="84" text="&lt;html&gt;&lt;h4&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open, the Synced Core should have it closed.&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="210" y="126" text="&lt;html&gt;&lt;h4&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core then power it directly via a 5V pin and Ground from the Master Core.&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="210" y="168" text="&lt;html&gt;&lt;h4&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="210" y="210" text="&lt;html&gt;&lt;h4&gt;4. Connect pin 1 of header X4 (the square marked pin, closest to the board edge) of both Cores together. This is the codec master clock.&lt;/h4&gt;&lt;/html&gt;"/>
-   <obj type="ksoloti/spilink/send 2" uuid="cae1c5ae-6da2-4a7b-918e-bd52fe6033bc" name="send_1" x="168" y="308">
+   <comment type="patch/comment" x="28" y="28" text="&lt;html&gt;&lt;h3 style=&quot;color:#800000;&quot;&gt;How to set up spilink between two Cores:&lt;/h3&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="70" text="&lt;html&gt;&lt;h4&gt;First of all make sure you download and flash the &quot;spilink&quot; branch of the Ksoloti firmware!&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="112" text="&lt;html&gt;&lt;h4&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open, the Synced Core should have it closed.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="154" text="&lt;html&gt;&lt;h4&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core then power it directly via a 5V pin and Ground from the Master Core.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="196" text="&lt;html&gt;&lt;h4&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="238" text="&lt;html&gt;&lt;h4&gt;4. Connect pin 1 of header X4 (the square marked pin, closest to the board edge) of both Cores together. This is the codec master clock.&lt;/h4&gt;&lt;/html&gt;"/>
+   <obj type="ksoloti/spilink/send 2" uuid="cae1c5ae-6da2-4a7b-918e-bd52fe6033bc" name="send_1" x="182" y="294">
       <params/>
       <attribs>
          <combo attributeName="channels" selection="1 | 2"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="308" y="308" text="&lt;- To avoid timing issues, place send objects at the top of the canvas..."/>
-   <obj type="ksoloti/spilink/send 1" uuid="541d8d7a-d045-4824-ae83-62b4a13a82eb" name="send_2" x="168" y="378">
+   <comment type="patch/comment" x="308" y="294" text="&lt;- To avoid timing issues, place send objects at the top of the canvas..."/>
+   <obj type="ksoloti/spilink/send 1" uuid="541d8d7a-d045-4824-ae83-62b4a13a82eb" name="send_2" x="182" y="378">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="3"/>
@@ -43,21 +43,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/spilink/pack k 4" uuid="67f977be-eaa3-4f82-b2c3-81219c911b8f" name="pack_3" x="938" y="518">
-      <params/>
-      <attribs>
-         <combo attributeName="channel" selection="1"/>
-         <combo attributeName="slots" selection="13 - 16"/>
-      </attribs>
-   </obj>
-   <obj type="ksoloti/spilink/unpack k 4" uuid="4caf3061-a70e-4164-86c8-68c0c028ecd3" name="unpack_3" x="1064" y="518">
-      <params/>
-      <attribs>
-         <combo attributeName="channel" selection="1"/>
-         <combo attributeName="slots" selection="13 - 16"/>
-      </attribs>
-   </obj>
-   <obj type="ksoloti/spilink/recv 1" uuid="dca54b00-5b02-41d0-a78c-4a02f672f8bd" name="recv_2" x="182" y="532">
+   <obj type="ksoloti/spilink/recv 1" uuid="dca54b00-5b02-41d0-a78c-4a02f672f8bd" name="recv_2" x="182" y="546">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="3"/>
@@ -80,25 +66,25 @@
    <comment type="patch/comment" x="168" y="728" text="Here we are sending three control values via channel 4 (as only channels 1 to 3 are used for audio)."/>
    <comment type="patch/comment" x="658" y="728" text="The channel and slots must match whatever the other Core sends on."/>
    <comment type="patch/comment" x="168" y="742" text="Slots 9 to 11 have been selected arbitrarily."/>
-   <obj type="ksoloti/spilink/unpack k 2" uuid="f96a9093-762d-423c-953d-000eb8f03b03" name="unpack_1" x="658" y="742">
+   <obj type="ksoloti/spilink/unpack k 2" uuid="f96a9093-762d-423c-953d-000eb8f03b03" name="unpack_1" x="644" y="742">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="4"/>
          <combo attributeName="slots" selection="9 | 10"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_3" x="798" y="742">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_3" x="812" y="742">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/spilink/unpack k 1" uuid="f403ac90-d3ed-41e2-8bad-7e9ec528e4b7" name="unpack_2" x="882" y="742">
+   <obj type="ksoloti/spilink/unpack k 1" uuid="f403ac90-d3ed-41e2-8bad-7e9ec528e4b7" name="unpack_2" x="896" y="742">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="4"/>
          <combo attributeName="slot" selection="11"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_6" x="1022" y="742">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_6" x="1064" y="742">
       <params/>
       <attribs/>
    </obj>
@@ -115,14 +101,14 @@
          <combo attributeName="slots" selection="9 | 10"/>
       </attribs>
    </obj>
-   <obj type="ksoloti/spilink/pack k 1" uuid="3e1f5f6e-565a-4ec1-a9f9-6f0ecafe2c7c" name="pack_2" x="420" y="756">
+   <obj type="ksoloti/spilink/pack k 1" uuid="3e1f5f6e-565a-4ec1-a9f9-6f0ecafe2c7c" name="pack_2" x="434" y="756">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="4"/>
          <combo attributeName="slot" selection="11"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_4" x="798" y="826">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_4" x="812" y="826">
       <params/>
       <attribs/>
    </obj>
