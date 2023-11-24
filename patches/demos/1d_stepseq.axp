@@ -179,7 +179,7 @@
    <obj type="math/&lt;&lt;" uuid="3c89a8ac22f44350a3366284704535e257aea35f" name="&lt;&lt;_1" x="1078" y="336">
       <params/>
       <attribs>
-         <spinner attributeName="shift" value="3"/>
+         <spinner attributeName="shift" value="2"/>
       </attribs>
    </obj>
    <obj type="osc/brds/comb" uuid="e83492db-ef5d-4367-a874-c82385603fee" name="comb_1" x="630" y="350">
@@ -434,9 +434,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>1920</x>
-      <y>0</y>
-      <width>1920</width>
-      <height>1043</height>
+      <x>1915</x>
+      <y>-5</y>
+      <width>1930</width>
+      <height>1053</height>
    </windowPos>
 </patch-1.0>
