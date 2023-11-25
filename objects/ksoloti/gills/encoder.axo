@@ -23,8 +23,8 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
          <spinner name="max" MinValue="-65536" MaxValue="65535" DefaultValue="127"/>
       </attribs>
       <code.declaration><![CDATA[#define ENC_PORT GPIOC
-#define ENC_A_PIN 1
-#define ENC_B_PIN 7
+#define ENC_A_PIN 7
+#define ENC_B_PIN 1
 #define ENC_SW_PORT GPIOA
 #define ENC_SW_PIN 9
 
