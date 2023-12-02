@@ -1,7 +1,7 @@
 <patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="28" y="28" text="&lt;html&gt;&lt;h3 style=&quot;color:#800000;&quot;&gt;How to set up spilink between two Cores:&lt;/h3&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="70" text="&lt;html&gt;&lt;h4&gt;First of all make sure you download and flash the &quot;spilink&quot; branch of the Ksoloti firmware!&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="28" y="112" text="&lt;html&gt;&lt;h4&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open (default), the Synced Core should have it closed with a blob of solder.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="112" text="&lt;html&gt;&lt;h4&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open, the Synced Core should have it closed.&lt;/h4&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="154" text="&lt;html&gt;&lt;h4&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core (since Core v0.6 only) then power it directly via a 5V pin and Ground from the Master Core.&lt;/h4&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="196" text="&lt;html&gt;&lt;h4&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h4&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="238" text="&lt;html&gt;&lt;h4&gt;4. Connect pin 1 of header X4 (the square marked pin, closest to the board edge) of both Cores together. This is the codec master clock.&lt;/h4&gt;&lt;/html&gt;"/>
@@ -20,7 +20,7 @@
    </obj>
    <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="28" y="462">
       <params>
-         <frac32.s.map name="pitch" value="0.0"/>
+         <frac32.s.map name="pitch" value="12.0"/>
       </params>
       <attribs/>
    </obj>
@@ -43,6 +43,55 @@
       <params/>
       <attribs/>
    </obj>
+   <patchobj type="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7" name="tdelta_1" x="784" y="490">
+      <params>
+         <bool32.mom name="clear" value="0"/>
+         <int32 name="dsp" value="0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7">
+         <sDescription>description</sDescription>
+         <inlets/>
+         <outlets/>
+         <displays>
+            <int32.label name="tdelta"/>
+            <int32.label name="tdelta_min"/>
+            <int32.label name="tdelta_max"/>
+         </displays>
+         <params>
+            <bool32.mom name="clear"/>
+            <int32 name="dsp">
+               <MinValue i="0"/>
+               <MaxValue i="999"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t tdelta_min = INT32_MAX;
+int32_t tdelta_max = INT32_MIN;]]></code.declaration>
+         <code.krate><![CDATA[extern unsigned int spidb_interrupt_timestamp;
+extern unsigned int codec_interrupt_timestamp;
+
+int tdelta = spidb_interrupt_timestamp - codec_interrupt_timestamp;
+
+if (param_clear)
+{
+	tdelta_min = INT32_MAX;
+	tdelta_max = INT32_MIN;
+}
+
+if (tdelta>tdelta_max) tdelta_max = tdelta;
+if (tdelta<tdelta_min) tdelta_min = tdelta;
+
+disp_tdelta_min = tdelta_min;
+disp_tdelta_max = tdelta_max;
+disp_tdelta = spidb_interrupt_timestamp - codec_interrupt_timestamp;
+
+volatile int i = param_dsp*10;
+while(i--) {}]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="896" y="532" text="&lt;html&gt;-- dsp will let you add a fake DSP load&lt;br/&gt;so you can check if signals become glitchy."/>
    <obj type="ksoloti/spilink/recv 1" uuid="dca54b00-5b02-41d0-a78c-4a02f672f8bd" name="recv_2" x="182" y="546">
       <params/>
       <attribs>
@@ -51,13 +100,13 @@
    </obj>
    <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="28" y="574">
       <params>
-         <frac32.s.map name="pitch" value="12.0"/>
+         <frac32.s.map name="pitch" value="15.0"/>
       </params>
       <attribs/>
    </obj>
    <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="28" y="686">
       <params>
-         <frac32.s.map name="pitch" value="24.0"/>
+         <frac32.s.map name="pitch" value="16.0"/>
       </params>
       <attribs/>
    </obj>
@@ -90,7 +139,7 @@
    </obj>
    <obj type="drj/lfo/sin_4_b" uuid="75f7330c26a13333215dccc3ba3b9008545c1daa9" name="sin_4_b_1" x="168" y="756">
       <params>
-         <frac32.s.map name="pitch" value="-28.459999561309814"/>
+         <frac32.s.map name="pitch" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
@@ -109,6 +158,18 @@
       </attribs>
    </obj>
    <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_4" x="812" y="826">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_1" x="896" y="826">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_2" x="980" y="826">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_3" x="1064" y="826">
       <params/>
       <attribs/>
    </obj>
@@ -140,14 +201,17 @@
       <net>
          <source obj="unpack_1" outlet="outA"/>
          <dest obj="dial_3" inlet="in"/>
+         <dest obj="chart_1" inlet="in"/>
       </net>
       <net>
          <source obj="unpack_1" outlet="outB"/>
          <dest obj="dial_4" inlet="in"/>
+         <dest obj="chart_2" inlet="in"/>
       </net>
       <net>
          <source obj="unpack_2" outlet="out"/>
          <dest obj="dial_6" inlet="in"/>
+         <dest obj="chart_3" inlet="in"/>
       </net>
       <net>
          <source obj="sin_4_b_1" outlet="0"/>
@@ -167,9 +231,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>1915</x>
-      <y>-5</y>
-      <width>1930</width>
-      <height>1053</height>
+      <x>1920</x>
+      <y>0</y>
+      <width>1920</width>
+      <height>521</height>
    </windowPos>
 </patch-1.0>
