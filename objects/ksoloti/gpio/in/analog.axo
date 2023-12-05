@@ -11,7 +11,7 @@
       <displays/>
       <params/>
       <attribs>
-         <combo name="channel">
+         <combo name="pad">
             <MenuEntries>
                <string>PA0 (ADC1_IN0)</string>
                <string>PA1 (ADC1_IN1)</string>
@@ -52,6 +52,6 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[outlet_out= adcvalues[attr_channel]<<15;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= adcvalues[attr_pad]<<15;]]></code.krate>
    </obj.normal>
 </objdefs>
