@@ -13,7 +13,7 @@ Note that PA9 pullup does not work due to a ChibiOS bug.</sDescription>
       <displays/>
       <params/>
       <attribs>
-         <combo name="pad">
+         <combo name="pin">
             <MenuEntries>
                <string>PA0</string>
                <string>PA1</string>
@@ -102,7 +102,7 @@ Note that PA9 pullup does not work due to a ChibiOS bug.</sDescription>
             </CEntries>
          </combo>
       </attribs>
-      <code.init><![CDATA[palSetPadMode(attr_pad, attr_mode);]]></code.init>
-      <code.krate><![CDATA[outlet_out = palReadPad(attr_pad)<<27;]]></code.krate>
+      <code.init><![CDATA[palSetPadMode(attr_pin, attr_mode);]]></code.init>
+      <code.krate><![CDATA[outlet_out = palReadPad(attr_pin)<<27;]]></code.krate>
    </obj.normal>
 </objdefs>

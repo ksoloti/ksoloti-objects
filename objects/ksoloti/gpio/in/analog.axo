@@ -11,25 +11,25 @@
       <displays/>
       <params/>
       <attribs>
-         <combo name="pad">
+         <combo name="pin">
             <MenuEntries>
-               <string>PA0 (ADC1_IN0)</string>
-               <string>PA1 (ADC1_IN1)</string>
-               <string>PA2 (ADC1_IN2)</string>
-               <string>PA3 (ADC1_IN3)</string>
-               <string>PA4 (ADC1_IN4)</string>
-               <string>PA5 (ADC1_IN5)</string>
-               <string>PA6 (ADC1_IN6)</string>
-               <string>PA7 (ADC1_IN7)</string>
-               <string>PB0 (ADC1_IN8)</string>
-               <string>PB1 (ADC1_IN9)</string>
-               <string>PC1 (ADC1_IN11)</string>
-               <string>PC4 (ADC1_IN14)</string>
-               <string>PC5 (ADC1_IN15)</string>
-               <string>PF6 (ADC3_IN4)</string>
-               <string>PF7 (ADC3_IN5)</string>
-               <string>PF8 (ADC3_IN6)</string>
-               <string>PF9 (ADC3_IN7)</string>
+               <string>PA0</string>
+               <string>PA1</string>
+               <string>PA2</string>
+               <string>PA3</string>
+               <string>PA4</string>
+               <string>PA5</string>
+               <string>PA6</string>
+               <string>PA7</string>
+               <string>PB0</string>
+               <string>PB1</string>
+               <string>PC1</string>
+               <string>PC4</string>
+               <string>PC5</string>
+               <string>PF6</string>
+               <string>PF7</string>
+               <string>PF8</string>
+               <string>PF9</string>
             </MenuEntries>
             <CEntries>
                <string>0</string>
@@ -52,6 +52,6 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[outlet_out= adcvalues[attr_pad]<<15;]]></code.krate>
+      <code.krate><![CDATA[outlet_out = adcvalues[attr_pin]<<15;]]></code.krate>
    </obj.normal>
 </objdefs>

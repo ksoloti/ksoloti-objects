@@ -11,7 +11,7 @@
       <displays/>
       <params/>
       <attribs>
-         <combo name="pad">
+         <combo name="pin">
             <MenuEntries>
                <string>PA0</string>
                <string>PA1</string>
@@ -98,7 +98,7 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.init><![CDATA[palSetPadMode(attr_pad, attr_mode);]]></code.init>
-      <code.krate><![CDATA[palWritePad(attr_pad, (inlet_in > 0));]]></code.krate>
+      <code.init><![CDATA[palSetPadMode(attr_pin, attr_mode);]]></code.init>
+      <code.krate><![CDATA[palWritePad(attr_pin, (inlet_in > 0));]]></code.krate>
    </obj.normal>
 </objdefs>
