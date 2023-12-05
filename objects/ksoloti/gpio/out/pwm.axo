@@ -1,0 +1,289 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="pwm" uuid="63fd46da-dcdc-4206-b460-90075711c994">
+      <sDescription>Simplified PWM object giving access to all PWMable pins
+and creating hardware configs as required.
+
+NOTE: You can&apos;t use the following pin combos for PWM
+due to hardware limitations:
+* PA5 &amp; PA15 simultaneously
+* PA6 &amp; PB4 simultaneously
+If used for PWM at the same time, the two respective pins will have the same value!
+The patcher will display a warning but does not prevent you from going live.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>GPL v3</license>
+      <inlets>
+         <frac32.positive name="in" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="pin">
+            <MenuEntries>
+               <string>PA0</string>
+               <string>PA1</string>
+               <string>PA2</string>
+               <string>PA3</string>
+               <string>PA5</string>
+               <string>PA6</string>
+               <string>PA7</string>
+               <string>PA9</string>
+               <string>PA15</string>
+               <string>PB0</string>
+               <string>PB1</string>
+               <string>PB3</string>
+               <string>PB4</string>
+               <string>PB6</string>
+               <string>PB7</string>
+               <string>PB8</string>
+               <string>PB9</string>
+               <string>PB13</string>
+               <string>PC7</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0x00</string>
+               <string>0x01</string>
+               <string>0x02</string>
+               <string>0x03</string>
+               <string>0x05</string>
+               <string>0x06</string>
+               <string>0x07</string>
+               <string>0x09</string>
+               <string>0x0F</string>
+               <string>0x10</string>
+               <string>0x11</string>
+               <string>0x13</string>
+               <string>0x14</string>
+               <string>0x16</string>
+               <string>0x17</string>
+               <string>0x18</string>
+               <string>0x19</string>
+               <string>0x1D</string>
+               <string>0x27</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <depends>
+         <depend>PWMD1</depend>
+         <depend>PWMD2</depend>
+         <depend>PWMD3</depend>
+         <depend>PWMD4</depend>
+         <depend>PWMD5</depend>
+      </depends>
+      <code.init><![CDATA[static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency. */
+	4096, /* PWM period is 128 cycles. */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+
+#if   (attr_pin == 0x00)
+#ifndef PWMD5START__
+#define PWMD5START__
+pwmStart(&PWMD5, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 0, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x01)
+#ifndef PWMD5STARTED__
+#define PWMD5STARTED__
+pwmStart(&PWMD5, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 1, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x02)
+#ifndef PWMD5STARTED__
+#define PWMD5STARTED__
+pwmStart(&PWMD5, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x03)
+#ifndef PWMD5STARTED__
+#define PWMD5STARTED__
+pwmStart(&PWMD5, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x05)
+#ifdef PA15_USING_PWM
+#warning "Can't use PA5 and PA15 simultaneously for PWM. They will have the same value!"
+#else
+#define PA5_USING_PWM
+#endif
+#ifndef PWMD2STARTED__
+#define PWMD2START__
+pwmStart(&PWMD2, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(1));
+
+#elif (attr_pin == 0x06)
+#ifdef PB4_USING_PWM
+#warning "Can't use PA6 and PB4 simultaneously for PWM. They will have the same value!"
+#else
+#define PA6_USING_PWM
+#endif
+#ifndef PWMD3STARTED__
+#define PWMD3START__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x07)
+#ifndef PWMD3STARTED__
+#define PWMD3START__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 7, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x09)
+#ifndef PWMD1STARTED__
+#define PWMD1STARTED__
+pwmStart(&PWMD1, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(1));
+
+#elif (attr_pin == 0x0F)
+#ifdef PA5_USING_PWM
+#warning "Can't use PA5 and PA15 simultaneously for PWM. They will have the same value!"
+#else
+#define PA15_USING_PWM
+#endif
+#ifndef PWMD2STARTED__
+#define PWMD2STARTED__
+pwmStart(&PWMD2, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 15, PAL_MODE_ALTERNATE(1));
+
+#elif (attr_pin == 0x10)
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 0, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x11)
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 1, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x13)
+#ifndef PWMD2STARTED__
+#define PWMD2START__
+pwmStart(&PWMD2, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 3, PAL_MODE_ALTERNATE(1));
+
+#elif (attr_pin == 0x14)
+#ifdef PA6_USING_PWM
+#warning "Can't use PA6 and PB4 simultaneously for PWM. They will have the same value!"
+#else
+#define PB4_USING_PWM
+#endif
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 4, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x16)
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x17)
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x18)
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x19)
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x1D)
+#ifndef PWMD1STARTED__
+#define PWMD1STARTED__
+pwmStart(&PWMD1, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 13, PAL_MODE_ALTERNATE(1));
+PWMD1.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;
+
+#elif (attr_pin == 0x27)
+#ifndef PWMD8STARTED__
+#define PWMD8STARTED__
+pwmStart(&PWMD8, &pwmcfg);
+#endif
+palSetPadMode(GPIOC, 7, PAL_MODE_ALTERNATE(3));
+
+#endif]]></code.init>
+      <code.krate><![CDATA[#if   (attr_pin == 0x00)
+pwmEnableChannel(&PWMD5, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x01)
+pwmEnableChannel(&PWMD5, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x02)
+pwmEnableChannel(&PWMD5, 2, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x03)
+pwmEnableChannel(&PWMD5, 3, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x05)
+pwmEnableChannel(&PWMD2, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x06)
+pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x07)
+pwmEnableChannel(&PWMD3, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x09)
+pwmEnableChannel(&PWMD1, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x0F)
+pwmEnableChannel(&PWMD2, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x10)
+pwmEnableChannel(&PWMD3, 2, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x11)
+pwmEnableChannel(&PWMD3, 3, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x13)
+pwmEnableChannel(&PWMD2, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x14)
+pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x16)
+pwmEnableChannel(&PWMD4, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x17)
+pwmEnableChannel(&PWMD4, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x18)
+pwmEnableChannel(&PWMD4, 2, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+#elif (attr_pin == 0x19)
+pwmEnableChannel(&PWMD4, 3, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x1D)
+pwmEnableChannel(&PWMD1, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x27)
+pwmEnableChannel(&PWMD8, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#endif]]></code.krate>
+   </obj.normal>
+</objdefs>
