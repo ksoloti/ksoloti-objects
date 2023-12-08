@@ -1,10 +1,10 @@
 <patch-1.0 appVersion="1.0.12">
-   <comment type="patch/comment" x="28" y="28" text="&lt;html&gt;&lt;h3 style=&quot;color:#800000;&quot;&gt;How to set up spilink between two Cores:&lt;/h3&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="28" y="70" text="&lt;html&gt;&lt;h4&gt;First of all make sure you download and flash the &quot;spilink&quot; branch of the Ksoloti firmware!&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="28" y="112" text="&lt;html&gt;&lt;h4&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open, the Synced Core should have it closed.&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="28" y="154" text="&lt;html&gt;&lt;h4&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core (since Core v0.6 only) then power it directly via a 5V pin and Ground from the Master Core.&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="28" y="196" text="&lt;html&gt;&lt;h4&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h4&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="28" y="238" text="&lt;html&gt;&lt;h4&gt;4. Connect pin 1 of header X4 (the square marked pin, closest to the board edge) of both Cores together. This is the codec master clock.&lt;/h4&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="28" text="&lt;html&gt;&lt;h1 style=&quot;color:#800000;&quot;&gt;How to set up spilink between two Cores:&lt;/h1&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="70" text="&lt;html&gt;&lt;h2&gt;First of all make sure you download and flash the &quot;spilink&quot; branch of the Ksoloti firmware!&lt;/h2&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="112" text="&lt;html&gt;&lt;h2&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open, the Synced Core should have it closed.&lt;/h2&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="154" text="&lt;html&gt;&lt;h2&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core (since Core v0.6 only) then power it directly via a 5V pin and Ground from the Master Core.&lt;/h2&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="196" text="&lt;html&gt;&lt;h2&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h2&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="238" text="&lt;html&gt;&lt;h2&gt;4. Connect pin 1 of header X4 (the square marked pin, closest to the board edge) of both Cores together. This is the codec master clock.&lt;/h2&gt;&lt;/html&gt;"/>
    <obj type="ksoloti/spilink/send 2" uuid="cae1c5ae-6da2-4a7b-918e-bd52fe6033bc" name="send_1" x="182" y="294">
       <params/>
       <attribs>
