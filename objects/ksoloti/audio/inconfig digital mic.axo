@@ -2,7 +2,10 @@
    <obj.normal id="inconfig digital mic" uuid="a8f5bfcb-73fd-4546-9aa6-57ae88005b81">
       <sDescription>Connect up to two digital (PDM) microphone modules to the Ksoloti Core board (pins GND, 3.3V, MIC_CLK, MIC_DAT).
 The regular audio inputs will be disabled and the factory audio/in objects will pass the (one or two) mic signals instead.
-The digital mic and analog audio inputs cannot be used simultaneously (hardware limitation).</sDescription>
+
+The digital mics and analog audio inputs cannot be used simultaneously (hardware limitation).
+
+Note that if you want to use two mics, you'll have to set up the pins called L/R (or similar) on your mic modules accordingly. One has to be tied to GND, making it the left channel, and one to 3.3V (right channel).</sDescription>
       <author>sebiik</author>
       <license>GPL</license>
       <inlets/>
