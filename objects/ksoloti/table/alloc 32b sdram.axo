@@ -1,0 +1,80 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="alloc 32b sdram" uuid="ce0f0a3e-a23e-4259-8fde-4131a808ece7">
+      <sDescription>allocate 32bit table in SDRAM memory</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="samples">
+            <MenuEntries>
+               <string>2</string>
+               <string>4</string>
+               <string>8</string>
+               <string>16</string>
+               <string>32</string>
+               <string>64</string>
+               <string>128</string>
+               <string>256</string>
+               <string>512</string>
+               <string>1K</string>
+               <string>2K</string>
+               <string>4K</string>
+               <string>8K</string>
+               <string>16K</string>
+               <string>32K</string>
+               <string>64K</string>
+               <string>128K</string>
+               <string>256K</string>
+               <string>512K</string>
+               <string>1M</string>
+               <string>2M</string>
+               <string>4M</string>
+               <string>8M</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+               <string>17</string>
+               <string>18</string>
+               <string>19</string>
+               <string>20</string>
+               <string>21</string>
+               <string>22</string>
+               <string>23</string>
+            </CEntries>
+         </combo>
+         <text name="init"/>
+      </attribs>
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = attr_samples;
+static const uint32_t LENGTH = 1<<attr_samples;
+static const uint32_t LENGTHMASK = (1<<attr_samples)-1;
+static const uint32_t BITS = 32;
+static const uint32_t GAIN = 0;
+int32_t *array;]]></code.declaration>
+      <code.init><![CDATA[static int32_t _array[attr_poly][LENGTH] __attribute__ ((section (".sdram")));
+array = &_array[parent->polyIndex][0];
+{ 
+  int i;
+  for(i=0;i<LENGTH;i++) array[i]=0;
+}
+attr_init]]></code.init>
+   </obj.normal>
+</objdefs>

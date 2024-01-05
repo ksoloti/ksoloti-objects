@@ -1,0 +1,453 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="14" y="28" text="8-bit resolution"/>
+   <comment type="patch/comment" x="182" y="28" text="non-interpolated fractional lookup"/>
+   <comment type="patch/comment" x="518" y="28" text="16-bit resolution"/>
+   <comment type="patch/comment" x="700" y="28" text="non-interpolated"/>
+   <comment type="patch/comment" x="1008" y="28" text="32-bit resolution"/>
+   <comment type="patch/comment" x="1176" y="28" text="non-interpolated_"/>
+   <obj type="table/alloc 8b" uuid="9a8785a40e0aebb9cc22af09b0a7cf5f91ad2c64" name="t1" x="14" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="16"/>
+         <text attributeName="init">
+            <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=2*i;]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="c1" x="98" y="42">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" name="read_1" x="182" y="42">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t1"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="displayS1" x="378" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="table/alloc 16b" uuid="597fcaac36aa638ba120b0fbdcadcde4ad405a7e" name="t2" x="518" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="16"/>
+         <text attributeName="init">
+            <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=512*i;]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="c1_" x="616" y="42">
+      <params>
+         <frac32.u.map name="value" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" name="read_2" x="700" y="42">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t2"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="displayS1___" x="854" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="table/alloc 32b" uuid="ac26551322b24f37c3be0e6481d1193f1fd66bc8" name="t3" x="1008" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="16"/>
+         <text attributeName="init">
+            <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=(1<<21)*i;]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="c1__" x="1106" y="42">
+      <params>
+         <frac32.u.map name="value" value="8.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" name="read_3" x="1176" y="42">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t3"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="displayS1_____" x="1330" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="700" y="98" text="linear interpolated"/>
+   <comment type="patch/comment" x="1176" y="98" text="linear interpolated_"/>
+   <comment type="patch/comment" x="182" y="126" text="input is fraction of table size (positive)"/>
+   <obj type="table/read interp" uuid="e650ab07d8398b3a0fc7b498a9580d4144727675" name="tabread1___" x="700" y="126">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t2"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="displayS1____" x="854" y="126">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="table/read interp" uuid="e650ab07d8398b3a0fc7b498a9580d4144727675" name="tabread1_____" x="1176" y="126">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t3"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="displayS1______" x="1330" y="126">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="182" y="140" text="so 4 units/step for a 16-element table"/>
+   <comment type="patch/comment" x="182" y="154" text="linear interpolated fractional lookup"/>
+   <obj type="table/read interp" uuid="e650ab07d8398b3a0fc7b498a9580d4144727675" name="tabread1_" x="182" y="182">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t1"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="displayS1__" x="378" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="224" y="280" text="integer lookup"/>
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="osc1" x="14" y="294">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/counter" uuid="7a141ba82230e54e5f5cd12da5dbe5a74ba854a5" name="counter1" x="140" y="294">
+      <params>
+         <int32 name="maximum" value="23"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" uuid="65eb8d0f6a3344638de94c9882999b9af15510d0" name="tabread2" x="224" y="294">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t1"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="displayS1_" x="420" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="812" y="308" text="table in main, accessed in sub"/>
+   <obj type="table/alloc 32b" uuid="ac26551322b24f37c3be0e6481d1193f1fd66bc8" name="ptable" x="812" y="322">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="32"/>
+         <text attributeName="init">
+            <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=0;]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <patcher type="patch/patcher" uuid="7c5307dc-df85-4948-99f1-711f1b9c6bf2" name="patcher_2" x="910" y="322">
+      <params/>
+      <attribs/>
+      <subpatch appVersion="1.0.12">
+         <obj type="lfo/saw" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_5" x="28" y="56">
+            <params>
+               <frac32.s.map name="pitch" value="1.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="table/write" uuid="ae85c48e960e33bd95ba61cce3832cf2a3a3de26" name="tabwrite_3" x="280" y="126">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="../ptable"/>
+            </attribs>
+         </obj>
+         <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="tabwrite_2" x="28" y="154">
+            <params>
+               <frac32.s.map name="pitch" value="-2.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="logic/change" uuid="42071f8cb4cfe1f35956c0bd5a313a57e049bec4" name="change_1" x="182" y="154">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source obj="tabwrite_2" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="v"/>
+               <dest obj="change_1" inlet="in"/>
+            </net>
+            <net>
+               <source obj="change_1" outlet="trig"/>
+               <dest obj="tabwrite_3" inlet="trig"/>
+            </net>
+            <net>
+               <source obj="tabwrite_5" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="a"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+         <windowPos>
+            <x>1920</x>
+            <y>0</y>
+            <width>780</width>
+            <height>620</height>
+         </windowPos>
+      </subpatch>
+   </patcher>
+   <obj type="lfo/saw" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_5" x="994" y="322">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" name="tabread3__" x="1092" y="322">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="ptable"/>
+      </attribs>
+   </obj>
+   <obj type="disp/kscope 128 b" uuid="e71f3dd9bc5b799ad703079e63fb929dd75def0" name="kscope_2" x="1218" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/ibar 16" uuid="302bfed4cde8894229679ce81f6b8a5c5212dd98" name="ibar161" x="224" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc/phasor" uuid="e5553f226015bf75f4fdc3faa39be1bee4f84044" name="phasor3_1" x="14" y="462">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" uuid="57c0d2f661ccce53e64e9d4653918bc7a74f311e" name="read_4" x="140" y="462">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t1"/>
+      </attribs>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_1" x="294" y="462">
+      <params>
+         <frac32.u.map name="amp" value="6.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out left" uuid="b11a3c09b2fdd575ea8212f2ce7743d5269253b1" name="dac_11" x="420" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="910" y="504" text="table in subpatch"/>
+   <patcher type="patch/patcher" uuid="7f072b46-2519-4216-ac69-c60f623557eb" name="patcher_1" x="910" y="518">
+      <params/>
+      <attribs/>
+      <subpatch appVersion="1.0.12">
+         <obj type="lfo/saw" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_5" x="28" y="56">
+            <params>
+               <frac32.s.map name="pitch" value="1.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="table/alloc 32b" uuid="ac26551322b24f37c3be0e6481d1193f1fd66bc8" name="ptable" x="168" y="56">
+            <params/>
+            <attribs>
+               <combo attributeName="size" selection="32"/>
+               <text attributeName="init">
+                  <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=0;]]></sText>
+               </text>
+            </attribs>
+         </obj>
+         <obj type="table/write" uuid="ae85c48e960e33bd95ba61cce3832cf2a3a3de26" name="tabwrite_3" x="280" y="126">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="ptable"/>
+            </attribs>
+         </obj>
+         <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="tabwrite_2" x="28" y="154">
+            <params>
+               <frac32.s.map name="pitch" value="-2.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="logic/change" uuid="42071f8cb4cfe1f35956c0bd5a313a57e049bec4" name="change_1" x="182" y="154">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source obj="tabwrite_2" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="v"/>
+               <dest obj="change_1" inlet="in"/>
+            </net>
+            <net>
+               <source obj="change_1" outlet="trig"/>
+               <dest obj="tabwrite_3" inlet="trig"/>
+            </net>
+            <net>
+               <source obj="tabwrite_5" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="a"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+         <windowPos>
+            <x>1920</x>
+            <y>0</y>
+            <width>780</width>
+            <height>620</height>
+         </windowPos>
+      </subpatch>
+   </patcher>
+   <obj type="lfo/saw" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_4" x="994" y="518">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" name="tabread3_" x="1092" y="518">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="patcher_1/ptable"/>
+      </attribs>
+   </obj>
+   <obj type="disp/kscope 128 b" uuid="e71f3dd9bc5b799ad703079e63fb929dd75def0" name="kscope_1" x="1218" y="518">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="cbp_1" x="56" y="602">
+      <params>
+         <frac32.s.map name="value" value="39.5600004196167"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/write" uuid="ae85c48e960e33bd95ba61cce3832cf2a3a3de26" name="tabwrite_1" x="140" y="602">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t1"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/button" uuid="ef3d13774349df85aa9bfecf30dbc91ab8488b3f" name="cb1m_1" x="56" y="686">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="c1" outlet="out"/>
+         <dest obj="tabread1_" inlet="a"/>
+         <dest obj="read_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="read_1" outlet="o"/>
+         <dest obj="displayS1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="counter1" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="counter1" outlet="o"/>
+         <dest obj="tabread2" inlet="a"/>
+         <dest obj="ibar161" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tabread2" outlet="o"/>
+         <dest obj="displayS1_" inlet="in"/>
+      </net>
+      <net>
+         <source obj="phasor3_1" outlet="phasor"/>
+         <dest obj="read_4" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tabread1_" outlet="o"/>
+         <dest obj="displayS1__" inlet="in"/>
+      </net>
+      <net>
+         <source obj="read_4" outlet="o"/>
+         <dest obj="*c_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+      </net>
+      <net>
+         <source obj="c1_" outlet="out"/>
+         <dest obj="tabread1___" inlet="a"/>
+         <dest obj="read_2" inlet="a"/>
+      </net>
+      <net>
+         <source obj="read_2" outlet="o"/>
+         <dest obj="displayS1___" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tabread1___" outlet="o"/>
+         <dest obj="displayS1____" inlet="in"/>
+      </net>
+      <net>
+         <source obj="c1__" outlet="out"/>
+         <dest obj="tabread1_____" inlet="a"/>
+         <dest obj="read_3" inlet="a"/>
+      </net>
+      <net>
+         <source obj="read_3" outlet="o"/>
+         <dest obj="displayS1_____" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tabread1_____" outlet="o"/>
+         <dest obj="displayS1______" inlet="in"/>
+      </net>
+      <net>
+         <source obj="cb1m_1" outlet="o"/>
+         <dest obj="tabwrite_1" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="cbp_1" outlet="out"/>
+         <dest obj="tabwrite_1" inlet="v"/>
+      </net>
+      <net>
+         <source obj="tabwrite_4" outlet="wave"/>
+         <dest obj="tabread3_" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tabread3_" outlet="o"/>
+         <dest obj="kscope_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tabwrite_5" outlet="wave"/>
+         <dest obj="tabread3__" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tabread3__" outlet="o"/>
+         <dest obj="kscope_2" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[note fdf ]]></notes>
+   <windowPos>
+      <x>2150</x>
+      <y>48</y>
+      <width>1434</width>
+      <height>844</height>
+   </windowPos>
+</patch-1.0>

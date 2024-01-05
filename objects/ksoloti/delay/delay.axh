@@ -1,0 +1,121 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="280" y="14" text="&lt;html&gt;&lt;h3&gt;The signal is written to the delay line..."/>
+   <comment type="patch/comment" x="14" y="28" text="&lt;html&gt;This is the original signal: a pulse oscillator&lt;br&gt;with very narrow pulse width"/>
+   <comment type="patch/comment" x="588" y="42" text="&lt;html&gt;&lt;h3&gt;Attenuate and output to codec"/>
+   <obj type="ksoloti/delay/write sdram" uuid="7cb03c9a-39bd-4f73-bf89-60d41d9d5321" name="write_1" x="280" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="samples" selection="256 (5.33ms)"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="pw_1" x="14" y="70">
+      <params>
+         <frac32.s.map name="value" value="-62.999999999999986"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/pwm" uuid="a6b40ff63f161d8bac8ea2eba5b0dbffcf49b472" name="pwm_1" x="98" y="70">
+      <params>
+         <frac32.s.map name="pitch" value="-24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_1" x="588" y="84">
+      <params>
+         <frac32.u.map name="amp" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="dac~_1" x="700" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="504" y="196" text="&lt;html&gt;&lt;h3&gt;... and mixed together&lt;br&gt;with the original signal"/>
+   <comment type="patch/comment" x="322" y="224" text="&lt;html&gt;&lt;h3&gt;... the signal is read back &lt;br&gt;from the delay line..."/>
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="658" y="224">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="14" y="252" text="&lt;html&gt;&lt;h3&gt;Very slow sine oscillator modulating the delay time"/>
+   <obj type="mix/mix 1" uuid="e8f482af5b1ec4a2e9cf8ac7ce09e7c0e43cea08" name="mix_1" x="504" y="252">
+      <params>
+         <frac32.u.map name="gain1" value="64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delay/read interp" uuid="e3d8b8823ab551c588659520bf6cc25c630466c7" name="delread2~~_1" x="322" y="280">
+      <params>
+         <frac32.u.map name="time" value="4.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="write_1"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="pitch_1" x="14" y="294">
+      <params>
+         <frac32.s.map name="value" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="98" y="294">
+      <params>
+         <frac32.s.map name="pitch" value="-48.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_2" x="210" y="294">
+      <params>
+         <frac32.u.map name="amp" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="588" y="420" text="original pulse ^"/>
+   <comment type="patch/comment" x="714" y="420" text="^ delayed pulse"/>
+   <nets>
+      <net>
+         <source obj="pwm_1" outlet="wave"/>
+         <dest obj="write_1" inlet="in"/>
+         <dest obj="mix_1" inlet="bus_in"/>
+      </net>
+      <net>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="scope_1" inlet="in"/>
+         <dest obj="*c_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="*c_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="delread2~~_1" inlet="time"/>
+      </net>
+      <net>
+         <source obj="pitch_1" outlet="out"/>
+         <dest obj="sine_1" inlet="pitch"/>
+      </net>
+      <net>
+         <source obj="pw_1" outlet="out"/>
+         <dest obj="pwm_1" inlet="pw"/>
+      </net>
+      <net>
+         <source obj="delread2~~_1" outlet="out"/>
+         <dest obj="mix_1" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="dac~_1" inlet="left"/>
+         <dest obj="dac~_1" inlet="right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>2520</x>
+      <y>0</y>
+      <width>840</width>
+      <height>538</height>
+   </windowPos>
+</patch-1.0>
