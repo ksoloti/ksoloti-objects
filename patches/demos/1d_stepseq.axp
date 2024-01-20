@@ -16,6 +16,7 @@
          <combo attributeName="mode" selection="Stereo"/>
       </attribs>
    </obj>
+   <comment type="patch/comment" x="658" y="28" text="&lt;html&gt;&lt;code style=&quot;font-size:16&quot;&gt;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&lt;br/&gt; pot1&amp;nbsp;&amp;nbsp;&amp;nbsp;pot2&amp;nbsp;&amp;nbsp;&amp;nbsp;pot3&amp;nbsp;&amp;nbsp;&amp;nbsp;pot4&amp;nbsp;&amp;nbsp;&amp;nbsp;pot5&lt;br/&gt; &lt;br/&gt; &amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&lt;br/&gt; pot6&amp;nbsp;&amp;nbsp;&amp;nbsp;pot7&amp;nbsp;&amp;nbsp;&amp;nbsp;pot8&amp;nbsp;&amp;nbsp;&amp;nbsp;pot9&amp;nbsp;&amp;nbsp;&amp;nbsp;pot10&lt;br/&gt;&lt;/code&gt;&lt;/html&gt;"/>
    <obj type="tiar/HW/OLED128x64nice" uuid="5bde8c3d-fe37-40b3-848e-edb113767bc8" name="OLED128x64nice_1" x="392" y="42">
       <params/>
       <attribs>
@@ -44,7 +45,6 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="602" y="112" text="&lt;html&gt;&lt;code&gt;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&lt;br/&gt; pot1&amp;nbsp;&amp;nbsp;&amp;nbsp;pot2&amp;nbsp;&amp;nbsp;&amp;nbsp;pot3&amp;nbsp;&amp;nbsp;&amp;nbsp;pot4&amp;nbsp;&amp;nbsp;&amp;nbsp;pot5&lt;br/&gt; &lt;br/&gt; &amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&lt;br/&gt; pot6&amp;nbsp;&amp;nbsp;&amp;nbsp;pot7&amp;nbsp;&amp;nbsp;&amp;nbsp;pot8&amp;nbsp;&amp;nbsp;&amp;nbsp;pot9&amp;nbsp;&amp;nbsp;&amp;nbsp;pot10&lt;br/&gt;&lt;/code&gt;&lt;/html&gt;"/>
    <obj type="audio/in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" name="in_1" x="1134" y="126">
       <params/>
       <attribs/>
@@ -434,9 +434,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>1915</x>
-      <y>-5</y>
-      <width>1930</width>
-      <height>1053</height>
+      <x>2079</x>
+      <y>4</y>
+      <width>1599</width>
+      <height>963</height>
    </windowPos>
 </patch-1.0>
