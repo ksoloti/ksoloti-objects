@@ -5,45 +5,20 @@
    <comment type="patch/comment" x="28" y="154" text="&lt;html&gt;&lt;h2&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core (since Core v0.6 only) then power it directly via a 5V pin and Ground from the Master Core.&lt;/h2&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="196" text="&lt;html&gt;&lt;h2&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h2&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="238" text="&lt;html&gt;&lt;h2&gt;4. Connect pin 1 of header X4 (the square marked pin, closest to the board edge) of both Cores together. This is the codec master clock.&lt;/h2&gt;&lt;/html&gt;"/>
-   <obj type="ksoloti/spilink/send 2" uuid="cae1c5ae-6da2-4a7b-918e-bd52fe6033bc" name="send_1" x="182" y="294">
-      <params/>
-      <attribs>
-         <combo attributeName="channels" selection="1 | 2"/>
-      </attribs>
-   </obj>
-   <comment type="patch/comment" x="308" y="294" text="&lt;- To avoid timing issues, place send objects at the top of the canvas..."/>
-   <obj type="ksoloti/spilink/send 1" uuid="541d8d7a-d045-4824-ae83-62b4a13a82eb" name="send_2" x="182" y="378">
-      <params/>
-      <attribs>
-         <combo attributeName="channel" selection="3"/>
-      </attribs>
-   </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="28" y="462">
-      <params>
-         <frac32.s.map name="pitch" value="12.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="ksoloti/spilink/recv 2" uuid="902ab129-3090-427d-90d9-a49d62dd5ec1" name="recv_1" x="182" y="462">
-      <params/>
-      <attribs>
-         <combo attributeName="channels" selection="1 | 2"/>
-      </attribs>
-   </obj>
-   <comment type="patch/comment" x="308" y="462" text="&lt;- ... and recv objects below any send objects."/>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="322" y="490">
+   <comment type="patch/comment" x="168" y="280" text="&lt;html&gt;&lt;p style=&quot;background:#080;&quot;&gt;---------------------------------&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;"/>
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="322" y="294">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="476" y="490">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="476" y="294">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="630" y="490">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="630" y="294">
       <params/>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7" name="tdelta_1" x="784" y="490">
+   <patchobj type="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7" name="tdelta_1" x="784" y="294">
       <params>
          <bool32.mom name="clear" value="0"/>
          <int32 name="dsp" value="0"/>
@@ -91,85 +66,110 @@ volatile int i = param_dsp*10;
 while(i--) {}]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="896" y="532" text="&lt;html&gt;-- dsp will let you add a fake DSP load&lt;br/&gt;so you can check if signals become glitchy."/>
-   <obj type="ksoloti/spilink/recv 1" uuid="dca54b00-5b02-41d0-a78c-4a02f672f8bd" name="recv_2" x="182" y="546">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="28" y="308">
+      <params>
+         <frac32.s.map name="pitch" value="3.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/spilink/recv 2" uuid="902ab129-3090-427d-90d9-a49d62dd5ec1" name="recv_1" x="182" y="308">
+      <params/>
+      <attribs>
+         <combo attributeName="channels" selection="1 | 2"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="882" y="336" text="&lt;html&gt;-- dsp will let you add a fake DSP load&lt;br/&gt;so you can check if signals become glitchy."/>
+   <obj type="ksoloti/spilink/recv 1" uuid="dca54b00-5b02-41d0-a78c-4a02f672f8bd" name="recv_2" x="182" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="3"/>
       </attribs>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="28" y="574">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="28" y="420">
       <params>
          <frac32.s.map name="pitch" value="15.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="28" y="686">
+   <obj type="ksoloti/spilink/send 2" uuid="cae1c5ae-6da2-4a7b-918e-bd52fe6033bc" name="send_1" x="182" y="462">
+      <params/>
+      <attribs>
+         <combo attributeName="channels" selection="1 | 2"/>
+      </attribs>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="28" y="532">
       <params>
          <frac32.s.map name="pitch" value="16.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="168" y="714" text="You can also use any of the spilink channels to send/receive up to 16 control values each."/>
-   <comment type="patch/comment" x="658" y="714" text="... and here we receive three control values from the other Core."/>
-   <comment type="patch/comment" x="168" y="728" text="Here we are sending three control values via channel 4 (as only channels 1 to 3 are used for audio)."/>
-   <comment type="patch/comment" x="658" y="728" text="The channel and slots must match whatever the other Core sends on."/>
-   <comment type="patch/comment" x="168" y="742" text="Slots 9 to 11 have been selected arbitrarily."/>
-   <obj type="ksoloti/spilink/unpack k 2" uuid="f96a9093-762d-423c-953d-000eb8f03b03" name="unpack_1" x="644" y="742">
+   <comment type="patch/comment" x="308" y="532" text="You can also use any of the spilink channels to send/receive up to 16 control values each."/>
+   <comment type="patch/comment" x="826" y="532" text="... and here we receive three control values from the other Core."/>
+   <obj type="ksoloti/spilink/send 1" uuid="541d8d7a-d045-4824-ae83-62b4a13a82eb" name="send_2" x="182" y="546">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="3"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="308" y="546" text="Here we are sending three control values via channel 4 (as only channels 1 to 3 are used for audio)."/>
+   <comment type="patch/comment" x="826" y="546" text="The channel and slots must match whatever the other Core sends on."/>
+   <comment type="patch/comment" x="308" y="560" text="Slots 9 to 11 have been selected arbitrarily."/>
+   <obj type="ksoloti/spilink/unpack k 2" uuid="f96a9093-762d-423c-953d-000eb8f03b03" name="unpack_1" x="826" y="560">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="4"/>
          <combo attributeName="slots" selection="9 | 10"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_3" x="812" y="742">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_3" x="980" y="560">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/spilink/unpack k 1" uuid="f403ac90-d3ed-41e2-8bad-7e9ec528e4b7" name="unpack_2" x="896" y="742">
+   <obj type="ksoloti/spilink/unpack k 1" uuid="f403ac90-d3ed-41e2-8bad-7e9ec528e4b7" name="unpack_2" x="1064" y="560">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="4"/>
          <combo attributeName="slot" selection="11"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_6" x="1064" y="742">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_6" x="1232" y="560">
       <params/>
       <attribs/>
    </obj>
-   <obj type="drj/lfo/sin_4_b" uuid="75f7330c26a13333215dccc3ba3b9008545c1daa9" name="sin_4_b_1" x="168" y="756">
+   <obj type="drj/lfo/sin_4_b" uuid="75f7330c26a13333215dccc3ba3b9008545c1daa9" name="sin_4_b_1" x="308" y="574">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/spilink/pack k 2" uuid="fdf0cb2b-5f0c-4246-a092-c5844870a835" name="pack_1" x="280" y="756">
+   <obj type="ksoloti/spilink/pack k 2" uuid="fdf0cb2b-5f0c-4246-a092-c5844870a835" name="pack_1" x="420" y="574">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="4"/>
          <combo attributeName="slots" selection="9 | 10"/>
       </attribs>
    </obj>
-   <obj type="ksoloti/spilink/pack k 1" uuid="3e1f5f6e-565a-4ec1-a9f9-6f0ecafe2c7c" name="pack_2" x="434" y="756">
+   <obj type="ksoloti/spilink/pack k 1" uuid="3e1f5f6e-565a-4ec1-a9f9-6f0ecafe2c7c" name="pack_2" x="546" y="574">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="4"/>
          <combo attributeName="slot" selection="11"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_4" x="812" y="826">
+   <comment type="patch/comment" x="186" y="621" text="&lt;html&gt;&lt;p style=&quot;background:#080;&quot;"/>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_4" x="966" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_1" x="896" y="826">
+   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_1" x="1050" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_2" x="980" y="826">
+   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_2" x="1134" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_3" x="1064" y="826">
+   <obj type="disp/chart b" uuid="d2bdf496f96ee521628490a038411210fbe29b15" name="chart_3" x="1218" y="658">
       <params/>
       <attribs/>
    </obj>
@@ -234,6 +234,6 @@ while(i--) {}]]></code.krate>
       <x>1920</x>
       <y>0</y>
       <width>1920</width>
-      <height>521</height>
+      <height>520</height>
    </windowPos>
 </patch-1.0>
