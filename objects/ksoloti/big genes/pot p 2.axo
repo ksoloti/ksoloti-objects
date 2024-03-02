@@ -1,0 +1,38 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="pot p 2" uuid="5f3d2718-1ff8-4408-adbd-0efdb75eb9e0">
+      <sDescription>Reads two adjecent pots on Ksoloti Big Genes. Unipolar output.
+Pins:
+PA0, PA1, PA2, PA3,
+PF6, PF7, PF8, PF9.
+
+Values from pots 1-4 are summed with the CV input jacks P1-4.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>analog.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32.positive name="outA"/>
+         <frac32.positive name="outB"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="pots">
+            <MenuEntries>
+               <string>1 | 2</string>
+               <string>3 | 4</string>
+               <string>5 | 6</string>
+               <string>7 | 8</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>2</string>
+               <string>14</string>
+               <string>16</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[outlet_outA = (1 << 27) - (adcvalues[attr_pots] << 15);
+outlet_outB = (1 << 27) - (adcvalues[attr_pots+1] << 15);]]></code.krate>
+   </obj.normal>
+</objdefs>

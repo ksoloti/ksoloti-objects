@@ -1,0 +1,37 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="cv in p" uuid="4b544f1d-462c-4cd5-8af7-73916e3e261e">
+      <sDescription>Reads a CV input on Ksoloti Big Genes. Unipolar output.
+Pins:
+PA6, PA7, PB0, PB1, PC1, PC4</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>analog.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32.positive name="out"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="jack">
+            <MenuEntries>
+               <string>A</string>
+               <string>B</string>
+               <string>C</string>
+               <string>D</string>
+               <string>X</string>
+               <string>Y</string>
+            </MenuEntries>
+            <CEntries>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[outlet_out = (1<<27) - (adcvalues[attr_jack]<<15);]]></code.krate>
+   </obj.normal>
+</objdefs>
