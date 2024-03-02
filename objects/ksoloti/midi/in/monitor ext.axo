@@ -1,0 +1,57 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="monitor ext" uuid="b3967eef-65e1-4597-9ebb-56114f7a1a25">
+      <sDescription>Provides in-patcher information about incoming midi-data.
+Extended with channel, pitchbend, and channel pressure.</sDescription>
+      <author>robert schirmer, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays>
+         <int32.bar16 name="channel"/>
+         <int32.label name="note "/>
+         <int32.label name="velocity "/>
+         <bool32 name="gate "/>
+         <int32.label name="cc "/>
+         <int32.label name="value "/>
+         <int32.label name="bend"/>
+         <int32.label name="chpress"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[uint8_t chnl;
+uint8_t gate, note, velo;
+uint8_t ccnumber, ccvalue;
+uint16_t bend;
+uint8_t chpress;]]></code.declaration>
+      <code.krate><![CDATA[disp_note = note;
+disp_velocity = velo;
+disp_gate = gate;
+disp_cc = ccnumber;
+disp_value = ccvalue;
+disp_bend = bend;
+disp_chpress = chpress;
+disp_channel = chnl;]]></code.krate>
+      <code.midihandler><![CDATA[uint8_t msg = (status & 0xF0);
+chnl = (status & 0x0F);
+
+if ((msg == MIDI_NOTE_ON) && (data2)) {
+	gate = 1;
+	note = data1;
+	velo = data2;
+}
+else if (((msg == MIDI_NOTE_ON) && (!data2)) || (msg == MIDI_NOTE_OFF)) {
+	gate = 0;
+}
+else if (msg == MIDI_CONTROL_CHANGE) {
+	ccnumber = data1;
+	ccvalue  = data2;
+}
+else if (msg == MIDI_PITCH_BEND) {
+	bend =  data2<<8; /* MSB */
+	bend += data1;   /* LSB */
+}
+else if (msg == MIDI_CHANNEL_PRESSURE) {
+	chpress = data1;
+}]]></code.midihandler>
+   </obj.normal>
+</objdefs>
