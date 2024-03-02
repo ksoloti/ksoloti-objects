@@ -20,7 +20,7 @@ Added pitch bend range.</sDescription>
       <displays/>
       <params/>
       <attribs>
-         <spinner name="bendrange" description="set pitch bend range (+/-) in semitones" MinValue="0" MaxValue="48" DefaultValue="48"/>
+         <spinner name="bendrange" description="set pitch bend range (+/-) in semitones" MinValue="0" MaxValue="96" DefaultValue="48"/>
       </attribs>
       <code.declaration><![CDATA[int8_t _note;
 int32_t _gate;
