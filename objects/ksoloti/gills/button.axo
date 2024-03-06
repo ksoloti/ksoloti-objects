@@ -1,0 +1,31 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="button" uuid="07be7a50-1051-436a-92aa-03e2fb9b1229">
+      <sDescription>Reads a button on Ksoloti Gills.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <bool32 name="out" description="switch value, pressed = HIGH"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="button">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+            </MenuEntries>
+            <CEntries>
+               <string>GPIOB,5</string>
+               <string>GPIOA,10</string>
+               <string>GPIOB,12</string>
+               <string>GPIOB,13</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.init><![CDATA[palSetPadMode(attr_button, PAL_MODE_INPUT);]]></code.init>
+      <code.krate><![CDATA[outlet_out = palReadPad(attr_button)<<27;]]></code.krate>
+   </obj.normal>
+</objdefs>

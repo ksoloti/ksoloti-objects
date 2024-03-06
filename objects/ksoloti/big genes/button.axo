@@ -1,6 +1,6 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="switch" uuid="f59f139e8da912742832dc541157f20f30b7ac1d">
-      <sDescription>Reads a switch on Ksoloti Gills.</sDescription>
+   <obj.normal id="button" uuid="d61d570e-303b-4adb-acac-76920264c270">
+      <sDescription>Reads a button on Ksoloti Big Genes.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
       <inlets/>
@@ -10,7 +10,7 @@
       <displays/>
       <params/>
       <attribs>
-         <combo name="switch">
+         <combo name="button">
             <MenuEntries>
                <string>1</string>
                <string>2</string>
@@ -25,7 +25,7 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.init><![CDATA[palSetPadMode(attr_switch, PAL_MODE_INPUT);]]></code.init>
-      <code.krate><![CDATA[outlet_out = palReadPad(attr_switch)<<27;]]></code.krate>
+      <code.init><![CDATA[palSetPadMode(attr_button, PAL_MODE_INPUT);]]></code.init>
+      <code.krate><![CDATA[outlet_out = palReadPad(attr_button)<<27;]]></code.krate>
    </obj.normal>
 </objdefs>

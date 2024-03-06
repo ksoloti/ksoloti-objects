@@ -1,7 +1,8 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="led3 pwm" uuid="3e491ae7-4200-4b96-95e7-cc42c168d1ff">
       <sDescription>PWM output to LED3 (dual-color, PB3 and PB4) using hardware timers 2 and 3
-at a fixed frequency of 97.65 Hz.</sDescription>
+at a fixed frequency of 97.65 Hz.
+incolor1 usually corresponds to blue or green, incolor2 to red.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
       <helpPatch>pwm.axh</helpPatch>
@@ -51,10 +52,8 @@ PWMD3.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;]]></code.init>
 pwmStop(&PWMD3);
 palSetPadMode(GPIOB, 3, PAL_MODE_INPUT_PULLDOWN);
 palSetPadMode(GPIOB, 4, PAL_MODE_INPUT_PULLDOWN);]]></code.dispose>
-      <code.krate><![CDATA[/* Pin 1, usually red. */
-pwmEnableChannel(&PWMD2, 1, (pwmcnt_t)(inlet_incolor1>=0?inlet_incolor1>>15:0));
+      <code.krate><![CDATA[pwmEnableChannel(&PWMD2, 1, (pwmcnt_t)(inlet_incolor1>=0?inlet_incolor1>>15:0));
 
-/* Pin 2, usually green. */
 pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_incolor2>=0?inlet_incolor2>>15:0));]]></code.krate>
    </obj.normal>
 </objdefs>
