@@ -1,6 +1,6 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="led4 pwm" uuid="3e491ae7-4200-4b96-95e7-cc42c168d200">
-      <sDescription>PWM output to LED4 (dual color, PB6 and PB7) using hardware timer 4
+      <sDescription>PWM output to LED4 (dual-color, PB6 and PB7) using hardware timer 4
 at a fixed frequency of 97.65 Hz.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
@@ -27,9 +27,13 @@ at a fixed frequency of 97.65 Hz.</sDescription>
 	/* HW dependent part.*/
 	0};
 
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
 pwmStart(&PWMD4, &pwmcfg);
+#endif
 palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(2));
 palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(2));
+
 PWMD4.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP | STM32_TIM_CCER_CC2NE | STM32_TIM_CCER_CC2NP;]]></code.init>
       <code.dispose><![CDATA[pwmStop(&PWMD4);
 palSetPadMode(GPIOB, 6, PAL_MODE_INPUT_PULLDOWN);

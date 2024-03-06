@@ -23,9 +23,14 @@ at a fixed frequency of 97.65 Hz. Note that PWM does not work on LED1 (green).
 	/* HW dependent part.*/
 	0};
 
+#ifndef PWMD8STARTED__
+#define PWMD8STARTED__
 pwmStart(&PWMD8, &pwmcfg);
-sysmon_disable_blinker();
+#endif
 palSetPadMode(GPIOC, 6, PAL_MODE_ALTERNATE(3));
+
+sysmon_disable_blinker();
+
 PWMD8.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;]]></code.init>
       <code.dispose><![CDATA[pwmStop(&PWMD8);]]></code.dispose>
       <code.krate><![CDATA[pwmEnableChannel(&PWMD8, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));]]></code.krate>

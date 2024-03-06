@@ -28,10 +28,23 @@ at a fixed frequency of 97.65 Hz.</sDescription>
 	/* HW dependent part.*/
 	0};
 
+#ifndef PWMD2STARTED__
+#define PWMD2STARTED__
 pwmStart(&PWMD2, &pwmcfg);
-pwmStart(&PWMD3, &pwmcfg);
+#endif
 palSetPadMode(GPIOB, 3, PAL_MODE_ALTERNATE(1));
+
+#ifdef PA6_USING_PWM
+#warning "Can't use PA6 and PB4 simultaneously for PWM. They will have the same value!"
+#else
+#define PB4_USING_PWM
+#endif
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
 palSetPadMode(GPIOB, 4, PAL_MODE_ALTERNATE(2));
+
 PWMD2.tim->CCER |= STM32_TIM_CCER_CC2NE | STM32_TIM_CCER_CC2NP;
 PWMD3.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;]]></code.init>
       <code.dispose><![CDATA[pwmStop(&PWMD2);

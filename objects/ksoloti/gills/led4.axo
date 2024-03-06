@@ -1,6 +1,6 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="led4" uuid="320eed040f6c55bb24c56416596ac2e67d0c82c2">
-      <sDescription>Controls LED 4 (dual-color) on Ksoloti Gills.</sDescription>
+      <sDescription>Controls LED4 (dual-color) on Ksoloti Gills.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
       <inlets>

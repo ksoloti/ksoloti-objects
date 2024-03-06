@@ -16,7 +16,7 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
          <combo name="offset">
             <MenuEntries>
                <string>E4 (0) = 0V (Axoloti)</string>
-               <string>C4 (-4) = 0V</string>
+               <string>C4 (-4) = 0V (Eurorack)</string>
             </MenuEntries>
             <CEntries>
                <string>0</string>

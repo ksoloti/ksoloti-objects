@@ -17,7 +17,7 @@ NOT for creating 1V/oct pitch CV.</sDescription>
          <combo name="offset">
             <MenuEntries>
                <string>E4 (0) = 0V (Axoloti)</string>
-               <string>C4 (-4) = 0V</string>
+               <string>C4 (-4) = 0V (Eurorack)</string>
             </MenuEntries>
             <CEntries>
                <string>0</string>
