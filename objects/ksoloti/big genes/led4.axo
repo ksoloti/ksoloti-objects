@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="led4" uuid="320eed040f6c55bb24c56416596ac2e67d0c82c3">
+   <obj.normal id="led4" uuid="5dd91715-6177-4ac2-a670-90967b9ee300">
       <sDescription>Controls LED4 (dual-color, PB6 and PB7) on Ksoloti Big Genes.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
@@ -10,8 +10,7 @@
       <outlets/>
       <displays/>
       <params/>
-      <attribs>
-      </attribs>
+      <attribs/>
       <code.init><![CDATA[
       palSetPadMode(GPIOB,6, PAL_MODE_OUTPUT_PUSHPULL);
       palSetPadMode(GPIOB,7, PAL_MODE_OUTPUT_PUSHPULL);

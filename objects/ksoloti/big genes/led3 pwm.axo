@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="led3 pwm" uuid="3e491ae7-4200-4b96-95e7-cc42c168d200">
+   <obj.normal id="led3 pwm" uuid="b095910e-905a-400e-9f5a-534f96318cbf">
       <sDescription>PWM output to LED3 (dual-color, PA9 and PC7) using hardware timers 1 and 8
 at a fixed frequency of 97.65 Hz.</sDescription>
       <author>Johannes Taelman, sebiik</author>
@@ -14,8 +14,8 @@ at a fixed frequency of 97.65 Hz.</sDescription>
       <params/>
       <attribs/>
       <depends>
-         <depend>PWMD1</depend>
          <depend>PWMD8</depend>
+         <depend>PWMD1</depend>
       </depends>
       <code.init><![CDATA[static const PWMConfig pwmcfg = {
 	400000, /* 400kHz PWM clock frequency.  */

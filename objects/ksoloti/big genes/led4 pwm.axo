@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="led4 pwm" uuid="3e491ae7-4200-4b96-95e7-cc42c168d201">
+   <obj.normal id="led4 pwm" uuid="5d4945da-5c80-4bcd-bd18-27ad81f0969b">
       <sDescription>PWM output to LED4 (dual-color, PB6 and PB7) using hardware timer 4
 at a fixed frequency of 97.65 Hz.</sDescription>
       <author>Johannes Taelman, sebiik</author>
