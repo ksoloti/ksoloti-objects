@@ -1,0 +1,44 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfccf">
+      <sDescription>Low-speed 12 bit digital to analog conversion, not suitable for audio signals, but for control voltages.
+To be used with Big Genes.
+Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, etc.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="cv1"/>
+         <frac32.bipolar name="cv2"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="offset">
+            <MenuEntries>
+               <string>E4 (0) = 0V (Axoloti)</string>
+               <string>C4 (-4) = 0V (Eurorack)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>(1&lt;&lt;22)</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[static const int hi_limit = 0x7FFFFFF;
+
+int calc_cv_bipolar(int in, int offs) {
+	int val = -((in >> 1) + offs) + (1<<26);
+	return __SSAT(val, 28);
+}]]></code.declaration>
+      <code.init><![CDATA[palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+RCC->APB1ENR |= 0x20000000;
+DAC->CR |= 0x00010001;]]></code.init>
+      <code.dispose><![CDATA[DAC->CR = 0x0;
+RCC->APB1ENR &= ~0x20000000;
+palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);]]></code.dispose>
+      <code.krate><![CDATA[DAC->DHR12R1 = calc_cv_bipolar(inlet_cv1, attr_offset)>>15;
+DAC->DHR12R2 = calc_cv_bipolar(inlet_cv2, attr_offset)>>15;]]></code.krate>
+   </obj.normal>
+</objdefs>

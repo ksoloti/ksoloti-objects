@@ -1,0 +1,33 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led2 pwm" uuid="3e491ae7-4200-4b96-95e7-cc42c168d1ff">
+      <sDescription>PWM output to LED2 (red, PC6) using hardware timer 8
+at a fixed frequency of 97.65 Hz. Note that PWM does not work on LED1 (green).
+      </sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>pwm.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="in" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.init><![CDATA[static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency.  */
+	4096, /* PWM period is 128 cycles.    */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+
+pwmStart(&PWMD8, &pwmcfg);
+sysmon_disable_blinker();
+palSetPadMode(GPIOC, 6, PAL_MODE_ALTERNATE(3));
+PWMD8.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;]]></code.init>
+      <code.dispose><![CDATA[pwmStop(&PWMD8);]]></code.dispose>
+      <code.krate><![CDATA[pwmEnableChannel(&PWMD8, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));]]></code.krate>
+   </obj.normal>
+</objdefs>
