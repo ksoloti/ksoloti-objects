@@ -1,0 +1,77 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712">
+      <sDescription>Controls a single LED color on Ksoloti Gills.
+LED1: green, PG6
+LED2: red, PC6
+LED3: dual-color, PB3 and PB4
+LED4: dual-color, PB6 and PB7</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="in" description="positive = true"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="led">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3 blue</string>
+               <string>3 red</string>
+               <string>4 blue</string>
+               <string>4 red</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0x66</string>
+               <string>0x26</string>
+               <string>0x13</string>
+               <string>0x14</string>
+               <string>0x16</string>
+               <string>0x17</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.init><![CDATA[#if attr_led == 0x66 /* LED1 */
+sysmon_disable_blinker();
+palSetPadMode(GPIOG,6, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x26 /* LED2 */
+sysmon_disable_blinker();
+palSetPadMode(LED2_PORT,LED2_PIN,PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x13 /* LED3 color A */
+palSetPadMode(GPIOB,3, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x14 /* LED3 color B */
+palSetPadMode(GPIOB,4, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x16 /* LED4 color A */
+palSetPadMode(GPIOB,6, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x17 /* LED4 color B */
+palSetPadMode(GPIOB,7, PAL_MODE_OUTPUT_PUSHPULL);
+
+#endif]]></code.init>
+      <code.krate><![CDATA[#if attr_led == 0x66 /* LED1 */
+palWritePad(GPIOG,6, (inlet_in > 0));
+
+#elif attr_led == 0x26 /* LED2 */
+palWritePad(GPIOC,6, (inlet_in > 0));
+
+#elif attr_led == 0x13 /* LED3 color A */
+palWritePad(GPIOB,3, (inlet_in > 0));
+
+#elif attr_led == 0x14 /* LED3 color B */
+palWritePad(GPIOB,4, (inlet_in > 0));
+
+#elif attr_led == 0x16 /* LED4 color A */
+palWritePad(GPIOB,6, (inlet_in > 0));
+
+#elif attr_led == 0x17 /* LED4 color B */
+palWritePad(GPIOB,7, (inlet_in > 0));
+
+#endif]]></code.krate>
+   </obj.normal>
+</objdefs>

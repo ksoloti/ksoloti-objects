@@ -1,0 +1,136 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led pwm 2" uuid="3fb2c0b0-63ad-4b98-87c1-6220b2d24aa0">
+      <sDescription>PWM output to an LED on Ksoloti Big Genes.
+Using a hardware timer at a fixed frequency of 97.65 Hz.
+(Or using software PWM for LED1 which does not have hardware PWM functionality).
+
+LED1 (green, PG6) using software
+LED2 (red, PC6) using hardware timer 8
+LED3 (dual-color, PA9 and PC7) using hardware timers 1 and 8
+LED4 (dual-color, PB6 and PB7) using hardware timer 4</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>pwm.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="inA" description="pwm ratio"/>
+         <frac32.positive name="inB" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="led">
+            <MenuEntries>
+               <string>1 green | 2 red</string>
+               <string>3 blue | red</string>
+               <string>4 blue | red</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <depends>
+         <depend>PWMD8</depend>
+         <depend>PWMD1</depend>
+         <depend>PWMD2</depend>
+         <depend>PWMD3</depend>
+         <depend>PWMD4</depend>
+      </depends>
+      <code.declaration><![CDATA[#if attr_led == 0 /* LED1 does not have hardware PWM, so we use a software comparator */
+uint8_t counter = 0;
+#endif]]></code.declaration>
+      <code.init><![CDATA[/* All LEDs except LED1 use this hardware PWM configuration */
+static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency.  */
+	4096, /* PWM period is 128 cycles.    */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+
+
+
+#if attr_led == 0 /* LED1 and LED2 */
+
+sysmon_disable_blinker();
+palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);
+
+#ifndef PWMD8STARTED__
+#define PWMD8STARTED__
+pwmStart(&PWMD8, &pwmcfg);
+#endif
+palSetPadMode(GPIOC, 6, PAL_MODE_ALTERNATE(3));
+//PWMD8.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;
+
+
+#elif attr_led == 1 /* LED3 */
+
+#ifndef PWMD1STARTED__
+#define PWMD1STARTED__
+pwmStart(&PWMD1, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(1));
+
+#ifndef PWMD8STARTED__
+#define PWMD8STARTED__
+pwmStart(&PWMD8, &pwmcfg);
+#endif
+palSetPadMode(GPIOC, 7, PAL_MODE_ALTERNATE(3));
+
+
+#elif attr_led == 2 /* LED4 */
+
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(2));
+//PWMD4.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;
+
+palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(2));
+//PWMD4.tim->CCER |= STM32_TIM_CCER_CC2NE | STM32_TIM_CCER_CC2NP;
+
+
+#endif]]></code.init>
+      <code.dispose><![CDATA[#if attr_led == 0
+pwmStop(&PWMD8);
+
+#elif attr_led == 1
+pwmStop(&PWMD1);
+pwmStop(&PWMD8);
+
+#elif attr_led == 2
+pwmStop(&PWMD4);
+
+#endif]]></code.dispose>
+      <code.krate><![CDATA[#if attr_led == 0 /* LED1 does not have hardware PWM, so we use a crude software comparator */
+
+uint8_t pwmval = (inlet_inA > 0 ? inlet_inA>>19 : 0);
+
+/* Only 64 PWM steps on LED1, so it might look jittery/flashy */
+/* K-rate 3000 Hz divided by 64 = 46.9 Hz. Only half the speed of the hardware PWM on the other LEDs. */
+
+/* counter increments through 64 steps at k-rate. Output is high as long as counter is smaller than pwmvalue, low otherwise. */
+palWritePad(GPIOG,6, (counter < pwmval ? 1 : 0));
+counter += 4;
+
+pwmEnableChannel(&PWMD8, 0, (pwmcnt_t)(inlet_inB >=0 ? inlet_inB>>15 : 0));
+
+
+#elif attr_led == 1 /* LED3 */
+pwmEnableChannel(&PWMD1, 1, (pwmcnt_t)(inlet_inA >= 0 ? inlet_inA>>15 : 0));
+pwmEnableChannel(&PWMD8, 1, (pwmcnt_t)(inlet_inB >= 0 ? inlet_inB>>15 : 0));
+
+
+#elif attr_led == 2 /* LED4 */
+pwmEnableChannel(&PWMD4, 0, (pwmcnt_t)(inlet_inA >= 0 ? inlet_inA>>15 : 0));
+pwmEnableChannel(&PWMD4, 1, (pwmcnt_t)(inlet_inB >= 0 ? inlet_inB>>15 : 0));
+
+#endif]]></code.krate>
+   </obj.normal>
+</objdefs>

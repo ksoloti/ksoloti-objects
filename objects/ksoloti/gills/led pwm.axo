@@ -1,0 +1,148 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led pwm" uuid="3e7d5685-2d1d-4cc8-a4bf-aa9ae4b0962e">
+      <sDescription>PWM output to an LED on Ksoloti Gills.
+Using a hardware timer at a fixed frequency of 97.65 Hz.
+(Or using software PWM for LED1 which does not have hardware PWM functionality).
+
+LED1 (green, PG6) using software
+LED2 (red, PC6) using hardware timer 8
+LED3 (dual-color, PB3 and PB4) using hardware timers 2 and 3
+LED4 (dual-color, PB6 and PB7) using hardware timer 4</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>pwm.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="in" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="led">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3 blue</string>
+               <string>3 red</string>
+               <string>4 blue</string>
+               <string>4 red</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0x66</string>
+               <string>0x26</string>
+               <string>0x13</string>
+               <string>0x14</string>
+               <string>0x16</string>
+               <string>0x17</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <depends>
+         <depend>PWMD2</depend>
+         <depend>PWMD3</depend>
+         <depend>PWMD4</depend>
+         <depend>PWMD8</depend>
+      </depends>
+      <code.declaration><![CDATA[#if attr_led == 0x66 /* LED1 does not have hardware PWM, so we use a software comparator */
+uint8_t counter = 0;
+#endif]]></code.declaration>
+      <code.init><![CDATA[#if attr_led != 0x66 /* All LEDs except LED1 use this hardware PWM configuration */
+static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency.  */
+	4096, /* PWM period is 128 cycles.    */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+#endif
+
+
+#if attr_led == 0x26 /* LED2 */
+#ifndef PWMD8STARTED__
+#define PWMD8STARTED__
+pwmStart(&PWMD8, &pwmcfg);
+#endif
+palSetPadMode(GPIOC, 6, PAL_MODE_ALTERNATE(3));
+sysmon_disable_blinker();
+PWMD8.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;
+
+
+#elif attr_led == 0x13 /* LED3 color A */
+#ifndef PWMD2STARTED__
+#define PWMD2STARTED__
+pwmStart(&PWMD2, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 3, PAL_MODE_ALTERNATE(1));
+PWMD2.tim->CCER |= STM32_TIM_CCER_CC2NE | STM32_TIM_CCER_CC2NP;
+
+
+#elif attr_led == 0x14 /* LED3 color B */
+#ifdef PA6_USING_PWM
+#warning "Can't use PA6 and PB4 simultaneously for PWM. They will have the same value!"
+#else
+#define PB4_USING_PWM
+#endif
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 4, PAL_MODE_ALTERNATE(2));
+PWMD3.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;
+
+
+#elif attr_led == 0x16 /* LED4 color A */
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(2));
+PWMD4.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;
+
+
+#elif attr_led == 0x17 /* LED4 color B */
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(2));
+PWMD4.tim->CCER |= STM32_TIM_CCER_CC2NE | STM32_TIM_CCER_CC2NP;
+
+
+#endif]]></code.init>
+      <code.dispose><![CDATA[pwmStop(&PWMD8);]]></code.dispose>
+      <code.krate><![CDATA[#if attr_led == 0x66 /* LED1 does not have hardware PWM, so we use a crude software comparator */
+
+uint8_t pwmval = (inlet_in > 0 ? inlet_in>>19 : 0);
+
+/* Only 64 PWM steps on LED1, so it might look jittery/flashy */
+/* K-rate 3000 Hz divided by 64 = 46.9 Hz. Only half the speed of the hardware PWM on the other LEDs. */
+
+/* counter increments through 64 steps at k-rate. Output is high as long as counter is smaller than pwmvalue, low otherwise. */
+palWritePad(GPIOG,6, (counter < pwmval ? 1 : 0));
+counter += 4;
+
+
+#elif attr_led == 0x26 /* LED2 */
+pwmEnableChannel(&PWMD8, 0, (pwmcnt_t)(inlet_in >=0 ? inlet_in>>15 : 0));
+
+
+#elif attr_led == 0x13 /* LED3 color A */
+pwmEnableChannel(&PWMD2, 1, (pwmcnt_t)(inlet_in>= 0 ? inlet_in>>15 : 0));
+
+
+#elif attr_led == 0x14 /* LED3 color B */
+pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_in>= 0 ? inlet_in>>15 : 0));
+
+
+#elif attr_led == 0x16 /* LED4 color A */
+pwmEnableChannel(&PWMD4, 0, (pwmcnt_t)(inlet_in >= 0 ? inlet_in>>15 : 0));
+
+
+#elif attr_led == 0x17 /* LED4 color B */
+pwmEnableChannel(&PWMD4, 1, (pwmcnt_t)(inlet_in >= 0 ? inlet_in>>15 : 0));
+
+#endif]]></code.krate>
+   </obj.normal>
+</objdefs>
