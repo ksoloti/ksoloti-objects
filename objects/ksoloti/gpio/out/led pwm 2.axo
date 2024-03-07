@@ -1,0 +1,62 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led pwm 2" uuid="10d54bb3-12a9-4661-9a8c-5dfb2d65c366">
+      <sDescription>PWM output to an LED on Ksoloti Core.
+Using a hardware timer at a fixed frequency of 97.65 Hz.
+(Or using software PWM for LED1 which does not have hardware PWM functionality).
+
+LED1 (green, PG6) using software
+LED2 (red, PC6) using hardware timer 8</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>pwm.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="led1" description="pwm ratio"/>
+         <frac32.positive name="led2" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <depends>
+         <depend>PWMD8</depend>
+      </depends>
+      <code.declaration><![CDATA[#if attr_led == 0 /* LED1 does not have hardware PWM, so we use a software comparator */
+uint8_t counter = 0;
+#endif]]></code.declaration>
+      <code.init><![CDATA[/* All LEDs except LED1 use this hardware PWM configuration */
+static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency.  */
+	4096, /* PWM period is 128 cycles.    */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+
+
+
+
+
+sysmon_disable_blinker();
+palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);
+
+#ifndef PWMD8STARTED__
+#define PWMD8STARTED__
+pwmStart(&PWMD8, &pwmcfg);
+#endif
+palSetPadMode(GPIOC, 6, PAL_MODE_ALTERNATE(3));
+//PWMD8.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;]]></code.init>
+      <code.dispose><![CDATA[pwmStop(&PWMD8);]]></code.dispose>
+      <code.krate><![CDATA[uint8_t pwmval = (inlet_led1 > 0 ? inlet_led1>>19 : 0);
+
+/* Only 64 PWM steps on LED1, so it might look jittery/flashy */
+/* K-rate 3000 Hz divided by 64 = 46.9 Hz. Only half the speed of the hardware PWM on the other LEDs. */
+
+/* counter increments through 64 steps at k-rate. Output is high as long as counter is smaller than pwmvalue, low otherwise. */
+palWritePad(GPIOG,6, (counter < pwmval ? 1 : 0));
+counter += 4;
+
+pwmEnableChannel(&PWMD8, 0, (pwmcnt_t)(inlet_led2 >=0 ? inlet_led2>>15 : 0));]]></code.krate>
+   </obj.normal>
+</objdefs>
