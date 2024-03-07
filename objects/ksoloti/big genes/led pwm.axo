@@ -1,12 +1,12 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="led pwm" uuid="b4a5ae61-9d98-497a-8397-acf535464f4c">
-      <sDescription>PWM output to an LED on Big Genes.
+   <obj.normal id="led pwm" uuid="f446b7ca-99c6-493d-97d0-20314da49589">
+      <sDescription>PWM output to an LED on Ksoloti Big Genes.
 Using a hardware timer at a fixed frequency of 97.65 Hz.
 (Or using software PWM for LED1 which does not have hardware PWM functionality).
 
 LED1 (green, PG6) using software
 LED2 (red, PC6) using hardware timer 8
-LED3 (dual-color, PA9 and PC7) using hardware timers 2 and 3
+LED3 (dual-color, PA9 and PC7) using hardware timers 1 and 8
 LED4 (dual-color, PB6 and PB7) using hardware timer 4</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
@@ -38,9 +38,9 @@ LED4 (dual-color, PB6 and PB7) using hardware timer 4</sDescription>
          </combo>
       </attribs>
       <depends>
-         <depend>PWMD1</depend>
          <depend>PWMD4</depend>
          <depend>PWMD8</depend>
+         <depend>PWMD1</depend>
       </depends>
       <code.declaration><![CDATA[#if attr_led == 0x66 /* LED1 does not have hardware PWM, so we use a software comparator */
 uint8_t counter = 0;
@@ -103,7 +103,22 @@ PWMD4.tim->CCER |= STM32_TIM_CCER_CC2NE | STM32_TIM_CCER_CC2NP;
 
 
 #endif]]></code.init>
-      <code.dispose><![CDATA[pwmStop(&PWMD8);]]></code.dispose>
+      <code.dispose><![CDATA[#if attr_led == 0x26 /* LED2 */
+pwmStop(&PWMD8);
+
+#elif attr_led == 0x09 /* LED3 color A */
+pwmStop(&PWMD1);
+
+#elif attr_led == 0x27 /* LED3 color B */
+pwmStop(&PWMD8);
+
+#elif attr_led == 0x16 /* LED4 color A */
+pwmStop(&PWMD4);
+
+#elif attr_led == 0x17 /* LED4 color B */
+pwmStop(&PWMD4);
+
+#endif]]></code.dispose>
       <code.krate><![CDATA[#if attr_led == 0x66 /* LED1 does not have hardware PWM, so we use a crude software comparator */
 
 uint8_t pwmval = (inlet_in > 0 ? inlet_in>>19 : 0);
