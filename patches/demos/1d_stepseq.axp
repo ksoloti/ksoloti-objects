@@ -97,15 +97,15 @@
    </obj>
    <obj type="TSG/fx/reverb" uuid="e404e386-4b86-4ea6-90ee-ce5cb82da637" name="obj_1" x="1316" y="308">
       <params>
-         <frac32.u.map name="PreDelay" value="1.0"/>
-         <frac32.u.map name="decay" value="15.5"/>
+         <frac32.u.map name="PreDelay" value="20.5"/>
+         <frac32.u.map name="decay" value="28.5"/>
          <frac32.u.map name="LowDamp" value="0.0"/>
          <frac32.u.map name="HighDamp" value="31.0"/>
          <frac32.u.map name="size" value="33.5"/>
          <frac32.s.map name="mod_:pitch" value="-29.0"/>
          <frac32.u.map name="mod_:gain" value="7.5"/>
          <frac32.u.map name="diffusion" value="64.0"/>
-         <frac32.u.map name="mix" value="8.0"/>
+         <frac32.u.map name="mix" value="24.0"/>
       </params>
       <attribs/>
    </obj>
@@ -164,7 +164,7 @@
    </patchobj>
    <obj type="jt/filter/vcf4pole2x" uuid="f0ea35e9-a9c5-445e-8868-79b556d5d5c3" name="vcf4pole2x_1" x="840" y="336">
       <params>
-         <frac32.s.map name="pitch" value="0.0"/>
+         <frac32.s.map name="pitch" value="-7.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
@@ -436,7 +436,7 @@
    <windowPos>
       <x>2115</x>
       <y>17</y>
-      <width>1604</width>
+      <width>1622</width>
       <height>963</height>
    </windowPos>
 </patch-1.0>
