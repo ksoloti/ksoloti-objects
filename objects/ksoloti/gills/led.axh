@@ -1,34 +1,12 @@
 <patch-1.0 appVersion="1.0.12">
-   <comment type="patch/comment" x="98" y="14" text="&lt;html&gt;&lt;h2&gt;Generate MIDI clock and do some logic to pulse LED1 with every beat."/>
-   <obj type="const/i" uuid="e202f44b2df17ae0b3e663b98ea6b14c8ff00408" name="i_1" x="14" y="56">
-      <params/>
-      <attribs>
-         <spinner attributeName="value" value="1"/>
-      </attribs>
-   </obj>
-   <obj type="midi/intern/clock" uuid="7f6f35e92d2c29e950af2b3af5cebb2e9e3b778c" name="clock_1" x="98" y="56">
+   <comment type="patch/comment" x="98" y="14" text="&lt;html&gt;&lt;h2&gt;Pulse LED1 using a simple square wave LFO."/>
+   <obj type="lfo/square" uuid="de6909eb64db13af5b43f979a4c130024b3a4793" name="square_1" x="98" y="56">
       <params>
-         <frac32.u.map name="bpm" value="16.0"/>
+         <frac32.s.map name="pitch" value="-24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="math/divremc" uuid="fd7d945542e16344358136d7e22cffd5be704260" name="divremc_1" x="210" y="56">
-      <params/>
-      <attribs>
-         <spinner attributeName="denominator" value="4"/>
-      </attribs>
-   </obj>
-   <obj type="logic/change" uuid="96e39ae624c3f3c952cec4a95e1986ee0104f718" name="change_1" x="336" y="56">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="timer/pulselength" uuid="ca68725237d8ba8407773340801660a9fd9b0dba" name="pulselength_1" x="420" y="56">
-      <params>
-         <frac32.s.map name="delay" value="-12.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_1" x="532" y="56">
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_1" x="210" y="56">
       <params/>
       <attribs>
          <combo attributeName="led" selection="1"/>
@@ -52,11 +30,13 @@
          <combo attributeName="led" selection="2"/>
       </attribs>
    </obj>
+   <comment type="patch/comment" x="252" y="238" text="pwm objects only react to positive values"/>
    <comment type="patch/comment" x="252" y="252" text="invert to display negative half of the waveform"/>
-   <obj type="math/inv" uuid="565521d3699b36d8095aa1c79b9ad0046fb133ce" name="inv_1" x="350" y="266">
+   <obj type="math/inv" uuid="565521d3699b36d8095aa1c79b9ad0046fb133ce" name="inv_1" x="308" y="266">
       <params/>
       <attribs/>
    </obj>
+   <comment type="patch/comment" x="238" y="280" text="--&gt; bipolar"/>
    <obj type="ksoloti/gills/led pwm 2" uuid="4baa217b-6fb8-4fb5-b1ad-f7d7c71c6b6b" name="led_3" x="518" y="294">
       <params/>
       <attribs>
@@ -71,31 +51,10 @@
    </obj>
    <nets>
       <net>
-         <source obj="clock_1" outlet="pos4ppq"/>
-         <dest obj="divremc_1" inlet="a"/>
-      </net>
-      <net>
-         <source obj="change_1" outlet="trig"/>
-         <dest obj="pulselength_1" inlet="trig"/>
-         <dest obj="tempoSyncedLFO_1" inlet="sync"/>
-      </net>
-      <net>
-         <source obj="pulselength_1" outlet="pulse"/>
-         <dest obj="led_1" inlet="in"/>
-      </net>
-      <net>
          <source obj="tempoSyncedLFO_1" outlet="triangle"/>
          <dest obj="inv_1" inlet="in"/>
          <dest obj="led_3" inlet="inA"/>
          <dest obj="led_4" inlet="inA"/>
-      </net>
-      <net>
-         <source obj="i_1" outlet="out"/>
-         <dest obj="clock_1" inlet="run"/>
-      </net>
-      <net>
-         <source obj="divremc_1" outlet="div"/>
-         <dest obj="change_1" inlet="in"/>
       </net>
       <net>
          <source obj="inv_1" outlet="out"/>
@@ -103,14 +62,19 @@
          <dest obj="led_3" inlet="inB"/>
          <dest obj="led_4" inlet="inB"/>
       </net>
+      <net>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="led_1" inlet="in"/>
+         <dest obj="tempoSyncedLFO_1" inlet="sync"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>2272</x>
-      <y>220</y>
+      <x>2369</x>
+      <y>215</y>
       <width>680</width>
       <height>634</height>
    </windowPos>
