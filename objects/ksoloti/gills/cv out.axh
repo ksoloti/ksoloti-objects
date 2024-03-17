@@ -1,183 +1,58 @@
 <patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1&gt;Try to adjust SCALE and OFFSET so that they are as close as possible to the voltages below.&lt;/h2&gt;"/>
    <comment type="patch/comment" x="14" y="70" text="&lt;html&gt;&lt;h2 style=&quot;color:#A00000;&quot;&gt;If you have set the respective UNIPOLAR jumper on the CV Expander PCB, the voltage range should go from 0V to 10V, not -5V to 5V.&lt;br&gt;Look at the &quot;Unipolar&quot; table instead to know the right voltages."/>
-   <comment type="patch/comment" x="14" y="140" text="&lt;html&gt;&lt;h2&gt;1. Go live and tweak the SCALE trimmer while switching between 1V and 2V below. Measure the output and try to get close to an interval of one volt.&lt;br&gt;The offset does not matter yet, for example something close to 1.42V and 2.42V is good."/>
-   <comment type="patch/comment" x="14" y="210" text="&lt;html&gt;&lt;h2&gt;2. Switch to 0V below and tweak the offset trimmer to get close to 0V at the output."/>
-   <comment type="patch/comment" x="14" y="252" text="&lt;html&gt;&lt;h2&gt;3. Redo steps 1 and 2 until your measured output is as close as possible to the selected values.&lt;br&gt;Switch between all values between -5V and +5V and compare with the measured output. Make adjustments if necessary."/>
-   <patcher type="patch/patcher" uuid="0d3fba42-9d02-4a1e-86f2-36c39eaae490" name="cv handler" x="294" y="336">
+   <comment type="patch/comment" x="14" y="154" text="&lt;html&gt;&lt;h2&gt;1. Go live and tweak the SCALE trimmer while switching between 1V and 2V below. &lt;span style=&quot;color: #00A000;&quot;&gt;You can also use the Gills encoder to step through the voltages.&lt;/span&gt;&lt;br&gt;Measure the output and try to get close to an interval of one volt.The offset does not matter yet, for example something close to 1.42V and 2.42V is good."/>
+   <comment type="patch/comment" x="14" y="238" text="&lt;html&gt;&lt;h2&gt;2. Switch to 0V below and tweak the offset trimmer to get close to 0V at the output."/>
+   <comment type="patch/comment" x="14" y="294" text="&lt;html&gt;&lt;h2&gt;3. Redo steps 1 and 2 until your measured output is as close as possible to the selected values.&lt;br&gt;Switch between all values between -5V and +5V and compare with the measured output. Make adjustments if necessary."/>
+   <obj type="ksoloti/gills/encoder" uuid="8d8c7129-cce1-491f-98b4-6ecb6355cfee" name="encoder_1" x="308" y="392">
+      <params/>
+      <attribs>
+         <spinner attributeName="min" value="-5"/>
+         <spinner attributeName="max" value="5"/>
+      </attribs>
+   </obj>
+   <patcher type="patch/patcher" uuid="f17b888c-e173-42cb-aa0b-8054e0b5b51d" name="cv handler" x="434" y="392">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
-         <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="index" x="154" y="140">
+         <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="index" x="266" y="140">
             <params/>
             <attribs/>
          </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_11" x="266" y="140">
-            <params>
-               <frac32.s.map name="value" value="60.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <patchobj type="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a" name="mux_1" x="364" y="140">
+         <patchobj type="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a" name="handle" x="364" y="140">
             <params/>
             <attribs/>
             <object id="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a">
-               <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+               <sDescription></sDescription>
                <author>Are Leistad</author>
                <license>BSD</license>
                <helpPatch>mux.axh</helpPatch>
                <inlets>
-                  <frac32 name="i0" description="input 0"/>
-                  <frac32 name="i1" description="input 1"/>
-                  <frac32 name="i2" description="input 2"/>
-                  <frac32 name="i3" description="input 3"/>
-                  <frac32 name="i4" description="input 4"/>
-                  <frac32 name="i5" description="input 5"/>
-                  <frac32 name="i6" description="input 6"/>
-                  <frac32 name="i7" description="input 7"/>
-                  <frac32 name="i8" description="input 8"/>
-                  <frac32 name="i9" description="input 9"/>
-                  <frac32 name="i10" description="input 10"/>
-                  <int32.positive name="s" description="select"/>
+                  <int32.positive name="in" description="select"/>
                </inlets>
                <outlets>
-                  <frac32 name="o" description="output"/>
+                  <frac32 name="out" description="output"/>
                </outlets>
                <displays/>
                <params/>
                <attribs/>
                <includes/>
-               <code.krate><![CDATA[switch(inlet_s>0?inlet_s:0){
-      case 0: outlet_o= inlet_i0;break;
-      case 1: outlet_o= inlet_i1;break;
-      case 2: outlet_o= inlet_i2;break;
-      case 3: outlet_o= inlet_i3;break;
-      case 4: outlet_o= inlet_i4;break;
-      case 5: outlet_o= inlet_i5;break;
-      case 6: outlet_o= inlet_i6;break;
-      case 7: outlet_o= inlet_i7;break;
-      case 8: outlet_o= inlet_i8;break;
-      case 9: outlet_o= inlet_i9;break;
-      case 10: outlet_o= inlet_i10;break;
-      default: outlet_o= inlet_i10;break;
-}]]></code.krate>
+               <code.declaration><![CDATA[int val = 0;]]></code.declaration>
+               <code.krate><![CDATA[val = inlet_in > 5 ? 5 : inlet_in < -5 ? -5 : inlet_in;
+outlet_out = (val * 12)<<21;]]></code.krate>
             </object>
          </patchobj>
          <obj type="patch/outlet f" uuid="d18a9a550bcaaebac94e25983bd0e27dbfd7233c" name="out" x="462" y="140">
             <params/>
             <attribs/>
          </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_10" x="266" y="224">
-            <params>
-               <frac32.s.map name="value" value="48.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_9" x="266" y="308">
-            <params>
-               <frac32.s.map name="value" value="36.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_8" x="266" y="392">
-            <params>
-               <frac32.s.map name="value" value="24.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_7" x="266" y="476">
-            <params>
-               <frac32.s.map name="value" value="12.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_6" x="266" y="560">
-            <params>
-               <frac32.s.map name="value" value="0.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_5" x="266" y="644">
-            <params>
-               <frac32.s.map name="value" value="-12.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_4" x="266" y="728">
-            <params>
-               <frac32.s.map name="value" value="-24.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_3" x="266" y="812">
-            <params>
-               <frac32.s.map name="value" value="-36.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_2" x="266" y="896">
-            <params>
-               <frac32.s.map name="value" value="-48.0"/>
-            </params>
-            <attribs/>
-         </obj>
-         <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_1" x="266" y="980">
-            <params>
-               <frac32.s.map name="value" value="-60.0"/>
-            </params>
-            <attribs/>
-         </obj>
          <nets>
             <net>
-               <source obj="dial_11" outlet="out"/>
-               <dest obj="mux_1" inlet="i0"/>
-            </net>
-            <net>
-               <source obj="dial_10" outlet="out"/>
-               <dest obj="mux_1" inlet="i1"/>
-            </net>
-            <net>
-               <source obj="dial_9" outlet="out"/>
-               <dest obj="mux_1" inlet="i2"/>
-            </net>
-            <net>
-               <source obj="dial_8" outlet="out"/>
-               <dest obj="mux_1" inlet="i3"/>
-            </net>
-            <net>
-               <source obj="dial_7" outlet="out"/>
-               <dest obj="mux_1" inlet="i4"/>
-            </net>
-            <net>
-               <source obj="dial_6" outlet="out"/>
-               <dest obj="mux_1" inlet="i5"/>
-            </net>
-            <net>
-               <source obj="dial_5" outlet="out"/>
-               <dest obj="mux_1" inlet="i6"/>
-            </net>
-            <net>
-               <source obj="dial_4" outlet="out"/>
-               <dest obj="mux_1" inlet="i7"/>
-            </net>
-            <net>
-               <source obj="dial_3" outlet="out"/>
-               <dest obj="mux_1" inlet="i8"/>
-            </net>
-            <net>
-               <source obj="dial_2" outlet="out"/>
-               <dest obj="mux_1" inlet="i9"/>
-            </net>
-            <net>
-               <source obj="dial_1" outlet="out"/>
-               <dest obj="mux_1" inlet="i10"/>
-            </net>
-            <net>
                <source obj="index" outlet="inlet"/>
-               <dest obj="mux_1" inlet="s"/>
+               <dest obj="handle" inlet="in"/>
             </net>
             <net>
-               <source obj="mux_1" outlet="o"/>
+               <source obj="handle" outlet="o"/>
                <dest obj="out" inlet="outlet"/>
             </net>
          </nets>
@@ -193,13 +68,17 @@
          </windowPos>
       </subpatch>
    </patcher>
-   <obj type="ksoloti/gills/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcce" name="cv_1" x="392" y="336">
+   <obj type="ksoloti/gills/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcce" name="cv_1" x="532" y="392">
       <params/>
       <attribs>
          <combo attributeName="offset" selection="E4 (0) = 0V (Axoloti)"/>
       </attribs>
    </obj>
-   <patchobj type="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba" name="voltage switcher" x="14" y="350">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_1" x="700" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba" name="voltage switcher" x="28" y="406">
       <params>
          <int32.vradio name="value" value="5"/>
       </params>
@@ -221,23 +100,122 @@
          </params>
          <attribs/>
          <includes/>
-         <code.krate><![CDATA[outlet_out= param_value;]]></code.krate>
+         <code.krate><![CDATA[outlet_out = 5-param_value;]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="112" y="350" text="&lt;html&gt;Bipolar&lt;br&gt;(default):"/>
-   <comment type="patch/comment" x="196" y="350" text="&lt;html&gt;Unipolar&lt;br&gt;(jumper set):"/>
-   <comment type="patch/comment" x="112" y="392" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
-   <comment type="patch/comment" x="196" y="392" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
-   <comment type="patch/comment" x="14" y="560" text="&lt;html&gt;&lt;h1 style=&quot;color:#A00000;&quot;&gt;Note: If you set or clear a UNIPOLAR jumper later on you may have to re-calibrate the respective CV channel."/>
+   <comment type="patch/comment" x="126" y="406" text="&lt;html&gt;Bipolar&lt;br&gt;(default):"/>
+   <comment type="patch/comment" x="210" y="406" text="&lt;html&gt;Unipolar&lt;br&gt;(jumper set):"/>
+   <comment type="patch/comment" x="126" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
+   <comment type="patch/comment" x="210" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
+   <patcher type="patch/patcher" uuid="472cc196-64ce-4804-a67e-99fbc0dd105e" name="oled stuff" x="434" y="490">
+      <params/>
+      <attribs/>
+      <subpatch appVersion="1.0.12">
+         <obj type="gpio/i2c/config" uuid="b095a33e56de5fcd23740a7d983bc0bafb315d81" name="config_1" x="308" y="0">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_2" x="252" y="42">
+            <params/>
+            <attribs>
+               <table attributeName="str" table="CV CALIBR."/>
+            </attribs>
+         </obj>
+         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="252" y="112">
+            <params/>
+            <attribs>
+               <table attributeName="str" table="CV 1&amp;2:"/>
+            </attribs>
+         </obj>
+         <obj type="tiar/HW/OLED128x64niceWOScope" uuid="5bde8c3d-fe37-4133-138e-edb113767bc8" name="OLED128x64niceWOScope_1" x="476" y="112">
+            <params/>
+            <attribs>
+               <combo attributeName="type" selection="SH1106"/>
+               <combo attributeName="I2CADDR" selection="0x3C"/>
+            </attribs>
+         </obj>
+         <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="value" x="84" y="182">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/*" uuid="6a31299e3a491edd8c4df0e809a519a35cc08a3b" name="*_1" x="252" y="182">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="tiar/HW/bar" uuid="29bab9de-7b6b-4c8e-87ee-75013c6b6e2f" name="bar_1" x="322" y="182">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="const/i" uuid="e202f44b2df17ae0b3e663b98ea6b14c8ff00408" name="i_2" x="84" y="224">
+            <params/>
+            <attribs>
+               <spinner attributeName="value" value="12"/>
+            </attribs>
+         </obj>
+         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_3" x="252" y="252">
+            <params/>
+            <attribs>
+               <table attributeName="str" table="0 1 2 3 4 5"/>
+            </attribs>
+         </obj>
+         <nets>
+            <net>
+               <source obj="c_1" outlet="out"/>
+               <dest obj="OLED128x64niceWOScope_1" inlet="line2"/>
+            </net>
+            <net>
+               <source obj="c_2" outlet="out"/>
+               <dest obj="OLED128x64niceWOScope_1" inlet="line1"/>
+            </net>
+            <net>
+               <source obj="bar_1" outlet="out"/>
+               <dest obj="OLED128x64niceWOScope_1" inlet="line3"/>
+            </net>
+            <net>
+               <source obj="*_1" outlet="result"/>
+               <dest obj="bar_1" inlet="in"/>
+            </net>
+            <net>
+               <source obj="i_2" outlet="out"/>
+               <dest obj="*_1" inlet="b"/>
+            </net>
+            <net>
+               <source obj="c_3" outlet="out"/>
+               <dest obj="OLED128x64niceWOScope_1" inlet="line4"/>
+            </net>
+            <net>
+               <source obj="value" outlet="inlet"/>
+               <dest obj="*_1" inlet="a"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+         <windowPos>
+            <x>1920</x>
+            <y>0</y>
+            <width>780</width>
+            <height>620</height>
+         </windowPos>
+      </subpatch>
+   </patcher>
+   <comment type="patch/comment" x="14" y="616" text="&lt;html&gt;&lt;h1 style=&quot;color:#A00000;&quot;&gt;Note: If you set or clear a UNIPOLAR jumper later on you may have to re-calibrate the respective CV channel."/>
    <nets>
       <net>
          <source obj="cv handler" outlet="out"/>
          <dest obj="cv_1" inlet="cv1"/>
          <dest obj="cv_1" inlet="cv2"/>
+         <dest obj="dial_1" inlet="in"/>
       </net>
       <net>
          <source obj="voltage switcher" outlet="out"/>
+         <dest obj="encoder_1" inlet="set"/>
+      </net>
+      <net>
+         <source obj="encoder_1" outlet="out"/>
          <dest obj="cv handler" inlet="index"/>
+         <dest obj="oled stuff" inlet="value"/>
       </net>
    </nets>
    <settings>
@@ -245,9 +223,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>2419</x>
-      <y>207</y>
-      <width>1004</width>
-      <height>716</height>
+      <x>2412</x>
+      <y>211</y>
+      <width>1036</width>
+      <height>807</height>
    </windowPos>
 </patch-1.0>
