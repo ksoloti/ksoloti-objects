@@ -11,7 +11,7 @@
          <spinner attributeName="max" value="5"/>
       </attribs>
    </obj>
-   <patcher type="patch/patcher" uuid="f17b888c-e173-42cb-aa0b-8054e0b5b51d" name="cv handler" x="434" y="392">
+   <patcher type="patch/patcher" uuid="2a6ebe7a-e1d6-4b4f-8a58-2fa94a362cd3" name="cv handler" x="434" y="392">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -23,7 +23,6 @@
             <params/>
             <attribs/>
             <object id="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a">
-               <sDescription></sDescription>
                <author>Are Leistad</author>
                <license>BSD</license>
                <helpPatch>mux.axh</helpPatch>
@@ -50,10 +49,6 @@ outlet_out = (val * 12)<<21;]]></code.krate>
             <net>
                <source obj="index" outlet="inlet"/>
                <dest obj="handle" inlet="in"/>
-            </net>
-            <net>
-               <source obj="handle" outlet="o"/>
-               <dest obj="out" inlet="outlet"/>
             </net>
          </nets>
          <settings>
@@ -107,7 +102,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
    <comment type="patch/comment" x="210" y="406" text="&lt;html&gt;Unipolar&lt;br&gt;(jumper set):"/>
    <comment type="patch/comment" x="126" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
    <comment type="patch/comment" x="210" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
-   <patcher type="patch/patcher" uuid="472cc196-64ce-4804-a67e-99fbc0dd105e" name="oled stuff" x="434" y="490">
+   <patcher type="patch/patcher" uuid="08feef60-cc98-4adb-a71b-d2c5397bb835" name="oled stuff" x="434" y="490">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
