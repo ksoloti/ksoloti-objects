@@ -3,7 +3,7 @@
       <sDescription>Low-speed 12 bit digital to analog conversion, not suitable for audio signals, but for control voltages.
 To be used with the Gills CV expander board.
 Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, etc.</sDescription>
-      <author>Johannes Taelman</author>
+      <author>Johannes Taelman, ksoloti</author>
       <license>BSD</license>
       <inlets>
          <frac32.bipolar name="cv1"/>
