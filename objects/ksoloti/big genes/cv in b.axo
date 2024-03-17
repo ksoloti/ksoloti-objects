@@ -3,7 +3,7 @@
       <sDescription>Reads a CV input on Ksoloti Big Genes. Bipolar output.
 Pins:
 PA6, PA7, PB0, PB1, PC1, PC4</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>analog.axh</helpPatch>
       <inlets/>

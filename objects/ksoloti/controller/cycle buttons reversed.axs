@@ -57,7 +57,7 @@
       <NPresetEntries>0</NPresetEntries>
       <NModulationSources>0</NModulationSources>
       <NModulationTargetsPerSource>0</NModulationTargetsPerSource>
-      <Author>Johannes Taelman, sebiik</Author>
+      <Author>Johannes Taelman, Ksoloti</Author>
       <License>BSD</License>
    </settings>
    <notes><![CDATA[Controller object. To use this: in file->preferences, enter "cycle buttons reversed" in the "controller object" field.

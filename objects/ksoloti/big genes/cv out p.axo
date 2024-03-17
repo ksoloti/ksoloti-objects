@@ -4,7 +4,7 @@
 To be used with Ksoloti Big Genes.
 Unipolar input (0...64). Suitable for unipolar LFOs, envelopes, etc.
 NOT for creating 1V/oct pitch CV.</sDescription>
-      <author>Johannes Taelman</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets>
          <frac32.positive name="cv1"/>

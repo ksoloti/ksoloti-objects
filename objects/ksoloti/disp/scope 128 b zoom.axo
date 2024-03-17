@@ -8,7 +8,7 @@ using external gain.
 Timebase slows down the sampling, averaging the signal and displaying longer time frames.
 
 NOTE: The code in this object is not optimized yet.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>scope.axh</helpPatch>
       <rotatedParams>true</rotatedParams>

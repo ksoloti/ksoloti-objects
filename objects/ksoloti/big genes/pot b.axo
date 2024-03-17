@@ -6,7 +6,7 @@ PA0, PA1, PA2, PA3,
 PF6, PF7, PF8, PF9.
 
 Values from pots 1-4 are summed with the CV input jacks P1-4.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>pot.axh</helpPatch>
       <inlets/>

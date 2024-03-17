@@ -1,7 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="button" uuid="d61d570e-303b-4adb-acac-76920264c270">
       <sDescription>Reads a button on Ksoloti Big Genes.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets/>
       <outlets>

@@ -1,7 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="button" uuid="07be7a50-1051-436a-92aa-03e2fb9b1229">
       <sDescription>Reads a button on Ksoloti Gills.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets/>
       <outlets>

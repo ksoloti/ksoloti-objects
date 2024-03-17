@@ -232,8 +232,8 @@
    <nets>
       <net>
          <source obj="cv handler" outlet="out"/>
-         <dest obj="cv_1" inlet="cv2"/>
          <dest obj="cv_1" inlet="cv1"/>
+         <dest obj="cv_1" inlet="cv2"/>
       </net>
       <net>
          <source obj="voltage switcher" outlet="out"/>
