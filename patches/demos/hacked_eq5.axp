@@ -6,21 +6,21 @@
          <combo attributeName="mode" selection="Stereo"/>
       </attribs>
    </obj>
-   <obj type="osc/brds/chaoticfeedbackfm" uuid="e5d9cdd6-46dc-48c5-aaf5-102184241574" name="chaoticfeedbackfm_1" x="182" y="14">
+   <obj type="osc/brds/chaoticfeedbackfm" uuid="e5d9cdd6-46dc-48c5-aaf5-102184241574" name="chaoticfeedbackfm_1" x="168" y="14">
       <params>
-         <frac32.s.map name="pitch" value="-48.98000000000002"/>
-         <frac32.u.map name="timbre" value="4.875000000000002"/>
-         <frac32.u.map name="color" value="31.045000000000005"/>
+         <frac32.s.map name="pitch" value="-60.52999954223641"/>
+         <frac32.u.map name="timbre" value="3.0"/>
+         <frac32.u.map name="color" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="b190fbc0-01b1-4216-b5ea-559a4e500469" name="eq5hq_1" x="336" y="14">
+   <patchobj type="patch/object" uuid="b190fbc0-01b1-4216-b5ea-559a4e500469" name="hacked_eq5hq_1" x="336" y="14">
       <params>
-         <frac32.s.map name="low" value="-49.289999999999935"/>
-         <frac32.s.map name="lowmid" value="64.0"/>
+         <frac32.s.map name="low" value="-48.01"/>
+         <frac32.s.map name="lowmid" value="-41.0"/>
          <frac32.s.map name="mid" value="64.0"/>
-         <frac32.s.map name="highmid" value="63.23999999999999"/>
-         <frac32.s.map name="high" value="38.82000000000002"/>
+         <frac32.s.map name="highmid" value="-29.0"/>
+         <frac32.s.map name="high" value="38.0"/>
       </params>
       <attribs/>
       <object id="patch/object" uuid="b190fbc0-01b1-4216-b5ea-559a4e500469">
@@ -30,6 +30,11 @@
          <helpPatch>eq5hq.axh</helpPatch>
          <inlets>
             <frac32buffer name="in" description="input"/>
+            <frac32.bipolar name="low"/>
+            <frac32.bipolar name="lowmid"/>
+            <frac32.bipolar name="mid"/>
+            <frac32.bipolar name="highmid"/>
+            <frac32.bipolar name="high"/>
          </inlets>
          <outlets>
             <frac32buffer name="out" description="output"/>
@@ -181,11 +186,11 @@ static const int NUMSTAGES=2;]]></code.declaration>
   arm_biquad_cascade_df1_init_q31(&S5, NUMSTAGES,
           (q31_t *) &eq5coefs[190*4 + 10*9],
           &biquadStateBand5Q31[0], 2);]]></code.init>
-         <code.krate><![CDATA[low = (param_low>>23);
-lowmid = (param_lowmid>>23);
-mid = (param_mid>>23);
-highmid = (param_highmid>>23);
-high = (param_high>>23);
+         <code.krate><![CDATA[low     = (__SSAT(param_low+ inlet_low, 28) >> 23);
+lowmid  = (__SSAT(param_lowmid+ inlet_lowmid, 28) >> 23);
+mid     = (__SSAT(param_mid+ inlet_mid, 28) >> 23);
+highmid = (__SSAT(param_highmid+ inlet_highmid, 28) >> 23);
+high    = (__SSAT(param_high+ inlet_high, 28) >> 23);
 
 S1.pCoeffs = (q31_t*)&eq5coefs[190*0 + 10*(low + 9)];
 S2.pCoeffs = (q31_t*)&eq5coefs[190*1 + 10*(lowmid + 9)];
@@ -193,11 +198,11 @@ S3.pCoeffs = (q31_t*)&eq5coefs[190*2 + 10*(mid + 9)];
 S4.pCoeffs = (q31_t*)&eq5coefs[190*3 + 10*(highmid + 9)];
 S5.pCoeffs = (q31_t*)&eq5coefs[190*4 + 10*(high + 9)];
 
-arm_biquad_cas_df1_32x64_q31(&S1, (q31_t *)inlet_in, (q31_t *)outlet_out, BUFSIZE);
+arm_biquad_cas_df1_32x64_q31(&S1, (q31_t *)inlet_in,   (q31_t *)outlet_out, BUFSIZE);
 arm_biquad_cas_df1_32x64_q31(&S2, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
-arm_biquad_cascade_df1_q31(&S3, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
-arm_biquad_cascade_df1_q31(&S4, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
-arm_biquad_cascade_df1_q31(&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);]]></code.krate>
+arm_biquad_cascade_df1_q31  (&S3, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
+arm_biquad_cascade_df1_q31  (&S4, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
+arm_biquad_cascade_df1_q31  (&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);]]></code.krate>
       </object>
    </patchobj>
    <obj type="stomps/compressor1" uuid="76beacbe-917e-4f20-b6d6-79cab2503b94" name="obj_1" x="448" y="14">
@@ -230,7 +235,7 @@ arm_biquad_cascade_df1_q31(&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZ
       <params/>
       <attribs/>
    </obj>
-   <patcher type="patch/patcher" uuid="298e0280-32ee-4940-a8cd-4cd55ccdbbcb" name="oled" x="14" y="98">
+   <patcher type="patch/patcher" uuid="7049c128-2d10-4d97-95c4-d337ca7f0ce3" name="oled" x="14" y="98">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -282,28 +287,28 @@ arm_biquad_cascade_df1_q31(&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZ
    </patcher>
    <comment type="patch/comment" x="826" y="98" text="adjust the amplitude"/>
    <comment type="patch/comment" x="896" y="112" text="left and right audio output"/>
-   <comment type="patch/comment" x="266" y="210" text="&lt;html&gt;&lt;b style=&quot;color:#008000;&quot;&gt;^ ctrl+shift+drag"/>
-   <comment type="patch/comment" x="392" y="252" text="&lt;html&gt;&lt;b style=&quot;color:#008000;&quot;&gt;^ ctrl+shift+drag"/>
-   <comment type="patch/comment" x="70" y="266" text="&lt;html&gt;&lt;h1 style=&quot;color:#FF00FF;&quot;&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="182" y="266" text="&lt;html&gt;&lt;h1 style=&quot;color:#00FFFF;&quot;&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="336" y="266" text="&lt;html&gt;&lt;h1 style=&quot;color:#FF0000;&quot;&gt;^^^ Attention! this EQ has been hacked and will produce very nasty &lt;br&gt; and interesting noise if the parameters are driven past their safe dB range."/>
-   <comment type="patch/comment" x="14" y="322" text="&lt;html&gt;&lt;h1&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="238" y="322" text="&lt;html&gt;&lt;h1&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
-   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="toggle_1" x="770" y="350">
-      <params>
-         <bool32.tgl name="b" value="0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="ksoloti/disp/scope 128 b trig zoom" uuid="1e502ace-1033-4a32-ad32-412d01ec7558" name="scope_1" x="854" y="350">
+   <obj type="ksoloti/disp/scope 128 b trig zoom" uuid="1e502ace-1033-4a32-ad32-412d01ec7558" name="scope_1" x="910" y="126">
       <params/>
       <attribs>
          <combo attributeName="magnify" selection="x1"/>
          <combo attributeName="timebase" selection="/8"/>
       </attribs>
    </obj>
+   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="toggle_1" x="826" y="168">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="252" y="196" text="&lt;html&gt;&lt;h2 style=&quot;color:#008000;&quot;&gt;^ drag"/>
+   <comment type="patch/comment" x="70" y="266" text="&lt;html&gt;&lt;h1 style=&quot;color:#FF00FF;&quot;&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="182" y="266" text="&lt;html&gt;&lt;h1 style=&quot;color:#00FFFF;&quot;&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="14" y="322" text="&lt;html&gt;&lt;h1&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="238" y="322" text="&lt;html&gt;&lt;h1&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="392" y="322" text="&lt;html&gt;&lt;h2 style=&quot;color:#008000;&quot;&gt;^ ctrl+shift+drag"/>
    <comment type="patch/comment" x="56" y="378" text="&lt;html&gt;&lt;h1&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="196" y="378" text="&lt;html&gt;&lt;h1&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="350" y="378" text="&lt;html&gt;&lt;h1 style=&quot;color:#FF0000;&quot;&gt;^^^ Attention! this EQ has been hacked and will produce very nasty &lt;br&gt; and interesting noise if the parameters are driven past their safe dB range."/>
    <comment type="patch/comment" x="126" y="434" text="&lt;html&gt;&lt;h1 style=&quot;color:#FF8000;&quot;&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="84" y="504" text="&lt;html&gt;&lt;h1 style=&quot;font-size:36;&quot;&gt;¯\_(ツ)_/¯&lt;/h1&gt;&lt;/html&gt;"/>
    <nets>
@@ -312,7 +317,7 @@ arm_biquad_cascade_df1_q31(&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZ
          <dest obj="scope_1" inlet="hold"/>
       </net>
       <net>
-         <source obj="eq5hq_1" outlet="out"/>
+         <source obj="hacked_eq5hq_1" outlet="out"/>
          <dest obj="obj_1" inlet="in"/>
       </net>
       <net>
@@ -335,7 +340,7 @@ arm_biquad_cascade_df1_q31(&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZ
       </net>
       <net>
          <source obj="chaoticfeedbackfm_1" outlet="wave"/>
-         <dest obj="eq5hq_1" inlet="in"/>
+         <dest obj="hacked_eq5hq_1" inlet="in"/>
       </net>
    </nets>
    <settings>
@@ -343,8 +348,8 @@ arm_biquad_cascade_df1_q31(&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZ
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>34</x>
-      <y>27</y>
+      <x>2220</x>
+      <y>238</y>
       <width>1089</width>
       <height>685</height>
    </windowPos>
