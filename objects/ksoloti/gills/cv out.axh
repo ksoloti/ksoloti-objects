@@ -60,7 +60,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
          </settings>
          <notes><![CDATA[]]></notes>
          <windowPos>
-            <x>1920</x>
+            <x>920</x>
             <y>0</y>
             <width>780</width>
             <height>620</height>
@@ -192,7 +192,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
          </settings>
          <notes><![CDATA[]]></notes>
          <windowPos>
-            <x>1920</x>
+            <x>920</x>
             <y>0</y>
             <width>780</width>
             <height>620</height>
@@ -222,7 +222,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>2412</x>
+      <x>412</x>
       <y>211</y>
       <width>1036</width>
       <height>807</height>

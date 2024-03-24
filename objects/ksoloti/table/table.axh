@@ -202,7 +202,7 @@ for(i=0;i<LENGTH;i++)
          </settings>
          <notes><![CDATA[]]></notes>
          <windowPos>
-            <x>1920</x>
+            <x>920</x>
             <y>0</y>
             <width>780</width>
             <height>620</height>
@@ -309,7 +309,7 @@ for(i=0;i<LENGTH;i++)
          </settings>
          <notes><![CDATA[]]></notes>
          <windowPos>
-            <x>1920</x>
+            <x>920</x>
             <y>0</y>
             <width>780</width>
             <height>620</height>
@@ -445,7 +445,7 @@ for(i=0;i<LENGTH;i++)
    </settings>
    <notes><![CDATA[note fdf ]]></notes>
    <windowPos>
-      <x>2150</x>
+      <x>150</x>
       <y>48</y>
       <width>1434</width>
       <height>844</height>
