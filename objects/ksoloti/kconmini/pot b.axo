@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8c">
+   <obj.normal id="pot b" uuid="a0dea16b-3136-47b8-b8cb-5bb3b5525890">
       <sDescription>Reads a pot on Alt Circuits K-Control Mini. Unipolar output.
 Pins:
 PA0, PA1, PA2, PA3.</sDescription>
