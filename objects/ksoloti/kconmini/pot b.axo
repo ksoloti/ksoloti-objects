@@ -1,0 +1,33 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8c">
+      <sDescription>Reads a pot on Alt Circuits K-Control Mini. Unipolar output.
+Pins:
+PA0, PA1, PA2, PA3.</sDescription>
+      <author>Johannes Taelman, sebiik</author>
+      <license>BSD</license>
+      <helpPatch>pot.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="out"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="pot">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[outlet_out = (adcvalues[attr_pot] << 16) - (1 << 27);]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,128 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="28" y="14" text="&lt;html&gt;&lt;h2&gt;The &quot;pot p&quot; object reads a pot and outputs a &lt;u&gt;unipolar&lt;/u&gt; value from 0 to 64."/>
+   <obj type="ksoloti/kconmini/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8b" name="pot_1" x="28" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="1"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_1" x="140" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/kconmini/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8b" name="pot_2" x="238" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="2"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_2" x="350" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/kconmini/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8b" name="pot_3" x="448" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="3"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_3" x="560" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/kconmini/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8b" name="pot_4" x="658" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="4"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_4" x="770" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="28" y="210" text="&lt;html&gt;&lt;h2&gt;The &quot;pot b&quot; object reads a pot and outputs a &lt;u&gt;bipolar&lt;/u&gt; value from -64 to 64."/>
+   <obj type="ksoloti/kconmini/pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8c" name="pot_11" x="28" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="1"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_11" x="140" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/kconmini/pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8c" name="pot_12" x="238" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="2"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_12" x="350" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/kconmini/pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8c" name="pot_13" x="448" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="3"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_13" x="560" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/kconmini/pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8c" name="pot_14" x="658" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="4"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_14" x="770" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="pot_1" outlet="out"/>
+         <dest obj="dial_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_2" outlet="out"/>
+         <dest obj="dial_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_3" outlet="out"/>
+         <dest obj="dial_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_4" outlet="out"/>
+         <dest obj="dial_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_11" outlet="out"/>
+         <dest obj="dial_11" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_12" outlet="out"/>
+         <dest obj="dial_12" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_13" outlet="out"/>
+         <dest obj="dial_13" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_14" outlet="out"/>
+         <dest obj="dial_14" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>520</x>
+      <y>0</y>
+      <width>872</width>
+      <height>450</height>
+   </windowPos>
+</patch-1.0>
