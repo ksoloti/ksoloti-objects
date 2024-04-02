@@ -1,0 +1,69 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led" uuid="909b878f-29c6-4ff8-89dc-acc2640143ac">
+      <sDescription>Controls a single LED color on Alt Circuits K-Control Mini.
+LED1: blue, PB7
+LED2: orange, PC7
+LEDRGB: red, PA7
+LEDRGB: green, PA5
+LEDRGB: blue, PA6</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>led.axh</helpPatch>
+      <inlets>
+         <bool32 name="in" description="positive = ON"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="led">
+            <MenuEntries>
+               <string>LED1 blue</string>
+               <string>LED2 orange</string>
+               <string>RGB red</string>
+               <string>RGB green</string>
+               <string>RGB blue</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0x17</string>
+               <string>0x27</string>
+               <string>0x07</string>
+               <string>0x05</string>
+               <string>0x06</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.init><![CDATA[#if attr_led == 0x17 /* LED1 blue */
+palSetPadMode(GPIOB,7, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x27 /* LED2 orange */
+palSetPadMode(GPIOC,7, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x07 /* LEDRGB red */
+palSetPadMode(GPIOA,7, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x05 /* LEDRGB green */
+palSetPadMode(GPIOA,5, PAL_MODE_OUTPUT_PUSHPULL);
+
+#elif attr_led == 0x06 /* LEDRGB blue */
+palSetPadMode(GPIOA,6, PAL_MODE_OUTPUT_PUSHPULL);
+
+#endif]]></code.init>
+      <code.krate><![CDATA[#if attr_led == 0x17 /* LED1 blue */
+palWritePad(GPIOB,7, (inlet_in > 0));
+
+#elif attr_led == 0x27 /* LED2 orange */
+palWritePad(GPIOC,7, (inlet_in > 0));
+
+#elif attr_led == 0x07 /* LEDRGB red */
+palWritePad(GPIOA,7, (inlet_in > 0));
+
+#elif attr_led == 0x05 /* LEDRGB green */
+palWritePad(GPIOA,5, (inlet_in > 0));
+
+#elif attr_led == 0x06 /* LEDRGB blue */
+palWritePad(GPIOA,6, (inlet_in > 0));
+
+#endif]]></code.krate>
+   </obj.normal>
+</objdefs>

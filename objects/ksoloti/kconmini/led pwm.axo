@@ -1,0 +1,140 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led pwm" uuid="49dba45e-12dc-4e7d-a10a-9e50989c9538">
+      <sDescription>PWM output to an LED on Alt Circuits K-Control Mini.
+Using a hardware timer at a fixed frequency of 97.65 Hz.
+
+LED1 (blue, PB7) using hardware timer 4
+LED2 (orange, PC7) using hardware timer 8
+LEDRGB (red, PA7) using hardware timer 3
+LEDRGB (green, PA5) using hardware timer 2
+LEDRGB (blue, PA6) using hardware timer 3
+
+NOTE: You can&apos;t use the following pin combos for PWM
+due to hardware limitations:
+* PA5 &amp; PA15 simultaneously
+* PA6 &amp; PB4 simultaneously
+If used for PWM at the same time, the two respective pins will have the same value!
+The patcher will display a warning but does not prevent you from going live.</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>led.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="in" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="led">
+            <MenuEntries>
+               <string>1 blue</string>
+               <string>2 orange</string>
+               <string>RGB red</string>
+               <string>RGB green</string>
+               <string>RGB blue</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0x17</string>
+               <string> 0x27</string>
+               <string> 0x07</string>
+               <string> 0x05</string>
+               <string> 0x06</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <depends>
+         <depend>PWMD8</depend>
+         <depend>PWMD2</depend>
+         <depend>PWMD3</depend>
+         <depend>PWMD4</depend>
+      </depends>
+      <code.init><![CDATA[static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency. */
+	4096, /* PWM period is 128 cycles. */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+
+#if (attr_pin == 0x17)
+#ifndef PWMD4STARTED__
+#define PWMD4STARTED__
+pwmStart(&PWMD4, &pwmcfg);
+#endif
+palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x27)
+#ifndef PWMD8STARTED__
+#define PWMD8STARTED__
+pwmStart(&PWMD8, &pwmcfg);
+#endif
+palSetPadMode(GPIOC, 7, PAL_MODE_ALTERNATE(3));
+
+#elif (attr_pin == 0x07)
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 7, PAL_MODE_ALTERNATE(2));
+
+#elif (attr_pin == 0x05)
+#ifdef PA15_USING_PWM
+#warning "Can't use PA5 and PA15 simultaneously for PWM. They will have the same value!"
+#else
+#define PA5_USING_PWM
+#endif
+#ifndef PWMD2STARTED__
+#define PWMD2STARTED__
+pwmStart(&PWMD2, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(1));
+
+#elif (attr_pin == 0x06)
+#ifdef PB4_USING_PWM
+#warning "Can't use PA6 and PB4 simultaneously for PWM. They will have the same value!"
+#else
+#define PA6_USING_PWM
+#endif
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(2));
+
+#endif]]></code.init>
+      <code.dispose><![CDATA[#if (attr_pin == 0x17)
+pwmStop(&PWMD4);
+
+#elif (attr_pin == 0x27)
+pwmStop(&PWMD8);
+
+#elif (attr_pin == 0x07)
+pwmStop(&PWMD3);
+
+#elif (attr_pin == 0x05)
+pwmStop(&PWMD2);
+
+#elif (attr_pin == 0x06)
+pwmStop(&PWMD3);
+
+#endif]]></code.dispose>
+      <code.krate><![CDATA[#if (attr_pin == 0x17)
+pwmEnableChannel(&PWMD4, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x27)
+pwmEnableChannel(&PWMD8, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x05)
+pwmEnableChannel(&PWMD2, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x07)
+pwmEnableChannel(&PWMD3, 1, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#elif (attr_pin == 0x06)
+pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_in>=0?inlet_in>>15:0));
+
+#endif]]></code.krate>
+   </obj.normal>
+</objdefs>

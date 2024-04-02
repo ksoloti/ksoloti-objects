@@ -1,0 +1,74 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="led pwm rgb" uuid="6a781bc7-8776-435c-b922-0770ee180110">
+      <sDescription>PWM output to the RGB LED on Alt Circuits K-Control Mini.
+Using a hardware timer at a fixed frequency of 97.65 Hz.
+
+LEDRGB (red, PA7) using hardware timer 3
+LEDRGB (green, PA5) using hardware timer 2
+LEDRGB (blue, PA6) using hardware timer 3
+
+NOTE: You can&apos;t use the following pin combos for PWM
+due to hardware limitations:
+* PA5 &amp; PA15 simultaneously
+* PA6 &amp; PB4 simultaneously
+If used for PWM at the same time, the two respective pins will have the same value!
+The patcher will display a warning but does not prevent you from going live.</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>led.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="inR" description="pwm ratio"/>
+         <frac32.positive name="inG" description="pwm ratio"/>
+         <frac32.positive name="inB" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <depends>
+         <depend>PWMD8</depend>
+         <depend>PWMD2</depend>
+         <depend>PWMD3</depend>
+         <depend>PWMD4</depend>
+      </depends>
+      <code.init><![CDATA[static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency. */
+	4096, /* PWM period is 128 cycles. */
+	NULL, 
+	{{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}, 
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}},
+	/* HW dependent part.*/
+	0};
+
+
+#ifndef PWMD3STARTED__
+#define PWMD3STARTED__
+pwmStart(&PWMD3, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 7, PAL_MODE_ALTERNATE(2));
+
+#ifdef PA15_USING_PWM
+#warning "Can't use PA5 and PA15 simultaneously for PWM. They will have the same value!"
+#else
+#define PA5_USING_PWM
+#endif
+#ifndef PWMD2STARTED__
+#define PWMD2STARTED__
+pwmStart(&PWMD2, &pwmcfg);
+#endif
+palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(1));
+
+#ifdef PB4_USING_PWM
+#warning "Can't use PA6 and PB4 simultaneously for PWM. They will have the same value!"
+#else
+#define PA6_USING_PWM
+#endif
+palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(2));]]></code.init>
+      <code.dispose><![CDATA[pwmStop(&PWMD2);
+pwmStop(&PWMD3);]]></code.dispose>
+      <code.krate><![CDATA[pwmEnableChannel(&PWMD3, 1, (pwmcnt_t)(inlet_inR>=0?inlet_inR>>15:0));
+pwmEnableChannel(&PWMD2, 0, (pwmcnt_t)(inlet_inG>=0?inlet_inG>>15:0));
+pwmEnableChannel(&PWMD3, 0, (pwmcnt_t)(inlet_inB>=0?inlet_inB>>15:0));]]></code.krate>
+   </obj.normal>
+</objdefs>
