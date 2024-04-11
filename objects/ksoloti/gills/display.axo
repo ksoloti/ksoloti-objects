@@ -169,7 +169,7 @@ void fill(uint8_t v) {
     }
 
     uint8_t p; for (p = 0; p < 8; p++) {
-        i2cMasterTransmit(&I2CD1, __I2C_ADDR, txbuf, 129, rxbuf, 0);
+        i2cMasterTransmitTimeout(&I2CD1, __I2C_ADDR, txbuf, 129, rxbuf, 0, 30);
     }
 
     i2cReleaseBus(&I2CD1);
