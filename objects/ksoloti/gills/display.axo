@@ -4,6 +4,7 @@
 Note that you do NOT need to place a gpio/i2c/config object in your patch anymore for this object to function.</sDescription>
       <author>Ksoloti</author>
       <license>GPL v3.0</license>
+	  <helpPatch>display.axh</helpPatch>
       <inlets>
          <charptr32 name="line1" description="First line of display, can display either 11 (regular) or 21 (narrow) characters."/>
          <charptr32 name="line2" description="Second line of display, can display either 11 (regular) or 21 (narrow) characters."/>
@@ -168,7 +169,7 @@ void fill(uint8_t v) {
     }
 
     uint8_t p; for (p = 0; p < 8; p++) {
-        i2cMasterTransmitTimeout(&I2CD1, __I2C_ADDR, txbuf, 129, rxbuf, 0, 30);
+        i2cMasterTransmit(&I2CD1, __I2C_ADDR, txbuf, 129, rxbuf, 0);
     }
 
     i2cReleaseBus(&I2CD1);
