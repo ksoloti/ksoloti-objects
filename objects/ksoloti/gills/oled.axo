@@ -1,5 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="oled" uuid="0c083e83-0280-4cf2-b747-8a00859bb904">
+      <sDescription>Interfaces with the OLED display on Ksoloti Gills.
+Note that you do NOT need to place a gpio/i2c/config object in your patch anymore for this object to function.</sDescription>
       <author>Ksoloti</author>
       <license>GPL v3.0</license>
       <inlets>
@@ -14,7 +16,7 @@
       <displays/>
       <params/>
       <attribs>
-         <combo name="useScope" description="&lt;html&gt;off: No scope function. OLED will always display 4 lines of text.&lt;br&gt;on: Place a scope object in your patch. Enter its name (e.g. scope_1) in the scope text field below. Changing the mode inlet will display the scope either across lines 2-4, or fuill screen.">
+         <combo name="useScope" description="&lt;html&gt;off: No scope function. OLED will always display 4 lines of text.&lt;br&gt;on: Place a scope object in your patch. Enter its name (e.g. scope_1) in the scope text field below. Changing the mode inlet will display the scope either across lines 2-4, or full screen.">
             <MenuEntries>
                <string>off</string>
                <string>on</string>
