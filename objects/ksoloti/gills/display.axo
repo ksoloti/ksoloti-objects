@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="oled" uuid="0c083e83-0280-4cf2-b747-8a00859bb904">
+   <obj.normal id="display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904">
       <sDescription>Interfaces with the OLED display on Ksoloti Gills.
 Note that you do NOT need to place a gpio/i2c/config object in your patch anymore for this object to function.</sDescription>
       <author>Ksoloti</author>
@@ -47,7 +47,7 @@ Note that you do NOT need to place a gpio/i2c/config object in your patch anymor
       </depends>
       <code.declaration><![CDATA[//* LOCAL DATA */
 
-/* Stock Ksoloti Gills and Big Genes use SH1106 type OLED on address 0x3C (a.k.a 0x78 after the necessary bit shift) by default. */
+/* Stock Ksoloti Gills and Big Genes use SH1106 type OLED on address 0x3C (a.k.a 0x78 after the necessary 1-bit left shift) by default. */
 #define __SH1106
 // #define __SSD1306
 // #define __SSD1309
