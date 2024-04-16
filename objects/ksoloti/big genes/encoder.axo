@@ -1,0 +1,102 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="encoder" uuid="1d83da76-97a3-4e59-85ce-9b2cdfd047d7">
+      <sDescription>Reads a rotary encoder on Ksoloti Big Genes.
+&quot;min&quot;, &quot;max&quot; set the range. Default is 0 to 127.
+When the &quot;set&quot; inlet changes, the value is set directly (good for setting init or preset values, modulation).</sDescription>
+      <author>Gavin, Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
+      <inlets>
+         <int32.bipolar name="set" description="Set value directly. Useful for presets, modulation"/>
+      </inlets>
+      <outlets>
+         <int32.bipolar name="out" description="encoder value"/>
+         <bool32 name="sw" description="switch output"/>
+      </outlets>
+      <displays>
+         <int32.label name="value" description="encoder value"/>
+         <bool32 name="switch" description="switch output"/>
+      </displays>
+      <params/>
+      <attribs>
+         <combo name="encoder">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+            </CEntries>
+         </combo>
+         <spinner name="min" MinValue="-65536" MaxValue="65535" DefaultValue="0"/>
+         <spinner name="max" MinValue="-65536" MaxValue="65535" DefaultValue="127"/>
+      </attribs>
+      <code.declaration><![CDATA[#if attr_encoder == 1
+
+#define ENC_A_PORT GPIOG
+#define ENC_A_PIN 11
+
+#define ENC_B_PORT GPIOG
+#define ENC_B_PIN 12
+
+#define ENC_SW_PORT GPIOB
+#define ENC_SW_PIN 5
+
+#elif attr_encoder == 2
+
+#define ENC_A_PORT GPIOG
+#define ENC_A_PIN 10
+
+#define ENC_B_PORT GPIOA
+#define ENC_B_PIN 15
+
+#define ENC_SW_PORT GPIOA
+#define ENC_SW_PIN 10
+
+#endif
+
+int32_t encoder_val = 0;
+int32_t set_last = 0;
+
+bool_t a = true;
+bool_t a_last = true;]]></code.declaration>
+      <code.init><![CDATA[/* Configure encoder pins as input */
+palSetPadMode(ENC_A_PORT, ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(ENC_B_PORT, ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
+
+/* Configure encoder switch as input */
+palSetPadMode(ENC_SW_PORT, ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
+      <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
+if (inlet_set != set_last) {
+	set_last = encoder_val = inlet_set;
+	/* Limit value to min, max attributes */
+	encoder_val = encoder_val > attr_max ? attr_max : encoder_val;
+	encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
+}
+
+a = palReadPad(ENC_B_PORT, ENC_B_PIN);
+
+/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
+if (!a && a_last) {
+	/* If pin A is low but wasn't before, we have caught an event. */
+		
+	if (palReadPad(ENC_A_PORT, ENC_A_PIN)) {
+		/* If pin B is currently HIGH it means we're turning counterclockwise */
+		if (encoder_val > attr_min) encoder_val -= 1;
+	}
+	else {
+		/* If pin B is currently LOW it means we're turning clockwise */
+		if (encoder_val < attr_max) encoder_val += 1;
+	}
+}
+
+/* Register changes */
+a_last = a;
+outlet_out = disp_value = encoder_val;
+
+
+/* Now read encoder switch */
+outlet_sw = disp_switch = palReadPad(ENC_SW_PORT, ENC_SW_PIN)<<27;]]></code.krate>
+   </obj.normal>
+</objdefs>

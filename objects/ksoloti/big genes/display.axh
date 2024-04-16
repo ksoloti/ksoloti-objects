@@ -1,0 +1,119 @@
+<patch-1.0 appVersion="1.0.12">
+   <obj type="osc/saw" uuid="739ecc36017ef3249479b8f01716b8bbfba9abc1" name="saw_1" x="322" y="28">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="phi/switch/sw 2-1a" uuid="350b79179fa4cce3d231eaa45f23eefa9121cb3b" name="sw_1" x="434" y="28">
+      <params>
+         <bool32.tgl name="s" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/&lt;&lt;" uuid="3c89a8ac22f44350a3366284704535e257aea35f" name="&lt;&lt;_1" x="560" y="28">
+      <params/>
+      <attribs>
+         <spinner attributeName="shift" value="1"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/disp/scope 128 b trig zoom" uuid="1e502ace-1033-4a32-ad32-412d01ec7558" name="scope_1" x="658" y="28">
+      <params/>
+      <attribs>
+         <combo attributeName="magnify" selection="x1"/>
+         <combo attributeName="timebase" selection="/8"/>
+      </attribs>
+   </obj>
+   <obj type="osc/pwm" uuid="a6b40ff63f161d8bac8ea2eba5b0dbffcf49b472" name="pwm_1" x="322" y="112">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="pwmcontrol" x="238" y="126">
+      <params>
+         <frac32.s.map name="value" value="-36.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="112" y="238" text="Up to 11 (regular) or up to 21 (narrow) characters per line"/>
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="112" y="252">
+      <params/>
+      <attribs>
+         <table attributeName="str" table="001 PATCHNAMEPATCHNAME"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/big genes/display" uuid="d21f1023-b829-4934-b142-5eedb601a570" name="display_1" x="392" y="308">
+      <params/>
+      <attribs>
+         <combo attributeName="useScope" selection="on"/>
+         <objref attributeName="scope" obj="scope_1"/>
+         <combo attributeName="narrowFont" selection="on"/>
+      </attribs>
+   </obj>
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_2" x="112" y="322">
+      <params/>
+      <attribs>
+         <table attributeName="str" table="123456789012345678901"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="112" y="406" text="&lt;html&gt;0: 4 lines of text, no scope&lt;br&gt;1: text in line1, scope in lines 2-4&lt;br&gt;2: scope in full screen"/>
+   <comment type="patch/comment" x="518" y="420" text="&lt;- you will not see a scope if this is off (saves memory)"/>
+   <obj type="ctrl/i radio 4 h" uuid="f87ae81e3162014f3bdca0f56dbbdf9322e69dfd" name="i_1" x="112" y="462">
+      <params>
+         <int32.hradio name="value" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_2" x="210" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="c_1" outlet="out"/>
+         <dest obj="display_1" inlet="line1"/>
+      </net>
+      <net>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="i_2" inlet="in"/>
+         <dest obj="display_1" inlet="mode"/>
+      </net>
+      <net>
+         <source obj="c_2" outlet="out"/>
+         <dest obj="display_1" inlet="line2"/>
+         <dest obj="display_1" inlet="line3"/>
+         <dest obj="display_1" inlet="line4"/>
+      </net>
+      <net>
+         <source obj="pwmcontrol" outlet="out"/>
+         <dest obj="pwm_1" inlet="pw"/>
+      </net>
+      <net>
+         <source obj="&lt;&lt;_1" outlet="result"/>
+         <dest obj="scope_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="sw_1" outlet="o"/>
+         <dest obj="&lt;&lt;_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="sw_1" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="pwm_1" outlet="wave"/>
+         <dest obj="sw_1" inlet="i2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>238</x>
+      <y>49</y>
+      <width>852</width>
+      <height>620</height>
+   </windowPos>
+</patch-1.0>
