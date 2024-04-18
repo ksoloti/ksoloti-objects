@@ -302,7 +302,7 @@ outlet_env = val>>4;]]></code.krate>
          </settings>
          <notes><![CDATA[]]></notes>
          <windowPos>
-            <x>2296</x>
+            <x>296</x>
             <y>81</y>
             <width>829</width>
             <height>644</height>
@@ -462,7 +462,7 @@ outlet_env = val>>4;]]></code.krate>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>2362</x>
+      <x>362</x>
       <y>81</y>
       <width>698</width>
       <height>796</height>
