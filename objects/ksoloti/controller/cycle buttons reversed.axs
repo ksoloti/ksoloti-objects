@@ -66,8 +66,8 @@ Push S1 to launch the PREVIOUS patch in the patch bank.
 Push S2 to launch the NEXT patch in the patch bank.
 ]]></notes>
    <windowPos>
-      <x>-8</x>
-      <y>-8</y>
+      <x>8</x>
+      <y>8</y>
       <width>1296</width>
       <height>705</height>
    </windowPos>

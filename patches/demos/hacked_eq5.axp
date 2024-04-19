@@ -278,7 +278,7 @@ arm_biquad_cascade_df1_q31  (&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFS
          </settings>
          <notes><![CDATA[]]></notes>
          <windowPos>
-            <x>1920</x>
+            <x>920</x>
             <y>0</y>
             <width>780</width>
             <height>620</height>
@@ -348,7 +348,7 @@ arm_biquad_cascade_df1_q31  (&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFS
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>2220</x>
+      <x>220</x>
       <y>238</y>
       <width>1089</width>
       <height>685</height>

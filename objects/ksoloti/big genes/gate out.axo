@@ -1,0 +1,29 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="gate out" uuid="a9f603ff-485b-4417-98e5-73de698b8a6e">
+      <sDescription>Gate output on Ksoloti Big Genes. Digital, 0V to ca. 10.3V.
+Gate 1: PD3
+Gate 2: PD4</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="in" description="positive = true"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="gate">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+            </MenuEntries>
+            <CEntries>
+               <string>GPIOD,3</string>
+               <string>GPIOD,4</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.init><![CDATA[palSetPadMode(attr_gate, PAL_MODE_OUTPUT_PUSHPULL);]]></code.init>
+      <code.krate><![CDATA[palWritePad(attr_gate, (inlet_in > 0));]]></code.krate>
+   </obj.normal>
+</objdefs>
