@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="cv out p 2" uuid="78c39cf4-581b-4230-88f9-4d663f4fca4e">
+   <obj.normal id="cv out p 2" uuid="78c39cf4-581b-4230-88f9-4d663f4fca4f">
       <sDescription>Low-speed 12 bit digital to analog conversion, not suitable for audio signals, but for control voltages.
 To be used with Ksoloti Big Genes. Two outputs.
 Unipolar input (0...64). Suitable for unipolar LFOs, envelopes, etc.

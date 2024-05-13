@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="cv out b 2" uuid="28629cd3-e124-4434-8179-a9b0c40cfccf">
+   <obj.normal id="cv out b 2" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd0">
       <sDescription>Low-speed 12 bit digital to analog conversion, not suitable for audio signals, but for control voltages.
 To be used with Ksoloti Big Genes. Two outputs.
 Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, etc.</sDescription>
