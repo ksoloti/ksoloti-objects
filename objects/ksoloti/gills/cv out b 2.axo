@@ -25,9 +25,7 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
             </CEntries>
          </combo>
       </attribs>
-      <code.declaration><![CDATA[static const int hi_limit = 0x7FFFFFF;
-
-int calc_cv_bipolar(int in, int offs) {
+      <code.declaration><![CDATA[int calc_cv_bipolar(int in, int offs) {
 	int val = -((in >> 1) + offs) + (1<<26);
 	return __SSAT(val, 28);
 }]]></code.declaration>

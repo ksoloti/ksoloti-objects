@@ -26,9 +26,7 @@ NOT for creating 1V/oct pitch CV.</sDescription>
             </CEntries>
          </combo>
       </attribs>
-      <code.declaration><![CDATA[static const int hi_limit = 0x7FFFFFF;
-
-int calc_cv_unipolar(int in, int offs) {
+      <code.declaration><![CDATA[int calc_cv_unipolar(int in, int offs) {
 	int val = (1<<27) - in + offs;
 	return __USAT(val, 27);
 }]]></code.declaration>
