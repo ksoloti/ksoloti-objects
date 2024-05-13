@@ -67,7 +67,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
          </windowPos>
       </subpatch>
    </patcher>
-   <obj type="ksoloti/gills/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcce" name="cv_1" x="532" y="392">
+   <obj type="ksoloti/gills/cv out b 2" uuid="28629cd3-e124-4434-8179-a9b0c40cfcce" name="cv_1" x="532" y="392">
       <params/>
       <attribs>
          <combo attributeName="offset" selection="E4 (0) = 0V (Axoloti)"/>
