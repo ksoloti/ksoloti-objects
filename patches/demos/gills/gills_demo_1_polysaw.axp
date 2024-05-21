@@ -20,7 +20,7 @@
    <obj type="audio/outconfig" uuid="eace67e3304afaa1bb695b444e9345f2d8adaf00" name="outconfig_1" x="14" y="56">
       <params/>
       <attribs>
-         <combo attributeName="headphones" selection="-36dB"/>
+         <combo attributeName="headphones" selection="-24dB"/>
          <combo attributeName="mode" selection="Stereo"/>
       </attribs>
    </obj>
@@ -36,7 +36,7 @@
          <combo attributeName="pot" selection="1"/>
       </attribs>
    </obj>
-   <patcher type="patch/patcher" uuid="5f84d644-ccbf-451b-ae75-2b83a6088e96" name="voice" x="140" y="210">
+   <patcher type="patch/patcher" uuid="ff4af2f6-e8b2-449f-955e-e67be37efa3a" name="voice" x="140" y="210">
       <params/>
       <attribs>
          <combo attributeName="poly" selection="5"/>
@@ -319,7 +319,7 @@ outlet_env = val>>4;]]></code.krate>
    <obj type="fx/lmnts/reverb" uuid="8027561C-A0B5-4DF8-A10E-3ED1274F2980" name="reverb_1" x="420" y="210">
       <params>
          <frac32.u.map name="amount" value="0.0"/>
-         <frac32.u.map name="time" value="60.0"/>
+         <frac32.u.map name="time" value="0.0"/>
          <frac32.u.map name="diffusion" value="43.0"/>
          <frac32.u.map name="gain" value="11.0"/>
          <frac32.u.map name="lowpass" value="48.0"/>
@@ -328,7 +328,7 @@ outlet_env = val>>4;]]></code.krate>
    </obj>
    <obj type="drj/audio/out_stereo_vol" uuid="awca1a567f535acc21055669829101d3ee7f0189" name="out_stereo_vol_1" x="532" y="210">
       <params>
-         <frac32.u.map name="volume" value="32.0"/>
+         <frac32.u.map name="volume" value="48.0"/>
       </params>
       <attribs/>
    </obj>
@@ -344,20 +344,29 @@ outlet_env = val>>4;]]></code.krate>
          <combo attributeName="pot" selection="3"/>
       </attribs>
    </obj>
-   <obj type="disp/scope 128 b" uuid="2b69f51a714fc276503ef10c349d6d253d1ae5e2" name="scope_1" x="532" y="350">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="pot_8" x="266" y="392">
+   <obj type="ksoloti/disp/scope 128 b trig zoom" uuid="1e502ace-1033-4a32-ad32-412d01ec7558" name="scope_1" x="532" y="350">
       <params/>
       <attribs>
-         <combo attributeName="pot" selection="10"/>
+         <combo attributeName="magnify" selection="x2"/>
+         <combo attributeName="timebase" selection="/4"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="pot_9" x="266" y="364">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="5"/>
       </attribs>
    </obj>
    <obj type="ksoloti/gills/pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8a" name="pot_3" x="14" y="420">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="6"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/gills/pot p" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac89" name="pot_8" x="266" y="434">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="10"/>
       </attribs>
    </obj>
    <obj type="ksoloti/gills/pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8a" name="pot_4" x="14" y="490">
@@ -376,6 +385,7 @@ outlet_env = val>>4;]]></code.krate>
    <comment type="patch/comment" x="154" y="588" text="cutoff"/>
    <comment type="patch/comment" x="224" y="588" text="reso"/>
    <comment type="patch/comment" x="294" y="588" text="flt env amt"/>
+   <comment type="patch/comment" x="434" y="588" text="revb time"/>
    <obj type="ksoloti/gills/pot b" uuid="1c0c845ed2d7e06ae5f377ba13d9d09f4747ac8a" name="pot_6" x="14" y="630">
       <params/>
       <attribs>
@@ -435,8 +445,8 @@ outlet_env = val>>4;]]></code.krate>
       </net>
       <net>
          <source obj="reverb_1" outlet="r"/>
-         <dest obj="scope_1" inlet="in"/>
          <dest obj="out_stereo_vol_1" inlet="right"/>
+         <dest obj="scope_1" inlet="in"/>
       </net>
       <net>
          <source obj="i_1" outlet="out"/>
@@ -450,15 +460,18 @@ outlet_env = val>>4;]]></code.krate>
          <source obj="pot_4" outlet="out"/>
          <dest obj="voice" inlet="d"/>
       </net>
+      <net>
+         <source obj="pot_9" outlet="out"/>
+         <dest obj="reverb_1" inlet="time"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
       <MidiChannel>1</MidiChannel>
-      <NPresets>8</NPresets>
-      <NPresetEntries>32</NPresetEntries>
+      <NPresets>0</NPresets>
+      <NPresetEntries>0</NPresetEntries>
       <NModulationSources>0</NModulationSources>
       <NModulationTargetsPerSource>0</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
