@@ -1,20 +1,16 @@
 <patch-1.0 appVersion="1.0.12">
-   <obj type="gpio/i2c/config" uuid="b095a33e56de5fcd23740a7d983bc0bafb315d81" name="config_1" x="14" y="14">
-      <params/>
-      <attribs/>
-   </obj>
    <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="364" y="14">
       <params/>
       <attribs>
          <table attributeName="str" table="1 POLYSAW"/>
       </attribs>
    </obj>
-   <obj type="tiar/HW/OLED128x64nice" uuid="5bde8c3d-fe37-40b3-848e-edb113767bc8" name="OLED128x64nice_1" x="532" y="14">
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="532" y="14">
       <params/>
       <attribs>
+         <combo attributeName="useScope" selection="on"/>
          <objref attributeName="scope" obj="scope_1"/>
-         <combo attributeName="type" selection="SH1106"/>
-         <combo attributeName="I2CADDR" selection="0x3C"/>
+         <combo attributeName="narrowFont" selection="off"/>
       </attribs>
    </obj>
    <obj type="audio/outconfig" uuid="eace67e3304afaa1bb695b444e9345f2d8adaf00" name="outconfig_1" x="14" y="56">
@@ -36,7 +32,7 @@
          <combo attributeName="pot" selection="1"/>
       </attribs>
    </obj>
-   <patcher type="patch/patcher" uuid="ff4af2f6-e8b2-449f-955e-e67be37efa3a" name="voice" x="140" y="210">
+   <patcher type="patch/patcher" uuid="8a6ec390-6710-47bf-bd14-556d74a26b95" name="voice" x="140" y="210">
       <params/>
       <attribs>
          <combo attributeName="poly" selection="5"/>
@@ -450,11 +446,11 @@ outlet_env = val>>4;]]></code.krate>
       </net>
       <net>
          <source obj="i_1" outlet="out"/>
-         <dest obj="OLED128x64nice_1" inlet="mode"/>
+         <dest obj="display_1" inlet="mode"/>
       </net>
       <net>
          <source obj="c_1" outlet="out"/>
-         <dest obj="OLED128x64nice_1" inlet="line1"/>
+         <dest obj="display_1" inlet="line1"/>
       </net>
       <net>
          <source obj="pot_4" outlet="out"/>
@@ -472,6 +468,7 @@ outlet_env = val>>4;]]></code.krate>
       <NPresetEntries>0</NPresetEntries>
       <NModulationSources>0</NModulationSources>
       <NModulationTargetsPerSource>0</NModulationTargetsPerSource>
+      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
