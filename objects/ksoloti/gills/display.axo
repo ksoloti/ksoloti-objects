@@ -598,8 +598,8 @@ Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, ThreadX, (void
       <code.dispose><![CDATA[chThdTerminate( Thd );
 chThdWait( Thd );
 
-#ifndef __I2C_UNCONFIGURED
-#define __I2C_UNCONFIGURED
+#ifdef __I2C_CONFIGURED
+#undef __I2C_CONFIGURED
 i2cStop(&I2CD1);
 palSetPadMode(GPIOB, 8, PAL_MODE_INPUT_ANALOG);
 palSetPadMode(GPIOB, 9, PAL_MODE_INPUT_ANALOG);
