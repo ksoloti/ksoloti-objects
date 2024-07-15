@@ -1,0 +1,6913 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="14" y="0" text="&lt;html&gt;&lt;h3&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CONTROLS&lt;/span&gt; &lt;br&gt;Knob 1 = wet/dry &lt;br&gt;knob 2 = delay time (divisions if synced) &lt;br&gt;Knob 3 = Feedback &lt;br&gt;Knob 4 = Lo pass filter &lt;br&gt;Knob 5 = Ping pong (offsets right channel, when at max ping pong greatness is achieved) &lt;br&gt;Knob 6 = Modulation speed (divisions if synced) &lt;br&gt;Knob 7 = Modulation depth &lt;br&gt;Knob 8 = Sequencer speed (Sequencer steps up and down straight and dotted delay times, from the current delay time) &lt;br&gt;Knob 9 = Sequencer depth &lt;br&gt;Knob 10 = width - offsets either right or left channel slightly to achieve a wider sound. repeats get progressively wider &lt;br&gt; &lt;br&gt;Button S1 - tap tempo (if you hold down the tap button and move the encoder you can change the division that the taps create. I.e. if set to 8ths and you tap quarters,&lt;br&gt;you will get double the speed of your tap. This is ignored if midi time is set to sync, in which case it uses the synced time knob setting). &lt;br&gt; &lt;br&gt;Button S2 = Presetmode (more on that later) &lt;br&gt; &lt;br&gt;Encoder = BPM, afffects synced times and is also set by tap tempo &lt;br&gt; &lt;br&gt;L3 - short press turns sync on/off for delay time. Long press enables pitch artifacts when changing delay time. &lt;br&gt;L4 - short press turns sync on/off for the sequencer speed, long press turns sync on/off for the modulation speed. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;PRESET MODE&lt;/span&gt; &lt;br&gt;Press S2 to enter preset mode. &lt;br&gt;Turn the encoder to select a preset. &lt;br&gt;Press the encoder to load selected preset. &lt;br&gt;Press S1 to save current settings to the selected preset &lt;br&gt;Long press S1 to save all presets and current settings to the sd card (if you don&apos;t do this the presets are lost when you reboot the ksoloti!!!). &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;SYNCING&lt;/span&gt; &lt;br&gt;Sync is either midi, tap or BPM. &lt;br&gt;If you tap when the delay time is unsynced, it will sync to the tap until the delay time is changed with the knob. It will use the tap division. &lt;br&gt;If you tap when the delay time is synced, it will use the delay knob division. &lt;br&gt;Tap affects the BPM setting too. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CHANGES IN V2&lt;/span&gt; &lt;br&gt;The OLED screen displays when the patch is listening to midi clock. &lt;br&gt;The patch responds to midi note messages to change preset on channel 16 (you can sequence whole preset changes easily! You can switch these to program messages, or the midi channel, on the preset object.) &lt;br&gt;The patch shows when the input is overloaded (screen shows an asterisk to the left). &lt;br&gt;I&apos;ve added a &quot;centre&quot; parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean! &lt;br&gt;Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars."/>
+   <hyperlink type="patch/hyperlink" name="https://discord.com/channels/1183050880279392277/1253796637764223077" x="728" y="728"/>
+   <comment type="patch/comment" x="14" y="756" text="gills inputs"/>
+   <comment type="patch/comment" x="308" y="756" text="L3 &amp; L4 long press/short press"/>
+   <patchobj type="patch/object" uuid="6688182a-996f-4370-812b-d60a9f2fec6b" name="1_2" x="14" y="770">
+      <params>
+         <int32 name="knobmoving" value="1500"/>
+         <frac32.u.map name="dead" value="0.09999990463256836"/>
+         <frac32.u.map name="resolution" value="0.5"/>
+         <frac32.s.map name="centre1" value="0.0"/>
+         <frac32.s.map name="centre2" value="0.0"/>
+         <frac32.s.map name="centre3" value="0.0"/>
+         <frac32.s.map name="centre4" value="0.0"/>
+         <frac32.s.map name="centre5" value="0.0"/>
+         <frac32.s.map name="centre6" value="0.0"/>
+         <frac32.s.map name="centre7" value="0.0"/>
+         <frac32.s.map name="centre8" value="0.0"/>
+         <frac32.s.map name="centre9" value="0.0"/>
+         <frac32.s.map name="centre10" value="0.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="avglength" selection="64"/>
+         <spinner attributeName="encodermin" value="0"/>
+         <spinner attributeName="encodermax" value="32"/>
+      </attribs>
+      <object id="patch/object" uuid="6688182a-996f-4370-812b-d60a9f2fec6b">
+         <sDescription>Input handler for  gills, uses a combination of averaging and dead zone to smooth knob jitter and has selectable resolution for knob output.</sDescription>
+         <author>Mattilyn Mattroe</author>
+         <license>I require 2 fillet burgers and 9 spicy wings delivered to me from the crown point chicken shop every time the object is used</license>
+         <helpPatch>analog.axh</helpPatch>
+         <inlets/>
+         <outlets>
+            <frac32.positive name="knob1"/>
+            <frac32.positive name="knob2"/>
+            <frac32.positive name="knob3"/>
+            <frac32.positive name="knob4"/>
+            <frac32.positive name="knob5"/>
+            <frac32.positive name="knob6"/>
+            <frac32.positive name="knob7"/>
+            <frac32.positive name="knob8"/>
+            <frac32.positive name="knob9"/>
+            <frac32.positive name="knob10"/>
+            <int32 name="controlID" description="number of last used control, knobs = 0-9 , buttons=10-13, encoder 14"/>
+            <bool32 name="knobmoving" description="outlet is on when any knob is changing, and turns off when knobs stop moving &amp; timer has ended (knob moving param)"/>
+            <bool32 name="S1"/>
+            <bool32 name="S2"/>
+            <bool32 name="L3"/>
+            <bool32 name="L4"/>
+            <int32 name="SID" description="S buttons id, s1=0, s2=1"/>
+            <bool32 name="Sgate" description="outlet turns on when s1 or s2 are pressed"/>
+            <int32 name="LID" description="L buttons id, L3=0, L4 =1"/>
+            <bool32 name="Lgate" description="outlet turns on when L3 or L4 are pressed"/>
+            <int32 name="encoder" description="encoder value"/>
+            <bool32 name="encoderSW" description="encoder button"/>
+            <bool32.pulse name="encoderup" description="sends trig everytime encoder turned clockwise"/>
+            <bool32.pulse name="encoderdwn" description="sends trig every time controller turned anticlockwise"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="knobmoving" description="time that the knobmoving outlet stays on after knob stops moving - I set to 1500">
+               <MinValue i="0"/>
+               <MaxValue i="66666"/>
+            </int32>
+            <frac32.u.map name="dead" description="dead zone - control only changes once it changes more than the dead zone - I set to 0.05"/>
+            <frac32.u.map name="resolution" description="resolution of knob outlets, I set to 0.1"/>
+            <frac32.s.map name="centre1"/>
+            <frac32.s.map name="centre2"/>
+            <frac32.s.map name="centre3"/>
+            <frac32.s.map name="centre4"/>
+            <frac32.s.map name="centre5"/>
+            <frac32.s.map name="centre6"/>
+            <frac32.s.map name="centre7"/>
+            <frac32.s.map name="centre8"/>
+            <frac32.s.map name="centre9"/>
+            <frac32.s.map name="centre10"/>
+         </params>
+         <attribs>
+            <combo name="avglength" description="amount of averaging used on knob input to smooth jitter -  I set to 64">
+               <MenuEntries>
+                  <string>2</string>
+                  <string>4</string>
+                  <string>8</string>
+                  <string>16</string>
+                  <string>32</string>
+                  <string>64</string>
+                  <string>128</string>
+                  <string>256</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>1</string>
+                  <string>2</string>
+                  <string>3</string>
+                  <string>4</string>
+                  <string>5</string>
+                  <string>6</string>
+                  <string>7</string>
+                  <string>8</string>
+               </CEntries>
+            </combo>
+            <spinner name="encodermin" description="minimum encoder value" MinValue="0" MaxValue="500" DefaultValue="0"/>
+            <spinner name="encodermax" description="maximum encoder value" MinValue="0" MaxValue="500" DefaultValue="64"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int i;
+int Fmoving;
+int controlID;
+int initid;
+
+int s1;
+int s1trig;
+
+int s2trig;
+int s2;
+int l3trig;
+int l3;
+int l4trig;
+int l4;
+int outs1;
+int outs2;
+int outl3;
+int outl4;
+int timer;
+
+int Fmove;
+int32_t out[10];
+int32_t centre[10];
+int32_t in[10];
+int32_t previn[10];
+int32_t t[10];
+int32_t difference;
+uint32_t faderout[10];
+uint32_t fcopy[10];
+uint32_t resolution;
+bool init;
+bool sID;
+bool lID;
+bool sgate;
+bool lgate;
+bool encoderup;
+bool encoderdwn;
+bool ebutton;
+bool etrig;
+// encoer stuff
+
+#define ENC_PORT GPIOC
+#define ENC_A_PIN 7
+#define ENC_B_PIN 1
+#define ENC_SW_PORT GPIOA
+#define ENC_SW_PIN 9
+
+int32_t encoder_val = 0;
+int32_t set_last = 0;
+
+bool_t a = true;
+bool_t a_last = true;
+
+//averaging
+//averaging lengths:   
+/////////
+      #ifdef FIFO_EXP
+        #undef FIFO_EXP
+      #endif
+      #ifdef FIFO_LEN
+        #undef FIFO_LEN
+      #endif
+      #ifdef FIFO_MASK
+        #undef FIFO_MASK
+      #endif
+      #define FIFO_EXP attr_avglength
+      #define FIFO_LEN (1<<FIFO_EXP)
+      #define FIFO_MASK (FIFO_LEN-1)
+      typedef struct _AveragerContextA
+      {
+        int32_t fifoA[FIFO_LEN];
+        int32_t fifo_iA;
+        int32_t accA;
+      } AveragerContextA;
+      AveragerContextA avgA;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageA( AveragerContextA *avgA, int32_t new_valueA )
+      {
+        avgA->fifo_iA             = (avgA->fifo_iA + 1) & FIFO_MASK;
+        avgA->accA               -= avgA->fifoA[avgA->fifo_iA];
+        avgA->accA              += new_valueA;
+        avgA->fifoA[avgA->fifo_iA]  = new_valueA;
+        return avgA->accA >> FIFO_EXP;
+      }
+/////////
+
+      typedef struct _AveragerContextB
+      {
+        int32_t fifoB[FIFO_LEN];
+        int32_t fifo_iB;
+        int32_t accB;
+      } AveragerContextB;
+      AveragerContextB avgB;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageB( AveragerContextB *avgB, int32_t new_valueB )
+      {
+        avgB->fifo_iB             = (avgB->fifo_iB + 1) & FIFO_MASK;
+        avgB->accB               -= avgB->fifoB[avgB->fifo_iB];
+        avgB->accB              += new_valueB;
+        avgB->fifoB[avgB->fifo_iB]  = new_valueB;
+        return avgB->accB >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextC
+      {
+        int32_t fifoC[FIFO_LEN];
+        int32_t fifo_iC;
+        int32_t accC;
+      } AveragerContextC;
+      AveragerContextC avgC;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageC( AveragerContextC *avgC, int32_t new_valueC )
+      {
+        avgC->fifo_iC             = (avgC->fifo_iC + 1) & FIFO_MASK;
+        avgC->accC               -= avgC->fifoC[avgC->fifo_iC];
+        avgC->accC              += new_valueC;
+        avgC->fifoC[avgC->fifo_iC]  = new_valueC;
+        return avgC->accC >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextD
+      {
+        int32_t fifoD[FIFO_LEN];
+        int32_t fifo_iD;
+        int32_t accD;
+      } AveragerContextD;
+      AveragerContextD avgD;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageD( AveragerContextD *avgD, int32_t new_valueD )
+      {
+        avgD->fifo_iD             = (avgD->fifo_iD + 1) & FIFO_MASK;
+        avgD->accD               -= avgD->fifoD[avgD->fifo_iD];
+        avgD->accD              += new_valueD;
+        avgD->fifoD[avgD->fifo_iD]  = new_valueD;
+        return avgD->accD >> FIFO_EXP;
+      }
+
+/////////////////////
+
+      typedef struct _AveragerContextE
+      {
+        int32_t fifoE[FIFO_LEN];
+        int32_t fifo_iE;
+        int32_t accE;
+      } AveragerContextE;
+      AveragerContextE avgE;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageE( AveragerContextE *avgE, int32_t new_valueE )
+      {
+        avgE->fifo_iE             = (avgE->fifo_iE + 1) & FIFO_MASK;
+        avgE->accE               -= avgE->fifoE[avgE->fifo_iE];
+        avgE->accE              += new_valueE;
+        avgE->fifoE[avgE->fifo_iE]  = new_valueE;
+        return avgE->accE >> FIFO_EXP;
+      }
+/////////
+
+      typedef struct _AveragerContextF
+      {
+        int32_t fifoF[FIFO_LEN];
+        int32_t fifo_iF;
+        int32_t accF;
+      } AveragerContextF;
+      AveragerContextF avgF;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageF( AveragerContextF *avgF, int32_t new_valueF )
+      {
+        avgF->fifo_iF             = (avgF->fifo_iF + 1) & FIFO_MASK;
+        avgF->accF               -= avgF->fifoF[avgF->fifo_iF];
+        avgF->accF              += new_valueF;
+        avgF->fifoF[avgF->fifo_iF]  = new_valueF;
+        return avgF->accF >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextG
+      {
+        int32_t fifoG[FIFO_LEN];
+        int32_t fifo_iG;
+        int32_t accG;
+      } AveragerContextG;
+      AveragerContextG avgG;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageG( AveragerContextG *avgG, int32_t new_valueG )
+      {
+        avgG->fifo_iG             = (avgG->fifo_iG + 1) & FIFO_MASK;
+        avgG->accG               -= avgG->fifoG[avgG->fifo_iG];
+        avgG->accG              += new_valueG;
+        avgG->fifoG[avgG->fifo_iG]  = new_valueG;
+        return avgG->accG >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextH
+      {
+        int32_t fifoH[FIFO_LEN];
+        int32_t fifo_iH;
+        int32_t accH;
+      } AveragerContextH;
+      AveragerContextH avgH;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageH( AveragerContextH *avgH, int32_t new_valueH )
+      {
+        avgH->fifo_iH             = (avgH->fifo_iH + 1) & FIFO_MASK;
+        avgH->accH               -= avgH->fifoH[avgH->fifo_iH];
+        avgH->accH              += new_valueH;
+        avgH->fifoH[avgH->fifo_iH]  = new_valueH;
+        return avgH->accH >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextI
+      {
+        int32_t fifoI[FIFO_LEN];
+        int32_t fifo_iI;
+        int32_t accI;
+      } AveragerContextI;
+      AveragerContextI avgI;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageI( AveragerContextI *avgI, int32_t new_valueI )
+      {
+        avgI->fifo_iI             = (avgI->fifo_iI + 1) & FIFO_MASK;
+        avgI->accI               -= avgI->fifoI[avgI->fifo_iI];
+        avgI->accI              += new_valueI;
+        avgI->fifoI[avgI->fifo_iI]  = new_valueI;
+        return avgI->accI >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextJ
+      {
+        int32_t fifoJ[FIFO_LEN];
+        int32_t fifo_iJ;
+        int32_t accJ;
+      } AveragerContextJ;
+      AveragerContextJ avgJ;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageJ( AveragerContextJ *avgJ, int32_t new_valueJ )
+      {
+        avgJ->fifo_iJ             = (avgJ->fifo_iJ + 1) & FIFO_MASK;
+        avgJ->accJ               -= avgJ->fifoJ[avgJ->fifo_iJ];
+        avgJ->accJ              += new_valueJ;
+        avgJ->fifoJ[avgJ->fifo_iJ]  = new_valueJ;
+        return avgJ->accJ >> FIFO_EXP;
+      }]]></code.declaration>
+         <code.init><![CDATA[palSetPadMode(GPIOB,5,PAL_MODE_INPUT_PULLDOWN);
+palSetPadMode(GPIOA,10,PAL_MODE_INPUT_PULLDOWN);
+palSetPadMode(GPIOB,12,PAL_MODE_INPUT_PULLDOWN);
+palSetPadMode(GPIOB,13,PAL_MODE_INPUT_PULLDOWN);
+initid=500;
+s1trig=1;
+s2trig=1;
+l3trig=1;
+l4trig=1;
+Fmoving=1;
+Fmove=3000;
+init=1;
+
+/* Configure encoder pins as input */
+palSetPadMode(ENC_PORT, ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(ENC_PORT, ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
+
+/* Configure encoder switch as input */
+palSetPadMode(ENC_SW_PORT, ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
+         <code.krate><![CDATA[if (param_resolution>0){
+	resolution=param_resolution;
+}
+else {
+	resolution=1;
+}
+
+
+in[0] = moving_averageA( &avgA, (adcvalues[0]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[1] = moving_averageB( &avgB, (adcvalues[1]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[2] = moving_averageC( &avgC, (adcvalues[2]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[3] = moving_averageD( &avgD, (adcvalues[3]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[4] = moving_averageE( &avgE, (adcvalues[6]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[5] = moving_averageF( &avgF, (adcvalues[7]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[6] = moving_averageG( &avgG, (adcvalues[8]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[7] = moving_averageH( &avgH, (adcvalues[9]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[8] = moving_averageI( &avgI, (adcvalues[11]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[9] = moving_averageJ( &avgJ, (adcvalues[12]<<15)>>FIFO_EXP )<<FIFO_EXP;
+
+
+centre[0]=(param_centre1)+(1<<26);
+centre[1]=(param_centre2)+(1<<26);
+centre[2]=(param_centre3)+(1<<26);
+centre[3]=(param_centre4)+(1<<26);
+centre[4]=(param_centre5)+(1<<26);
+centre[5]=(param_centre6)+(1<<26);
+centre[6]=(param_centre7)+(1<<26);
+centre[7]=(param_centre8)+(1<<26);
+centre[8]=(param_centre9)+(1<<26);
+centre[9]=((param_centre10)+(1<<26));
+//timer param replacement from original
+timer=4;
+
+for (i = 0;i<10;i++){
+	
+	if ((in[i]!=previn[i])&&(t[i]==0)){
+		int32_t difference=in[i]-fcopy[i];
+		if (difference<0){
+			difference=0-difference;
+		}
+		if (difference>=param_dead){
+			t[i]=timer;
+		}
+		previn[i]=in[i];    
+	}
+	if (t[i]>0){
+		t[i]-=1;
+	}
+	if (t[i]>0){
+		controlID=i;
+		if (in[i]<(param_dead<<1)){
+			faderout[i]=0;
+		}
+		else if (in[i]>=((1<<27)-(param_dead<<1))){
+			//faderout[i]=1<<27;
+			faderout[i]=0x07FFFFFF;
+		}
+		else {
+			  int32_t b = in[i] >> (27-1);              // i [0 2[
+			  int32_t a = (in[i] & ((1<<(27-1)) - 1));  // a q26
+			  if(b < 1){ // [0 1[             q27         q26   q21           q27 
+			    out[i] = ___SMMLA(centre[i] - 0, a, 0>> 6) << 6;
+			  } else {   // [1 2[
+			    out[i] = ___SMMLA(0x07FFFFFF - centre[i], a, centre[i] >> 6) << 6;
+			  }
+			faderout[i]=(out[i]/resolution)*resolution;
+			}
+		fcopy[i]=in[i];
+		
+		Fmoving=1;
+	}
+	
+}
+/////////////
+
+//if (Fmoving&&!init){
+if (Fmoving){
+	Fmove=param_knobmoving;
+}
+if (Fmove>0){
+	Fmove-=1;
+}
+if ((Fmove==0)&&init){
+	controlID=0;
+	init=0;
+}
+
+
+// write outputs
+
+outlet_knob1 = faderout[0];
+outlet_knob2 = faderout[1];
+outlet_knob3 = faderout[2];
+outlet_knob4 = faderout[3];
+outlet_knob5 = faderout[4];
+outlet_knob6 = faderout[5];
+outlet_knob7 = faderout[6];
+outlet_knob8 = faderout[7];
+outlet_knob9 = faderout[8];
+outlet_knob10 = faderout[9];
+
+
+
+
+
+s1=palReadPad(GPIOB,5)<<27;
+if (s1&&!s1trig){
+	outs1=1;
+	controlID=10;
+	sID=0;
+	s1trig=1;
+	}
+else if (!s1){
+		s1trig=0;
+		outs1=0;
+		}
+
+s2= palReadPad(GPIOA,10)<<27;
+
+if (s2&&!s2trig){
+	outs2=1;
+	controlID=11;
+	s2trig=1;
+	sID=1;
+	
+	}
+else if (!s2){
+		s2trig=0;
+		outs2=0;
+		}
+
+
+l3=palReadPad(GPIOB,12)<<27;
+if (l3&&!l3trig){
+	outl3=1;
+	controlID=12;
+	l3trig=1;
+	lID=0;
+	}
+else if (!l3){
+		l3trig=0;
+		outl3=0;
+		}
+
+l4=palReadPad(GPIOB,13)<<27;
+if (l4&&!l4trig){
+	outl4=1;
+	controlID=13;
+	l4trig=1;
+	lID=1;
+	}
+else if (!l4){
+		l4trig=0;
+		outl4=0;
+		}
+
+
+
+
+outlet_S2= outs2;
+outlet_S1= outs1;
+outlet_L3= outl3;
+outlet_L4= outl4;
+
+if (outs1 || outs2){
+	sgate=1;
+}
+else {
+	sgate=0;
+}
+
+if (outl3 || outl4){
+	lgate=1;
+}
+else {
+	lgate=0;
+}
+
+
+a = palReadPad(ENC_PORT, ENC_A_PIN);
+
+/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
+if (!a && a_last) {
+	/* If pin A is low but wasn't before, we have caught an event. */
+		
+	if (palReadPad(ENC_PORT, ENC_B_PIN)) {
+		/* If pin B is currently HIGH it means we're turning counterclockwise */
+		if (encoder_val > attr_encodermin) encoder_val -= 1;
+		encoderdwn=1;
+		controlID=14;
+	}
+	else {
+		/* If pin B is currently LOW it means we're turning clockwise */
+		if (encoder_val < attr_encodermax) encoder_val += 1;
+		encoderup=1;
+		controlID=14;
+	}
+}
+
+/* Register changes */
+a_last = a;
+outlet_encoder  = encoder_val;
+
+
+/* Now read encoder switch */
+ebutton=palReadPad(GPIOA, 9)<<27;
+if (ebutton && !etrig){
+	controlID=14;
+	etrig=1;
+}
+else if (!ebutton) { 
+	etrig=0;
+}
+outlet_encoderSW  = ebutton;
+if (initid>0){
+	initid-=1;
+	controlID=0;
+}
+outlet_controlID=controlID;
+
+outlet_Sgate=sgate;
+outlet_SID=sID;
+outlet_Lgate=lgate;
+outlet_LID=lID;
+outlet_knobmoving=Fmove;
+outlet_encoderup=encoderup;
+outlet_encoderdwn=encoderdwn;
+encoderdwn=0;
+encoderup=0;
+Fmoving=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_2" x="182" y="770">
+      <params/>
+      <attribs>
+         <spinner attributeName="period" value="3"/>
+         <combo attributeName="mode" selection="fast 0 to 1"/>
+      </attribs>
+   </obj>
+   <patchobj type="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9" name="object_13" x="294" y="770">
+      <params>
+         <int32 name="time" value="4500"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9">
+         <inlets>
+            <bool32 name="i1"/>
+         </inlets>
+         <outlets>
+            <bool32 name="o1"/>
+            <bool32 name="o2"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="time">
+               <MinValue i="0"/>
+               <MaxValue i="10000000"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int trig;
+int itrig;
+int xtrig;
+int i;]]></code.declaration>
+         <code.krate><![CDATA[if (inlet_i1){
+	if (!itrig){
+		itrig=1;
+		}
+	i+=1;
+	if (i>=param_time){
+		itrig=0;
+		xtrig=1;
+	}
+	
+}
+else if (!inlet_i1){
+	if (itrig){
+	itrig=0;
+	trig=1;
+	}
+	i=0;
+}
+
+outlet_o1=trig;
+outlet_o2=xtrig;
+trig=0;
+xtrig=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_3" x="378" y="770">
+      <params/>
+      <attribs>
+         <spinner attributeName="period" value="3"/>
+         <combo attributeName="mode" selection="fast 0 to 1"/>
+      </attribs>
+   </obj>
+   <patchobj type="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9" name="object_11" x="490" y="770">
+      <params>
+         <int32 name="time" value="4500"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9">
+         <inlets>
+            <bool32 name="i1"/>
+         </inlets>
+         <outlets>
+            <bool32 name="o1"/>
+            <bool32 name="o2"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="time">
+               <MinValue i="0"/>
+               <MaxValue i="10000000"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int trig;
+int itrig;
+int xtrig;
+int i;]]></code.declaration>
+         <code.krate><![CDATA[if (inlet_i1){
+	if (!itrig){
+		itrig=1;
+		}
+	i+=1;
+	if (i>=param_time){
+		itrig=0;
+		xtrig=1;
+	}
+	
+}
+else if (!inlet_i1){
+	if (itrig){
+	itrig=0;
+	trig=1;
+	}
+	i=0;
+}
+
+outlet_o1=trig;
+outlet_o2=xtrig;
+trig=0;
+xtrig=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_4" x="602" y="770">
+      <params/>
+      <attribs>
+         <spinner attributeName="period" value="3"/>
+         <combo attributeName="mode" selection="fast 0 to 1"/>
+      </attribs>
+   </obj>
+   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_5" x="728" y="770">
+      <params/>
+      <attribs>
+         <spinner attributeName="period" value="3"/>
+         <combo attributeName="mode" selection="fast 0 to 1"/>
+      </attribs>
+   </obj>
+   <obj type="table/alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" name="data" x="1148" y="770">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="4096"/>
+         <file attributeName="filename" file="../gillsdelayDATAX"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="182" y="882" text="write controls to table"/>
+   <comment type="patch/comment" x="322" y="882" text="read controls from table"/>
+   <comment type="patch/comment" x="1064" y="882" text="tap division encoder"/>
+   <comment type="patch/comment" x="1218" y="882" text="preset encoder"/>
+   <comment type="patch/comment" x="1344" y="882" text="preset loader/saver"/>
+   <patchobj type="patch/object" uuid="2949beb1-14af-4178-b69c-b334798a2738" name="object_1" x="182" y="896">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+         <combo attributeName="device" selection="din"/>
+         <spinner attributeName="channel" value="16"/>
+      </attribs>
+      <object id="patch/object" uuid="2949beb1-14af-4178-b69c-b334798a2738">
+         <inlets>
+            <int32 name="offset"/>
+            <frac32 name="i1"/>
+            <frac32 name="i2"/>
+            <frac32 name="i3"/>
+            <frac32 name="i4"/>
+            <frac32 name="i5"/>
+            <frac32 name="i6"/>
+            <frac32 name="i7"/>
+            <frac32 name="i8"/>
+            <frac32 name="i9"/>
+            <frac32 name="i10"/>
+            <bool32 name="i11"/>
+            <bool32 name="i12"/>
+            <bool32 name="i13"/>
+            <bool32 name="i14"/>
+            <frac32 name="i15"/>
+            <bool32 name="i16"/>
+            <bool32 name="i17"/>
+         </inlets>
+         <outlets/>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+            <combo name="device">
+               <MenuEntries>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>MIDI_DEVICE_DIN, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 2</string>
+                  <string>MIDI_DEVICE_USB_HOST, 3</string>
+                  <string>MIDI_DEVICE_USB_HOST, 4</string>
+                  <string>MIDI_DEVICE_INTERNAL, 1</string>
+                  <string>MIDI_DEVICE_INTERNAL, 2</string>
+                  <string>MIDI_DEVICE_USB_DEVICE, 1</string>
+               </CEntries>
+            </combo>
+            <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="1"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[uint32_t prev1;
+uint32_t prev2;
+uint32_t prev3;
+uint32_t prev4;
+uint32_t prev5;
+uint32_t prev6;
+uint32_t prev7;
+uint32_t prev8;
+uint32_t prev9;
+uint32_t prev10;
+uint32_t prev11;
+uint32_t prev12;
+uint32_t prev15;
+uint32_t value;
+uint32_t v;
+int offset;
+int midiCC[20];
+int midiV;
+int ccV[128];
+int cc;
+int cctrig;
+int midistart;
+int midiend;
+bool trig11;
+bool trig12;
+bool trig13;
+bool trig14;]]></code.declaration>
+         <code.init><![CDATA[midiCC[0]=20;
+midiCC[1]=21;
+midiCC[2]=22;
+midiCC[3]=23;
+midiCC[4]=24;
+midiCC[5]=25;
+midiCC[6]=26;
+midiCC[7]=27;
+midiCC[8]=28;
+midiCC[9]=29;
+midiCC[10]=30;
+midiCC[11]=31;
+midiCC[12]=32;
+midiCC[13]=33;
+midiCC[14]=34;
+midistart=20;
+midiend=34;]]></code.init>
+         <code.krate><![CDATA[offset=inlet_offset;
+
+if (inlet_i1 != prev1){
+	attr_table.array [__USAT((offset+0),attr_table.LENGTHPOW)]= inlet_i1>>attr_table.GAIN;
+//	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), CCVALUE, (inlet_v0 >>20));
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[0], (inlet_i1 >>20));
+	prev1=inlet_i1;
+}
+
+if (inlet_i2 != prev2){
+	attr_table.array [__USAT((offset+1),attr_table.LENGTHPOW)]= inlet_i2>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[1], (inlet_i2 >>20));
+	prev2=inlet_i2;
+}
+
+if (inlet_i3 != prev3){
+	attr_table.array [__USAT((offset+2),attr_table.LENGTHPOW)]= inlet_i3>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[2], (inlet_i3 >>20));
+	prev3=inlet_i3;
+}
+
+if (inlet_i4 != prev4){
+	attr_table.array [__USAT((offset+3),attr_table.LENGTHPOW)]= inlet_i4>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[3], (inlet_i4 >>20));
+	prev4=inlet_i4;
+}
+
+if (inlet_i5 != prev5){
+	attr_table.array [__USAT((offset+4),attr_table.LENGTHPOW)]= inlet_i5>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[4], (inlet_i5 >>20));
+	prev5=inlet_i5;
+}
+
+if (inlet_i6 != prev6){
+	attr_table.array [__USAT((offset+5),attr_table.LENGTHPOW)]= inlet_i6>>attr_table.GAIN;
+	//int ccv;
+	//ccv=midiCC[5];
+	//MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), ccv, (inlet_i6 >>20));
+	//LogTextMessage("Control ch%2D cc%3D v%3D    dev%3D port%3D ", ccv, ccv, ccv, ccv, (inlet_i6 >>20));
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[5], (inlet_i6 >>20));
+	prev6=inlet_i6;
+}
+
+if (inlet_i7 != prev7){
+	attr_table.array [__USAT((offset+6),attr_table.LENGTHPOW)]= inlet_i7>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[6], (inlet_i7 >>20));
+	prev7=inlet_i7;
+}
+
+if (inlet_i8 != prev8){
+	attr_table.array [__USAT((offset+7),attr_table.LENGTHPOW)]= inlet_i8>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[7], (inlet_i8 >>20));
+	prev8=inlet_i8;
+}
+
+if (inlet_i9 != prev9){
+	attr_table.array [__USAT((offset+8),attr_table.LENGTHPOW)]= inlet_i9>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[8], (inlet_i9 >>20));
+	prev9=inlet_i9;
+}
+
+if (inlet_i10 != prev10){
+	attr_table.array [__USAT((offset+9),attr_table.LENGTHPOW)]= inlet_i10>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[9], (inlet_i10 >>20));
+	prev10=inlet_i10;
+}
+
+if (inlet_i11 && !trig11){
+	//bool
+	value=attr_table.array [__USAT((offset+10),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+	trig11=1;
+	if (!value){
+	 v=inlet_i11<<21;
+	 midiV=127;
+	}
+	
+	else {
+		midiV=0;
+		v=0;
+	}
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[10], midiV);
+	attr_table.array [__USAT((offset+10),attr_table.LENGTHPOW)]=v>>attr_table.GAIN;
+}
+else if (!inlet_i11){
+	trig11=0;
+}
+if (inlet_i12 && !trig12){
+	//bool
+	value=attr_table.array [__USAT((offset+11),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+	trig12=1;
+	if (!value){
+	 v=inlet_i12<<21;
+	 midiV=127;
+	}
+	
+	else {
+		midiV=0;
+		v=0;
+	}
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[11], midiV);
+	attr_table.array [__USAT((offset+11),attr_table.LENGTHPOW)]=v>>attr_table.GAIN;
+
+}
+else if (!inlet_i12){
+	trig12=0;
+}
+if (inlet_i13 && !trig13){
+	//bool
+	value=attr_table.array [__USAT((offset+12),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+	trig13=1;
+	if (!value){
+	 v=inlet_i13<<21;
+	 midiV=127;
+	}
+	
+	else {
+		midiV=0;
+		v=0;
+	}
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[12], midiV);
+	attr_table.array [__USAT((offset+12),attr_table.LENGTHPOW)]=v>>attr_table.GAIN;
+
+}
+else if (!inlet_i13){
+	trig13=0;
+}
+
+if (inlet_i14 && !trig14){
+	//bool
+	value=attr_table.array [__USAT((offset+13),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+	trig14=1;
+	if (!value){
+	 v=inlet_i14<<21;
+	 midiV=127;
+	}
+	else {
+		midiV=0;
+		v=0;
+	}
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[13], midiV);
+
+	attr_table.array [__USAT((offset+13),attr_table.LENGTHPOW)]=v>>attr_table.GAIN;
+
+}
+else if (!inlet_i14){
+	trig14=0;
+}
+
+if (inlet_i15 != prev15){
+	//bool
+	attr_table.array [__USAT((offset+14),attr_table.LENGTHPOW)]= inlet_i15>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[14], (inlet_i15 >>20));
+	prev15=inlet_i15;
+}
+
+if (inlet_i16 ){
+	//bool
+	//do not use!! delay division is using this index
+
+}
+if (inlet_i17 ){
+	//bool
+	//do not use!! delay division is using this index
+
+}
+
+
+
+if (cctrig){
+	cctrig=0;
+	attr_table.array [__USAT((offset+(cc-midistart)),attr_table.LENGTHPOW)]= ccV[cc]>>attr_table.GAIN;
+}]]></code.krate>
+         <code.midihandler><![CDATA[if (status == (attr_channel-1) + MIDI_CONTROL_CHANGE)
+{
+	if ((data1>=midistart) && (data1<=midiend)){
+		cctrig=1;
+		cc=data1;
+		if (data2==127){
+			ccV[data1]=0x07FFFFFF;
+		}
+		else{
+			ccV[data1]=data2<<20;
+		}
+	}
+}]]></code.midihandler>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee" name="tableread_1" x="322" y="896">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+      </attribs>
+      <object id="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee">
+         <sDescription>read 8 values from a table,starting from &apos;offset&apos;</sDescription>
+         <author>robert schirmer</author>
+         <license>who cares</license>
+         <inlets>
+            <int32 name="offset" description="sets an offset for writing to the table"/>
+         </inlets>
+         <outlets>
+            <frac32 name="v1"/>
+            <frac32 name="v2"/>
+            <frac32 name="v3"/>
+            <frac32 name="v4"/>
+            <frac32 name="v5"/>
+            <frac32 name="v6"/>
+            <frac32 name="v7"/>
+            <frac32 name="v8"/>
+            <frac32 name="v9"/>
+            <frac32 name="v10"/>
+            <bool32 name="v11"/>
+            <bool32 name="v12"/>
+            <bool32 name="v13"/>
+            <bool32 name="v14"/>
+            <frac32 name="v15"/>
+            <frac32.positive name="v16"/>
+            <int32 name="v17"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int offset;]]></code.declaration>
+         <code.krate><![CDATA[outlet_v1= attr_table.array[__USAT((offset + 0),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v2= attr_table.array[__USAT((offset + 1),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v3= attr_table.array[__USAT((offset + 2),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v4= attr_table.array[__USAT((offset + 3),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v5= attr_table.array[__USAT((offset + 4),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v6= attr_table.array[__USAT((offset + 5),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v7= attr_table.array[__USAT((offset + 6),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v8= attr_table.array[__USAT((offset + 7),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v9= attr_table.array[__USAT((offset + 8),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v10= attr_table.array[__USAT((offset + 9),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v11= attr_table.array[__USAT((offset + 10),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v12= attr_table.array[__USAT((offset + 11),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v13= attr_table.array[__USAT((offset + 12),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v14= attr_table.array[__USAT((offset + 13),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v15= attr_table.array[__USAT((offset + 14),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v16= attr_table.array[__USAT((offset + 15),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v17= attr_table.array[__USAT((offset + 16),attr_table.LENGTHPOW)];]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_1" x="756" y="896">
+      <params/>
+      <attribs>
+         <spinner attributeName="period" value="3"/>
+         <combo attributeName="mode" selection="fast 0 to 1"/>
+      </attribs>
+   </obj>
+   <patchobj type="patch/object" uuid="e21be394-7de5-40c5-b61d-ac2f837afb91" name="object_6" x="882" y="896">
+      <params>
+         <int32 name="s1longpress" value="6000"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="e21be394-7de5-40c5-b61d-ac2f837afb91">
+         <inlets>
+            <bool32 name="s1"/>
+            <bool32 name="s2"/>
+            <bool32 name="Eup"/>
+            <bool32 name="Edown"/>
+            <bool32 name="Ebutton"/>
+         </inlets>
+         <outlets>
+            <bool32.pulse name="tap"/>
+            <bool32.pulse name="Pup"/>
+            <bool32.pulse name="Pdown"/>
+            <bool32 name="Pmode"/>
+            <bool32.pulse name="Tup"/>
+            <bool32.pulse name="Tdown"/>
+            <bool32 name="Tmode"/>
+            <bool32.pulse name="Pload"/>
+            <bool32.pulse name="Psave"/>
+            <bool32 name="tablesave"/>
+            <bool32.pulse name="tapdivUP"/>
+            <bool32.pulse name="tapdivDOWN"/>
+            <bool32 name="tapon"/>
+            <bool32 name="bypass"/>
+            <bool32 name="midirevert"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="s1longpress">
+               <MinValue i="1000"/>
+               <MaxValue i="1000000"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int presetmode;
+int s2trig;
+int s1trig;
+int save;
+int tablepause;
+int tablesave;
+int timer;
+int bypass;
+int etrig;
+int midiR;]]></code.declaration>
+         <code.init><![CDATA[bypass=0;]]></code.init>
+         <code.krate><![CDATA[if (inlet_s2 && !s2trig){
+	s2trig=1;
+	if (!presetmode && !bypass) {
+		presetmode=1;
+	}
+	else {
+		presetmode=0;
+	}
+}
+else if (!inlet_s2){
+	s2trig=0;
+}
+
+if (presetmode){
+	
+	if (inlet_s1 && !s1trig){
+		timer=param_s1longpress;
+		s1trig=1;
+	}
+	if (timer>0){
+		tablepause=1;
+		timer-=1;
+		if (timer==0){
+			tablesave=1;
+			tablepause=0;
+			//s1trig-0;
+			presetmode=0;
+			
+		}
+	}
+	if (!inlet_s1){
+		if (s1trig && tablepause){
+			tablepause=0;
+			save=1;
+			presetmode=0;
+			timer=0;
+		}
+		else if (s1trig && !tablepause){
+			
+		}
+		s1trig=0;
+	}
+
+	
+	outlet_tap=0;
+	outlet_Pup=inlet_Eup;
+	outlet_Pdown=inlet_Edown;
+	
+	outlet_Pload=inlet_Ebutton;
+	if (outlet_Pload){
+		//presetmode=0;
+		etrig=1;
+	}
+
+	
+	outlet_Tup=0;
+	outlet_Tdown=0;
+	outlet_tap=0;
+	outlet_tapdivUP=0;
+	outlet_tapdivDOWN=0;
+}
+
+else if (!presetmode){
+	if (!inlet_s1){
+		s1trig=0;
+		outlet_Tup=inlet_Eup;
+		outlet_Tdown=inlet_Edown;
+		outlet_tapdivUP=0;
+		outlet_tapdivDOWN=0;
+		outlet_tapon=0;
+		if (inlet_Ebutton && !etrig){
+			etrig=1;
+			if (!bypass){
+				bypass=1;
+			}
+			else {
+				bypass=0;
+			}
+		}
+		else if (!inlet_Ebutton){
+			etrig=0;
+		}
+	}
+	else {
+		outlet_Tup=0;
+		outlet_Tdown=0;
+
+		outlet_tapdivUP=inlet_Eup;
+		outlet_tapdivDOWN=inlet_Edown;
+		outlet_tapon=1;
+		if (inlet_Ebutton && !etrig){
+			etrig=1;
+		
+				midiR=1;
+		
+		}
+		else if (!inlet_Ebutton){
+			etrig=0;
+		}
+		
+	}
+	if (!s1trig){
+	outlet_tap=inlet_s1;
+	}
+	else {
+		outlet_tap=0;
+	}
+	if (!inlet_s1){
+		s1trig=0;
+	}
+	
+	
+	outlet_Pup=0;
+	outlet_Pdown=0;
+	outlet_Pload=0;	
+	
+}
+
+
+outlet_midirevert=midiR;
+midiR=0;
+
+
+outlet_bypass=bypass;
+outlet_Pmode=presetmode;
+outlet_Tmode=!presetmode;
+outlet_Psave=save;
+outlet_tablesave=tablesave;
+
+tablesave=0;
+save=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="4d62867a-567e-433d-ab02-3e0deaead454" name="object_7" x="1064" y="896">
+      <params>
+         <int32 name="min" value="6"/>
+         <int32 name="max" value="22"/>
+      </params>
+      <attribs>
+         <spinner attributeName="init" value="14"/>
+      </attribs>
+      <object id="patch/object" uuid="4d62867a-567e-433d-ab02-3e0deaead454">
+         <inlets>
+            <bool32 name="up"/>
+            <bool32 name="down"/>
+            <int32 name="setvalue"/>
+         </inlets>
+         <outlets>
+            <int32 name="out"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="min">
+               <MinValue i="-60000"/>
+               <MaxValue i="60000"/>
+            </int32>
+            <int32 name="max">
+               <MinValue i="-60000"/>
+               <MaxValue i="60000"/>
+            </int32>
+         </params>
+         <attribs>
+            <spinner name="init" MinValue="-60000" MaxValue="60000" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int i;
+int holdv;
+bool utrig;
+bool dtrig;
+bool htrig;]]></code.declaration>
+         <code.init><![CDATA[i=attr_init;]]></code.init>
+         <code.krate><![CDATA[if (inlet_up &&  !utrig && (i<param_max)){
+		i+=1;
+		utrig=1;
+	}
+	else if (!inlet_up){
+		utrig=0;
+	}
+	if (inlet_down && !dtrig && (i>param_min)){
+		i-=1;
+		dtrig=1;
+	}
+	
+	else if (!inlet_down){
+		dtrig=0;
+	}
+if (inlet_setvalue!=holdv){
+	holdv=inlet_setvalue;
+	i=inlet_setvalue;
+}
+outlet_out=i;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="4d62867a-567e-433d-ab02-3e0deaead454" name="object_2" x="1218" y="896">
+      <params>
+         <int32 name="min" value="0"/>
+         <int32 name="max" value="99"/>
+      </params>
+      <attribs>
+         <spinner attributeName="init" value="0"/>
+      </attribs>
+      <object id="patch/object" uuid="4d62867a-567e-433d-ab02-3e0deaead454">
+         <inlets>
+            <bool32 name="up"/>
+            <bool32 name="down"/>
+            <bool32 name="hold"/>
+         </inlets>
+         <outlets>
+            <int32 name="out"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="min">
+               <MinValue i="-60000"/>
+               <MaxValue i="60000"/>
+            </int32>
+            <int32 name="max">
+               <MinValue i="-60000"/>
+               <MaxValue i="60000"/>
+            </int32>
+         </params>
+         <attribs>
+            <spinner name="init" MinValue="-60000" MaxValue="60000" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int i;
+bool utrig;
+bool dtrig;]]></code.declaration>
+         <code.init><![CDATA[i=attr_init;]]></code.init>
+         <code.krate><![CDATA[if (!inlet_hold){
+	if (inlet_up &&  !utrig){
+		i+=1;
+		if (i>param_max) {
+			i=param_min;
+		}
+		utrig=1;
+	}
+	if (inlet_down && !dtrig ){
+		
+		i-=1;
+		if (i<param_min){
+			i=param_max;
+		}
+		dtrig=1;
+	}
+	
+}
+
+
+if (!inlet_up){
+	utrig=0;
+}
+if (!inlet_down){
+	dtrig=0;
+}
+
+outlet_out=i;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="54e1b800-1a0e-44b6-abdb-c5adcc04a360" name="preset_1" x="1344" y="896">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+         <spinner attributeName="range" value="32"/>
+         <combo attributeName="sendDevice" selection="din"/>
+         <combo attributeName="sendmidi" selection="off"/>
+         <spinner attributeName="channel" value="16"/>
+         <combo attributeName="type" selection="midi note"/>
+         <spinner attributeName="initdelay" value="56"/>
+      </attribs>
+      <object id="patch/object" uuid="54e1b800-1a0e-44b6-abdb-c5adcc04a360">
+         <sDescription>copy the elements of a table from table &apos;src&apos; to table &apos;dst&apos;
+the length of the area to copy is defined by &apos;range&apos;,
+the read offset is defined by inlet&apos;src&apos; and the write offset by &apos;dst&apos;
+&apos;speed&apos; sets the copying speed in terms of audio-rate (16 is really fast!)
+if &apos;splat&apos; is enabled,tcopy will preserve the original contents of the destination table.
+if &apos;clear&apos; is enabled,tcopy will clear the contents of the table.</sDescription>
+         <author>Robert Schirmer</author>
+         <license>BSD</license>
+         <helpPatch>data.axh</helpPatch>
+         <inlets>
+            <int32 name="snapshot"/>
+            <bool32.rising name="load" description="start copying"/>
+            <int32 name="offset"/>
+            <bool32.rising name="save"/>
+            <bool32.rising name="saveinitpatch"/>
+            <bool32 name="delayinitpatch"/>
+         </inlets>
+         <outlets>
+            <int32 name="snapshot"/>
+            <bool32.pulse name="initsaved"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table" description="name of the source -table"/>
+            <spinner name="range" MinValue="1" MaxValue="300" DefaultValue="1"/>
+            <combo name="sendDevice">
+               <MenuEntries>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>MIDI_DEVICE_DIN, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 2</string>
+                  <string>MIDI_DEVICE_USB_HOST, 3</string>
+                  <string>MIDI_DEVICE_USB_HOST, 4</string>
+                  <string>MIDI_DEVICE_INTERNAL, 1</string>
+                  <string>MIDI_DEVICE_INTERNAL, 2</string>
+                  <string>MIDI_DEVICE_USB_DEVICE, 1</string>
+               </CEntries>
+            </combo>
+            <combo name="sendmidi">
+               <MenuEntries>
+                  <string>off</string>
+                  <string>on</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0</string>
+                  <string>1</string>
+               </CEntries>
+            </combo>
+            <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="1"/>
+            <combo name="type">
+               <MenuEntries>
+                  <string>midi note</string>
+                  <string>program change</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0</string>
+                  <string>1</string>
+               </CEntries>
+            </combo>
+            <spinner name="initdelay" MinValue="0" MaxValue="12000000" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[uint32_t i;
+uint32_t ii;
+uint32_t previi;
+uint32_t src;
+uint32_t dst;
+
+
+
+
+
+uint32_t snapshot;
+uint32_t range;
+
+uint32_t start;
+
+uint32_t soffset;
+int ntrig;
+int Mpreset;
+int Mtrig;
+
+int speed;
+//int save;
+int strig;
+int s;
+int o;
+int prevsnap;
+
+int init;
+int savinginit;
+int initsaved;
+
+
+
+
+//int ppptrig;]]></code.declaration>
+         <code.init><![CDATA[ntrig = 1;
+
+snapshot=1;
+speed = 2;
+init=attr_initdelay;]]></code.init>
+         <code.krate><![CDATA[start=inlet_offset;
+range=attr_range;
+if (inlet_snapshot!=prevsnap){
+	prevsnap=inlet_snapshot;
+	snapshot=inlet_snapshot+1;
+}
+if (Mtrig){
+
+//	s=1;
+	snapshot=Mpreset+1;
+	ntrig = 1;
+//	save=0;
+	i = 0;
+	ii=0;
+	previi=-1;
+	src = (snapshot*range) + start + range;
+	dst = 0 + start;
+}
+
+if (inlet_load&& !ntrig && !Mtrig){ 
+	snapshot=inlet_snapshot+1;
+	s=1;
+	ntrig = 1;
+//	save=0;
+	i = 0;
+	ii=0;
+	previi=-1;
+	src = (snapshot*range) + start + range;
+	dst = 0 + start;
+}
+
+
+if (inlet_save&& !ntrig && !Mtrig ){ 
+	snapshot=inlet_snapshot+1;
+	ntrig = 1;
+//	save=1;
+	i = 0;
+	ii=0;
+	previi=-1;
+	src = 0 + start;
+		dst = (snapshot*range) + start + range;
+}
+
+
+if (init>0){
+	
+	if (inlet_delayinitpatch){
+			init=attr_initdelay;
+		}
+	else {
+		     init-=1;
+		}
+	if (init==1){
+		init=0;
+		s=1;
+		ntrig = 1;
+//		save=0;
+		i = 0;
+		ii=0;
+		previi=-1;
+		src = 0 + start+range;
+		dst = 0 + start;
+			
+		}
+}
+
+if (inlet_saveinitpatch && !strig){
+	strig=1;
+	snapshot=inlet_snapshot+1;
+	ntrig = 1;
+//	save=1;
+	i = 0;
+	ii=0;
+	previi=-1;
+	src = 0 + start;
+	dst = 0 + start + range;
+	savinginit=1;
+
+
+	
+}
+else if (!inlet_saveinitpatch){
+	strig=0;
+}
+//if (param_initpatch && !ppptrig){
+//	s=1;
+//	ntrig = 1;
+//	save=0;
+//	i = 0;
+//	ii=0;
+//	previi=-1;
+//	src = 0 + start+range;
+//	dst = 0 + start;
+
+
+
+	
+//	ppptrig=1;
+//}
+//else if (!param_initpatch){
+//	ppptrig=0;
+//}
+
+if ((ii<range)&&(ntrig)){
+	
+	if (ii!=previi){
+	
+  attr_table.array[ii + dst]=  attr_table.array[ii  + src] ;
+		
+  previi=ii;
+	}
+  
+  i += 1;
+  ii=i/speed;	
+ // if (ii==range){
+ // 	ntrig=0;
+//  }
+}
+
+if ((ii==range) && !inlet_load && !inlet_save && !Mtrig &&ntrig){
+  	ntrig=0;
+  	if (savinginit){
+  		attr_table.array [__USAT((start+range+14),attr_table.LENGTHPOW)]= 0;
+  		savinginit=0;
+  		initsaved=1;
+  		
+  	}
+  	//saveinit=0;
+  	if (s && attr_sendmidi){
+  		
+  	o=1;
+  	if (!attr_type){
+  	MidiSend3((midi_device_t) attr_sendDevice, MIDI_NOTE_ON + (attr_channel-1),snapshot,78);
+  	}
+  	else if (attr_type){
+  	MidiSend2((midi_device_t) attr_sendDevice , MIDI_PROGRAM_CHANGE + (attr_channel-1),snapshot-1);
+  	}
+  	s=0;
+  	}
+  	
+  }
+if (attr_sendmidi){
+	if (o>0){
+	  if (o==4){
+	  	if (!attr_type){
+		  MidiSend3((midi_device_t) attr_sendDevice, MIDI_NOTE_OFF + (attr_channel-1),snapshot,10);
+	  	}
+	  }
+	  o+=1;
+	}
+}
+outlet_snapshot=snapshot-1;
+
+outlet_initsaved=initsaved;
+initsaved=0;
+Mtrig=0;]]></code.krate>
+         <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + (attr_channel-1)) && (data2)) {
+	
+	if (!attr_type){
+	Mpreset=data1;
+	Mtrig=1;
+	}
+
+	
+}
+else if (status == MIDI_PROGRAM_CHANGE + (attr_channel-1)) {  
+	if (attr_type){
+	Mpreset= data1;
+	Mtrig=1;
+	}
+}]]></code.midihandler>
+      </object>
+   </patchobj>
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="1526" y="966">
+      <params/>
+      <attribs>
+         <table attributeName="str" table="../gillsdelayDATAX"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_7" x="476" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_1" x="546" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_2" x="616" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_3" x="686" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_4" x="756" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="table/save" uuid="3e4108b607d56d9e1cd10abb898b58eea11e53b2" name="save_1" x="1554" y="1036">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_8" x="476" y="1078">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_9" x="546" y="1078">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_10" x="616" y="1078">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_11" x="686" y="1078">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_12" x="756" y="1078">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1064" y="1092" text="when input goes low, trig is sent"/>
+   <patchobj type="patch/object" uuid="e5baf153-5a7f-4fad-adb1-398431ae9cfa" name="object_3" x="1064" y="1106">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="e5baf153-5a7f-4fad-adb1-398431ae9cfa">
+         <inlets>
+            <bool32 name="i1"/>
+         </inlets>
+         <outlets>
+            <bool32 name="o1"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int ntrig;
+int trig;]]></code.declaration>
+         <code.krate><![CDATA[if (inlet_i1 && !ntrig){
+	ntrig=1;
+}
+else if (!inlet_i1 && ntrig){
+	ntrig=0;
+	trig=1;
+}
+
+outlet_o1=trig;
+trig=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_1" x="588" y="1204">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="3 blue"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_2" x="714" y="1204">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="4 blue"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="896" y="1260" text="clock"/>
+   <patchobj type="patch/object" uuid="6da7343a-46c1-4b5b-8ffd-f6e4242b745c" name="1_1" x="882" y="1274">
+      <params>
+         <bool32.tgl name="bpmstyle" value="0"/>
+         <bool32.tgl name="bpmlock" value="0"/>
+         <int32 name="ppq" value="1"/>
+         <int32 name="ppqmax" value="0"/>
+      </params>
+      <attribs>
+         <combo attributeName="in" selection="omni"/>
+         <combo attributeName="thru" selection="off"/>
+         <combo attributeName="Thruput" selection="din"/>
+      </attribs>
+      <object id="patch/object" uuid="6da7343a-46c1-4b5b-8ffd-f6e4242b745c">
+         <sDescription>Midi clock slave</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>midi_in.axh</helpPatch>
+         <inlets>
+            <int32 name="bpm"/>
+            <bool32.rising name="bpmUP"/>
+            <bool32.rising name="bpmDOWN"/>
+            <bool32 name="reset"/>
+            <bool32 name="stop"/>
+            <bool32 name="tap"/>
+            <frac32.positive name="ppqgate"/>
+            <bool32.rising name="midirevert"/>
+         </inlets>
+         <outlets>
+            <bool32 name="midiactive" description="Song is playing"/>
+            <int32 name="bpmkbeat"/>
+            <int32 name="kbeat" description="average length of a beat at k rate"/>
+            <int32 name="sbeat"/>
+            <bool32.pulse name="start" description="start trigger"/>
+            <bool32.pulse name="stop" description="stop trigger"/>
+            <bool32.pulse name="1ppq" description="beat trigger, 1ppq"/>
+            <int32 name="bpm" description="rough bpm"/>
+            <bool32 name="bartrig" description="triggers every bar"/>
+            <int32 name="count"/>
+            <bool32 name="tapping"/>
+            <int32 name="ppq"/>
+            <bool32 name="ppqgate"/>
+            <bool32 name="o1"/>
+            <bool32 name="bpmchange"/>
+            <bool32 name="bpmreset"/>
+            <bool32 name="mode"/>
+         </outlets>
+         <displays>
+            <int32.label name="kbeat"/>
+            <int32.label name="bpm"/>
+         </displays>
+         <params>
+            <bool32.tgl name="bpmstyle"/>
+            <bool32.tgl name="bpmlock"/>
+            <int32 name="ppq">
+               <MinValue i="1"/>
+               <MaxValue i="96"/>
+            </int32>
+            <int32 name="ppqmax">
+               <MinValue i="0"/>
+               <MaxValue i="6666666"/>
+            </int32>
+         </params>
+         <attribs>
+            <combo name="in">
+               <MenuEntries>
+                  <string>omni</string>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>true</string>
+                  <string>dev == MIDI_DEVICE_DIN &amp;&amp; port == 1</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 1</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 2</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 3</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 4</string>
+                  <string>dev == MIDI_DEVICE_INTERNAL &amp;&amp; port == 1</string>
+                  <string>dev == MIDI_DEVICE_INTERNAL &amp;&amp; port == 2</string>
+                  <string>dev == MIDI_DEVICE_USB_DEVICE &amp;&amp; port == 1</string>
+               </CEntries>
+            </combo>
+            <combo name="thru">
+               <MenuEntries>
+                  <string>off</string>
+                  <string>on</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0</string>
+                  <string>1</string>
+               </CEntries>
+            </combo>
+            <combo name="Thruput">
+               <MenuEntries>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>MIDI_DEVICE_DIN, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 2</string>
+                  <string>MIDI_DEVICE_USB_HOST, 3</string>
+                  <string>MIDI_DEVICE_USB_HOST, 4</string>
+                  <string>MIDI_DEVICE_INTERNAL, 1</string>
+                  <string>MIDI_DEVICE_INTERNAL, 2</string>
+                  <string>MIDI_DEVICE_USB_DEVICE, 1</string>
+               </CEntries>
+            </combo>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int tap[4];
+int tapcount;
+int t;
+int avg;
+int ntrig;
+int counttaken;
+int lastcount;
+int outcount;
+int outrig;
+int tapping;
+int newtap;
+int prevavg;
+int ppq1;
+int resetC;
+int tapstart;
+int trighold;
+int prevfinal;
+
+
+int bpmclock;
+int bpmtrig;
+int bpmcount;
+
+int prevtest;
+int prevppq;
+int ppq;
+int ppqclock;
+int ppqout;
+int barclock;
+int incount;
+int k;
+int prevc;
+
+int _pos;
+int stepos;
+
+
+
+int ch;
+int CCa;
+int CCb;
+
+//int prevkb;
+int prevbpm;
+int active;
+int stablebpm;
+int solidbpm;
+int change;
+int rchange;
+int xchange;
+int changed;
+int pkb;
+int lastbpm;
+int finalbpm;
+int pstable;
+int pst;
+int cl;
+int start;
+int stop;
+int pulse;
+int bartrig;
+int kbeat;
+int Okbeat;
+int sent1;
+int sent2;
+int stable;
+int resetbavg;
+int setbpm;
+int beatavg[4];
+int Bavg;
+int ppqgate;
+int ppqwidth;
+int bpm;
+int pbpm;
+int barpos;
+int kbarpos;
+int Pbarpos;
+int mode;
+int Xkbeat[3];
+int Xstart[3];
+int Xstop[3];
+int Xbarpos[3];
+int midipickup;
+int tmpb;
+int Utrig;
+int Dtrig;
+int Ubpm;
+int prevUbpm;
+int pppbpm;
+int bpmreset;
+int holding;
+//uint32_t kph;
+//uint32_t kclock;
+//uint32_t pkclock;
+bool midihold;
+bool started;
+bool init;
+bool ppqtrig;
+bool midiactive;
+bool rtrig;
+bool strig;]]></code.declaration>
+         <code.init><![CDATA[active = 0;
+barpos=0;
+Pbarpos=0;
+t=-1;
+tapcount=-1;
+
+ch=15;
+CCa=80;
+CCb=81;
+mode=1;
+//_active = 0;
+midiactive=0;
+_pos = -1;
+
+Ubpm=119;
+	kbeat=1500;
+	Bavg=kbeat;
+avg=kbeat;
+prevavg=kbeat;
+
+ppq1=4;
+
+stepos=-1;
+
+setbpm=1;
+init=3;
+midipickup=1;
+holding=1000;]]></code.init>
+         <code.krate><![CDATA[// modes
+// 0 = BPM/tap
+// 1 = midi
+if (inlet_midirevert){
+	mode=1;
+}
+
+//tap ***********************************************************************
+outcount+=1;
+if ((outcount>=avg)){
+	if ((avg>20)&&!trighold){
+		outrig=1;
+	}
+	outcount=0;
+}
+// timer
+if (t>=0){
+	t+=1;
+}
+if ((t>=((avg>>1)+avg))&&(avg>20)){
+	newtap=0;
+	tapping=0;
+}
+
+//tap
+if (inlet_tap&&!ntrig){
+	
+	if (!tapping){
+		
+		
+		if (barpos==0){
+//		Pbarpos=barpos+1;
+		}
+		tapcount=-1;
+			outrig=1;
+			outcount=0;
+			tapping=1;
+			newtap=1;
+			resetC=1;
+			trighold=1;
+			avg=0x07FFFFFF;
+			tap[0]=0;
+			tap[1]=0;
+			tap[2]=0;
+	}
+	tapping=1;
+	ntrig=1;
+
+		
+	if (tapcount>=0){
+		
+		tap[tapcount]=t;
+		if (trighold){
+			outrig=1;
+			}
+		if (newtap){
+			
+			avg=(tap[0]+tap[1]+tap[2])/(tapcount+1);
+		}
+		
+		if (!newtap){
+		avg=(tap[0]+ tap[1]+tap[2])/3;
+		}
+	}
+	lastcount=tapcount;
+	tapcount+=1;
+	if ((tapcount>=0)&&trighold){
+		
+		trighold=0;
+		outcount=0;
+		outrig=1;
+	}
+	if (tapcount==1){
+		midihold=0;
+		mode=0;
+	}
+	if (tapcount>=3){
+		
+		newtap=0;
+		//outcount=0;
+		//outrig=1;
+		
+		tapcount=0;
+	}
+
+	t=0;
+}
+
+
+if (!inlet_tap){
+	ntrig=0;
+}
+
+
+if (outrig){
+	ppq1+=1;
+	if (resetC){
+		ppq1=0;
+	}
+	if (ppq1==4){
+		tapstart=1;
+		bpmclock=0;
+	}
+}
+
+//outlet_trig=outrig;
+//outlet_tapping=tapping;
+
+Xkbeat[0]=prevavg;
+
+Xstart[0]=tapstart;
+tmpb=pkb;
+
+//bpm***********************************************************************
+if (inlet_bpm!=pkb){
+	midihold=0;
+	pkb=inlet_bpm;
+	if (inlet_bpm>0){
+		avg=180000/inlet_bpm;
+		}
+	else {
+		avg=180000;
+	}
+	mode=0;
+	if (!active){
+		Xstart[0]=1;
+		active=1;
+	}
+	//setbpm=1;
+}
+
+if (inlet_bpmUP && !Utrig){
+	Ubpm=finalbpm+1;
+	Utrig=1;
+}
+else if (!inlet_bpmUP){
+	Utrig=0;
+}
+
+if (inlet_bpmDOWN && !Dtrig){
+	Ubpm=finalbpm-1;
+	Dtrig=1;
+}
+else if (!inlet_bpmDOWN){
+	Dtrig=0;
+}
+if (Ubpm<=1){
+	Ubpm=1;
+}
+if (Ubpm>=600){
+	Ubpm=600;
+}
+if (Ubpm!=prevUbpm){
+	prevUbpm=Ubpm;
+	midihold=0;
+//	pkb=inlet_bpm;
+	if (Ubpm>0){
+		avg=180000/Ubpm;
+		}
+	else {
+		avg=180000;
+	}
+	mode=0;
+	if (!active){
+	//	Xstart[0]=1;
+	//	active=1;
+	}
+
+
+	
+}
+
+if (mode==1){
+	avg=180000/finalbpm;
+	prevavg=avg;
+}
+
+if ((avg!=prevavg)&&(avg!=0X07FFFFFF)){
+	prevavg=avg;
+	
+	
+}
+
+//midi CC
+Xkbeat[1]=(sent1<<6)+sent2;
+
+incount=(stepos/24);
+k+=1;
+if ((incount!=prevc)&&(stepos>=0)){
+	
+	Xbarpos[1]=incount-((incount>>2)<<2);
+	if (stepos>0){
+		Xkbeat[1]=k;
+		sent1=k>>6;
+		sent2=k-((k>>6)<<6);
+	}
+	prevc=incount;
+	k=0;
+}
+
+if (inlet_reset&&!rtrig){
+	rtrig=1;
+	outcount=0;
+	ppq1=0;
+	
+	//if (!active){
+		Xstart[0]=1;
+	//	}
+	if ((mode==2)&&!active){
+		mode=0;
+	}
+}
+else if (!inlet_reset){
+	rtrig=0;
+}
+//mode=0;
+
+kbeat=Xkbeat[mode];
+if (mode==1){
+	ppq1=incount;
+}
+kbarpos=ppq1-((ppq1>>2)<<2);
+
+start=Xstart[mode];
+stop=Xstop[mode];
+Xbarpos[0]=kbarpos;
+if (!mode){
+	//Xbarpos[0]=kbarpos;
+	}
+else {
+	//Xbarpos[0]=Xbarpos[1];
+}
+
+barpos=Xbarpos[mode];
+
+if (inlet_stop&&!strig){
+	strig=1;
+	stop=1;
+}
+else if (!inlet_stop){
+	strig=0;
+}
+
+if (start){
+	prevppq=-1;
+	resetbavg=1;
+	barpos=0;
+	Pbarpos=-1;
+	barclock=-1;
+	//kclock=0;
+	//pkclock=0;
+	kbarpos=0;
+	bpmclock=0;
+	bpmcount=0;
+	active=1;
+	
+}
+if (stop){
+	active=0;
+}
+
+
+
+
+
+
+
+if (barpos!=Pbarpos){
+	pulse=1;
+	Pbarpos=barpos;
+	if (barpos==0){
+			barclock+=1;
+			bartrig=1;
+			
+		
+		}
+
+		
+}
+
+
+
+
+
+int rawbpm=180000/kbeat;
+float bpm_float = 180000.0f/kbeat;
+int bpm_int = bpm_float;
+int tenth=(bpm_float - bpm_int)*10;
+
+
+
+if (tenth>=5){
+	bpm=rawbpm+1;
+}
+else {
+	bpm=rawbpm;
+}
+if (mode==0){
+	setbpm=1;
+}
+if (setbpm){
+	//bpm=inlet_bpm;
+	stablebpm=bpm;
+	solidbpm=bpm;
+	prevbpm=bpm;
+	change=0;
+	setbpm=0;
+	lastbpm=bpm;
+	finalbpm=bpm;
+}
+
+if (pulse){
+	if (bpm!=prevbpm){
+		if (change>(0)){
+			stablebpm=bpm;
+		}
+		if ( ((bpm>lastbpm)&&(bpm>prevbpm)) || ((bpm<lastbpm)&&(bpm<prevbpm)) ){
+			change+=1;
+		
+		}
+		else {
+			change=0;
+		}
+		stable=0;
+		//lastbpm=prevbpm;
+		lastbpm=prevbpm;
+		prevbpm=bpm;
+		
+	}
+	else {
+		if (change>(1)){
+			stablebpm=bpm;
+		}
+		if (stable>(1)){
+			stablebpm=bpm;
+		
+			
+		}
+		stable+=1;
+		change=0;
+	}
+
+	if (stablebpm==pstable){
+		if (pst<4){
+			pst+=1;	
+		}
+		if (pst>2){
+			solidbpm=stablebpm;
+		}
+		
+	}
+	else {
+		pst=0;
+	}
+	pstable=stablebpm;
+}
+if (!param_bpmstyle){
+	finalbpm=stablebpm;
+	
+}
+else {
+	finalbpm=solidbpm;
+}
+if (param_bpmlock){
+	Okbeat=180000/finalbpm;
+	if ((finalbpm!=prevfinal)&&!tapping){
+		avg=Okbeat;
+		prevavg=Okbeat;
+		prevfinal=finalbpm;
+	}
+	
+}
+else {
+	Okbeat=kbeat;
+}
+ppq=param_ppq;
+if (bpmclock<(Okbeat-(Okbeat/ppq))){
+	bpmclock+=1;
+	
+}
+
+if (pulse){
+	//disp_test=bpmclock/(bpmclock/24);
+	
+	bpmclock=0;
+}
+//         
+ppqclock=(bpmclock/(Okbeat/ppq))+(barpos*ppq)+(barclock*(ppq<<2));
+ppqout=ppqclock-((ppqclock/param_ppqmax)*param_ppqmax);
+
+if (ppqout!=prevppq){
+	ppqgate=1;
+	prevppq=ppqout;
+}
+ppqwidth=___SMMUL((Okbeat/ppq)<<3,inlet_ppqgate<<2);
+if (ppqwidth<3){
+	ppqwidth=3;
+}
+
+if (ppqgate>0){
+	ppqgate+=1;
+	if (ppqgate>=ppqwidth){
+		ppqgate=0;
+	}
+}
+if (init>0){
+	init-1;
+	if (init==3){
+		pkb=777;
+		if (inlet_bpm==0){
+			Ubpm=119;
+		}
+	}
+	else if (init==2){
+		midipickup=1;
+	}
+}
+if (finalbpm!=pppbpm){
+	pppbpm=finalbpm;
+	if ((mode==0) && !tapping){
+		bpmreset=1;
+	}
+}
+
+if (holding>0){
+	holding-=1;
+	bpmreset=0;
+}
+ 
+
+
+
+outlet_ppq=ppqout;
+outlet_ppqgate=ppqgate;
+outlet_bpmreset=bpmreset;
+
+outlet_midiactive = midiactive;
+outlet_mode=mode;
+outlet_start=Xstart[mode];
+outlet_kbeat=Okbeat;
+outlet_sbeat=Okbeat<<4;
+
+//outlet_start=start;
+outlet_stop=stop;
+outlet_bartrig=bartrig;
+outlet_1ppq=pulse;
+outlet_tapping=tapping;
+outlet_bpmkbeat=180000/finalbpm;
+
+outlet_count=barpos;
+outlet_bpm=finalbpm;
+disp_bpm=finalbpm;
+disp_kbeat=Okbeat;
+
+
+//ppqtrig=0;
+bpmreset=0;
+bpmtrig=0;
+start=0;
+stop=0;
+Xstart[0]=0;
+Xstart[1]=0;
+Xstop[1]=0;
+tapstart=0;
+resetC=0;
+outrig=0;
+pulse=0;
+bartrig=0;]]></code.krate>
+         <code.midihandler><![CDATA[if (attr_in){
+	if (status == MIDI_TIMING_CLOCK) {
+		if (midipickup){
+			//pkb=tmpb;
+		midihold=0;
+		mode=1;
+		//Xstart[1]=1;
+		_pos = 0;
+	  	stepos=-1;
+	  	midiactive=1;
+	  	started=1;
+		midipickup=0;
+			if ((_pos==0)&&midiactive){
+		  	//start=1;
+		  	Xstart[1]=1;
+		  	Xstart[0]=1;
+		  }
+		  _pos++;
+		  stepos++;
+		
+	}
+	if (midiactive){
+	
+	
+			if ((_pos==0)&&midiactive){
+		  	//start=1;
+		  	Xstart[1]=1;
+		  	Xstart[0]=1;
+		  }
+		  _pos++;
+		  stepos++;
+	}
+	
+	  
+	}
+	else if (status == MIDI_START){
+		midihold=0;
+		mode=1;
+		//Xstart[1]=1;
+		_pos = 0;
+	  	stepos=-1;
+	  	midiactive=1;
+	  	started=1;
+		
+		
+		if (attr_thru){
+			MidiSend1((midi_device_t) attr_Thruput, MIDI_START);
+		}
+	}
+	else if (status == MIDI_STOP){
+		mode=0;
+		midihold=1;
+		Xstop[1]=1;
+		midiactive=0;
+		_pos = -1;
+	  	stepos=-1;
+		//active=0;
+		if (attr_thru){
+			MidiSend1((midi_device_t) attr_Thruput, MIDI_STOP);
+		}
+	}
+	//if (status == MIDI_SONG_POSITION){
+	if ((status == (ch-1) + MIDI_CONTROL_CHANGE)&&(data1 == (CCb+1))){
+		//barpos=data1;
+		Xbarpos[1]=data2;
+		if (started){
+			started=0;
+		  	//start=1;
+		  	Xstart[1]=1;
+		  }
+		if ((barpos==0)&&!active){
+			//active=1;
+			//Xstart[2]=1;
+		}
+		if (attr_thru){
+			MidiSend3((midi_device_t) attr_Thruput, MIDI_CONTROL_CHANGE,data1,data2);
+		}
+		
+	}
+	
+	
+	if ((status == (ch-1) + MIDI_CONTROL_CHANGE)&&(data1 == CCa)){
+		
+		sent1=data2;
+		if (attr_thru){
+		MidiSend3((midi_device_t) attr_Thruput, MIDI_CONTROL_CHANGE + (ch-1),data1,data2);	
+		}
+	}
+	if ((status == (ch-1) + MIDI_CONTROL_CHANGE)&&(data1 == CCb)){
+		sent2=data2;
+		if (attr_thru){
+		MidiSend3((midi_device_t) attr_Thruput, MIDI_CONTROL_CHANGE + (ch-1),data1,data2);		
+		}
+	}
+}]]></code.midihandler>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="6335dc26-2200-40fa-b55d-37427445ce2e" name="object_4" x="1064" y="1274">
+      <params>
+         <int32 name="dead" value="6"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="6335dc26-2200-40fa-b55d-37427445ce2e">
+         <inlets>
+            <int32 name="in"/>
+         </inlets>
+         <outlets>
+            <int32 name="out"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="dead">
+               <MinValue i="0"/>
+               <MaxValue i="30000000"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int isMoving;
+int changeD;
+int fader;
+int motionTrackPos;
+int deadbandSize;
+int timeoutCounter;
+int ignite;
+int latched;
+int prevlatched;
+int change;
+int faderID;
+int i;
+int Fmoving;]]></code.declaration>
+         <code.init><![CDATA[//change=-1;
+//deadbandSize = (4 << 19);
+
+timeoutCounter = 10000;
+
+isMoving = 0;
+motionTrackPos = 0;]]></code.init>
+         <code.krate><![CDATA[fader=inlet_in;
+deadbandSize = param_dead;
+if    (!isMoving)
+	{
+		// check for a change in the value
+		    changeD = fader - motionTrackPos;
+		if (changeD > deadbandSize)
+		{
+			timeoutCounter = 0;
+			motionTrackPos = fader;
+			      isMoving = 1;
+		}
+		   else if (changeD < -deadbandSize)
+		{
+			timeoutCounter = 0;
+			motionTrackPos = fader;
+		    	      isMoving = -1;
+		}
+	}
+	// the poti is moving. But did it stop just now?
+	if             (isMoving) // no else!
+	{
+		     timeoutCounter++;
+		 if (timeoutCounter >= 50)
+		{
+			changeD = fader - motionTrackPos;
+		 if (changeD > deadbandSize)
+			{
+				timeoutCounter = 0;
+				motionTrackPos = fader;
+				      isMoving = 1;
+			}
+			else if (changeD < -deadbandSize)
+			{
+				timeoutCounter = 0;
+				motionTrackPos = fader;
+				      isMoving = -1;
+			}
+			else if (timeoutCounter > 2000)
+			{	
+				
+			
+				    isMoving = 0;
+				    
+			}
+		}
+		
+		latched = fader;
+		
+	}
+	
+	
+
+	
+	
+		
+		
+		
+		
+	
+	
+	
+
+	
+
+outlet_out = latched;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="logic/or 2" uuid="3805d3c84d30032a44fbdbe42d9a2988a1790a3e" name="or_1" x="1260" y="1288">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_3" x="476" y="1302">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_1" x="560" y="1302">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_1" x="644" y="1302">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_4" x="476" y="1358">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_2" x="560" y="1358">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_3" x="644" y="1358">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1064" y="1372" text="kcycles per 1/4 at current bpm"/>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_5" x="1064" y="1386">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_3" x="798" y="1792">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_2" x="1736" y="1792">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_1" x="1876" y="1792">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_2" x="1932" y="1792">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1050" y="1820" text="lfo switcher to stop "/>
+   <comment type="patch/comment" x="1204" y="1820" text="time lfos                                                    "/>
+   <comment type="patch/comment" x="616" y="1834" text="wet/dry knob module"/>
+   <comment type="patch/comment" x="798" y="1834" text="lfo speed  sync &amp; division &amp; scaling"/>
+   <comment type="patch/comment" x="1050" y="1834" text="clicks when resyncing"/>
+   <comment type="patch/comment" x="1204" y="1834" text="lfo A"/>
+   <comment type="patch/comment" x="1344" y="1834" text="lfo B"/>
+   <comment type="patch/comment" x="1666" y="1834" text="delay time sync &amp; divisions &amp; scaling"/>
+   <comment type="patch/comment" x="1932" y="1834" text="sequencer clock"/>
+   <comment type="patch/comment" x="2324" y="1834" text="time mod depth helper"/>
+   <comment type="patch/comment" x="2506" y="1834" text="LFO led"/>
+   <patchobj type="patch/object" uuid="796fee05-1092-4d4a-a47c-2e9810ac2191" name="wetdry_5" x="616" y="1848">
+      <params>
+         <frac32.u.map name="centregain" value="64.0"/>
+         <frac32.s.map name="centrepos" value="0.0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="796fee05-1092-4d4a-a47c-2e9810ac2191">
+         <sDescription>(inverse) exponential curving module
+exp parameter above zero is exponential curve
+exp parameter below zero is inverse exponential curve</sDescription>
+         <author>Remco van der Most</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32.positive name="wetdry"/>
+            <bool32 name="bypass"/>
+         </inlets>
+         <outlets>
+            <frac32.positive name="dry"/>
+            <frac32.positive name="wet"/>
+            <frac32.positive name="pos"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.u.map name="centregain"/>
+            <frac32.s.map name="centrepos"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t wet;
+int32_t wetB;
+int32_t dry;
+int32_t dryB;
+int32_t xfade;
+int32_t expo;
+int32_t expoB;
+int32_t dir;]]></code.declaration>
+         <code.krate><![CDATA[int32_t inexpoWD=__SSAT(-param_centrepos,28);
+dir=inexpoWD>0?1:-1;
+inexpoWD=inexpoWD>0?inexpoWD:-inexpoWD;
+int32_t invWD=(1<<27)-inexpoWD;
+int dar;
+dar=inlet_wetdry>0?1:-1;
+int32_t posWD=inlet_wetdry>0?inlet_wetdry:-inlet_wetdry;
+if(dir>0)
+{expo=___SMMUL(posWD<<3,(invWD+___SMMUL(inexpoWD<<3,posWD<<2))<<2);}
+if(dir<0)
+{expo=___SMMUL(((1<<27)-posWD)<<3,(invWD+___SMMUL(inexpoWD<<3,((1<<27)-posWD)<<2))<<2);}
+expoB=___SMMUL(expo<<3,(invWD+___SMMUL(inexpoWD<<3,expo<<2))<<2);
+if(dir>0)
+{xfade=expoB*dar;}
+if(dir<0)
+{xfade=((1<<27)-expoB)*dar;}
+
+
+
+
+int32_t inexpo=__SSAT(-param_centregain,28);
+inexpo=inexpo>0?inexpo:-inexpo;
+int32_t inv=(1<<27)-inexpo;
+
+// wet
+
+int32_t pos=xfade>0?xfade:-xfade;
+
+
+wet=___SMMUL(((1<<27)-pos)<<3,(inv+___SMMUL(inexpo<<3,((1<<27)-pos)<<2))<<2);
+wetB= ___SMMUL(wet<<3,(inv+___SMMUL(inexpo<<3,wet<<2))<<2);
+
+//dry
+int32_t invertX = (1<<27) - xfade-1;
+
+
+int32_t posD=invertX>0?invertX:-invertX;
+dry=___SMMUL(((1<<27)-posD)<<3,(inv+___SMMUL(inexpo<<3,((1<<27)-posD)<<2))<<2);
+dryB= ___SMMUL(dry<<3,(inv+___SMMUL(inexpo<<3,dry<<2))<<2);
+
+if (inlet_bypass){
+	wetB=(1<<27);
+	dryB=0;
+}
+	outlet_wet=((1<<27)-wetB);
+	
+	outlet_dry=((1<<27)-dryB);
+	
+	outlet_pos=xfade;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a" name="LFO_1" x="798" y="1848">
+      <params>
+         <int32 name="start" value="4"/>
+         <int32 name="end" value="29"/>
+         <int32 name="ratiodiv" value="4"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a">
+         <license>GPL</license>
+         <inlets>
+            <int32 name="kbeat"/>
+            <frac32.positive name="division"/>
+            <bool32.risingfalling name="unsync"/>
+            <int32 name="count"/>
+            <bool32 name="resync"/>
+         </inlets>
+         <outlets>
+            <int32 name="length"/>
+            <frac32.positive name="ratio"/>
+            <int32 name="division"/>
+            <bool32 name="resync"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="start">
+               <MinValue i="0"/>
+               <MaxValue i="28"/>
+            </int32>
+            <int32 name="end">
+               <MinValue i="0"/>
+               <MaxValue i="29"/>
+            </int32>
+            <int32 name="ratiodiv">
+               <MinValue i="0"/>
+               <MaxValue i="29"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int currentdivision;
+
+int baselength;
+int division[29];
+
+int prevd;
+
+
+
+int p;
+
+int reset;
+int rtrig;
+
+
+int input;
+
+int i;
+int out;
+int scale;
+int ktime;
+int length;
+int prevo;]]></code.declaration>
+         <code.krate><![CDATA[baselength=inlet_kbeat;
+if (baselength==0){
+	baselength=1500;
+}
+else if (inlet_unsync){
+	baselength=1500;
+}
+
+length=param_end-param_start;
+input=inlet_division;
+i=(input/(0x07FFFFFF/length))+param_start;
+
+p=baselength;
+//16bar 12bar  8bar  7bar  6bar  5bar  4bar  3bar  2bar .1bar  1bar .1/2   1/2  .1/4   1/4  .1/8   1/8  .1/16  1/16 .1/32  1/32 .1/64  1/64.1/128 1/128.1/256 1/256.1/512 1/512   off
+division[0]=p<<6;//16
+division[1]=(p<<5)+(p<<4);//12
+division[2]=p<<5;//8
+division[3]=(p<<4)+(p<<3)+(p<<2);//7
+division[4]=(p<<4)+(p<<3);//6
+division[5]=(p<<4)+(p<<2);//5
+division[6]=p<<4; //4bar
+division[7]=(p<<3)+(p<<2); //3bar
+division[8]=p<<3; //2bar
+division[9]=(p<<2)+(p<<1);
+division[10]=p<<2; //1bar
+division[11]=(p<<1)+p;
+division[12]=p<<1; // 1/2
+division[13]=p+(p>>1);
+division[14]=p; // 1/4
+division[15]=(p>>1)+(p>>2);
+division[16]=p>>1; // 1/8
+division[17]=(p>>2)+(p>>3);
+division[18]=p>>2; // 1/16
+division[19]=(p>>3)+(p>>4);
+division[20]=p>>3; // 1/32
+division[21]=(p>>4)+(p>>5);
+division[22]=p>>4; // 1/64
+division[23]=(p>>5)+(p>>6);
+division[24]=p>>5; // 1/28
+division[25]=(p>>6)+(p>>7);
+division[26]=p>>6; // 1/256
+division[27]=(p>>7)+(p>>8);
+division[28]=p>>7; //1/512
+
+
+
+if (!inlet_unsync){
+	out=division[i];
+	outlet_length=out;
+	outlet_ratio=((0x07FFFFFF)/division[param_ratiodiv])*out;
+	if (i!=prevd){
+		prevd=i;
+		reset=1;
+	}
+	if (reset&&(inlet_count==0)){
+		reset=0;
+		rtrig=1;
+	}
+	}
+else {
+	
+	scale= ( input - ((0x07FFFFFF/length) * (i-param_start)) )* ((1<<27) / ((1<<27)/length) );
+	ktime=division[i]-division[i+1];
+	out= division[i]- (___SMMUL(ktime<<3,scale<<2));
+	if (out<12){
+		out=12;
+	}
+	
+	outlet_length=out;
+	
+	
+	outlet_ratio=((0x07FFFFFF)/division[param_ratiodiv])*out;
+
+
+}
+
+
+outlet_resync=rtrig;
+rtrig=0;
+outlet_division=i;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="phi/logic/or 4" uuid="5dc5a7c1fb7809522171638f755fead71cbe14ea" name="or_2" x="952" y="1848">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="be163130-a19e-4282-b2de-19fe342023b4" name="object_12" x="1050" y="1848">
+      <params>
+         <int32 name="fade" value="188"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="be163130-a19e-4282-b2de-19fe342023b4">
+         <inlets>
+            <bool32 name="trig"/>
+            <int32 name="kbeat"/>
+            <frac32.positive name="ratio"/>
+         </inlets>
+         <outlets>
+            <int32 name="kbeatA"/>
+            <bool32.pulse name="trigA"/>
+            <frac32.positive name="ratioA"/>
+            <frac32.positive name="fadeA"/>
+            <int32 name="kbeatB"/>
+            <bool32.pulse name="trigB"/>
+            <frac32.positive name="ratioB"/>
+            <frac32.positive name="fadeB"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="fade">
+               <MinValue i="2"/>
+               <MaxValue i="60000000"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int out;
+int fphase;
+int ntrig;
+int changed;
+int fadein;
+int kbeatA;
+int trigA;
+int kbeatB;
+int trigB;
+int ratioA;
+int ratioB;]]></code.declaration>
+         <code.krate><![CDATA[fphase=0x07FFFFFF/param_fade;
+
+if (inlet_trig && !ntrig){
+	ntrig=1;
+	changed=1;
+	
+	if (out==0){
+		fadein=1;
+		kbeatA=inlet_kbeat;
+		ratioA=inlet_ratio;
+		trigA=1;
+	}
+	else {
+		fadein=2;
+		kbeatB=inlet_kbeat;
+		ratioB=inlet_ratio;
+		trigB=1;
+	}
+}
+else if (!inlet_trig && !changed){
+	ntrig=0;
+}
+		
+if ((fadein==1)&&changed){
+	out+=fphase;
+	if (out>=0x07FFFFFF){
+		out=0x07FFFFFF;
+		changed=0;
+		fadein=0;
+		
+	}
+}
+else if ((fadein==2)&&changed){
+	out-=fphase;
+	if (out<=0){
+		out=0;
+		fadein=0;
+		changed=0;
+	}
+	
+}
+
+outlet_kbeatA=kbeatA;
+outlet_ratioA=ratioA;
+outlet_trigA=trigA;
+outlet_kbeatB=kbeatB;
+outlet_ratioB=ratioB;
+outlet_trigB=trigB;
+outlet_fadeA=out;
+outlet_fadeB=0x07FFFFFF-out;
+
+
+trigA=0;
+trigB=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec" name="simple_1" x="1204" y="1848">
+      <params>
+         <frac32.u.map name="pulsewidth" value="32.0"/>
+         <bool32.tgl name="oneshot" value="0"/>
+         <bool32.tgl name="inverthold" value="0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="resetspeed" value="1"/>
+      </attribs>
+      <object id="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec">
+         <license>GPL</license>
+         <inlets>
+            <int32 name="kbeat"/>
+            <int32 name="wave"/>
+            <bool32.rising name="trig"/>
+            <bool32.risingfalling name="hold"/>
+            <frac32.positive name="pulsewidth"/>
+         </inlets>
+         <outlets>
+            <frac32 name="out"/>
+            <bool32 name="half"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.u.map name="pulsewidth">
+               <DefaultValue v="32.0"/>
+            </frac32.u.map>
+            <bool32.tgl name="oneshot"/>
+            <bool32.tgl name="inverthold"/>
+         </params>
+         <attribs>
+            <spinner name="resetspeed" MinValue="0" MaxValue="40000" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int phase;
+//int Phase;
+int phaseQ;
+int phaseB;
+int pulsewidthA;
+int pulsewidthB;
+int pulsewidthC;
+
+int pulsedivide;
+int wave;
+int depth;
+
+int i;
+
+int dir;
+
+int out;
+int outB;
+
+int outBv;
+int resethold;
+int resetinc;
+
+int reset;
+
+
+int holdv;
+
+
+int kbeat;
+
+
+
+
+int Sphase;
+int hold;
+//int8_t stageW;
+
+
+
+
+int32_t expo[3];
+
+
+float32_t widthC;
+
+bool rtrig;
+
+//bool xtrig;
+bool init;]]></code.declaration>
+         <code.init><![CDATA[init=1;]]></code.init>
+         <code.krate><![CDATA[if (inlet_kbeat==0){
+	kbeat=1500;
+}
+else {
+	kbeat=inlet_kbeat;
+	if (kbeat<12){
+		kbeat=12;
+	}
+}
+phase+=(0x07FFFFFF/kbeat);
+
+
+
+if (init){
+	init=0;
+	
+	if (param_oneshot){
+		phase=0x07FFFFFF;
+	}
+	else {
+		phase=0;
+		}
+}
+
+if (!param_oneshot){
+	if (phase>=0x07FFFFFF){
+		phase=0;
+
+	}
+}
+else if (param_oneshot){
+	if (phase>=0x07FFFFFF){
+		phase=0x07FFFFFF;
+	}
+}
+
+
+if (inlet_trig&&!rtrig){
+	rtrig=1;
+	if (!param_oneshot){
+		reset=1;
+		resethold=outBv;
+		resetinc=outBv/attr_resetspeed;
+	}
+	else {
+		phase=0;
+	}
+	//phase=0;
+}
+if (!inlet_trig && (resethold<=0)){
+rtrig=0;
+}
+
+
+pulsewidthA=(inlet_pulsewidth+param_pulsewidth);
+pulsewidthC=((0x07FFFFFF-(inlet_pulsewidth+param_pulsewidth))-(1<<26))<<1;;
+pulsewidthB=0x07FFFFFF-(inlet_pulsewidth+param_pulsewidth);
+
+phaseB=phase-(inlet_pulsewidth+param_pulsewidth);
+wave=inlet_wave+1;
+switch( wave )
+            {
+              default:
+              case 1 :
+                // Triangle
+    {
+       if (phase<pulsewidthA){
+       	float32_t width1=pulsewidthA;
+		float32_t ratio=0x07FFFFFF/width1;
+		int32_t in=phase>pulsewidthA?pulsewidthA:phase;
+
+		out=in*ratio;
+       	
+       }
+       else if (phase>=pulsewidthA){
+       float32_t width1=pulsewidthB;
+    
+		float32_t ratio=0x07FFFFFF/width1;
+		
+		int32_t in=phaseB>pulsewidthB?pulsewidthB:phaseB;
+
+		out=0x07FFFFFF-(in*ratio);
+       }
+    }
+                break;
+
+              case 2 :
+              {
+                // Sine
+               // if (phase<(0x07FFFFFF-(0x07FFFFFFF>>2))){
+               // Sphase=phase+(0x07FFFFFFF>>2);
+               // }
+                //else {Sphase=phase;}
+                
+           	if (phase<(0x07FFFFFF>>2)){
+				Sphase=phase+(0x07FFFFFF-(0x07FFFFFF>>2));
+				}
+			else {Sphase=phase-(0x07FFFFFF>>2);}
+                int32_t r;
+                SINE2TINTERP( Sphase<<5, r )
+                 
+                out= ((r>>4)>>1)+(1<<26);
+
+
+              } 
+                break;
+
+              case 3 :
+                  // Square
+                  {
+		if (phase<pulsewidthA){
+			out=0x07FFFFFF;
+			
+		}
+		else out=0;
+                  }
+                break;
+
+              
+
+             
+
+				
+                
+            }
+
+
+if (wave==2){
+	int32_t inexpo=__SSAT(pulsewidthC,28);
+	dir=inexpo>0?1:-1;
+	inexpo=inexpo>0?inexpo:-inexpo;
+	int32_t inv=(1<<27)-inexpo;
+	int dar;
+	dar=out>0?1:-1;
+	int32_t pos=out>0?out:-out;
+	if(dir>0)
+	{expo[0]=___SMMUL(pos<<3,(inv+___SMMUL(inexpo<<3,pos<<2))<<2);}
+	if(dir<0)
+	{expo[0]=___SMMUL(((1<<27)-pos)<<3,(inv+___SMMUL(inexpo<<3,((1<<27)-pos)<<2))<<2);}
+	for(i=1;i<=2;i++)
+	expo[i]=___SMMUL(expo[i-1]<<3,(inv+___SMMUL(inexpo<<3,expo[i-1]<<2))<<2);
+	if(dir>0)
+	{outBv=expo[2]*dar;}
+	if(dir<0)
+	{outBv=((1<<27)-expo[2])*dar;}
+	}
+else {outBv=out;}
+
+
+
+if (reset){
+	if (resethold<=0){
+		reset=0;
+		phase=0;
+	}
+	
+	resethold-=resetinc;
+	outBv=resethold;
+	
+}
+
+
+
+if (param_inverthold){
+	hold=!inlet_hold;
+}
+else {hold=inlet_hold;}
+
+if (!hold){
+	outB=outBv;
+	holdv=outB;
+	}
+else if (hold){
+	outB=holdv;
+}
+
+
+
+	
+if (phase>=pulsewidthA){
+	outlet_half=1;
+	}
+else {
+	outlet_half=0;
+}
+   
+
+
+outlet_out=outB;
+
+
+
+//outlet_out=phase;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec" name="simple_2" x="1344" y="1848">
+      <params>
+         <frac32.u.map name="pulsewidth" value="32.0"/>
+         <bool32.tgl name="oneshot" value="0"/>
+         <bool32.tgl name="inverthold" value="0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="resetspeed" value="1"/>
+      </attribs>
+      <object id="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec">
+         <license>GPL</license>
+         <inlets>
+            <int32 name="kbeat"/>
+            <int32 name="wave"/>
+            <bool32.rising name="trig"/>
+            <bool32.risingfalling name="hold"/>
+            <frac32.positive name="pulsewidth"/>
+         </inlets>
+         <outlets>
+            <frac32 name="out"/>
+            <bool32 name="half"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.u.map name="pulsewidth">
+               <DefaultValue v="32.0"/>
+            </frac32.u.map>
+            <bool32.tgl name="oneshot"/>
+            <bool32.tgl name="inverthold"/>
+         </params>
+         <attribs>
+            <spinner name="resetspeed" MinValue="0" MaxValue="40000" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int phase;
+//int Phase;
+int phaseQ;
+int phaseB;
+int pulsewidthA;
+int pulsewidthB;
+int pulsewidthC;
+
+int pulsedivide;
+int wave;
+int depth;
+
+int i;
+
+int dir;
+
+int out;
+int outB;
+
+int outBv;
+int resethold;
+int resetinc;
+
+int reset;
+
+
+int holdv;
+
+
+int kbeat;
+
+
+
+
+int Sphase;
+int hold;
+//int8_t stageW;
+
+
+
+
+int32_t expo[3];
+
+
+float32_t widthC;
+
+bool rtrig;
+
+//bool xtrig;
+bool init;]]></code.declaration>
+         <code.init><![CDATA[init=1;]]></code.init>
+         <code.krate><![CDATA[if (inlet_kbeat==0){
+	kbeat=1500;
+}
+else {
+	kbeat=inlet_kbeat;
+	if (kbeat<12){
+		kbeat=12;
+	}
+}
+phase+=(0x07FFFFFF/kbeat);
+
+
+
+if (init){
+	init=0;
+	
+	if (param_oneshot){
+		phase=0x07FFFFFF;
+	}
+	else {
+		phase=0;
+		}
+}
+
+if (!param_oneshot){
+	if (phase>=0x07FFFFFF){
+		phase=0;
+
+	}
+}
+else if (param_oneshot){
+	if (phase>=0x07FFFFFF){
+		phase=0x07FFFFFF;
+	}
+}
+
+
+if (inlet_trig&&!rtrig){
+	rtrig=1;
+	if (!param_oneshot){
+		reset=1;
+		resethold=outBv;
+		resetinc=outBv/attr_resetspeed;
+	}
+	else {
+		phase=0;
+	}
+	//phase=0;
+}
+if (!inlet_trig && (resethold<=0)){
+rtrig=0;
+}
+
+
+pulsewidthA=(inlet_pulsewidth+param_pulsewidth);
+pulsewidthC=((0x07FFFFFF-(inlet_pulsewidth+param_pulsewidth))-(1<<26))<<1;;
+pulsewidthB=0x07FFFFFF-(inlet_pulsewidth+param_pulsewidth);
+
+phaseB=phase-(inlet_pulsewidth+param_pulsewidth);
+wave=inlet_wave+1;
+switch( wave )
+            {
+              default:
+              case 1 :
+                // Triangle
+    {
+       if (phase<pulsewidthA){
+       	float32_t width1=pulsewidthA;
+		float32_t ratio=0x07FFFFFF/width1;
+		int32_t in=phase>pulsewidthA?pulsewidthA:phase;
+
+		out=in*ratio;
+       	
+       }
+       else if (phase>=pulsewidthA){
+       float32_t width1=pulsewidthB;
+    
+		float32_t ratio=0x07FFFFFF/width1;
+		
+		int32_t in=phaseB>pulsewidthB?pulsewidthB:phaseB;
+
+		out=0x07FFFFFF-(in*ratio);
+       }
+    }
+                break;
+
+              case 2 :
+              {
+                // Sine
+               // if (phase<(0x07FFFFFF-(0x07FFFFFFF>>2))){
+               // Sphase=phase+(0x07FFFFFFF>>2);
+               // }
+                //else {Sphase=phase;}
+                
+           	if (phase<(0x07FFFFFF>>2)){
+				Sphase=phase+(0x07FFFFFF-(0x07FFFFFF>>2));
+				}
+			else {Sphase=phase-(0x07FFFFFF>>2);}
+                int32_t r;
+                SINE2TINTERP( Sphase<<5, r )
+                 
+                out= ((r>>4)>>1)+(1<<26);
+
+
+              } 
+                break;
+
+              case 3 :
+                  // Square
+                  {
+		if (phase<pulsewidthA){
+			out=0x07FFFFFF;
+			
+		}
+		else out=0;
+                  }
+                break;
+
+              
+
+             
+
+				
+                
+            }
+
+
+if (wave==2){
+	int32_t inexpo=__SSAT(pulsewidthC,28);
+	dir=inexpo>0?1:-1;
+	inexpo=inexpo>0?inexpo:-inexpo;
+	int32_t inv=(1<<27)-inexpo;
+	int dar;
+	dar=out>0?1:-1;
+	int32_t pos=out>0?out:-out;
+	if(dir>0)
+	{expo[0]=___SMMUL(pos<<3,(inv+___SMMUL(inexpo<<3,pos<<2))<<2);}
+	if(dir<0)
+	{expo[0]=___SMMUL(((1<<27)-pos)<<3,(inv+___SMMUL(inexpo<<3,((1<<27)-pos)<<2))<<2);}
+	for(i=1;i<=2;i++)
+	expo[i]=___SMMUL(expo[i-1]<<3,(inv+___SMMUL(inexpo<<3,expo[i-1]<<2))<<2);
+	if(dir>0)
+	{outBv=expo[2]*dar;}
+	if(dir<0)
+	{outBv=((1<<27)-expo[2])*dar;}
+	}
+else {outBv=out;}
+
+
+
+if (reset){
+	if (resethold<=0){
+		reset=0;
+		phase=0;
+	}
+	
+	resethold-=resetinc;
+	outBv=resethold;
+	
+}
+
+
+
+if (param_inverthold){
+	hold=!inlet_hold;
+}
+else {hold=inlet_hold;}
+
+if (!hold){
+	outB=outBv;
+	holdv=outB;
+	}
+else if (hold){
+	outB=holdv;
+}
+
+
+
+	
+if (phase>=pulsewidthA){
+	outlet_half=1;
+	}
+else {
+	outlet_half=0;
+}
+   
+
+
+outlet_out=outB;
+
+
+
+//outlet_out=phase;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="566d23d0-9688-4cf2-8cb0-fe729528eaab" name="xfade_1" x="1470" y="1848">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="566d23d0-9688-4cf2-8cb0-fe729528eaab">
+         <sDescription>crossfade between two inputs</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32 name="i1" description="input"/>
+            <frac32 name="i2" description="input"/>
+            <frac32.positive name="c" description="control"/>
+         </inlets>
+         <outlets>
+            <frac32 name="o" description="output"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[   {
+      int64_t a = (int64_t)inlet_i2 * inlet_c;
+      a += (int64_t)inlet_i1 * ((128<<20)-inlet_c);
+      outlet_o= a>>27;
+   }
+]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="logic/or 2" uuid="3805d3c84d30032a44fbdbe42d9a2988a1790a3e" name="or_3" x="1610" y="1848">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="88bab9c1-fa35-4650-8337-da90c6d6f402" name="delay_1" x="1694" y="1848">
+      <params>
+         <int32 name="start" value="6"/>
+         <int32 name="end" value="24"/>
+         <int32 name="tappedindex" value="15"/>
+         <int32 name="bpmindex" value="16"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="deelite"/>
+         <objref attributeName="tappedtable" obj="data"/>
+      </attribs>
+      <object id="patch/object" uuid="88bab9c1-fa35-4650-8337-da90c6d6f402">
+         <license>GPL</license>
+         <inlets>
+            <int32 name="kbeat"/>
+            <frac32.positive name="division"/>
+            <bool32.risingfalling name="unsync"/>
+            <bool32 name="tapset" description="sets unsynced time to synced quarters for taptempo takeover"/>
+            <int32 name="tapdivision"/>
+            <bool32.rising name="pulsereset"/>
+            <bool32 name="killtapset"/>
+         </inlets>
+         <outlets>
+            <int32 name="length"/>
+            <int32 name="division"/>
+            <frac32.positive name="delaytime"/>
+            <bool32 name="pulse"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="start">
+               <MinValue i="0"/>
+               <MaxValue i="28"/>
+            </int32>
+            <int32 name="end">
+               <MinValue i="0"/>
+               <MaxValue i="28"/>
+            </int32>
+            <int32 name="tappedindex">
+               <MinValue i="0"/>
+               <MaxValue i="60000000"/>
+            </int32>
+            <int32 name="bpmindex">
+               <MinValue i="0"/>
+               <MaxValue i="670000000"/>
+            </int32>
+         </params>
+         <attribs>
+            <objref name="delayname"/>
+            <objref name="tappedtable"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int timearray[13];
+int division[29];
+int whole;
+int l;
+int currentdivision;
+int baselength;
+int delaytime;
+int tapset;
+int p;
+int Tdivision;
+int input;
+int i;
+int out;
+int scale;
+int ktime;
+int length;
+int pinput;
+int taptrig;
+int pulsecount;
+int pulse;
+int ptrig;
+int kttrig;
+int pulsetime;]]></code.declaration>
+         <code.init><![CDATA[l=(attr_delayname.LENGTHPOW-16);
+if (l<0){
+	l=0;
+	}
+	
+timearray[0]=4080;
+timearray[1]=7110;
+timearray[2]=16380;
+timearray[3]=32700;
+timearray[4]=65400;
+whole=timearray[l];]]></code.init>
+         <code.krate><![CDATA[baselength=inlet_kbeat;
+
+if (inlet_tapset && !taptrig){
+		tapset=1;
+		taptrig=1;
+	}
+else if (!inlet_tapset){
+	taptrig=0;
+}
+
+
+if (baselength==0){
+	baselength=1500;
+}
+if (inlet_unsync && !tapset){
+	baselength=1500;
+}
+
+length=param_end-param_start;
+input=0x07FFFFFF-inlet_division;
+i=(input/(0x07FFFFFF/length))+param_start;
+
+p=baselength;
+//16bar 12bar  8bar  7bar  6bar  5bar  4bar  3bar  2bar .1bar  1bar .1/2   1/2  .1/4   1/4  .1/8   1/8  .1/16  1/16 .1/32  1/32 .1/64  1/64.1/128 1/128.1/256 1/256.1/512 1/512   off
+division[0]=p<<6;//16
+division[1]=(p<<5)+(p<<4);//12
+division[2]=p<<5;//8
+division[3]=(p<<4)+(p<<3)+(p<<2);//7
+division[4]=(p<<4)+(p<<3);//6
+division[5]=(p<<4)+(p<<2);//5
+division[6]=p<<4; //4bar
+division[7]=(p<<3)+(p<<2); //3bar
+division[8]=p<<3; //2bar
+division[9]=(p<<2)+(p<<1);
+division[10]=p<<2; //1bar
+division[11]=(p<<1)+p;
+division[12]=p<<1; // 1/2
+division[13]=p+(p>>1);
+division[14]=p; // 1/4
+division[15]=(p>>1)+(p>>2);
+division[16]=p>>1; // 1/8
+division[17]=(p>>2)+(p>>3);
+division[18]=p>>2; // 1/16
+division[19]=(p>>3)+(p>>4);
+division[20]=p>>3; // 1/32
+division[21]=(p>>4)+(p>>5);
+division[22]=p>>4; // 1/64
+division[23]=(p>>5)+(p>>6);
+division[24]=p>>5; // 1/28
+division[25]=(p>>6)+(p>>7);
+division[26]=p>>6; // 1/256
+division[27]=(p>>7)+(p>>8);
+division[28]=p>>7; //1/512
+
+
+if (inlet_tapdivision==0){
+	Tdivision=14;
+}
+else {
+	Tdivision=inlet_tapdivision;
+}
+
+
+if (!inlet_unsync){
+		out=division[i];
+		tapset=0;
+		attr_tappedtable.array [__USAT(param_tappedindex,attr_tappedtable.LENGTHPOW)]= 0;
+	}
+else {
+	if (tapset){
+		i=Tdivision;
+		out=division[i];
+	}
+	if (input!=pinput) {
+		tapset=0;
+		attr_tappedtable.array [__USAT(param_tappedindex,attr_tappedtable.LENGTHPOW)]= 0;
+		division[param_end]=0; 
+		scale= ( input - ((0x07FFFFFF/length) * (i-param_start)) )* ((1<<27) / ((1<<27)/length) );
+		ktime=division[i]-division[i+1];
+		out= division[i]- (___SMMUL(ktime<<3,scale<<2));
+	}
+}
+
+
+
+
+
+
+if (inlet_killtapset && !kttrig){
+	kttrig=1;
+	tapset=0;
+}
+else if (!inlet_killtapset){
+	kttrig=0;
+}
+
+delaytime=(((1<<27)/(whole-1))*out);
+if (tapset){
+attr_tappedtable.array [__USAT(param_tappedindex,attr_tappedtable.LENGTHPOW)]= delaytime>>attr_tappedtable.GAIN;
+
+attr_tappedtable.array [__USAT(param_bpmindex,attr_tappedtable.LENGTHPOW)]= 180000/baselength;
+}
+else if (attr_tappedtable.array [__USAT(param_tappedindex,attr_tappedtable.LENGTHPOW)]>0){
+	i=Tdivision;
+	delaytime=attr_tappedtable.array [__USAT(param_tappedindex,attr_tappedtable.LENGTHPOW)]<<attr_tappedtable.GAIN;
+//	attr_table.array[__USAT((offset + 15),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+}
+if (out>2){
+	pulsetime=out;
+}
+else {
+	pulsetime=2;
+}
+pulsecount+=1;
+if (pulsecount>=pulsetime){
+	pulsecount=0;
+}
+if (inlet_pulsereset&&!ptrig){
+	ptrig=1;
+	pulsecount=0;
+}
+else if (!inlet_pulsereset){
+	ptrig=0;
+}
+if (pulsecount< (pulsetime>>1)){
+	pulse=1;
+}
+else {
+	pulse=0;
+}
+outlet_delaytime=delaytime;
+outlet_length=out;
+outlet_division=i;
+outlet_pulse=pulse;
+pinput=input;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a" name="seq" x="1932" y="1848">
+      <params>
+         <int32 name="start" value="8"/>
+         <int32 name="end" value="19"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a">
+         <license>GPL</license>
+         <inlets>
+            <int32 name="kbeat"/>
+            <frac32.positive name="division"/>
+            <bool32.risingfalling name="unsync"/>
+            <int32 name="count"/>
+            <bool32 name="reset"/>
+            <frac32.bipolar name="depth"/>
+         </inlets>
+         <outlets>
+            <int32 name="length"/>
+            <int32 name="step"/>
+            <int32 name="division"/>
+            <bool32 name="resync"/>
+            <int32 name="depth"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="start">
+               <MinValue i="0"/>
+               <MaxValue i="28"/>
+            </int32>
+            <int32 name="end">
+               <MinValue i="0"/>
+               <MaxValue i="28"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int currentdivision;
+
+int baselength;
+int division[29];
+
+int prevd;
+
+int indepth;
+int step;
+int outstep;
+int depth;
+int p;
+int down;
+int reset;
+int rtrig;
+
+int trig;
+int input;
+int t;
+int i;
+int out;
+int scale;
+int ktime;
+int length;
+int prevo;
+
+
+int pptrig;]]></code.declaration>
+         <code.krate><![CDATA[baselength=inlet_kbeat;
+if (baselength==0){
+	baselength=1500;
+}
+else if (inlet_unsync){
+	baselength=1500;
+}
+
+length=param_end-param_start;
+input=inlet_division;
+i=(input/(0x07FFFFFF/length))+param_start;
+
+p=baselength;
+//16bar 12bar  8bar  7bar  6bar  5bar  4bar  3bar  2bar .1bar  1bar .1/2   1/2  .1/4   1/4  .1/8   1/8  .1/16  1/16 .1/32  1/32 .1/64  1/64.1/128 1/128.1/256 1/256.1/512 1/512   off
+division[0]=p<<6;//16
+division[1]=(p<<5)+(p<<4);//12
+division[2]=p<<5;//8
+division[3]=(p<<4)+(p<<3)+(p<<2);//7
+division[4]=(p<<4)+(p<<3);//6
+division[5]=(p<<4)+(p<<2);//5
+division[6]=p<<4; //4bar
+division[7]=(p<<3)+(p<<2); //3bar
+division[8]=p<<3; //2bar
+division[9]=(p<<2)+(p<<1);
+division[10]=p<<2; //1bar
+division[11]=(p<<1)+p;
+division[12]=p<<1; // 1/2
+division[13]=p+(p>>1);
+division[14]=p; // 1/4
+division[15]=(p>>1)+(p>>2);
+division[16]=p>>1; // 1/8
+division[17]=(p>>2)+(p>>3);
+division[18]=p>>2; // 1/16
+division[19]=(p>>3)+(p>>4);
+division[20]=p>>3; // 1/32
+division[21]=(p>>4)+(p>>5);
+division[22]=p>>4; // 1/64
+division[23]=(p>>5)+(p>>6);
+division[24]=p>>5; // 1/28
+division[25]=(p>>6)+(p>>7);
+division[26]=p>>6; // 1/256
+division[27]=(p>>7)+(p>>8);
+division[28]=p>>7; //1/512
+
+
+
+if (!inlet_unsync){
+	out=division[i];
+	
+	if (i!=prevd){
+		prevd=i;
+		reset=1;
+	}
+	if (reset&&(inlet_count==0)){
+		reset=0;
+		rtrig=1;
+	}
+	}
+else {
+	
+	scale= ( input - ((0x07FFFFFF/length) * (i-param_start)) )* ((1<<27) / ((1<<27)/length) );
+	ktime=division[i]-division[i+1];
+	out= division[i]- (___SMMUL(ktime<<3,scale<<2));
+	if (out<12){
+		out=12;
+	}
+	
+	
+
+
+}
+
+
+t+=1;
+if (t>=out){
+	t=0;
+	trig=1;
+}
+if (inlet_reset && !pptrig){
+	pptrig=1;
+	rtrig=1;
+}
+else if (!inlet_reset){
+	pptrig=0;
+}
+//reset
+if (rtrig){
+	trig=0;
+	step=0;
+	t=0;
+	down=0;
+	
+}
+
+indepth= (inlet_depth>>1)+(1<<26);
+depth=___SMMUL(indepth<<3,11<<2)-5;
+//DO NOT MOVE DEPTH OUTLET!!!!!
+outlet_depth=depth;
+
+if (depth<0){
+	depth=-depth;
+}
+
+
+
+if (trig && (depth!=0)){
+	if (!down){
+		step+=1;
+		if (step>=depth){
+			down=1;
+		}
+	}
+	else if (down){
+		step-=1;
+		if (step<=0){
+			down=0;
+		}
+	}
+}
+
+if (inlet_depth<0){
+	outstep=-step;
+}
+else {
+	outstep=step;
+}
+if (depth==0){
+	step=0;
+	outstep=0;
+}
+//phase+=((1<<27)/division[inlet_lfodivision]);
+//if (phase>=(1<<27)){
+//	phase=0;
+//	trig=1;
+//}
+
+
+outlet_length=out;
+outlet_step=outstep;
+//outlet_ratio=((0x07FFFFFF)/division[param_ratiodiv])*out;
+outlet_resync=rtrig;
+outlet_division=i;
+
+rtrig=0;
+trig=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="16d17cdb-d473-495e-b0dd-64fd8c8bcfc9" name="u8u_3" x="2142" y="1848">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="16d17cdb-d473-495e-b0dd-64fd8c8bcfc9">
+         <sDescription>A unipolar k rate function defined by 8 segments.
+Use factor/conv/unipolar2bipolar and bipolar2unipolar if you need bipolar functions.
+It can be used to shape saw LFOs, enveloppes and many other control signals such as pitch (if you need to control a parameter depending on pitch)...</sDescription>
+         <author>Smashed Transistors</author>
+         <license>LGPL</license>
+         <helpPatch>u8u.axh</helpPatch>
+         <rotatedParams>true</rotatedParams>
+         <inlets>
+            <frac32 name="in"/>
+         </inlets>
+         <outlets>
+            <frac32 name="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t out;]]></code.declaration>
+         <code.krate><![CDATA[// p0=0, p1=0.4, p2=1, p3=1.5, p4=2, p5=2.5 p6=3, p7=8, p8=64
+// all muliplied by 16<<21
+
+
+if(inlet_in >= (1<<27))
+  out = 0x07FFFFFF;
+else if(inlet_in <= 0)
+  out = 0;
+else{
+  int32_t i = inlet_in >> (27-3);              // i [0 8[
+  int32_t a = (inlet_in & ((1<<(27-3)) - 1));  // a q24
+  if(i < 4){ // [0 4[
+    if(i < 2){ // [0 2[
+      if(i < 1){ // [0 1[             q27         q24   q19           q27 
+        out = ___SMMLA(0x000CCCCC - 0, a, 0 >> 8) << 8;
+      } else {   // [1 2[
+        out = ___SMMLA(0x00200000 - 0x000CCCCC, a, 0x000CCCCC>> 8) << 8;
+      }
+    } else { // [2 4[
+      if(i < 3){ // [2 3[
+        out = ___SMMLA(0x00300000 - 0x00200000, a, 0x00200000>> 8) << 8;
+      } else {   // [3 4[
+        out = ___SMMLA(0x00400000 - 0x00300000, a, 0x00300000>> 8) << 8;
+      }
+    }
+  } else { // [4 8[
+    if(i < 6){ // [4 6[
+      if(i < 5){ // [4 5[
+        out = ___SMMLA(0x00500000 - 0x00400000, a, 0x00400000>> 8) << 8;
+      } else {   // [5 6[
+        out = ___SMMLA(0x00600000 - 0x00500000, a, 0x00500000>> 8) << 8;
+      }
+    } else { // [6 8[
+      if(i < 7){ // [6 7[
+        out = ___SMMLA(0x01000000 - 0x00600000, a, 0x00600000>> 8) << 8;
+      } else {   // [7 8[
+        out = ___SMMLA(0x07FFFFFF - 0x01000000, a, 0x01000000>> 8) << 8;
+      }
+    }
+  }
+}
+
+outlet_out= ___SMMUL(out<<3,(16<<21)<<2);]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="math/*c" uuid="7d5ef61c3bcd571ee6bbd8437ef3612125dfb225" name="*c_1" x="2240" y="1848">
+      <params>
+         <frac32.u.map name="amp" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="5b7ebbe0-c502-4cef-9060-0860d9dbefb2" name="55_1" x="2352" y="1848">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="5b7ebbe0-c502-4cef-9060-0860d9dbefb2">
+         <sDescription>multiply</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32.positive name="ratio"/>
+            <frac32.positive name="depth"/>
+            <frac32.positive name="lfo"/>
+            <bool32.risingfalling name="off"/>
+         </inlets>
+         <outlets>
+            <frac32 name="mod" description="output"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t Rdepth;
+int32_t Sdepth;]]></code.declaration>
+         <code.krate><![CDATA[if (!inlet_off){
+//attenuate depth by lfo speed ratio
+	Rdepth= ___SMMUL(inlet_ratio<<3,inlet_depth<<2);
+	}
+else {
+	Rdepth=0;
+}
+	
+
+
+//smooth depth change
+Sdepth = ___SMMLA(Sdepth-Rdepth,(-1<<26)+(0x06000000>>1),Sdepth);
+
+outlet_mod= ___SMMUL(Sdepth<<3,inlet_lfo<<2);]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="math/sat" uuid="ae2a11c9bb4d6470ae44c7b2674e7e96184f38d3" name="sat_1" x="2436" y="1848">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gills/led pwm" uuid="e6534d2d-0815-4b4a-8351-99987f214822" name="led_4" x="2506" y="1848">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="2"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="14" y="1932" text="screen handler"/>
+   <patchobj type="patch/object" uuid="48c0045e-0a75-41e0-88f2-0602ad99bfed" name="1_3" x="14" y="1946">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+      </attribs>
+      <object id="patch/object" uuid="48c0045e-0a75-41e0-88f2-0602ad99bfed">
+         <license>GPL</license>
+         <inlets>
+            <int32 name="controlID"/>
+            <int32 name="offset"/>
+            <bool32 name="delaysync"/>
+            <int32 name="delaydivision"/>
+            <int32 name="moddivision"/>
+            <int32 name="bpm"/>
+            <bool32 name="presetmode"/>
+            <int32 name="preset"/>
+            <bool32 name="tap"/>
+            <bool32 name="bypass"/>
+            <bool32 name="lfosync"/>
+            <bool32 name="seqsync"/>
+            <int32 name="seqdivision"/>
+            <int32.bipolar name="seqdepth"/>
+            <bool32 name="l3"/>
+            <bool32 name="l4"/>
+            <int32 name="tappedbpm"/>
+            <bool32 name="midion"/>
+            <bool32 name="inputclip"/>
+            <int32 name="tapdivision"/>
+         </inlets>
+         <outlets>
+            <frac32 name="value"/>
+            <charptr32 name="out1"/>
+            <charptr32 name="out2"/>
+            <charptr32 name="out3"/>
+            <charptr32 name="out4"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[char a[22];
+char b[22];
+char j[22];
+char midi[22];
+//char tap[22];
+char c[330];
+char d[174];
+char blank[22];
+char p[44];
+char q[44];
+char g[44];
+char lfo[44];
+char ww[44];
+char pit[44];
+
+int prev[12];
+int type[16];
+int otype;
+int value;
+int pvalue;
+int offset;
+int controlID;
+int index;
+int division;
+int dindex;
+int init;
+int bpmA;
+int bpmB;
+int bpmC;
+int Ioffset;
+int pA;
+int pB;
+int lfotimer;
+int prevC;
+int valueX;
+int prevCI;
+int tapped;
+int tappedbpm;
+
+int32_t digitA;
+int32_t digitB;
+int32_t digitC;
+int32_t digitD;
+int32_t digitE;
+int32_t digitF;
+
+bool presetmode;]]></code.declaration>
+         <code.init><![CDATA[init=12000;
+pvalue=0;
+
+// control labels
+// stpy(&c[(0*22)],"wet          v       ");
+ strcpy(&c[(0*22)],"     WET             ");
+ strcpy(&c[(1*22)],"    TIME             ");
+ strcpy(&c[(2*22)],"   FEEDBACK          ");
+ strcpy(&c[(3*22)],"   FILTER            ");
+ strcpy(&c[(4*22)],"   PING-PONG         ");
+ strcpy(&c[(5*22)],"   MOD SPEED         ");
+ strcpy(&c[(6*22)],"   MOD DEPTH         ");
+ strcpy(&c[(7*22)],"SEQUENCER SPEED      ");
+ strcpy(&c[(8*22)],"SEQUENCER DEPTH      ");
+ strcpy(&c[(9*22)],"    WIDTH            ");
+strcpy(&c[(10*22)],"  DELAY SYNC         ");
+strcpy(&c[(11*22)],"                     ");
+strcpy(&c[(12*22)],"SEQUENCER SYNC       ");
+strcpy(&c[(13*22)],"                     ");
+strcpy(&c[(14*22)],"  BPM TIME           ");
+  //  strcpy(&tap[0],"       BPM  120      ");
+      strcpy(&b[0],"       BPM  120      ");
+   strcpy(&midi[0],"        (MIDI)       ");
+      strcpy(&a[0]," TAP           PRESET");
+      strcpy(&g[0],"                     ");
+      strcpy(&q[0],"(save to SD)         ");
+      strcpy(&p[0],"SAVE             BACK");
+     strcpy(&p[21],"       PRESET        ");
+
+     strcpy(&j[0],"      GILLS DELAY    ");
+   strcpy(&lfo[0],"   MOD SYNC          ");
+   strcpy(&pit[0],"   RE-PITCH          ");
+    strcpy(&ww[0],"         BYPASS      ");
+   //   strcpy(&d[0],"16bars  12bars  8bars   7bars   6bars   5bars   4bars   3bars   2bars   *bar    bar     *1/4    1/4");
+ strcpy(&d[(0*6)],"16bars");
+ strcpy(&d[(1*6)],"12bars");
+ strcpy(&d[(2*6)]," 8bars");
+ strcpy(&d[(3*6)]," 7bars");
+ strcpy(&d[(4*6)]," 6bars");
+ strcpy(&d[(5*6)]," 5bars");
+ strcpy(&d[(6*6)]," 4bars");
+ strcpy(&d[(7*6)]," 3bars");
+ strcpy(&d[(8*6)]," 2bars");
+ strcpy(&d[(9*6)]," .bar ");
+strcpy(&d[(10*6)],"  bar ");
+strcpy(&d[(11*6)],".1/2  ");
+strcpy(&d[(12*6)]," 1/2  ");
+strcpy(&d[(13*6)],".1/4  ");
+strcpy(&d[(14*6)]," 1/4  ");
+strcpy(&d[(15*6)],".1/8  ");
+strcpy(&d[(16*6)]," 1/8  ");
+strcpy(&d[(17*6)],".1/16 ");
+strcpy(&d[(18*6)]," 1/16 ");
+strcpy(&d[(19*6)],".1/32 ");
+strcpy(&d[(20*6)]," 1/32 ");
+strcpy(&d[(21*6)],".1/64 ");
+strcpy(&d[(22*6)]," 1/64 ");
+strcpy(&d[(23*6)],".1/128");
+strcpy(&d[(24*6)]," 1/128");
+strcpy(&d[(25*6)],".1/256");
+strcpy(&d[(26*6)]," 1/256");
+strcpy(&d[(27*6)],".1/512");
+strcpy(&d[(28*6)]," 1/512");
+
+
+ 
+// control type
+// type 0 = unused
+// type 1 = unipolar f
+// type 2 = bipolar f
+// type 3 = delay time
+// type 4 = bool toggle
+//type 5 = 2nd line bool toggle
+// type 6 = bipolar integer from inlet
+//type 8
+type[0]=1;
+type[1]=3;
+type[2]=1;
+type[3]=1;
+type[4]=1;
+type[5]=3;
+type[6]=1;
+type[7]=3;
+type[8]=6;
+type[9]=2;
+type[10]=4;
+type[11]=4;
+type[12]=4;
+type[13]=4;
+type[14]=4;
+type[15]=5;]]></code.init>
+         <code.krate><![CDATA[offset=inlet_offset;
+if (inlet_controlID!=prevCI){
+	if ((inlet_controlID!=10) && (inlet_controlID!=11)&& (inlet_controlID!=14)){
+		controlID=inlet_controlID;	
+		if (controlID==12){
+			controlID=10;
+		}
+		else if (controlID==13){
+			controlID=12;
+		}
+	}
+	prevCI=inlet_controlID;
+}
+
+index=controlID*22;
+//  attr_table.array[__USAT((offset + 0),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+value= attr_table.array[__USAT((offset + controlID),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+if (value>=0x07FFF000){
+	value=0x08000000;
+	
+}
+otype=type[controlID];
+
+
+if (controlID==1){
+	division=inlet_delaydivision;
+}
+else if (controlID==5) {
+	division=inlet_moddivision;
+}
+else if (controlID==7) {
+	division=inlet_seqdivision;
+}
+
+
+tapped=attr_table.array[__USAT((15),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+tappedbpm=attr_table.array[__USAT((16),attr_table.LENGTHPOW)];
+
+if (inlet_inputclip){
+	b[0]='*';
+	ww[0]='*';
+	p[21]='*';
+}
+else {
+	b[0]=' ';
+	ww[0]=' ';
+	p[21]=' ';
+}
+
+presetmode=inlet_presetmode;
+
+if ((otype==3)&& !inlet_delaysync && (controlID==1)){
+	if (!tapped){
+		otype=1;
+		
+	}
+	else {
+		otype=8;
+		index=14*22;
+		
+	}
+}
+if ((otype==3)&& !inlet_lfosync && (controlID==5)){
+	otype=1;
+}
+if ((otype==3)&& !inlet_seqsync && (controlID==7)){
+	otype=1;
+}
+// type 0 = unused
+// type 1 = unipolar f
+// type 2 = bipolar f
+// type 3 = delay time
+
+if (init>0){
+	init-=1;
+	outlet_out1=0;
+	outlet_out2=&j[0];
+	outlet_out3=0;
+	outlet_out4=0;
+
+	if (((value!=pvalue) || inlet_tap || inlet_preset) && (init<11900)){
+		
+		init=0;
+	}
+	pvalue=value;
+}
+
+if (init==0){
+if (!inlet_bypass){
+	if ((otype==1) || (otype==2)){
+			if (otype==2){
+
+				value= (value-(1<<26))<<1;
+			}
+			//unipolar
+	//		digitD=(value>>21)/10;
+	//		digitE=(value>>21)-(digitD*10);
+	//		c[16+index]='0'+digitD;
+	//		c[17+index]='0'+digitE;
+	
+	
+			if (value<0){
+						value=0-value;
+						c[15+index]='-';
+					}
+			else{
+				c[15+index]=' ';
+			}
+			digitA=(value)/(1<<21)/10;
+			digitB=(((value)/(1<<21)))-(digitA*10);
+			digitD=((value)/((1<<21)/10))-((digitA*100)+(digitB*10));
+			digitE=((value)/((1<<21)/100))-((digitD*10)+(digitA*1000)+(digitB*100));
+	
+			c[16+index]='0'+digitA;
+			c[17+index]='0'+digitB;
+			c[18+index]='.';
+			c[19+index]='0'+digitD;
+			c[20+index]='0'+digitE;
+			}
+		else if (otype==2){
+			//bipolar
+			if (value<0){
+				value=0-value;
+				c[15+index]='-';
+			}
+			else{
+				c[15+index]='+';
+			}
+			
+			digitD=(value>>21)/10;
+			digitE=(value>>21)-(digitD*10);
+			c[16+index]='0'+digitD;
+			c[17+index]='0'+digitE;
+		}
+		else if (otype==3){
+			//delay time
+	
+					
+					dindex=division*6;
+				if (controlID==7){
+					Ioffset=1;
+				}
+				else {
+					Ioffset=0;
+				}
+					c[15+index+Ioffset]=d[0+dindex];
+					c[16+index+Ioffset]=d[1+dindex];
+					c[17+index+Ioffset]=d[2+dindex];
+					c[18+index+Ioffset]=d[3+dindex];
+					c[19+index+Ioffset]=d[4+dindex];
+					c[20+index+Ioffset]=d[5+dindex];
+				
+				
+		}
+		else if (otype==4){
+			if (value){
+				c[16+index]='o';
+				c[17+index]='n';
+				c[18+index]=' ';
+			}
+			else {
+				c[16+index]='o';
+				c[17+index]='f';
+				c[18+index]='f';
+			}
+			c[19+index]=' ';
+			c[20+index]=' ';
+			
+		}
+		else if (otype==6){
+			value=inlet_seqdepth;
+			if (value<0){
+						value=0-value;
+						c[17+index]='-';
+					}
+			else{
+				c[17+index]=' ';
+			}
+			
+			digitA=value/10;
+			digitB=value-(digitA*10);
+
+			c[18+index]='0'+digitA;
+			c[19+index]='0'+digitB;
+			
+			c[20+index]=' ';
+			c[21+index]=' ';
+			
+		}
+		else if (otype==8){
+				dindex=division*6;
+
+					bpmA=tappedbpm/100;
+					bpmB=(tappedbpm-(bpmA*100))/10;
+					bpmC=(tappedbpm-(bpmA*100)-(bpmB*10));
+
+					
+					c[12+index+Ioffset]='0'+bpmA;
+					c[13+index+Ioffset]='0'+bpmB;
+					c[14+index+Ioffset]='0'+bpmC;
+					
+					c[16+index+Ioffset]=d[0+dindex];
+					c[17+index+Ioffset]=d[1+dindex];
+					c[18+index+Ioffset]=d[2+dindex];
+					c[19+index+Ioffset]=d[3+dindex];
+					c[20+index+Ioffset]=d[4+dindex];
+					c[21+index+Ioffset]=d[5+dindex];
+		}
+		else if (otype==0){
+			//unused
+			c[19+index]=' ';
+			c[20+index]=' ';
+			
+		}
+		outlet_out1=&c[0+index];
+	if (!presetmode){
+		
+		
+		// second line
+		if ((!inlet_l3) && (!inlet_l4)){
+			bpmA=inlet_bpm/100;
+			bpmB=(inlet_bpm-(bpmA*100))/10;
+			bpmC=(inlet_bpm-(bpmA*100)-(bpmB*10));
+			
+			b[12]='0'+bpmA;
+			b[13]='0'+bpmB;
+			b[14]='0'+bpmC;
+			
+			outlet_out2=&b[0];
+			}
+		else if (inlet_l3){
+			valueX= attr_table.array[__USAT((offset + 11),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+			if (valueX){
+				pit[16]='o';
+				pit[17]='n';
+				pit[18]=' ';
+			}
+			else {
+				pit[16]='o';
+				pit[17]='f';
+				pit[18]='f';
+			}
+			pit[19]=' ';
+			pit[20]=' ';
+
+			
+			outlet_out2=&pit[0];
+		}
+		else if (inlet_l4){
+			valueX= attr_table.array[__USAT((offset + 13),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+			if (valueX){
+				lfo[16]='o';
+				lfo[17]='n';
+				lfo[18]=' ';
+			}
+			else {
+				lfo[16]='o';
+				lfo[17]='f';
+				lfo[18]='f';
+			}
+			lfo[19]=' ';
+			lfo[20]=' ';
+
+			
+			outlet_out2=&lfo[0];
+		}
+		
+		
+		
+		
+		
+		
+		outlet_out4=&a[0];
+		
+				
+			
+		if (inlet_tap){
+			dindex=inlet_tapdivision*6;
+			if (inlet_tapdivision==0){
+				dindex=14*6;
+			}
+			g[0]=d[0+dindex];
+			g[1]=d[1+dindex];
+			g[2]=d[2+dindex];
+			g[3]=d[3+dindex];
+			g[4]=d[4+dindex];
+			g[5]=d[5+dindex];
+			if (inlet_midion){
+			g[6]=midi[6];
+			g[7]=midi[7];
+			g[8]=midi[8];
+			g[9]=midi[9];
+			g[10]=midi[10];
+			g[11]=midi[11];
+			g[12]=midi[12];
+			g[13]=midi[13];
+			}
+			else {
+				g[6]=' ';
+				g[7]=' ';
+				g[8]=' ';
+				g[9]=' ';
+				g[10]=' ';
+				g[11]=' ';
+				g[12]=' ';
+				g[13]=' ';
+			}
+			
+			outlet_out3=&g[0];
+		}
+		else if (inlet_midion){
+			outlet_out3=&midi[0];
+		}
+		else{
+		outlet_out3=&blank[0];
+		}
+		//outlet_out3=&midi[0];
+	}
+	else {
+		pA=inlet_preset/10;
+		pB=inlet_preset-(pA*10);
+		p[35]='0'+pA;
+		p[36]='0'+pB;
+		
+		//outlet_out1=&blank[0];
+		
+		outlet_out2=&p[21];
+		outlet_out3=&q[0];
+		outlet_out4=&p[0];
+	}
+}
+else if (inlet_bypass){
+	outlet_out1=&blank[0];
+		
+		outlet_out2=&ww[0];
+		outlet_out3=&blank[0];
+		outlet_out4=&blank[0];
+}
+}
+
+
+
+
+
+
+
+
+
+outlet_value=value;
+//for(i=0;i<12;i++){
+//}]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="154" y="1946">
+      <params/>
+      <attribs>
+         <combo attributeName="useScope" selection="off"/>
+         <objref attributeName="scope" obj=""/>
+         <combo attributeName="narrowFont" selection="on"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="2170" y="1988" text="width"/>
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_1" x="2156" y="2002">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/inv" uuid="565521d3699b36d8095aa1c79b9ad0046fb133ce" name="inv_4" x="2268" y="2002">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="sss/math/expCurveK" uuid="bde45a1d-540b-4c33-b7b5-d733d42a1772" name="expCurveK_1" x="2366" y="2002">
+      <params>
+         <frac32.s.map name="exp" value="40.299999713897705"/>
+         <int32 name="stack" value="4"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="462" y="2030" text="auto input - detects mono (left only ) or stereo (right &amp; left)"/>
+   <comment type="patch/comment" x="1862" y="2030" text="time division stepper"/>
+   <comment type="patch/comment" x="2044" y="2030" text="pingpong"/>
+   <comment type="patch/comment" x="2520" y="2030" text="width for feedback"/>
+   <comment type="patch/comment" x="462" y="2044" text="if mono, left is sent to left &amp; right inputs"/>
+   <comment type="patch/comment" x="1568" y="2044" text="tempo led"/>
+   <patchobj type="patch/object" uuid="327dea59-b2db-47be-908e-52bdc17acad6" name="object_14" x="1862" y="2044">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="327dea59-b2db-47be-908e-52bdc17acad6">
+         <inlets>
+            <frac32.positive name="delaytime"/>
+            <int32 name="step"/>
+         </inlets>
+         <outlets>
+            <frac32.positive name="delaytime"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int division[29];
+int p;
+int step;
+int delaytime;]]></code.declaration>
+         <code.krate><![CDATA[p=inlet_delaytime;
+
+//16bar 12bar  8bar  7bar  6bar  5bar  4bar  3bar  2bar .1bar  1bar .1/2   1/2  .1/4   1/4  .1/8   1/8  .1/16  1/16 .1/32  1/32 .1/64  1/64.1/128 1/128.1/256 1/256.1/512 1/512   off
+division[0]=p<<6;//16
+division[1]=(p<<5)+(p<<4);//12
+division[2]=p<<5;//8
+division[3]=(p<<4)+(p<<3)+(p<<2);//7
+division[4]=(p<<4)+(p<<3);//6
+division[5]=(p<<4)+(p<<2);//5
+division[6]=p<<4; //4bar
+division[7]=(p<<3)+(p<<2); //3bar
+division[8]=p<<3; //2bar
+division[9]=(p<<2)+(p<<1);
+division[10]=p<<2; //1bar
+division[11]=(p<<1)+p;
+division[12]=p<<1; // 1/2
+division[13]=p+(p>>1);
+division[14]=p; // 1/4
+division[15]=(p>>1)+(p>>2);
+division[16]=p>>1; // 1/8
+division[17]=(p>>2)+(p>>3);
+division[18]=p>>2; // 1/16
+division[19]=(p>>3)+(p>>4);
+division[20]=p>>3; // 1/32
+division[21]=(p>>4)+(p>>5);
+division[22]=p>>4; // 1/64
+division[23]=(p>>5)+(p>>6);
+division[24]=p>>5; // 1/28
+division[25]=(p>>6)+(p>>7);
+division[26]=p>>6; // 1/256
+division[27]=(p>>7)+(p>>8);
+division[28]=p>>7; //1/512
+
+step=14 - inlet_step;
+delaytime=division[step];
+if (delaytime>=0x07FFFFFF){
+	delaytime=0x07FFFFFF;
+}
+if (delaytime<=0){
+	delaytime=0;
+}
+outlet_delaytime=delaytime;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="556e798a-ad10-4909-8735-2e836f34161d" name="object_10" x="2030" y="2044">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="556e798a-ad10-4909-8735-2e836f34161d">
+         <inlets>
+            <frac32 name="timeL"/>
+            <frac32 name="timeR"/>
+            <frac32.bipolar name="Roffset"/>
+         </inlets>
+         <outlets>
+            <frac32 name="L"/>
+            <frac32 name="R"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int Roffset;]]></code.declaration>
+         <code.krate><![CDATA[outlet_L=inlet_timeL;
+
+if (inlet_Roffset>=0){
+	outlet_R= (___SMMUL((inlet_timeR)<<3,inlet_Roffset<<2))+inlet_timeR;
+	}
+else {
+	Roffset= 
+	outlet_R= inlet_timeR - ___SMMUL(inlet_timeR<<3,(-inlet_Roffset>>1)<<2);
+}]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_6" x="2156" y="2044">
+      <params>
+         <frac32.u.map name="value" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad" name="object_8" x="2240" y="2044">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad">
+         <inlets>
+            <frac32 name="L"/>
+            <frac32 name="R"/>
+            <frac32.bipolar name="width"/>
+            <frac32 name="widthmax"/>
+         </inlets>
+         <outlets>
+            <frac32 name="L"/>
+            <frac32 name="R"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[//if (inlet_width>0){
+//	haasdelayR=___SMMUL(inlet_width<<3,384<<2);
+//	haasdelayL=0;
+//}
+//else {
+//	haasdelayL=___SMMUL(inlet_width<<3,384<<2);
+//	haasdelayR=0;
+//}
+
+
+
+
+if (inlet_width>0){
+	outlet_L=inlet_L;
+	outlet_R=inlet_R+(___SMMUL(inlet_width<<3,(inlet_widthmax>>6)<<2));
+	
+}
+else if (inlet_width<0){
+	outlet_L=inlet_L+(___SMMUL((-inlet_width)<<3,(inlet_widthmax>>6)<<2));
+	outlet_R=inlet_R;
+
+}
+else if (inlet_width==0){
+	outlet_L=inlet_L;
+	outlet_R=inlet_R;
+	
+}]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad" name="object_9" x="2520" y="2044">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad">
+         <inlets>
+            <frac32 name="L"/>
+            <frac32 name="R"/>
+            <frac32.bipolar name="width"/>
+            <frac32 name="widthmax"/>
+         </inlets>
+         <outlets>
+            <frac32 name="L"/>
+            <frac32 name="R"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[//if (inlet_width>0){
+//	haasdelayR=___SMMUL(inlet_width<<3,384<<2);
+//	haasdelayL=0;
+//}
+//else {
+//	haasdelayL=___SMMUL(inlet_width<<3,384<<2);
+//	haasdelayR=0;
+//}
+
+
+
+
+if (inlet_width>0){
+	outlet_L=inlet_L;
+	outlet_R=inlet_R+(___SMMUL(inlet_width<<3,(inlet_widthmax>>6)<<2));
+	
+}
+else if (inlet_width<0){
+	outlet_L=inlet_L+(___SMMUL((-inlet_width)<<3,(inlet_widthmax>>6)<<2));
+	outlet_R=inlet_R;
+
+}
+else if (inlet_width==0){
+	outlet_L=inlet_L;
+	outlet_R=inlet_R;
+	
+}]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="462" y="2058" text="if stereo, effect is true stereo"/>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_3" x="1554" y="2058">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="1"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="462" y="2072" text="click the button to redetect"/>
+   <obj type="ctrl/button" uuid="ef3d13774349df85aa9bfecf30dbc91ab8488b3f" name="button_2" x="462" y="2086">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="0f185d48-b0f5-4208-8bff-cfcd176d3009" name="input_1" x="546" y="2086">
+      <params>
+         <frac32.u.map name="threshhold" value="2.0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="0f185d48-b0f5-4208-8bff-cfcd176d3009">
+         <sDescription>Audio input, stereo</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <bool32.rising name="detect"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="left" description="Left channel"/>
+            <frac32buffer name="right" description="Right channel"/>
+            <bool32 name="clipping"/>
+         </outlets>
+         <displays>
+            <frac32.vu name="vuLeft"/>
+            <frac32.vu name="vuRight"/>
+         </displays>
+         <params>
+            <frac32.u.map name="threshhold" noLabel="true"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int detecting;
+int t;
+bool rON;
+bool lON;
+bool leftON;
+bool rightON;]]></code.declaration>
+         <code.init><![CDATA[detecting=1500;]]></code.init>
+         <code.krate><![CDATA[if (inlet_detect){
+	detecting=1500;
+	rON=0;
+	lON=0;
+}
+
+if (detecting>0){
+
+	detecting-=1;
+
+	   if ((AudioInputRight[0]>param_threshhold) &&(AudioInputRight[0]>0)){
+	   	rON=1;
+	   }
+	   if ((AudioInputLeft[0]>param_threshhold) &&(AudioInputLeft[0]>0)){
+	   	lON=1;
+	   }
+	 if (detecting<10){
+	 	if (lON){
+		 	rightON=rON;
+		 	detecting=0;
+	 	}
+	 	else {
+	 		detecting=1500;
+	 	}
+		//rON=0;
+	 }
+	
+}
+
+
+
+		
+switch( rightON )
+            {
+             
+              case 0 :
+                {
+               
+					for(int j=0;j<BUFSIZE;j++){
+		                	outlet_left[j]=AudioInputLeft[j];
+			   			outlet_right[j]=AudioInputLeft[j];
+					}
+                }
+       
+                break;
+
+              case 1 :
+             	{
+             		
+					for(int j=0;j<BUFSIZE;j++){
+			        		outlet_left[j]=AudioInputLeft[j];
+			   			outlet_right[j]=AudioInputRight[j];
+					}
+             	}
+    
+       
+                break;
+		    
+              
+            }
+
+disp_vuLeft=AudioInputLeft[0];
+disp_vuRight=AudioInputRight[0];
+
+if (AudioInputLeft[0] >= (127<<20)){
+	t=1000;
+}
+if (AudioInputRight[0] >= (127<<20)){
+	t=1000;
+}
+
+if (t>0){
+	t-=1;
+}
+outlet_clipping=t;]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="1134" y="2114" text="wet "/>
+   <comment type="patch/comment" x="1134" y="2128" text="(first in chain to keep trails "/>
+   <comment type="patch/comment" x="1022" y="2142" text="dry"/>
+   <comment type="patch/comment" x="1134" y="2142" text="when bypassed)"/>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_6" x="1694" y="2142">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_9" x="1022" y="2156">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_10" x="1134" y="2156">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="392" y="2240" text="delay switcher "/>
+   <comment type="patch/comment" x="770" y="2240" text="left delay line (first repeat   ***************************************************************************************************************"/>
+   <comment type="patch/comment" x="182" y="2254" text="smooth delay repitch"/>
+   <comment type="patch/comment" x="392" y="2254" text="stops clicks/pitch changes"/>
+   <comment type="patch/comment" x="1652" y="2254" text="filter"/>
+   <comment type="patch/comment" x="1764" y="2254" text="record into delay buffer"/>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_5" x="182" y="2268">
+      <params>
+         <frac32.u.map name="value" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="e16b8c12-e480-40ac-9b4a-5e63245fbd3c" name="i_2" x="266" y="2268">
+      <params>
+         <bool32.tgl name="p1" value="1"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="e16b8c12-e480-40ac-9b4a-5e63245fbd3c">
+         <sDescription>constant</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>i.axh</helpPatch>
+         <inlets/>
+         <outlets>
+            <bool32 name="out"/>
+         </outlets>
+         <displays/>
+         <params>
+            <bool32.tgl name="p1"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[outlet_out= param_p1;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="0312dc0b-b148-4f40-a0ed-7e20eb2d1f5f" name="delay_2" x="392" y="2268">
+      <params>
+         <int32 name="fade" value="128"/>
+         <int32 name="pitchfade" value="512"/>
+      </params>
+      <attribs>
+         <combo attributeName="size" selection="1048576 (21.8s)"/>
+      </attribs>
+      <object id="patch/object" uuid="0312dc0b-b148-4f40-a0ed-7e20eb2d1f5f">
+         <sDescription>convert to fractional output</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32.positive name="time"/>
+            <bool32.risingfalling name="repitch"/>
+            <bool32.risingfalling name="octavefade"/>
+            <bool32.risingfalling name="fifth"/>
+            <frac32.positive name="smooth"/>
+         </inlets>
+         <outlets>
+            <frac32 name="timeA"/>
+            <frac32 name="envA" description="output"/>
+            <frac32 name="timeB"/>
+            <frac32 name="envB"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="fade" description="fade in &quot;k samples&quot;" noLabel="true">
+               <MinValue i="2"/>
+               <MaxValue i="20000"/>
+            </int32>
+            <int32 name="pitchfade">
+               <MinValue i="0"/>
+               <MaxValue i="200000"/>
+            </int32>
+         </params>
+         <attribs>
+            <combo name="size" description="THIS SHOULD MATCH DELAY WRITE SIZE">
+               <MenuEntries>
+                  <string>1024 (21.33ms)</string>
+                  <string>2048 (42.66ms)</string>
+                  <string>4096 (85.33ms)</string>
+                  <string>8192 (170ms)</string>
+                  <string>16384 (341ms)</string>
+                  <string>32768 (682ms)</string>
+                  <string>65536 (1.36s)</string>
+                  <string>131072 (2.37s)</string>
+                  <string>262144 (5.46s)</string>
+                  <string>524288 (10.9s)</string>
+                  <string>1048576 (21.8s)</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>21</string>
+                  <string>20</string>
+                  <string>19</string>
+                  <string>18</string>
+                  <string>17</string>
+                  <string>16</string>
+                  <string>15</string>
+                  <string>14</string>
+                  <string>13</string>
+                  <string>12</string>
+                  <string>11</string>
+               </CEntries>
+            </combo>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int32_t PtimeA;
+int32_t timeD;
+int out;
+int timeA;
+int timeB;
+int outA;
+int outB;
+int ptime;
+int fadein;
+int fphase;
+int prevTA;
+int Pphase;
+int length;
+int timeup;
+int timeC;
+int timedn;	
+int pitchfade;	
+int Pfade;
+int depth;
+bool changed;]]></code.declaration>
+         <code.init><![CDATA[timeA=0;
+timeB=0;
+prevTA=-1;]]></code.init>
+         <code.krate><![CDATA[fphase=0x07FFFFFF/param_fade;
+
+if (!inlet_repitch){
+	
+		if ((inlet_time!=ptime)&&!changed){
+			changed=1;
+			ptime=inlet_time;
+			if (out==0){
+				fadein=1;
+				timeA=inlet_time;
+				timeC=timeA;
+			}
+			else {
+				fadein=2;
+				timeB=inlet_time;
+				timeC=timeB;
+			}
+		}
+		
+		if ((fadein==1)&&changed){
+			out+=fphase;
+			if (out>=0x07FFFFFF){
+				out=0x07FFFFFF;
+				changed=0;
+				fadein=0;
+				
+			}
+		}
+		else if ((fadein==2)&&changed){
+			out-=fphase;
+			if (out<=0){
+				out=0;
+				fadein=0;
+				changed=0;
+			}
+			
+		}
+		//timeC=timeA;
+		prevTA=timeA;
+		timedn=0;
+		timeup=0;
+	}
+else {
+	out=0x07FFFFFF;
+	timeA=inlet_time;
+}
+
+
+
+outA=out;
+outB=0x07FFFFFF-out;
+if (inlet_repitch){
+	
+	if ((timeA!=prevTA)&&!timeup&&!timedn) {
+		
+		if (timeA>=timeC){
+			length=(timeA-timeC);
+			timeup=1;
+			timedn=0;
+			if (inlet_octavefade){
+			Pphase=(1<<((attr_size-1)-inlet_fifth));
+			}
+		}
+		else if (timeA<timeC){
+			length=timeC-timeA;
+			timedn=1;
+			timeup=0;
+			if (inlet_octavefade){
+			Pphase=(1<<(attr_size-inlet_fifth));
+			}
+		}
+			
+			if (!inlet_octavefade){
+			Pphase=___SMMUL((0x07FFFFFF/param_pitchfade)<<3,length<<2);
+			}
+			
+			
+			
+			if (Pphase<1){
+				Pphase=1;
+			}
+
+		prevTA=timeA;
+		}
+		if (timeup){
+			timeC+=Pphase;
+			if (timeC>=prevTA){
+				timeup=0;
+				timeC=prevTA;
+				}
+			}
+		else if (timedn){
+			timeC-=Pphase;
+			if (timeC<=prevTA){
+				timedn=0;
+				timeC=prevTA;
+			}
+		}
+	
+	}
+
+timeD = ___SMMLA(timeD-timeC,(-1<<26)+(inlet_smooth>>1),timeD);
+
+outlet_envA=outA;
+if (!inlet_repitch){
+	outlet_timeA=timeA;
+	}
+else {
+	outlet_timeA=timeD;
+}
+outlet_envB=outB;
+outlet_timeB=timeB;
+
+
+//outlet_o=(inlet_i-((inlet_i/(0x07FFFFFF/param_entries))*(0x07FFFFFF/param_entries)))*param_entries;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_1" x="616" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_2" x="728" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_1" x="812" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_1" x="896" y="2268">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="deelite"/>
+      </attribs>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_11" x="1050" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_3" x="1148" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_2" x="1232" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_2" x="1302" y="2268">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="deelite"/>
+      </attribs>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_12" x="1470" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_3" x="1540" y="2268">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_1" x="1652" y="2268">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="deelite" x="1764" y="2268">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="1048576 (21.8s)"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="798" y="2408" text="wet "/>
+   <comment type="patch/comment" x="798" y="2422" text="(first in chain to keep trails "/>
+   <comment type="patch/comment" x="686" y="2436" text="dry"/>
+   <comment type="patch/comment" x="798" y="2436" text="when bypassed)"/>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_14" x="686" y="2450">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_15" x="798" y="2450">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="770" y="2534" text="right delay line (first repeat   ***************************************************************************************************************"/>
+   <patchobj type="patch/object" uuid="fe046d58-1420-41a0-86b2-f81c73c925ee" name="delay_3" x="406" y="2548">
+      <params>
+         <int32 name="fade" value="128"/>
+         <int32 name="pitchfade" value="512"/>
+      </params>
+      <attribs>
+         <combo attributeName="size" selection="1048576 (21.8s)"/>
+      </attribs>
+      <object id="patch/object" uuid="fe046d58-1420-41a0-86b2-f81c73c925ee">
+         <sDescription>convert to fractional output</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32.positive name="time"/>
+            <bool32.risingfalling name="repitch"/>
+            <bool32.risingfalling name="octavefade"/>
+            <bool32.risingfalling name="fifth"/>
+            <frac32.positive name="smooth"/>
+         </inlets>
+         <outlets>
+            <frac32 name="timeA"/>
+            <frac32 name="envA" description="output"/>
+            <frac32 name="timeB"/>
+            <frac32 name="envB"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="fade" description="fade in &quot;k samples&quot;" noLabel="true">
+               <MinValue i="2"/>
+               <MaxValue i="20000"/>
+            </int32>
+            <int32 name="pitchfade">
+               <MinValue i="0"/>
+               <MaxValue i="200000"/>
+            </int32>
+         </params>
+         <attribs>
+            <combo name="size" description="THIS SHOULD MATCH DELAY WRITE SIZE">
+               <MenuEntries>
+                  <string>1024 (21.33ms)</string>
+                  <string>2048 (42.66ms)</string>
+                  <string>4096 (85.33ms)</string>
+                  <string>8192 (170ms)</string>
+                  <string>16384 (341ms)</string>
+                  <string>32768 (682ms)</string>
+                  <string>65536 (1.36s)</string>
+                  <string>131072 (2.37s)</string>
+                  <string>262144 (5.46s)</string>
+                  <string>524288 (10.9s)</string>
+                  <string>1048576 (21.8s)</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>21</string>
+                  <string>20</string>
+                  <string>19</string>
+                  <string>18</string>
+                  <string>17</string>
+                  <string>16</string>
+                  <string>15</string>
+                  <string>14</string>
+                  <string>13</string>
+                  <string>12</string>
+                  <string>11</string>
+               </CEntries>
+            </combo>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int32_t PtimeA;
+int32_t timeD;
+int out;
+int timeA;
+int timeB;
+int outA;
+int outB;
+int ptime;
+int fadein;
+int fphase;
+int prevTA;
+int Pphase;
+int length;
+int timeup;
+int timeC;
+int timedn;	
+int pitchfade;	
+int Pfade;
+int depth;
+bool changed;]]></code.declaration>
+         <code.init><![CDATA[timeA=0;
+timeB=0;
+prevTA=-1;]]></code.init>
+         <code.krate><![CDATA[fphase=0x07FFFFFF/param_fade;
+
+if (!inlet_repitch){
+	
+		if ((inlet_time!=ptime)&&!changed){
+			changed=1;
+			ptime=inlet_time;
+			if (out==0){
+				fadein=1;
+				timeA=inlet_time;
+				timeC=timeA;
+			}
+			else {
+				fadein=2;
+				timeB=inlet_time;
+				timeC=timeB;
+			}
+		}
+		
+		if ((fadein==1)&&changed){
+			out+=fphase;
+			if (out>=0x07FFFFFF){
+				out=0x07FFFFFF;
+				changed=0;
+				fadein=0;
+				
+			}
+		}
+		else if ((fadein==2)&&changed){
+			out-=fphase;
+			if (out<=0){
+				out=0;
+				fadein=0;
+				changed=0;
+			}
+			
+		}
+		//timeC=timeA;
+		prevTA=timeA;
+		timedn=0;
+		timeup=0;
+	}
+else {
+	out=0x07FFFFFF;
+	timeA=inlet_time;
+}
+
+
+
+outA=out;
+outB=0x07FFFFFF-out;
+if (inlet_repitch){
+	
+	if ((timeA!=prevTA)&&!timeup&&!timedn) {
+		
+		if (timeA>=timeC){
+			length=(timeA-timeC);
+			timeup=1;
+			timedn=0;
+			if (inlet_octavefade){
+			Pphase=(1<<((attr_size-1)-inlet_fifth));
+			}
+		}
+		else if (timeA<timeC){
+			length=timeC-timeA;
+			timedn=1;
+			timeup=0;
+			if (inlet_octavefade){
+			Pphase=(1<<(attr_size-inlet_fifth));
+			}
+		}
+			
+			if (!inlet_octavefade){
+			Pphase=___SMMUL((0x07FFFFFF/param_pitchfade)<<3,length<<2);
+			}
+			
+			
+			
+			if (Pphase<1){
+				Pphase=1;
+			}
+
+		prevTA=timeA;
+		}
+		if (timeup){
+			timeC+=Pphase;
+			if (timeC>=prevTA){
+				timeup=0;
+				timeC=prevTA;
+				}
+			}
+		else if (timedn){
+			timeC-=Pphase;
+			if (timeC<=prevTA){
+				timedn=0;
+				timeC=prevTA;
+			}
+		}
+	
+	}
+
+timeD = ___SMMLA(timeD-timeC,(-1<<26)+(inlet_smooth>>1),timeD);
+
+outlet_envA=outA;
+if (!inlet_repitch){
+	outlet_timeA=timeA;
+	}
+else {
+	outlet_timeA=timeD;
+}
+outlet_envB=outB;
+outlet_timeB=timeB;
+
+
+//outlet_o=(inlet_i-((inlet_i/(0x07FFFFFF/param_entries))*(0x07FFFFFF/param_entries)))*param_entries;]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="1862" y="2548" text="filter"/>
+   <comment type="patch/comment" x="1960" y="2548" text="record into delay buffer"/>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_4" x="630" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_5" x="742" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_4" x="826" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_3" x="910" y="2562">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="delayright"/>
+      </attribs>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_16" x="1064" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_6" x="1162" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_5" x="1246" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_4" x="1316" y="2562">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="delayright"/>
+      </attribs>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_17" x="1484" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_6" x="1554" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_1" x="1666" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_12" x="1750" y="2562">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_2" x="1848" y="2562">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="delayright" x="1960" y="2562">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="1048576 (21.8s)"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="770" y="2730" text="left delay line (feedback - necessary for ping pong   ***************************************************************************************************************"/>
+   <patchobj type="patch/object" uuid="e6b2d589-8bdd-4713-ae26-75c71f0afa09" name="delay_4" x="406" y="2758">
+      <params>
+         <int32 name="fade" value="128"/>
+         <int32 name="pitchfade" value="512"/>
+      </params>
+      <attribs>
+         <combo attributeName="size" selection="1048576 (21.8s)"/>
+      </attribs>
+      <object id="patch/object" uuid="e6b2d589-8bdd-4713-ae26-75c71f0afa09">
+         <sDescription>convert to fractional output</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32.positive name="time"/>
+            <bool32.risingfalling name="repitch"/>
+            <bool32.risingfalling name="octavefade"/>
+            <bool32.risingfalling name="fifth"/>
+            <frac32.positive name="smooth"/>
+         </inlets>
+         <outlets>
+            <frac32 name="timeA"/>
+            <frac32 name="envA" description="output"/>
+            <frac32 name="timeB"/>
+            <frac32 name="envB"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="fade" description="fade in &quot;k samples&quot;" noLabel="true">
+               <MinValue i="2"/>
+               <MaxValue i="20000"/>
+            </int32>
+            <int32 name="pitchfade">
+               <MinValue i="0"/>
+               <MaxValue i="200000"/>
+            </int32>
+         </params>
+         <attribs>
+            <combo name="size" description="THIS SHOULD MATCH DELAY WRITE SIZE">
+               <MenuEntries>
+                  <string>1024 (21.33ms)</string>
+                  <string>2048 (42.66ms)</string>
+                  <string>4096 (85.33ms)</string>
+                  <string>8192 (170ms)</string>
+                  <string>16384 (341ms)</string>
+                  <string>32768 (682ms)</string>
+                  <string>65536 (1.36s)</string>
+                  <string>131072 (2.37s)</string>
+                  <string>262144 (5.46s)</string>
+                  <string>524288 (10.9s)</string>
+                  <string>1048576 (21.8s)</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>21</string>
+                  <string>20</string>
+                  <string>19</string>
+                  <string>18</string>
+                  <string>17</string>
+                  <string>16</string>
+                  <string>15</string>
+                  <string>14</string>
+                  <string>13</string>
+                  <string>12</string>
+                  <string>11</string>
+               </CEntries>
+            </combo>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int32_t PtimeA;
+int32_t timeD;
+int out;
+int timeA;
+int timeB;
+int outA;
+int outB;
+int ptime;
+int fadein;
+int fphase;
+int prevTA;
+int Pphase;
+int length;
+int timeup;
+int timeC;
+int timedn;	
+int pitchfade;	
+int Pfade;
+int depth;
+bool changed;]]></code.declaration>
+         <code.init><![CDATA[timeA=0;
+timeB=0;
+prevTA=-1;]]></code.init>
+         <code.krate><![CDATA[fphase=0x07FFFFFF/param_fade;
+
+if (!inlet_repitch){
+	
+		if ((inlet_time!=ptime)&&!changed){
+			changed=1;
+			ptime=inlet_time;
+			if (out==0){
+				fadein=1;
+				timeA=inlet_time;
+				timeC=timeA;
+			}
+			else {
+				fadein=2;
+				timeB=inlet_time;
+				timeC=timeB;
+			}
+		}
+		
+		if ((fadein==1)&&changed){
+			out+=fphase;
+			if (out>=0x07FFFFFF){
+				out=0x07FFFFFF;
+				changed=0;
+				fadein=0;
+				
+			}
+		}
+		else if ((fadein==2)&&changed){
+			out-=fphase;
+			if (out<=0){
+				out=0;
+				fadein=0;
+				changed=0;
+			}
+			
+		}
+		//timeC=timeA;
+		prevTA=timeA;
+		timedn=0;
+		timeup=0;
+	}
+else {
+	out=0x07FFFFFF;
+	timeA=inlet_time;
+}
+
+
+
+outA=out;
+outB=0x07FFFFFF-out;
+if (inlet_repitch){
+	
+	if ((timeA!=prevTA)&&!timeup&&!timedn) {
+		
+		if (timeA>=timeC){
+			length=(timeA-timeC);
+			timeup=1;
+			timedn=0;
+			if (inlet_octavefade){
+			Pphase=(1<<((attr_size-1)-inlet_fifth));
+			}
+		}
+		else if (timeA<timeC){
+			length=timeC-timeA;
+			timedn=1;
+			timeup=0;
+			if (inlet_octavefade){
+			Pphase=(1<<(attr_size-inlet_fifth));
+			}
+		}
+			
+			if (!inlet_octavefade){
+			Pphase=___SMMUL((0x07FFFFFF/param_pitchfade)<<3,length<<2);
+			}
+			
+			
+			
+			if (Pphase<1){
+				Pphase=1;
+			}
+
+		prevTA=timeA;
+		}
+		if (timeup){
+			timeC+=Pphase;
+			if (timeC>=prevTA){
+				timeup=0;
+				timeC=prevTA;
+				}
+			}
+		else if (timedn){
+			timeC-=Pphase;
+			if (timeC<=prevTA){
+				timedn=0;
+				timeC=prevTA;
+			}
+		}
+	
+	}
+
+timeD = ___SMMLA(timeD-timeC,(-1<<26)+(inlet_smooth>>1),timeD);
+
+outlet_envA=outA;
+if (!inlet_repitch){
+	outlet_timeA=timeA;
+	}
+else {
+	outlet_timeA=timeD;
+}
+outlet_envB=outB;
+outlet_timeB=timeB;
+
+
+//outlet_o=(inlet_i-((inlet_i/(0x07FFFFFF/param_entries))*(0x07FFFFFF/param_entries)))*param_entries;]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="938" y="2758" text="feedback"/>
+   <comment type="patch/comment" x="1008" y="2758" text="sum input and feedbackloop"/>
+   <comment type="patch/comment" x="1176" y="2758" text="filter"/>
+   <comment type="patch/comment" x="1288" y="2758" text="record into delay buffer"/>
+   <comment type="patch/comment" x="1442" y="2758" text="sum wet&amp;dry (delay)"/>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_7" x="686" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_8" x="798" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_7" x="882" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_5" x="966" y="2772">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="fbackL"/>
+      </attribs>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_21" x="1120" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_9" x="1218" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_8" x="1302" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_6" x="1372" y="2772">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="fbackL"/>
+      </attribs>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_22" x="1540" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_9" x="1610" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_10" x="1750" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_23" x="1834" y="2772">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_3" x="1932" y="2772">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="fbackL" x="2044" y="2772">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="1048576 (21.8s)"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="1932" y="2940" text="sum wet&amp;dry&amp;fback"/>
+   <obj type="drj/math/sum3" uuid="93cb11244902274d118a237aed86ae7d7fd46107" name="sum3_1" x="1932" y="2954">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1932" y="3052" text="sum wet&amp;dry&amp;fback"/>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_11" x="1932" y="3066">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="45c87834-402c-40e5-90de-e52443abf0a9" name="output_1" x="2044" y="3066">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="45c87834-402c-40e5-90de-e52443abf0a9">
+         <sDescription>Audio output, stereo</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32buffer name="left" description="Left channel"/>
+            <frac32buffer name="right" description="Right channel"/>
+         </inlets>
+         <outlets>
+            <bool32 name="clipping"/>
+         </outlets>
+         <displays>
+            <frac32.vu name="vuLeft"/>
+            <frac32.vu name="vuRight"/>
+         </displays>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int t;]]></code.declaration>
+         <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   AudioOutputLeft[j] += __SSAT(inlet_left[j],28);
+   AudioOutputRight[j] += __SSAT(inlet_right[j],28);
+}
+disp_vuLeft=inlet_left[0];
+disp_vuRight=inlet_right[0];
+
+if (AudioOutputLeft[0] >= (127<<20)){
+	t=1000;
+}
+if (AudioOutputRight[0] >= (127<<20)){
+	t=1000;
+}
+
+if (t>0){
+	t-=1;
+}
+
+outlet_clipping=t;]]></code.krate>
+      </object>
+   </patchobj>
+   <nets>
+      <net>
+         <source obj="1_1" outlet="start"/>
+         <dest obj="or_2" inlet="i1"/>
+         <dest obj="or_3" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="count"/>
+         <dest obj="seq" inlet="count"/>
+         <dest obj="LFO_1" inlet="count"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v3"/>
+         <dest obj="vca_23" inlet="v"/>
+         <dest obj="vca_1" inlet="v"/>
+         <dest obj="dial_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="interp_2" outlet="o"/>
+         <dest obj="+_1" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v2"/>
+         <dest obj="dial_1" inlet="in"/>
+         <dest obj="delay_1" inlet="division"/>
+      </net>
+      <net>
+         <source obj="+_3" outlet="out"/>
+         <dest obj="+_10" inlet="in1"/>
+         <dest obj="sum3_1" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="vca_10" outlet="o"/>
+         <dest obj="lp_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="wetdry_5" outlet="dry"/>
+         <dest obj="vca_9" inlet="v"/>
+         <dest obj="vca_14" inlet="v"/>
+      </net>
+      <net>
+         <source obj="wetdry_5" outlet="wet"/>
+         <dest obj="vca_10" inlet="v"/>
+         <dest obj="vca_15" inlet="v"/>
+      </net>
+      <net>
+         <source obj="vca_9" outlet="o"/>
+         <dest obj="sum3_1" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="bpmkbeat"/>
+         <dest obj="seq" inlet="kbeat"/>
+         <dest obj="LFO_1" inlet="kbeat"/>
+         <dest obj="i_5" inlet="in"/>
+         <dest obj="delay_1" inlet="kbeat"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v6"/>
+         <dest obj="LFO_1" inlet="division"/>
+         <dest obj="dial_8" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v1"/>
+         <dest obj="wetdry_5" inlet="wetdry"/>
+         <dest obj="dial_7" inlet="in"/>
+      </net>
+      <net>
+         <source obj="lp_1" outlet="out"/>
+         <dest obj="deelite" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v4"/>
+         <dest obj="lp_1" inlet="pitch"/>
+         <dest obj="lp_2" inlet="pitch"/>
+         <dest obj="lp_3" inlet="pitch"/>
+         <dest obj="dial_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="read_1" outlet="out"/>
+         <dest obj="vca_11" inlet="a"/>
+      </net>
+      <net>
+         <source obj="vca_11" outlet="o"/>
+         <dest obj="+_3" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="interp_3" outlet="o"/>
+         <dest obj="+_2" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="vca_12" outlet="o"/>
+         <dest obj="+_3" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="read_2" outlet="out"/>
+         <dest obj="vca_12" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v7"/>
+         <dest obj="u8u_3" inlet="in"/>
+         <dest obj="dial_9" inlet="in"/>
+      </net>
+      <net>
+         <source obj="LFO_1" outlet="length"/>
+         <dest obj="simple_2" inlet="kbeat"/>
+         <dest obj="object_12" inlet="kbeat"/>
+         <dest obj="simple_1" inlet="kbeat"/>
+      </net>
+      <net>
+         <source obj="xfade_1" outlet="o"/>
+         <dest obj="55_1" inlet="lfo"/>
+         <dest obj="sat_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="LFO_1" outlet="ratio"/>
+         <dest obj="object_12" inlet="ratio"/>
+         <dest obj="55_1" inlet="ratio"/>
+      </net>
+      <net>
+         <source obj="delay_2" outlet="timeA"/>
+         <dest obj="interp_2" inlet="i"/>
+      </net>
+      <net>
+         <source obj="delay_2" outlet="envA"/>
+         <dest obj="vca_11" inlet="v"/>
+      </net>
+      <net>
+         <source obj="delay_2" outlet="timeB"/>
+         <dest obj="interp_3" inlet="i"/>
+      </net>
+      <net>
+         <source obj="delay_2" outlet="envB"/>
+         <dest obj="vca_12" inlet="v"/>
+      </net>
+      <net>
+         <source obj="55_1" outlet="mod"/>
+         <dest obj="interp_1" inlet="i"/>
+         <dest obj="interp_4" inlet="i"/>
+         <dest obj="interp_7" inlet="i"/>
+      </net>
+      <net>
+         <source obj="+_2" outlet="out"/>
+         <dest obj="read_2" inlet="time"/>
+      </net>
+      <net>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="+_1" inlet="in2"/>
+         <dest obj="+_2" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="+_1" outlet="out"/>
+         <dest obj="read_1" inlet="time"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v8"/>
+         <dest obj="seq" inlet="division"/>
+         <dest obj="dial_10" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v9"/>
+         <dest obj="unipolar2bipolar_2" inlet="i"/>
+         <dest obj="dial_11" inlet="in"/>
+      </net>
+      <net>
+         <source obj="i_2" outlet="out"/>
+         <dest obj="delay_2" inlet="octavefade"/>
+         <dest obj="delay_3" inlet="octavefade"/>
+         <dest obj="delay_4" inlet="octavefade"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="kbeat"/>
+         <dest obj="object_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="sat_1" outlet="out"/>
+         <dest obj="led_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob3"/>
+         <dest obj="object_1" inlet="i3"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob4"/>
+         <dest obj="object_1" inlet="i4"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob5"/>
+         <dest obj="object_1" inlet="i5"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob6"/>
+         <dest obj="object_1" inlet="i6"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob7"/>
+         <dest obj="object_1" inlet="i7"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob8"/>
+         <dest obj="object_1" inlet="i8"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob9"/>
+         <dest obj="object_1" inlet="i9"/>
+      </net>
+      <net>
+         <source obj="c_1" outlet="out"/>
+         <dest obj="save_1" inlet="filename"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="encoderSW"/>
+         <dest obj="debounce1_1" inlet="i0"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="S2"/>
+         <dest obj="debounce1_5" inlet="i0"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="S1"/>
+         <dest obj="debounce1_4" inlet="i0"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="L3"/>
+         <dest obj="debounce1_2" inlet="i0"/>
+         <dest obj="1_3" inlet="l3"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="L4"/>
+         <dest obj="debounce1_3" inlet="i0"/>
+         <dest obj="1_3" inlet="l4"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v12"/>
+         <dest obj="delay_2" inlet="repitch"/>
+         <dest obj="delay_3" inlet="repitch"/>
+         <dest obj="delay_4" inlet="repitch"/>
+         <dest obj="bool_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="inv_2" outlet="o"/>
+         <dest obj="delay_1" inlet="unsync"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="bpm"/>
+         <dest obj="1_3" inlet="bpm"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="encoderup"/>
+         <dest obj="object_6" inlet="Eup"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="encoderdwn"/>
+         <dest obj="object_6" inlet="Edown"/>
+      </net>
+      <net>
+         <source obj="object_2" outlet="out"/>
+         <dest obj="preset_1" inlet="snapshot"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="controlID"/>
+         <dest obj="1_3" inlet="controlID"/>
+      </net>
+      <net>
+         <source obj="delay_1" outlet="division"/>
+         <dest obj="i_6" inlet="in"/>
+         <dest obj="1_3" inlet="delaydivision"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v11"/>
+         <dest obj="inv_2" inlet="i"/>
+         <dest obj="led_1" inlet="in"/>
+         <dest obj="bool_3" inlet="in"/>
+         <dest obj="1_3" inlet="delaysync"/>
+      </net>
+      <net>
+         <source obj="LFO_1" outlet="division"/>
+         <dest obj="1_3" inlet="moddivision"/>
+      </net>
+      <net>
+         <source obj="button_2" outlet="o"/>
+         <dest obj="input_1" inlet="detect"/>
+      </net>
+      <net>
+         <source obj="input_1" outlet="left"/>
+         <dest obj="vca_9" inlet="a"/>
+         <dest obj="vca_10" inlet="a"/>
+      </net>
+      <net>
+         <source obj="interp_5" outlet="o"/>
+         <dest obj="+_4" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="+_6" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
+         <dest obj="+_11" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="vca_15" outlet="o"/>
+         <dest obj="+_12" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="vca_14" outlet="o"/>
+         <dest obj="+_11" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="read_3" outlet="out"/>
+         <dest obj="vca_16" inlet="a"/>
+      </net>
+      <net>
+         <source obj="vca_16" outlet="o"/>
+         <dest obj="+_6" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="interp_6" outlet="o"/>
+         <dest obj="+_5" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="vca_17" outlet="o"/>
+         <dest obj="+_6" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="read_4" outlet="out"/>
+         <dest obj="vca_17" inlet="a"/>
+      </net>
+      <net>
+         <source obj="+_5" outlet="out"/>
+         <dest obj="read_4" inlet="time"/>
+      </net>
+      <net>
+         <source obj="interp_4" outlet="o"/>
+         <dest obj="+_4" inlet="in2"/>
+         <dest obj="+_5" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="+_4" outlet="out"/>
+         <dest obj="read_3" inlet="time"/>
+      </net>
+      <net>
+         <source obj="input_1" outlet="right"/>
+         <dest obj="vca_14" inlet="a"/>
+         <dest obj="vca_15" inlet="a"/>
+      </net>
+      <net>
+         <source obj="lp_2" outlet="out"/>
+         <dest obj="delayright" inlet="in"/>
+      </net>
+      <net>
+         <source obj="object_14" outlet="delaytime"/>
+         <dest obj="object_10" inlet="timeL"/>
+         <dest obj="object_10" inlet="timeR"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pmode"/>
+         <dest obj="1_3" inlet="presetmode"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tap"/>
+         <dest obj="1_1" inlet="tap"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pup"/>
+         <dest obj="object_2" inlet="up"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pdown"/>
+         <dest obj="object_2" inlet="down"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Tup"/>
+         <dest obj="1_1" inlet="bpmUP"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Tdown"/>
+         <dest obj="1_1" inlet="bpmDOWN"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pload"/>
+         <dest obj="or_2" inlet="i3"/>
+         <dest obj="or_3" inlet="i2"/>
+         <dest obj="preset_1" inlet="load"/>
+         <dest obj="delay_1" inlet="killtapset"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Psave"/>
+         <dest obj="preset_1" inlet="save"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="tapping"/>
+         <dest obj="or_1" inlet="i2"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tapdivUP"/>
+         <dest obj="object_7" inlet="up"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tapdivDOWN"/>
+         <dest obj="object_7" inlet="down"/>
+      </net>
+      <net>
+         <source obj="object_7" outlet="out"/>
+         <dest obj="object_1" inlet="i15"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v15"/>
+         <dest obj="i_1" inlet="in"/>
+         <dest obj="object_7" inlet="setvalue"/>
+         <dest obj="delay_1" inlet="tapdivision"/>
+         <dest obj="1_3" inlet="tapdivision"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tapon"/>
+         <dest obj="1_3" inlet="tap"/>
+      </net>
+      <net>
+         <source obj="delay_3" outlet="timeA"/>
+         <dest obj="interp_5" inlet="i"/>
+      </net>
+      <net>
+         <source obj="delay_3" outlet="envA"/>
+         <dest obj="vca_16" inlet="v"/>
+      </net>
+      <net>
+         <source obj="delay_3" outlet="timeB"/>
+         <dest obj="interp_6" inlet="i"/>
+      </net>
+      <net>
+         <source obj="delay_3" outlet="envB"/>
+         <dest obj="vca_17" inlet="v"/>
+      </net>
+      <net>
+         <source obj="object_8" outlet="L"/>
+         <dest obj="delay_2" inlet="time"/>
+      </net>
+      <net>
+         <source obj="object_8" outlet="R"/>
+         <dest obj="delay_3" inlet="time"/>
+      </net>
+      <net>
+         <source obj="unipolar2bipolar_1" outlet="o"/>
+         <dest obj="inv_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v10"/>
+         <dest obj="unipolar2bipolar_1" inlet="i"/>
+         <dest obj="dial_12" inlet="in"/>
+      </net>
+      <net>
+         <source obj="interp_8" outlet="o"/>
+         <dest obj="+_7" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="+_9" outlet="out"/>
+         <dest obj="+_10" inlet="in2"/>
+         <dest obj="sum3_1" inlet="in3"/>
+      </net>
+      <net>
+         <source obj="lp_3" outlet="out"/>
+         <dest obj="fbackL" inlet="in"/>
+      </net>
+      <net>
+         <source obj="read_5" outlet="out"/>
+         <dest obj="vca_21" inlet="a"/>
+      </net>
+      <net>
+         <source obj="vca_21" outlet="o"/>
+         <dest obj="+_9" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="interp_9" outlet="o"/>
+         <dest obj="+_8" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="vca_22" outlet="o"/>
+         <dest obj="+_9" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="read_6" outlet="out"/>
+         <dest obj="vca_22" inlet="a"/>
+      </net>
+      <net>
+         <source obj="+_8" outlet="out"/>
+         <dest obj="read_6" inlet="time"/>
+      </net>
+      <net>
+         <source obj="interp_7" outlet="o"/>
+         <dest obj="+_7" inlet="in2"/>
+         <dest obj="+_8" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="+_7" outlet="out"/>
+         <dest obj="read_5" inlet="time"/>
+      </net>
+      <net>
+         <source obj="delay_4" outlet="timeA"/>
+         <dest obj="interp_8" inlet="i"/>
+      </net>
+      <net>
+         <source obj="delay_4" outlet="timeB"/>
+         <dest obj="interp_9" inlet="i"/>
+      </net>
+      <net>
+         <source obj="delay_4" outlet="envA"/>
+         <dest obj="vca_21" inlet="v"/>
+      </net>
+      <net>
+         <source obj="delay_4" outlet="envB"/>
+         <dest obj="vca_22" inlet="v"/>
+      </net>
+      <net>
+         <source obj="object_10" outlet="L"/>
+         <dest obj="object_8" inlet="L"/>
+      </net>
+      <net>
+         <source obj="object_10" outlet="R"/>
+         <dest obj="object_8" inlet="R"/>
+         <dest obj="object_9" inlet="L"/>
+         <dest obj="object_9" inlet="R"/>
+      </net>
+      <net>
+         <source obj="object_9" outlet="L"/>
+         <dest obj="delay_4" inlet="time"/>
+      </net>
+      <net>
+         <source obj="vca_23" outlet="o"/>
+         <dest obj="lp_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="+_10" outlet="out"/>
+         <dest obj="vca_23" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v5"/>
+         <dest obj="object_10" inlet="Roffset"/>
+         <dest obj="dial_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="+_11" outlet="out"/>
+         <dest obj="output_1" inlet="right"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob1"/>
+         <dest obj="object_1" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob2"/>
+         <dest obj="object_1" inlet="i2"/>
+      </net>
+      <net>
+         <source obj="simple_1" outlet="out"/>
+         <dest obj="xfade_1" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="simple_2" outlet="out"/>
+         <dest obj="xfade_1" inlet="i2"/>
+      </net>
+      <net>
+         <source obj="object_12" outlet="trigA"/>
+         <dest obj="simple_1" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="object_12" outlet="trigB"/>
+         <dest obj="simple_2" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="LFO_1" outlet="resync"/>
+         <dest obj="or_2" inlet="i2"/>
+      </net>
+      <net>
+         <source obj="object_12" outlet="fadeB"/>
+         <dest obj="xfade_1" inlet="c"/>
+      </net>
+      <net>
+         <source obj="or_2" outlet="o"/>
+         <dest obj="object_12" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="u8u_3" outlet="out"/>
+         <dest obj="*c_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="object_11" outlet="o1"/>
+         <dest obj="object_1" inlet="i13"/>
+      </net>
+      <net>
+         <source obj="object_11" outlet="o2"/>
+         <dest obj="object_1" inlet="i14"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="bypass"/>
+         <dest obj="wetdry_5" inlet="bypass"/>
+         <dest obj="object_3" inlet="i1"/>
+         <dest obj="1_3" inlet="bypass"/>
+      </net>
+      <net>
+         <source obj="debounce1_1" outlet="o0"/>
+         <dest obj="object_6" inlet="Ebutton"/>
+      </net>
+      <net>
+         <source obj="seq" outlet="step"/>
+         <dest obj="object_14" inlet="step"/>
+      </net>
+      <net>
+         <source obj="delay_1" outlet="delaytime"/>
+         <dest obj="object_14" inlet="delaytime"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v14"/>
+         <dest obj="inv_3" inlet="i"/>
+         <dest obj="bool_2" inlet="in"/>
+         <dest obj="1_3" inlet="lfosync"/>
+      </net>
+      <net>
+         <source obj="inv_3" outlet="o"/>
+         <dest obj="LFO_1" inlet="unsync"/>
+      </net>
+      <net>
+         <source obj="seq" outlet="division"/>
+         <dest obj="1_3" inlet="seqdivision"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v13"/>
+         <dest obj="inv_1" inlet="i"/>
+         <dest obj="led_2" inlet="in"/>
+         <dest obj="bool_4" inlet="in"/>
+         <dest obj="1_3" inlet="seqsync"/>
+      </net>
+      <net>
+         <source obj="inv_1" outlet="o"/>
+         <dest obj="seq" inlet="unsync"/>
+      </net>
+      <net>
+         <source obj="seq" outlet="depth"/>
+         <dest obj="1_3" inlet="seqdepth"/>
+      </net>
+      <net>
+         <source obj="unipolar2bipolar_2" outlet="o"/>
+         <dest obj="seq" inlet="depth"/>
+      </net>
+      <net>
+         <source obj="object_13" outlet="o1"/>
+         <dest obj="object_1" inlet="i11"/>
+      </net>
+      <net>
+         <source obj="object_13" outlet="o2"/>
+         <dest obj="object_1" inlet="i12"/>
+      </net>
+      <net>
+         <source obj="dial_5" outlet="out"/>
+         <dest obj="delay_2" inlet="smooth"/>
+         <dest obj="delay_3" inlet="smooth"/>
+         <dest obj="delay_4" inlet="smooth"/>
+      </net>
+      <net>
+         <source obj="expCurveK_1" outlet="out"/>
+         <dest obj="object_8" inlet="width"/>
+         <dest obj="object_9" inlet="width"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob10"/>
+         <dest obj="object_1" inlet="i10"/>
+      </net>
+      <net>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="55_1" inlet="depth"/>
+      </net>
+      <net>
+         <source obj="dial_6" outlet="out"/>
+         <dest obj="object_8" inlet="widthmax"/>
+         <dest obj="object_9" inlet="widthmax"/>
+      </net>
+      <net>
+         <source obj="inv_4" outlet="out"/>
+         <dest obj="expCurveK_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="+_12" outlet="out"/>
+         <dest obj="lp_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="+_12" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="or_1" outlet="o"/>
+         <dest obj="delay_1" inlet="tapset"/>
+      </net>
+      <net>
+         <source obj="delay_1" outlet="pulse"/>
+         <dest obj="led_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="bpmreset"/>
+         <dest obj="or_1" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out1"/>
+         <dest obj="display_1" inlet="line1"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out2"/>
+         <dest obj="display_1" inlet="line2"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out3"/>
+         <dest obj="display_1" inlet="line3"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out4"/>
+         <dest obj="display_1" inlet="line4"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v17"/>
+         <dest obj="i_3" inlet="in"/>
+         <dest obj="1_3" inlet="tappedbpm"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="mode"/>
+         <dest obj="1_3" inlet="midion"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="midirevert"/>
+         <dest obj="1_1" inlet="midirevert"/>
+      </net>
+      <net>
+         <source obj="object_3" outlet="o1"/>
+         <dest obj="or_2" inlet="i4"/>
+      </net>
+      <net>
+         <source obj="preset_1" outlet="snapshot"/>
+         <dest obj="1_3" inlet="preset"/>
+      </net>
+      <net>
+         <source obj="sum3_1" outlet="out"/>
+         <dest obj="output_1" inlet="left"/>
+      </net>
+      <net>
+         <source obj="input_1" outlet="clipping"/>
+         <dest obj="1_3" inlet="inputclip"/>
+      </net>
+      <net>
+         <source obj="or_3" outlet="o"/>
+         <dest obj="delay_1" inlet="pulsereset"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knobmoving"/>
+         <dest obj="preset_1" inlet="delayinitpatch"/>
+      </net>
+      <net>
+         <source obj="preset_1" outlet="initsaved"/>
+         <dest obj="save_1" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tablesave"/>
+         <dest obj="preset_1" inlet="saveinitpatch"/>
+      </net>
+      <net>
+         <source obj="debounce1_2" outlet="o0"/>
+         <dest obj="object_13" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="debounce1_3" outlet="o0"/>
+         <dest obj="object_11" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="debounce1_4" outlet="o0"/>
+         <dest obj="object_6" inlet="s1"/>
+      </net>
+      <net>
+         <source obj="debounce1_5" outlet="o0"/>
+         <dest obj="object_6" inlet="s2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>0</NPresets>
+      <NPresetEntries>0</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+      <Author>matroe</Author>
+   </settings>
+   <notes><![CDATA[<html><h3><span style="color:#0000AA">CONTROLS</span>
+<br>Knob 1 = wet/dry
+<br>knob 2 = delay time (divisions if synced)
+<br>Knob 3 = Feedback
+<br>Knob 4 = Lo pass filter
+<br>Knob 5 = Ping pong (offsets right channel, when at max ping pong greatness is achieved)
+<br>Knob 6 = Modulation speed (divisions if synced)
+<br>Knob 7 = Modulation depth
+<br>Knob 8 = Sequencer speed (Sequencer steps up and down straight and dotted delay times, from the current delay time)
+<br>Knob 9 = Sequencer depth
+<br>Knob 10 = width - offsets either right or left channel slightly to achieve a wider sound. repeats get progressively wider
+<br>
+<br>Button S1 - tap tempo (if you hold down the tap button and move the encoder you can change the division that the taps create. I.e. if set to 8ths and you tap quarters,<br>you will get double the speed of your tap. This is ignored if midi time is set to sync, in which case it uses the synced time knob setting).
+<br>
+<br>Button S2 = Presetmode (more on that later)
+<br>
+<br>Encoder = BPM, afffects synced times and is also set by tap tempo
+<br>
+<br>L3 - short press turns sync on/off for delay time. Long press enables pitch artifacts when changing delay time.
+<br>L4 - short press turns sync on/off for the sequencer speed, long press turns sync on/off for the modulation speed.
+<br>
+<br>
+<br><span style="color:#0000AA">PRESET MODE</span>
+<br>Press S2 to enter preset mode.
+<br>Turn the encoder to select a preset.
+<br>Press the encoder to load selected preset.
+<br>Press S1 to save current settings to the selected preset
+<br>Long press S1 to save all presets and current settings to the sd card (if you don't do this the presets are lost when you reboot the ksoloti!!!).
+<br>
+<br>
+<br><span style="color:#0000AA">SYNCING</span>
+<br>Sync is either midi, tap or BPM.
+<br>If you tap when the delay time is unsynced, it will sync to the tap until the delay time is changed with the knob. It will use the tap division.
+<br>If you tap when the delay time is synced, it will use the delay knob division.
+<br>Tap affects the BPM setting too.
+<br>
+<br>
+<br><span style="color:#0000AA">CHANGES IN V2</span>
+<br>The OLED screen displays when the patch is listening to midi clock.
+<br>The patch responds to midi note messages to change preset on channel 16 (you can sequence whole preset changes easily! You can switch these to program messages, or the midi channel, on the preset object.)
+<br>The patch shows when the input is overloaded (screen shows an asterisk to the left).
+<br>I've added a "centre" parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean!
+<br>Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars.]]></notes>
+   <windowPos>
+      <x>-7</x>
+      <y>-7</y>
+      <width>1550</width>
+      <height>848</height>
+   </windowPos>
+</patch-1.0>
