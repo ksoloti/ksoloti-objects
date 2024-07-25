@@ -60,15 +60,15 @@
       <Author>Johannes Taelman, Ksoloti</Author>
       <License>BSD</License>
    </settings>
-   <notes><![CDATA[Controller object. To use this: in file->preferences, enter "cycle buttons reversed" in the "controller object" field.
-Cycles through patches in a patch bank by using buttons S1/S2. Button behaviour is reversed:
+   <notes><![CDATA[Controller object. To use this: in file->preferences, enter "ksoloti/controller/cycle buttons reversed" in the "controller object" field.
+Cycles through patches in a patch bank by using buttons S1/S2.
 Push S1 to launch the PREVIOUS patch in the patch bank.
 Push S2 to launch the NEXT patch in the patch bank.
 ]]></notes>
    <windowPos>
       <x>8</x>
       <y>8</y>
-      <width>1296</width>
-      <height>705</height>
+      <width>696</width>
+      <height>305</height>
    </windowPos>
 </patch-1.0>
