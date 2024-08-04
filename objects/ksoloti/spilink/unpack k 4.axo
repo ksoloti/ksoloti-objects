@@ -1,7 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="unpack k 4" uuid="4caf3061-a70e-4164-86c8-68c0c028ecd3">
       <sDescription>Use one spilink audio channel to send/receive up to 16 control rate values between linked boards.
-NOTE: X/Y placement of spilink objects within your patch is important due to the tight timing. If you encounter noise or aliasing, try to place the spilink objects at the top of your canvas and the send objects higher than the receive objects.</sDescription>
+</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>GPL</license>
       <helpPatch>spilink.axh</helpPatch>
