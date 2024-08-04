@@ -3,7 +3,7 @@
       <sDescription>Reads an external analog voltage. Voltage range 0 to 3.3V maps to 0..64, with 12-bit precision. Apply no more than 3.3V! Object edited for sebiik axo-427-core.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
-      <helpPatch>analog.axh</helpPatch>
+      <helpPatch>in analog.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32 name="out" description="external analog control voltage input"/>

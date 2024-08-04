@@ -1,0 +1,58 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="42" y="14" text="&lt;html&gt;&lt;h2&gt;&lt;i&gt;led pwm *&lt;/i&gt; objects expect values from 0..64 and will simply stay off when they receive negative values."/>
+   <comment type="patch/comment" x="42" y="70" text="Bipolar LFO... -64..64"/>
+   <comment type="patch/comment" x="168" y="70" text="converting to 0..64"/>
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_1" x="42" y="84">
+      <params>
+         <frac32.s.map name="pitch" value="-24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/bipolar2unipolar" uuid="f6f63d71053d572d3c795f83c7ec11dfbbce82dd" name="bipolar2unipolar_1" x="168" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/out/led pwm 2" uuid="10d54bb3-12a9-4661-9a8c-5dfb2d65c366" name="led_1" x="322" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="462" y="84" text="&lt;html&gt;&lt;h2&gt;Fade the brightness!"/>
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_2" x="42" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/bipolar2unipolar" uuid="f6f63d71053d572d3c795f83c7ec11dfbbce82dd" name="bipolar2unipolar_2" x="168" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="bipolar2unipolar_1" inlet="i"/>
+      </net>
+      <net>
+         <source obj="bipolar2unipolar_1" outlet="o"/>
+         <dest obj="led_1" inlet="led1"/>
+      </net>
+      <net>
+         <source obj="sine_2" outlet="wave"/>
+         <dest obj="bipolar2unipolar_2" inlet="i"/>
+      </net>
+      <net>
+         <source obj="bipolar2unipolar_2" outlet="o"/>
+         <dest obj="led_1" inlet="led2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>240</x>
+      <y>160</y>
+      <width>794</width>
+      <height>375</height>
+   </windowPos>
+</patch-1.0>

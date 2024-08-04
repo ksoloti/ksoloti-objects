@@ -8,7 +8,7 @@ LED1 (green, PG6) using software
 LED2 (red, PC6) using hardware timer 8</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
-      <helpPatch>pwm.axh</helpPatch>
+      <helpPatch>led pwm.axh</helpPatch>
       <inlets>
          <frac32.positive name="in" description="pwm ratio"/>
       </inlets>

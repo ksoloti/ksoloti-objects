@@ -10,7 +10,7 @@ LED3 (dual-color, PA9 and PC7) using hardware timers 1 and 8
 LED4 (dual-color, PB6 and PB7) using hardware timer 4</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
-      <helpPatch>pwm.axh</helpPatch>
+      <helpPatch>led big genes.axh</helpPatch>
       <inlets>
          <frac32.positive name="inA" description="pwm ratio"/>
          <frac32.positive name="inB" description="pwm ratio"/>

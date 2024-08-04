@@ -1,0 +1,81 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="84" y="14" text="&lt;html&gt;&lt;h2&gt;Pulse LED1 using a simple square wave LFO."/>
+   <obj type="lfo/square" uuid="de6909eb64db13af5b43f979a4c130024b3a4793" name="square_1" x="84" y="56">
+      <params>
+         <frac32.s.map name="pitch" value="-24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/led" uuid="5d902cb5-b92e-46dc-9a75-1d4a86deaf1a" name="led_1" x="196" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="1"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="84" y="182" text="&lt;html&gt;&lt;h2&gt;Use a tempo syncable LFO to PWM remaining LEDs in sync to the tempo."/>
+   <obj type="sss/lfo/tempoSyncedLFO" uuid="75b84958-bc07-418c-b306-9b29a4bdcee1" name="tempoSyncedLFO_1" x="84" y="224">
+      <params>
+         <int32 name="multiply" value="1"/>
+         <int32 name="divide" value="4"/>
+         <int32 name="octave" value="0"/>
+         <frac32.u.map name="phase" value="0.0"/>
+         <frac32.s.map name="PW" value="0.0"/>
+         <bool32.tgl name="syncRst" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/led pwm" uuid="f446b7ca-99c6-493d-97d0-20314da49589" name="led_2" x="504" y="224">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="2"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="238" y="238" text="pwm objects only react to positive values"/>
+   <comment type="patch/comment" x="238" y="252" text="invert to display negative half of the waveform"/>
+   <obj type="math/inv" uuid="565521d3699b36d8095aa1c79b9ad0046fb133ce" name="inv_1" x="294" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="224" y="280" text="--&gt; bipolar"/>
+   <obj type="ksoloti/big genes/led pwm 2" uuid="3fb2c0b0-63ad-4b98-87c1-6220b2d24aa0" name="led_3" x="504" y="294">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="3 blue | red"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/big genes/led pwm 2" uuid="3fb2c0b0-63ad-4b98-87c1-6220b2d24aa0" name="led_4" x="504" y="378">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="4 blue | red"/>
+      </attribs>
+   </obj>
+   <nets>
+      <net>
+         <source obj="tempoSyncedLFO_1" outlet="triangle"/>
+         <dest obj="inv_1" inlet="in"/>
+         <dest obj="led_3" inlet="inA"/>
+         <dest obj="led_4" inlet="inA"/>
+      </net>
+      <net>
+         <source obj="inv_1" outlet="out"/>
+         <dest obj="led_2" inlet="in"/>
+         <dest obj="led_3" inlet="inB"/>
+         <dest obj="led_4" inlet="inB"/>
+      </net>
+      <net>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="tempoSyncedLFO_1" inlet="sync"/>
+         <dest obj="led_1" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>396</x>
+      <y>138</y>
+      <width>680</width>
+      <height>634</height>
+   </windowPos>
+</patch-1.0>

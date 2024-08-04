@@ -1,0 +1,69 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="analog p" uuid="78c39cf4-281b-4230-88f9-4d663f4fca50">
+      <sDescription>Low-speed 12 bit digital to analog conversion, not suitable for audio signals, but for control voltages.
+General purpose object for Ksoloti Core. Single output.
+Unipolar input (0...64). Suitable for unipolar LFOs, envelopes, etc.
+NOT for creating 1V/oct pitch CV.</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+	   <helpPatch>out analog.axh</helpPatch>
+      <inlets>
+         <frac32.positive name="cv"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="output">
+            <MenuEntries>
+               <string>CV1 (PA4)</string>
+               <string>CV2 (PA5)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="offset">
+            <MenuEntries>
+               <string>E4 (0) = 0V (Axoloti)</string>
+               <string>C4 (-4) = 0V (Eurorack)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>(1&lt;&lt;22)</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int calc_cv_unipolar(int in, int offs) {
+	int val = (1<<27) - in + offs;
+	return __USAT(val, 27);
+}]]></code.declaration>
+      <code.init><![CDATA[#if attr_output == 0
+palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+#elif attr_output == 1
+palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+#endif
+
+RCC->APB1ENR |= 0x20000000;
+
+#if attr_output == 0
+DAC->CR |= 0x00000001;
+#elif attr_output == 1
+DAC->CR |= 0x00010000;
+#endif]]></code.init>
+      <code.dispose><![CDATA[DAC->CR = 0x0;
+RCC->APB1ENR &= ~0x20000000;
+
+#if attr_output == 0
+palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+#elif attr_output == 1
+palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+#endif]]></code.dispose>
+      <code.krate><![CDATA[#if attr_output == 0
+DAC->DHR12R1 = calc_cv_unipolar(inlet_cv, attr_offset)>>15;
+#elif attr_output == 1
+DAC->DHR12R2 = calc_cv_unipolar(inlet_cv, attr_offset)>>15;
+#endif]]></code.krate>
+   </obj.normal>
+</objdefs>

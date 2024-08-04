@@ -3,7 +3,7 @@
       <sDescription>External digital output pin control. Object compatible with the Ksoloti board only.</sDescription>
       <author>Johannes Taelman, sebiik</author>
       <license>BSD</license>
-      <helpPatch>out-digital.axh</helpPatch>
+      <helpPatch>out digital.axh</helpPatch>
       <inlets>
          <bool32 name="in" description="positive = true"/>
       </inlets>
