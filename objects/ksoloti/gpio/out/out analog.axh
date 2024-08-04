@@ -1,208 +1,103 @@
 <patch-1.0 appVersion="1.0.12">
-   <patcher type="patch/patcher" uuid="4f154210-7fb2-4338-adaf-7928bb5e2f1d" name="cv handler" x="434" y="392">
+   <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h2&gt;This will output sine waves from 0V to 3.3V at pins PA4 and PA5."/>
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_1" x="14" y="70">
+      <params>
+         <frac32.s.map name="pitch" value="-48.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 2" uuid="3bcb8a666381ed18b8962eda50b1aa679136f618" name="mux_1" x="210" y="70">
       <params/>
       <attribs/>
-      <subpatch appVersion="1.0.12">
-         <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="index" x="266" y="140">
-            <params/>
-            <attribs/>
-         </obj>
-         <patchobj type="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a" name="handle" x="364" y="140">
-            <params/>
-            <attribs/>
-            <object id="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a">
-               <author>Are Leistad</author>
-               <license>BSD</license>
-               <helpPatch>mux.axh</helpPatch>
-               <inlets>
-                  <int32.positive name="in" description="select"/>
-               </inlets>
-               <outlets>
-                  <frac32 name="out" description="output"/>
-               </outlets>
-               <displays/>
-               <params/>
-               <attribs/>
-               <includes/>
-               <code.declaration><![CDATA[int val = 0;]]></code.declaration>
-               <code.krate><![CDATA[val = inlet_in > 5 ? 5 : inlet_in < -5 ? -5 : inlet_in;
-outlet_out = (val * 12)<<21;]]></code.krate>
-            </object>
-         </patchobj>
-         <obj type="patch/outlet f" uuid="d18a9a550bcaaebac94e25983bd0e27dbfd7233c" name="out" x="462" y="140">
-            <params/>
-            <attribs/>
-         </obj>
-         <nets>
-            <net>
-               <source obj="index" outlet="inlet"/>
-               <dest obj="handle" inlet="in"/>
-            </net>
-            <net>
-               <source obj="handle" outlet="out"/>
-               <dest obj="out" inlet="outlet"/>
-            </net>
-         </nets>
-         <settings>
-            <subpatchmode>no</subpatchmode>
-         </settings>
-         <notes><![CDATA[]]></notes>
-         <windowPos>
-            <x>920</x>
-            <y>0</y>
-            <width>780</width>
-            <height>620</height>
-         </windowPos>
-      </subpatch>
-   </patcher>
-   <obj type="ksoloti/gills/cv out b 2" uuid="28629cd3-e124-4434-8179-a9b0c40cfcce" name="cv_1" x="532" y="392">
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_1" x="294" y="70">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/gpio/out/analog b 2" uuid="28629cd3-e224-4434-8179-a9b0c40cfcd0" name="analog_1" x="378" y="70">
       <params/>
       <attribs>
          <combo attributeName="offset" selection="E4 (0) = 0V (Axoloti)"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_1" x="700" y="392">
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_2" x="14" y="154">
+      <params>
+         <frac32.s.map name="pitch" value="-36.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 2" uuid="3bcb8a666381ed18b8962eda50b1aa679136f618" name="mux_2" x="210" y="154">
       <params/>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba" name="voltage switcher" x="28" y="406">
-      <params>
-         <int32.vradio name="value" value="5"/>
-      </params>
-      <attribs/>
-      <object id="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba">
-         <sDescription>positive integer control, vertical radio buttons</sDescription>
-         <author>Johannes Taelman</author>
-         <license>BSD</license>
-         <helpPatch>ctrl.axh</helpPatch>
-         <inlets/>
-         <outlets>
-            <int32.positive name="out" description="output"/>
-         </outlets>
-         <displays/>
-         <params>
-            <int32.vradio name="value" noLabel="true">
-               <MaxValue i="11"/>
-            </int32.vradio>
-         </params>
-         <attribs/>
-         <includes/>
-         <code.krate><![CDATA[outlet_out = 5-param_value;]]></code.krate>
-      </object>
-   </patchobj>
-   <comment type="patch/comment" x="126" y="406" text="&lt;html&gt;Bipolar&lt;br&gt;(default):"/>
-   <comment type="patch/comment" x="210" y="406" text="&lt;html&gt;Unipolar&lt;br&gt;(jumper set):"/>
-   <comment type="patch/comment" x="126" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
-   <comment type="patch/comment" x="210" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
-   <patcher type="patch/patcher" uuid="83ab3366-7207-426f-9e53-d9672938b0e3" name="oled stuff" x="434" y="490">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_2" x="294" y="154">
       <params/>
       <attribs/>
-      <subpatch appVersion="1.0.12">
-         <obj type="gpio/i2c/config" uuid="b095a33e56de5fcd23740a7d983bc0bafb315d81" name="config_1" x="308" y="0">
-            <params/>
-            <attribs/>
-         </obj>
-         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_2" x="252" y="42">
-            <params/>
-            <attribs>
-               <table attributeName="str" table="CV CALIBR."/>
-            </attribs>
-         </obj>
-         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="252" y="112">
-            <params/>
-            <attribs>
-               <table attributeName="str" table="CV 1&amp;2:"/>
-            </attribs>
-         </obj>
-         <obj type="tiar/HW/OLED128x64niceWOScope" uuid="5bde8c3d-fe37-4133-138e-edb113767bc8" name="OLED128x64niceWOScope_1" x="476" y="112">
-            <params/>
-            <attribs>
-               <combo attributeName="type" selection="SH1106"/>
-               <combo attributeName="I2CADDR" selection="0x3C"/>
-            </attribs>
-         </obj>
-         <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="value" x="84" y="182">
-            <params/>
-            <attribs/>
-         </obj>
-         <obj type="math/*" uuid="6a31299e3a491edd8c4df0e809a519a35cc08a3b" name="*_1" x="252" y="182">
-            <params/>
-            <attribs/>
-         </obj>
-         <obj type="tiar/HW/bar" uuid="29bab9de-7b6b-4c8e-87ee-75013c6b6e2f" name="bar_1" x="322" y="182">
-            <params/>
-            <attribs/>
-         </obj>
-         <obj type="const/i" uuid="e202f44b2df17ae0b3e663b98ea6b14c8ff00408" name="i_2" x="84" y="224">
-            <params/>
-            <attribs>
-               <spinner attributeName="value" value="12"/>
-            </attribs>
-         </obj>
-         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_3" x="252" y="252">
-            <params/>
-            <attribs>
-               <table attributeName="str" table="0 1 2 3 4 5"/>
-            </attribs>
-         </obj>
-         <nets>
-            <net>
-               <source obj="c_1" outlet="out"/>
-               <dest obj="OLED128x64niceWOScope_1" inlet="line2"/>
-            </net>
-            <net>
-               <source obj="c_2" outlet="out"/>
-               <dest obj="OLED128x64niceWOScope_1" inlet="line1"/>
-            </net>
-            <net>
-               <source obj="bar_1" outlet="out"/>
-               <dest obj="OLED128x64niceWOScope_1" inlet="line3"/>
-            </net>
-            <net>
-               <source obj="*_1" outlet="result"/>
-               <dest obj="bar_1" inlet="in"/>
-            </net>
-            <net>
-               <source obj="i_2" outlet="out"/>
-               <dest obj="*_1" inlet="b"/>
-            </net>
-            <net>
-               <source obj="c_3" outlet="out"/>
-               <dest obj="OLED128x64niceWOScope_1" inlet="line4"/>
-            </net>
-            <net>
-               <source obj="value" outlet="inlet"/>
-               <dest obj="*_1" inlet="a"/>
-            </net>
-         </nets>
-         <settings>
-            <subpatchmode>no</subpatchmode>
-         </settings>
-         <notes><![CDATA[]]></notes>
-         <windowPos>
-            <x>920</x>
-            <y>0</y>
-            <width>780</width>
-            <height>620</height>
-         </windowPos>
-      </subpatch>
-   </patcher>
-   <comment type="patch/comment" x="14" y="616" text="&lt;html&gt;&lt;h1 style=&quot;color:#A00000;&quot;&gt;Note: If you set or clear a UNIPOLAR jumper later on you may have to re-calibrate the respective CV channel."/>
+   </obj>
+   <comment type="patch/comment" x="14" y="252" text="off: LFOs control CV"/>
+   <comment type="patch/comment" x="14" y="266" text="on: MIDI note controls CV"/>
+   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="use midi note" x="14" y="280">
+      <params>
+         <bool32.tgl name="b" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/gain" uuid="6b4dd3da49f98e54900f6c20031f38f4624fa364" name="gain_1" x="308" y="294">
+      <params>
+         <frac32.u.map name="amp" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="14" y="350" text="&lt;html&gt;&lt;h2&gt;Open [Window &amp;gt; Keyboard] to play notes"/>
+   <obj type="midi/in/keyb" uuid="53b04874696932f38aceaa168bd5d9efb743716d" name="keyb_1" x="14" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="drj/math/offset_scale_1" uuid="8943f98651aed59bf140da20c3f97585a2dffa8d" name="offset_scale_1_1" x="238" y="392">
+      <params>
+         <frac32.s.map name="offset" value="0.0"/>
+         <frac32.s.map name="scale" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="406" y="392" text="&lt; adjust gain, scale and offset."/>
+   <comment type="patch/comment" x="406" y="406" text="Maybe you can get a few octaves of 1V/oct?"/>
    <nets>
       <net>
-         <source obj="cv handler" outlet="out"/>
-         <dest obj="cv_1" inlet="cv1"/>
-         <dest obj="cv_1" inlet="cv2"/>
+         <source obj="use midi note" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
+         <dest obj="mux_2" inlet="s"/>
+      </net>
+      <net>
+         <source obj="offset_scale_1_1" outlet="out"/>
+         <dest obj="gain_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="mux_1" outlet="o"/>
          <dest obj="dial_1" inlet="in"/>
+         <dest obj="analog_1" inlet="cv1"/>
       </net>
       <net>
-         <source obj="voltage switcher" outlet="out"/>
-         <dest obj="encoder_1" inlet="set"/>
+         <source obj="mux_2" outlet="o"/>
+         <dest obj="dial_2" inlet="in"/>
+         <dest obj="analog_1" inlet="cv2"/>
       </net>
       <net>
-         <source obj="encoder_1" outlet="out"/>
-         <dest obj="cv handler" inlet="index"/>
-         <dest obj="oled stuff" inlet="value"/>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="mux_1" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="sine_2" outlet="wave"/>
+         <dest obj="mux_2" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="keyb_1" outlet="note"/>
+         <dest obj="offset_scale_1_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="gain_1" outlet="out"/>
+         <dest obj="mux_2" inlet="i2"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
    </nets>
    <settings>
@@ -210,9 +105,9 @@ outlet_out = (val * 12)<<21;]]></code.krate>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>412</x>
-      <y>211</y>
-      <width>1036</width>
-      <height>807</height>
+      <x>388</x>
+      <y>26</y>
+      <width>655</width>
+      <height>622</height>
    </windowPos>
 </patch-1.0>
