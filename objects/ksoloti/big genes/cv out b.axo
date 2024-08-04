@@ -5,7 +5,7 @@ To be used with Ksoloti Big Genes. Single output.
 Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, etc.</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
-	   <helpPatch>cv out.axh</helpPatch>
+	   <helpPatch>cv out big genes.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="cv"/>
       </inlets>

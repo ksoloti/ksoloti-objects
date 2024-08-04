@@ -5,7 +5,7 @@ To be used with the Gills CV expander board. Single output.
 Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, etc.</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
-	   <helpPatch>cv out.axh</helpPatch>
+	   <helpPatch>cv out gills.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="cv"/>
       </inlets>
