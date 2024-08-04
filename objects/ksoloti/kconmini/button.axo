@@ -22,7 +22,7 @@ Pins: PA9, PC1.</sDescription>
             </CEntries>
          </combo>
       </attribs>
-      <code.init><![CDATA[palSetPadMode(attr_button, PAL_MODE_INPUT);]]></code.init>
+      <code.init><![CDATA[palSetPadMode(attr_button, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
       <code.krate><![CDATA[outlet_out = palReadPad(attr_button)<<27;]]></code.krate>
    </obj.normal>
 </objdefs>
