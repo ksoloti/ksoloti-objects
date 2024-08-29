@@ -7,7 +7,7 @@ Extended with channel, pitchbend, and channel pressure.</sDescription>
       <inlets/>
       <outlets/>
       <displays>
-         <int32.bar16 name="channel"/>
+         <int32.label name="channel"/>
          <int32.label name="note "/>
          <int32.label name="velocity "/>
          <bool32 name="gate "/>
@@ -30,7 +30,7 @@ disp_cc = ccnumber;
 disp_value = ccvalue;
 disp_bend = bend;
 disp_chpress = chpress;
-disp_channel = chnl;]]></code.krate>
+disp_channel = chnl+1; /* showing 1-16, not 0-15 */]]></code.krate>
       <code.midihandler><![CDATA[uint8_t msg = (status & 0xF0);
 chnl = (status & 0x0F);
 
@@ -47,8 +47,8 @@ else if (msg == MIDI_CONTROL_CHANGE) {
 	ccvalue  = data2;
 }
 else if (msg == MIDI_PITCH_BEND) {
-	bend =  data2<<8; /* MSB */
-	bend += data1;   /* LSB */
+	bend =  data2 << 8; /* MSB */
+	bend += data1;      /* LSB */
 }
 else if (msg == MIDI_CHANNEL_PRESSURE) {
 	chpress = data1;
