@@ -1,13 +1,13 @@
 <patch-1.0 appVersion="1.0.12">
-   <comment type="patch/comment" x="1484" y="518" text="load default preset"/>
-   <obj type="table/alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" name="data" x="1176" y="532">
+   <comment type="patch/comment" x="1456" y="14" text="load default preset"/>
+   <obj type="table/alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" name="data" x="1148" y="28">
       <params/>
       <attribs>
          <combo attributeName="size" selection="4096"/>
          <file attributeName="filename" file="../gillsdelayDATAX"/>
       </attribs>
    </obj>
-   <patchobj type="patch/object" uuid="2518541f-c1be-4e4c-95cb-b22803b3dcec" name="object_2" x="1484" y="532">
+   <patchobj type="patch/object" uuid="2518541f-c1be-4e4c-95cb-b22803b3dcec" name="object_2" x="1456" y="28">
       <params/>
       <attribs>
          <objref attributeName="table" obj="data"/>
@@ -124,9 +124,9 @@ if (active){
 }]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="56" y="546" text="gills inputs"/>
-   <comment type="patch/comment" x="196" y="546" text="L3 &amp; L4 long press/short press"/>
-   <patchobj type="patch/object" uuid="6688182a-996f-4370-812b-d60a9f2fec6b" name="1_2" x="56" y="560">
+   <comment type="patch/comment" x="28" y="42" text="gills inputs"/>
+   <comment type="patch/comment" x="168" y="42" text="L3 &amp; L4 long press/short press"/>
+   <patchobj type="patch/object" uuid="6688182a-996f-4370-812b-d60a9f2fec6b" name="1_2" x="28" y="56">
       <params>
          <int32 name="knobmoving" value="1500"/>
          <frac32.u.map name="dead" value="0.09999990463256836"/>
@@ -266,11 +266,14 @@ bool ebutton;
 bool etrig;
 // encoer stuff
 
-#define ENC_PORT GPIOC
-#define ENC_A_PIN 7
-#define ENC_B_PIN 1
-#define ENC_SW_PORT GPIOA
-#define ENC_SW_PIN 9
+#ifndef GILLS_ENC_PORT /* Check for this one define to represent all below */
+#define GILLS_ENC_PORT GPIOC
+#define GILLS_ENC_A_PIN 7
+#define GILLS_ENC_B_PIN 1
+
+#define GILLS_ENC_SW_PORT GPIOA
+#define GILLS_ENC_SW_PIN 9
+#endif
 
 int32_t encoder_val = 0;
 int32_t set_last = 0;
@@ -482,11 +485,11 @@ Fmove=3000;
 init=1;
 
 /* Configure encoder pins as input */
-palSetPadMode(ENC_PORT, ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
-palSetPadMode(ENC_PORT, ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(GILLS_ENC_PORT, GILLS_ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(GILLS_ENC_PORT, GILLS_ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
 
 /* Configure encoder switch as input */
-palSetPadMode(ENC_SW_PORT, ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
+palSetPadMode(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
          <code.krate><![CDATA[if (param_resolution>0){
 	resolution=param_resolution;
 }
@@ -666,13 +669,13 @@ else {
 }
 
 
-a = palReadPad(ENC_PORT, ENC_A_PIN);
+a = palReadPad(GILLS_ENC_PORT, GILLS_ENC_A_PIN);
 
 /* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
 if (!a && a_last) {
 	/* If pin A is low but wasn't before, we have caught an event. */
 		
-	if (palReadPad(ENC_PORT, ENC_B_PIN)) {
+	if (palReadPad(GILLS_ENC_PORT, GILLS_ENC_B_PIN)) {
 		/* If pin B is currently HIGH it means we're turning counterclockwise */
 		if (encoder_val > attr_encodermin) encoder_val -= 1;
 		encoderdwn=1;
@@ -692,7 +695,7 @@ outlet_encoder  = encoder_val;
 
 
 /* Now read encoder switch */
-ebutton=palReadPad(GPIOA, 9)<<27;
+ebutton=palReadPad(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN)<<27;
 if (ebutton && !etrig){
 	controlID=14;
 	etrig=1;
@@ -719,7 +722,7 @@ encoderup=0;
 Fmoving=0;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9" name="object_13" x="182" y="560">
+   <patchobj type="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9" name="object_13" x="154" y="56">
       <params>
          <int32 name="time" value="4500"/>
       </params>
@@ -770,7 +773,7 @@ trig=0;
 xtrig=0;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9" name="object_11" x="280" y="560">
+   <patchobj type="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9" name="object_11" x="252" y="56">
       <params>
          <int32 name="time" value="4500"/>
       </params>
@@ -821,11 +824,11 @@ trig=0;
 xtrig=0;]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="350" y="658" text="write controls to table"/>
-   <comment type="patch/comment" x="476" y="658" text="read controls from table"/>
-   <comment type="patch/comment" x="1078" y="658" text="tap division encoder"/>
-   <comment type="patch/comment" x="1358" y="658" text="preset loader/saver"/>
-   <patchobj type="patch/object" uuid="2949beb1-14af-4178-b69c-b334798a2738" name="object_1" x="350" y="672">
+   <comment type="patch/comment" x="322" y="154" text="write controls to table"/>
+   <comment type="patch/comment" x="448" y="154" text="read controls from table"/>
+   <comment type="patch/comment" x="1050" y="154" text="tap division encoder"/>
+   <comment type="patch/comment" x="1330" y="154" text="preset loader/saver"/>
+   <patchobj type="patch/object" uuid="2949beb1-14af-4178-b69c-b334798a2738" name="object_1" x="322" y="168">
       <params/>
       <attribs>
          <objref attributeName="table" obj="data"/>
@@ -1122,7 +1125,7 @@ if (cctrig){
 }]]></code.midihandler>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee" name="tableread_1" x="476" y="672">
+   <patchobj type="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee" name="tableread_1" x="448" y="168">
       <params/>
       <attribs>
          <objref attributeName="table" obj="data"/>
@@ -1179,14 +1182,14 @@ outlet_v16= attr_table.array[__USAT((offset + 15),attr_table.LENGTHPOW)]<<attr_t
 outlet_v17= attr_table.array[__USAT((offset + 16),attr_table.LENGTHPOW)];]]></code.krate>
       </object>
    </patchobj>
-   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_1" x="616" y="672">
+   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_1" x="588" y="168">
       <params/>
       <attribs>
          <spinner attributeName="period" value="3"/>
          <combo attributeName="mode" selection="fast 0 to 1"/>
       </attribs>
    </obj>
-   <patchobj type="patch/object" uuid="e21be394-7de5-40c5-b61d-ac2f837afb91" name="object_6" x="742" y="672">
+   <patchobj type="patch/object" uuid="e21be394-7de5-40c5-b61d-ac2f837afb91" name="object_6" x="714" y="168">
       <params>
          <int32 name="s1longpress" value="6000"/>
       </params>
@@ -1369,7 +1372,7 @@ tablesave=0;
 save=0;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="4d62867a-567e-433d-ab02-3e0deaead454" name="object_7" x="1078" y="672">
+   <patchobj type="patch/object" uuid="4d62867a-567e-433d-ab02-3e0deaead454" name="object_7" x="1050" y="168">
       <params>
          <int32 name="min" value="6"/>
          <int32 name="max" value="22"/>
@@ -1432,7 +1435,7 @@ if (inlet_setvalue!=holdv){
 outlet_out=i;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="54e1b800-1a0e-44b6-abdb-c5adcc04a360" name="preset_1" x="1358" y="672">
+   <patchobj type="patch/object" uuid="54e1b800-1a0e-44b6-abdb-c5adcc04a360" name="preset_1" x="1330" y="168">
       <params/>
       <attribs>
          <objref attributeName="table" obj="data"/>
@@ -1758,24 +1761,24 @@ else if (status == MIDI_PROGRAM_CHANGE + (attr_channel-1)) {
 }]]></code.midihandler>
       </object>
    </patchobj>
-   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_8" x="1218" y="700">
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_8" x="1190" y="196">
       <params/>
       <attribs/>
    </obj>
-   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="1554" y="756">
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="1526" y="252">
       <params/>
       <attribs>
          <table attributeName="str" table="../gillsdelayDATAX"/>
       </attribs>
    </obj>
-   <obj type="table/save" uuid="3e4108b607d56d9e1cd10abb898b58eea11e53b2" name="save_1" x="1582" y="826">
+   <obj type="table/save" uuid="3e4108b607d56d9e1cd10abb898b58eea11e53b2" name="save_1" x="1554" y="322">
       <params/>
       <attribs>
          <objref attributeName="table" obj="data"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="1077" y="880" text="when input goes low, trig is sent"/>
-   <patchobj type="patch/object" uuid="e5baf153-5a7f-4fad-adb1-398431ae9cfa" name="object_3" x="1078" y="896">
+   <comment type="patch/comment" x="1050" y="378" text="when input goes low, trig is sent"/>
+   <patchobj type="patch/object" uuid="e5baf153-5a7f-4fad-adb1-398431ae9cfa" name="object_3" x="1050" y="392">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="e5baf153-5a7f-4fad-adb1-398431ae9cfa">
@@ -1803,20 +1806,20 @@ outlet_o1=trig;
 trig=0;]]></code.krate>
       </object>
    </patchobj>
-   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_1" x="644" y="980">
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_1" x="616" y="476">
       <params/>
       <attribs>
          <combo attributeName="led" selection="3 blue"/>
       </attribs>
    </obj>
-   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_2" x="770" y="980">
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_2" x="742" y="476">
       <params/>
       <attribs>
          <combo attributeName="led" selection="4 blue"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="966" y="1050" text="clock"/>
-   <patchobj type="patch/object" uuid="6da7343a-46c1-4b5b-8ffd-f6e4242b745c" name="1_1" x="952" y="1064">
+   <comment type="patch/comment" x="938" y="546" text="clock"/>
+   <patchobj type="patch/object" uuid="6da7343a-46c1-4b5b-8ffd-f6e4242b745c" name="1_1" x="924" y="560">
       <params>
          <bool32.tgl name="bpmstyle" value="0"/>
          <bool32.tgl name="bpmlock" value="0"/>
@@ -2631,7 +2634,7 @@ bartrig=0;]]></code.krate>
 }]]></code.midihandler>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="6335dc26-2200-40fa-b55d-37427445ce2e" name="object_4" x="1148" y="1064">
+   <patchobj type="patch/object" uuid="6335dc26-2200-40fa-b55d-37427445ce2e" name="object_4" x="1120" y="560">
       <params>
          <int32 name="dead" value="6"/>
       </params>
@@ -2740,126 +2743,126 @@ if    (!isMoving)
 outlet_out = latched;]]></code.krate>
       </object>
    </patchobj>
-   <obj type="logic/or 2" uuid="3805d3c84d30032a44fbdbe42d9a2988a1790a3e" name="or_1" x="1316" y="1078">
+   <obj type="logic/or 2" uuid="3805d3c84d30032a44fbdbe42d9a2988a1790a3e" name="or_1" x="1288" y="574">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1442" y="1148" text="wetdry"/>
-   <comment type="patch/comment" x="1540" y="1148" text="delaytime"/>
-   <comment type="patch/comment" x="1638" y="1148" text="feedback"/>
-   <comment type="patch/comment" x="1736" y="1148" text="filter"/>
-   <comment type="patch/comment" x="1834" y="1148" text="pingpong"/>
-   <comment type="patch/comment" x="1148" y="1162" text="kcycles per 1/4 at current bpm"/>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_7" x="1442" y="1162">
+   <comment type="patch/comment" x="1414" y="644" text="wetdry"/>
+   <comment type="patch/comment" x="1512" y="644" text="delaytime"/>
+   <comment type="patch/comment" x="1610" y="644" text="feedback"/>
+   <comment type="patch/comment" x="1708" y="644" text="filter"/>
+   <comment type="patch/comment" x="1806" y="644" text="pingpong"/>
+   <comment type="patch/comment" x="1120" y="658" text="kcycles per 1/4 at current bpm"/>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_7" x="1414" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_1" x="1540" y="1162">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_1" x="1512" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_2" x="1638" y="1162">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_2" x="1610" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_3" x="1736" y="1162">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_3" x="1708" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_4" x="1834" y="1162">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_4" x="1806" y="658">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_5" x="1190" y="1176">
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_5" x="1162" y="672">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1442" y="1274" text="mod speed"/>
-   <comment type="patch/comment" x="1540" y="1274" text="mod depth"/>
-   <comment type="patch/comment" x="1624" y="1274" text="sequencer speed"/>
-   <comment type="patch/comment" x="1722" y="1274" text="sequencer depth"/>
-   <comment type="patch/comment" x="1834" y="1274" text="width"/>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_8" x="1442" y="1288">
+   <comment type="patch/comment" x="1414" y="770" text="mod speed"/>
+   <comment type="patch/comment" x="1512" y="770" text="mod depth"/>
+   <comment type="patch/comment" x="1596" y="770" text="sequencer speed"/>
+   <comment type="patch/comment" x="1694" y="770" text="sequencer depth"/>
+   <comment type="patch/comment" x="1806" y="770" text="width"/>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_8" x="1414" y="784">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_9" x="1540" y="1288">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_9" x="1512" y="784">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_10" x="1638" y="1288">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_10" x="1610" y="784">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_11" x="1736" y="1288">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_11" x="1708" y="784">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_12" x="1834" y="1288">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_12" x="1806" y="784">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1442" y="1386" text="delay sync"/>
-   <comment type="patch/comment" x="1540" y="1386" text="sequencer sync"/>
-   <comment type="patch/comment" x="1708" y="1386" text="tap division"/>
-   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_3" x="1442" y="1400">
+   <comment type="patch/comment" x="1414" y="882" text="delay sync"/>
+   <comment type="patch/comment" x="1512" y="882" text="sequencer sync"/>
+   <comment type="patch/comment" x="1680" y="882" text="tap division"/>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_3" x="1414" y="896">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_4" x="1554" y="1400">
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_4" x="1526" y="896">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1708" y="1400" text="(14 = 1/4)"/>
-   <comment type="patch/comment" x="1820" y="1400" text="bpm"/>
-   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_1" x="1708" y="1414">
+   <comment type="patch/comment" x="1680" y="896" text="(14 = 1/4)"/>
+   <comment type="patch/comment" x="1792" y="896" text="bpm"/>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_1" x="1680" y="910">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_3" x="1820" y="1414">
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_3" x="1792" y="910">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1442" y="1470" text="delay repitch"/>
-   <comment type="patch/comment" x="1554" y="1470" text="mod sync"/>
-   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_1" x="1442" y="1484">
+   <comment type="patch/comment" x="1414" y="966" text="delay repitch"/>
+   <comment type="patch/comment" x="1526" y="966" text="mod sync"/>
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_1" x="1414" y="980">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_2" x="1554" y="1484">
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_2" x="1526" y="980">
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_3" x="826" y="1582">
+   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_3" x="798" y="1078">
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_2" x="1764" y="1582">
+   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_2" x="1736" y="1078">
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_1" x="1904" y="1582">
+   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_1" x="1876" y="1078">
       <params/>
       <attribs/>
    </obj>
-   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_2" x="1960" y="1582">
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_2" x="1932" y="1078">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1078" y="1610" text="lfo switcher to stop "/>
-   <comment type="patch/comment" x="1232" y="1610" text="time lfos                                                    "/>
-   <comment type="patch/comment" x="644" y="1624" text="wet/dry knob module"/>
-   <comment type="patch/comment" x="826" y="1624" text="lfo speed  sync &amp; division &amp; scaling"/>
-   <comment type="patch/comment" x="1078" y="1624" text="clicks when resyncing"/>
-   <comment type="patch/comment" x="1232" y="1624" text="lfo A"/>
-   <comment type="patch/comment" x="1372" y="1624" text="lfo B"/>
-   <comment type="patch/comment" x="1694" y="1624" text="delay time sync &amp; divisions &amp; scaling"/>
-   <comment type="patch/comment" x="1960" y="1624" text="sequencer clock"/>
-   <comment type="patch/comment" x="2352" y="1624" text="time mod depth helper"/>
-   <comment type="patch/comment" x="2534" y="1624" text="LFO led"/>
-   <patchobj type="patch/object" uuid="796fee05-1092-4d4a-a47c-2e9810ac2191" name="wetdry_5" x="644" y="1638">
+   <comment type="patch/comment" x="1050" y="1106" text="lfo switcher to stop "/>
+   <comment type="patch/comment" x="1204" y="1106" text="time lfos                                                    "/>
+   <comment type="patch/comment" x="616" y="1120" text="wet/dry knob module"/>
+   <comment type="patch/comment" x="798" y="1120" text="lfo speed  sync &amp; division &amp; scaling"/>
+   <comment type="patch/comment" x="1050" y="1120" text="clicks when resyncing"/>
+   <comment type="patch/comment" x="1204" y="1120" text="lfo A"/>
+   <comment type="patch/comment" x="1344" y="1120" text="lfo B"/>
+   <comment type="patch/comment" x="1666" y="1120" text="delay time sync &amp; divisions &amp; scaling"/>
+   <comment type="patch/comment" x="1932" y="1120" text="sequencer clock"/>
+   <comment type="patch/comment" x="2324" y="1120" text="time mod depth helper"/>
+   <comment type="patch/comment" x="2506" y="1120" text="LFO led"/>
+   <patchobj type="patch/object" uuid="796fee05-1092-4d4a-a47c-2e9810ac2191" name="wetdry_5" x="616" y="1134">
       <params>
-         <frac32.u.map name="centregain" value="64.0"/>
+         <frac32.u.map name="centregain" value="63.99999952316284"/>
          <frac32.s.map name="centrepos" value="0.0"/>
       </params>
       <attribs/>
@@ -2944,7 +2947,7 @@ if (inlet_bypass){
 	outlet_pos=xfade;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a" name="LFO_1" x="826" y="1638">
+   <patchobj type="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a" name="LFO_1" x="798" y="1134">
       <params>
          <int32 name="start" value="4"/>
          <int32 name="end" value="29"/>
@@ -3088,11 +3091,11 @@ rtrig=0;
 outlet_division=i;]]></code.krate>
       </object>
    </patchobj>
-   <obj type="phi/logic/or 4" uuid="5dc5a7c1fb7809522171638f755fead71cbe14ea" name="or_2" x="980" y="1638">
+   <obj type="phi/logic/or 4" uuid="5dc5a7c1fb7809522171638f755fead71cbe14ea" name="or_2" x="952" y="1134">
       <params/>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="be163130-a19e-4282-b2de-19fe342023b4" name="object_12" x="1078" y="1638">
+   <patchobj type="patch/object" uuid="be163130-a19e-4282-b2de-19fe342023b4" name="object_12" x="1050" y="1134">
       <params>
          <int32 name="fade" value="188"/>
       </params>
@@ -3189,7 +3192,7 @@ trigA=0;
 trigB=0;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec" name="simple_1" x="1232" y="1638">
+   <patchobj type="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec" name="simple_1" x="1204" y="1134">
       <params>
          <frac32.u.map name="pulsewidth" value="32.0"/>
          <bool32.tgl name="oneshot" value="0"/>
@@ -3469,7 +3472,7 @@ outlet_out=outB;
 //outlet_out=phase;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec" name="simple_2" x="1372" y="1638">
+   <patchobj type="patch/object" uuid="ac32d94b-6f19-4945-b26c-94e5a89809ec" name="simple_2" x="1344" y="1134">
       <params>
          <frac32.u.map name="pulsewidth" value="32.0"/>
          <bool32.tgl name="oneshot" value="0"/>
@@ -3749,7 +3752,7 @@ outlet_out=outB;
 //outlet_out=phase;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="566d23d0-9688-4cf2-8cb0-fe729528eaab" name="xfade_1" x="1498" y="1638">
+   <patchobj type="patch/object" uuid="566d23d0-9688-4cf2-8cb0-fe729528eaab" name="xfade_1" x="1470" y="1134">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="566d23d0-9688-4cf2-8cb0-fe729528eaab">
@@ -3776,11 +3779,11 @@ outlet_out=outB;
 ]]></code.krate>
       </object>
    </patchobj>
-   <obj type="logic/or 2" uuid="3805d3c84d30032a44fbdbe42d9a2988a1790a3e" name="or_3" x="1638" y="1638">
+   <obj type="logic/or 2" uuid="3805d3c84d30032a44fbdbe42d9a2988a1790a3e" name="or_3" x="1610" y="1134">
       <params/>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="88bab9c1-fa35-4650-8337-da90c6d6f402" name="delay_1" x="1722" y="1638">
+   <patchobj type="patch/object" uuid="88bab9c1-fa35-4650-8337-da90c6d6f402" name="delay_1" x="1694" y="1134">
       <params>
          <int32 name="start" value="6"/>
          <int32 name="end" value="24"/>
@@ -4003,7 +4006,7 @@ outlet_pulse=pulse;
 pinput=input;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a" name="seq" x="1960" y="1638">
+   <patchobj type="patch/object" uuid="ed06772a-8e65-460f-ae17-ceb72679fe2a" name="seq" x="1932" y="1134">
       <params>
          <int32 name="start" value="8"/>
          <int32 name="end" value="19"/>
@@ -4214,7 +4217,7 @@ rtrig=0;
 trig=0;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="16d17cdb-d473-495e-b0dd-64fd8c8bcfc9" name="u8u_3" x="2170" y="1638">
+   <patchobj type="patch/object" uuid="16d17cdb-d473-495e-b0dd-64fd8c8bcfc9" name="u8u_3" x="2142" y="1134">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="16d17cdb-d473-495e-b0dd-64fd8c8bcfc9">
@@ -4281,13 +4284,13 @@ else{
 outlet_out= ___SMMUL(out<<3,(16<<21)<<2);]]></code.krate>
       </object>
    </patchobj>
-   <obj type="math/*c" uuid="7d5ef61c3bcd571ee6bbd8437ef3612125dfb225" name="*c_1" x="2268" y="1638">
+   <obj type="math/*c" uuid="7d5ef61c3bcd571ee6bbd8437ef3612125dfb225" name="*c_1" x="2240" y="1134">
       <params>
          <frac32.u.map name="amp" value="16.0"/>
       </params>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="5b7ebbe0-c502-4cef-9060-0860d9dbefb2" name="55_1" x="2380" y="1638">
+   <patchobj type="patch/object" uuid="5b7ebbe0-c502-4cef-9060-0860d9dbefb2" name="55_1" x="2352" y="1134">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="5b7ebbe0-c502-4cef-9060-0860d9dbefb2">
@@ -4326,22 +4329,22 @@ Sdepth = ___SMMLA(Sdepth-Rdepth,(-1<<26)+(0x06000000>>1),Sdepth);
 outlet_mod= ___SMMUL(Sdepth<<3,inlet_lfo<<2);]]></code.krate>
       </object>
    </patchobj>
-   <obj type="math/sat" uuid="ae2a11c9bb4d6470ae44c7b2674e7e96184f38d3" name="sat_1" x="2464" y="1638">
+   <obj type="math/sat" uuid="ae2a11c9bb4d6470ae44c7b2674e7e96184f38d3" name="sat_1" x="2436" y="1134">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/gills/led pwm" uuid="e6534d2d-0815-4b4a-8351-99987f214822" name="led_4" x="2534" y="1638">
+   <obj type="ksoloti/gills/led pwm" uuid="e6534d2d-0815-4b4a-8351-99987f214822" name="led_4" x="2506" y="1134">
       <params/>
       <attribs>
          <combo attributeName="led" selection="2"/>
       </attribs>
    </obj>
-   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_4" x="2100" y="1652">
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_4" x="2072" y="1148">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="28" y="1722" text="screen handler"/>
-   <patchobj type="patch/object" uuid="48c0045e-0a75-41e0-88f2-0602ad99bfed" name="1_3" x="28" y="1736">
+   <comment type="patch/comment" x="14" y="1218" text="screen handler"/>
+   <patchobj type="patch/object" uuid="48c0045e-0a75-41e0-88f2-0602ad99bfed" name="1_3" x="14" y="1232">
       <params/>
       <attribs>
          <objref attributeName="table" obj="data"/>
@@ -4875,7 +4878,7 @@ outlet_value=value;
 //}]]></code.krate>
       </object>
    </patchobj>
-   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="182" y="1736">
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="154" y="1232">
       <params/>
       <attribs>
          <combo attributeName="useScope" selection="off"/>
@@ -4883,29 +4886,29 @@ outlet_value=value;
          <combo attributeName="narrowFont" selection="on"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="2198" y="1778" text="width"/>
-   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_1" x="2184" y="1792">
+   <comment type="patch/comment" x="2170" y="1274" text="width"/>
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_1" x="2156" y="1288">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/inv" uuid="565521d3699b36d8095aa1c79b9ad0046fb133ce" name="inv_4" x="2296" y="1792">
+   <obj type="math/inv" uuid="565521d3699b36d8095aa1c79b9ad0046fb133ce" name="inv_4" x="2268" y="1288">
       <params/>
       <attribs/>
    </obj>
-   <obj type="sss/math/expCurveK" uuid="bde45a1d-540b-4c33-b7b5-d733d42a1772" name="expCurveK_1" x="2394" y="1792">
+   <obj type="sss/math/expCurveK" uuid="bde45a1d-540b-4c33-b7b5-d733d42a1772" name="expCurveK_1" x="2366" y="1288">
       <params>
          <frac32.s.map name="exp" value="40.299999713897705"/>
          <int32 name="stack" value="4"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="490" y="1820" text="auto input - detects mono (left only ) or stereo (right &amp; left)"/>
-   <comment type="patch/comment" x="1890" y="1820" text="time division stepper"/>
-   <comment type="patch/comment" x="2072" y="1820" text="pingpong"/>
-   <comment type="patch/comment" x="2548" y="1820" text="width for feedback"/>
-   <comment type="patch/comment" x="504" y="1834" text="if mono, left is sent to left &amp; right inputs"/>
-   <comment type="patch/comment" x="1596" y="1834" text="tempo led"/>
-   <patchobj type="patch/object" uuid="327dea59-b2db-47be-908e-52bdc17acad6" name="object_14" x="1890" y="1834">
+   <comment type="patch/comment" x="462" y="1316" text="auto input - detects mono (left only ) or stereo (right &amp; left)"/>
+   <comment type="patch/comment" x="1862" y="1316" text="time division stepper"/>
+   <comment type="patch/comment" x="2044" y="1316" text="pingpong"/>
+   <comment type="patch/comment" x="2520" y="1316" text="width for feedback"/>
+   <comment type="patch/comment" x="476" y="1330" text="if mono, left is sent to left &amp; right inputs"/>
+   <comment type="patch/comment" x="1568" y="1330" text="tempo led"/>
+   <patchobj type="patch/object" uuid="327dea59-b2db-47be-908e-52bdc17acad6" name="object_14" x="1862" y="1330">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="327dea59-b2db-47be-908e-52bdc17acad6">
@@ -4968,7 +4971,7 @@ if (delaytime<=0){
 outlet_delaytime=delaytime;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="556e798a-ad10-4909-8735-2e836f34161d" name="object_10" x="2058" y="1834">
+   <patchobj type="patch/object" uuid="556e798a-ad10-4909-8735-2e836f34161d" name="object_10" x="2030" y="1330">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="556e798a-ad10-4909-8735-2e836f34161d">
@@ -4997,13 +5000,13 @@ else {
 }]]></code.krate>
       </object>
    </patchobj>
-   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_6" x="2184" y="1834">
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_6" x="2156" y="1330">
       <params>
          <frac32.u.map name="value" value="8.0"/>
       </params>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad" name="object_8" x="2268" y="1834">
+   <patchobj type="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad" name="object_8" x="2240" y="1330">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad">
@@ -5050,7 +5053,7 @@ else if (inlet_width==0){
 }]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad" name="object_9" x="2548" y="1834">
+   <patchobj type="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad" name="object_9" x="2520" y="1330">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="de4bd840-5a6f-45da-809f-5e1e85f504ad">
@@ -5097,21 +5100,21 @@ else if (inlet_width==0){
 }]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="504" y="1848" text="if stereo, effect is true stereo"/>
-   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_3" x="1582" y="1848">
+   <comment type="patch/comment" x="476" y="1344" text="if stereo, effect is true stereo"/>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_3" x="1554" y="1344">
       <params/>
       <attribs>
          <combo attributeName="led" selection="1"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="504" y="1862" text="click the button to redetect"/>
-   <obj type="ctrl/button" uuid="ef3d13774349df85aa9bfecf30dbc91ab8488b3f" name="button_2" x="490" y="1876">
+   <comment type="patch/comment" x="476" y="1358" text="click the button to redetect"/>
+   <obj type="ctrl/button" uuid="ef3d13774349df85aa9bfecf30dbc91ab8488b3f" name="button_2" x="462" y="1372">
       <params>
          <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="0f185d48-b0f5-4208-8bff-cfcd176d3009" name="input_1" x="574" y="1876">
+   <patchobj type="patch/object" uuid="0f185d48-b0f5-4208-8bff-cfcd176d3009" name="input_1" x="546" y="1372">
       <params>
          <frac32.u.map name="threshhold" value="2.0"/>
       </params>
@@ -5221,35 +5224,35 @@ if (t>0){
 outlet_clipping=t;]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="1162" y="1904" text="wet "/>
-   <comment type="patch/comment" x="1148" y="1918" text="(first in chain to keep trails "/>
-   <comment type="patch/comment" x="1050" y="1932" text="dry"/>
-   <comment type="patch/comment" x="1162" y="1932" text="when bypassed)"/>
-   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_6" x="1722" y="1932">
+   <comment type="patch/comment" x="1134" y="1400" text="wet "/>
+   <comment type="patch/comment" x="1120" y="1414" text="(first in chain to keep trails "/>
+   <comment type="patch/comment" x="1022" y="1428" text="dry"/>
+   <comment type="patch/comment" x="1134" y="1428" text="when bypassed)"/>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_6" x="1694" y="1428">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_9" x="1050" y="1946">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_9" x="1022" y="1442">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_10" x="1162" y="1946">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_10" x="1134" y="1442">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="420" y="2030" text="delay switcher "/>
-   <comment type="patch/comment" x="784" y="2030" text="left delay line (first repeat   ***************************************************************************************************************"/>
-   <comment type="patch/comment" x="182" y="2044" text="smooth delay repitch"/>
-   <comment type="patch/comment" x="420" y="2044" text="stops clicks/pitch changes"/>
-   <comment type="patch/comment" x="1680" y="2044" text="filter"/>
-   <comment type="patch/comment" x="1792" y="2044" text="record into delay buffer"/>
-   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_5" x="210" y="2058">
+   <comment type="patch/comment" x="392" y="1526" text="delay switcher "/>
+   <comment type="patch/comment" x="756" y="1526" text="left delay line (first repeat   ***************************************************************************************************************"/>
+   <comment type="patch/comment" x="154" y="1540" text="smooth delay repitch"/>
+   <comment type="patch/comment" x="392" y="1540" text="stops clicks/pitch changes"/>
+   <comment type="patch/comment" x="1652" y="1540" text="filter"/>
+   <comment type="patch/comment" x="1764" y="1540" text="record into delay buffer"/>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_5" x="182" y="1554">
       <params>
          <frac32.u.map name="value" value="24.0"/>
       </params>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="e16b8c12-e480-40ac-9b4a-5e63245fbd3c" name="i_2" x="294" y="2058">
+   <patchobj type="patch/object" uuid="e16b8c12-e480-40ac-9b4a-5e63245fbd3c" name="i_2" x="266" y="1554">
       <params>
          <bool32.tgl name="p1" value="1"/>
       </params>
@@ -5272,7 +5275,7 @@ outlet_clipping=t;]]></code.krate>
          <code.krate><![CDATA[outlet_out= param_p1;]]></code.krate>
       </object>
    </patchobj>
-   <patchobj type="patch/object" uuid="0312dc0b-b148-4f40-a0ed-7e20eb2d1f5f" name="delay_2" x="420" y="2058">
+   <patchobj type="patch/object" uuid="0312dc0b-b148-4f40-a0ed-7e20eb2d1f5f" name="delay_2" x="392" y="1554">
       <params>
          <int32 name="fade" value="128"/>
          <int32 name="pitchfade" value="512"/>
@@ -5479,19 +5482,19 @@ outlet_timeB=timeB;
 //outlet_o=(inlet_i-((inlet_i/(0x07FFFFFF/param_entries))*(0x07FFFFFF/param_entries)))*param_entries;]]></code.krate>
       </object>
    </patchobj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_1" x="644" y="2058">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_1" x="616" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_2" x="756" y="2058">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_2" x="728" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_1" x="840" y="2058">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_1" x="812" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_1" x="924" y="2058">
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_1" x="896" y="1554">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -5499,19 +5502,19 @@ outlet_timeB=timeB;
          <objref attributeName="delayname" obj="deelite"/>
       </attribs>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_11" x="1078" y="2058">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_11" x="1050" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_3" x="1176" y="2058">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_3" x="1148" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_2" x="1260" y="2058">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_2" x="1232" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_2" x="1330" y="2058">
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_2" x="1302" y="1554">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -5519,41 +5522,41 @@ outlet_timeB=timeB;
          <objref attributeName="delayname" obj="deelite"/>
       </attribs>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_12" x="1498" y="2058">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_12" x="1470" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_3" x="1568" y="2058">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_3" x="1540" y="1554">
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_1" x="1680" y="2058">
+   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_1" x="1652" y="1554">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="deelite" x="1792" y="2058">
+   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="deelite" x="1764" y="1554">
       <params/>
       <attribs>
          <combo attributeName="size" selection="1048576 (21.8s)"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="826" y="2198" text="wet "/>
-   <comment type="patch/comment" x="826" y="2212" text="(first in chain to keep trails "/>
-   <comment type="patch/comment" x="714" y="2226" text="dry"/>
-   <comment type="patch/comment" x="826" y="2226" text="when bypassed)"/>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_14" x="714" y="2240">
+   <comment type="patch/comment" x="798" y="1694" text="wet "/>
+   <comment type="patch/comment" x="798" y="1708" text="(first in chain to keep trails "/>
+   <comment type="patch/comment" x="686" y="1722" text="dry"/>
+   <comment type="patch/comment" x="798" y="1722" text="when bypassed)"/>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_14" x="686" y="1736">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_15" x="826" y="2240">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_15" x="798" y="1736">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="896" y="2324" text="right delay line (first repeat   ***************************************************************************************************************"/>
-   <patchobj type="patch/object" uuid="fe046d58-1420-41a0-86b2-f81c73c925ee" name="delay_3" x="434" y="2338">
+   <comment type="patch/comment" x="868" y="1820" text="right delay line (first repeat   ***************************************************************************************************************"/>
+   <patchobj type="patch/object" uuid="fe046d58-1420-41a0-86b2-f81c73c925ee" name="delay_3" x="406" y="1834">
       <params>
          <int32 name="fade" value="128"/>
          <int32 name="pitchfade" value="512"/>
@@ -5760,21 +5763,21 @@ outlet_timeB=timeB;
 //outlet_o=(inlet_i-((inlet_i/(0x07FFFFFF/param_entries))*(0x07FFFFFF/param_entries)))*param_entries;]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="1890" y="2338" text="filter"/>
-   <comment type="patch/comment" x="1988" y="2338" text="record into delay buffer"/>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_4" x="658" y="2352">
+   <comment type="patch/comment" x="1862" y="1834" text="filter"/>
+   <comment type="patch/comment" x="1960" y="1834" text="record into delay buffer"/>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_4" x="630" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_5" x="770" y="2352">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_5" x="742" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_4" x="854" y="2352">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_4" x="826" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_3" x="938" y="2352">
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_3" x="910" y="1848">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -5782,19 +5785,19 @@ outlet_timeB=timeB;
          <objref attributeName="delayname" obj="delayright"/>
       </attribs>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_16" x="1092" y="2352">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_16" x="1064" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_6" x="1190" y="2352">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_6" x="1162" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_5" x="1274" y="2352">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_5" x="1246" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_4" x="1344" y="2352">
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_4" x="1316" y="1848">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -5802,42 +5805,42 @@ outlet_timeB=timeB;
          <objref attributeName="delayname" obj="delayright"/>
       </attribs>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_17" x="1512" y="2352">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_17" x="1484" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_6" x="1582" y="2352">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_6" x="1554" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_1" x="1694" y="2352">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_1" x="1666" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_12" x="1778" y="2352">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_12" x="1750" y="1848">
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_2" x="1876" y="2352">
+   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_2" x="1848" y="1848">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="delayright" x="1988" y="2352">
+   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="delayright" x="1960" y="1848">
       <params/>
       <attribs>
          <combo attributeName="size" selection="1048576 (21.8s)"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="798" y="2548" text="left delay line (feedback - necessary for ping pong   ***************************************************************************************************************"/>
-   <comment type="patch/comment" x="966" y="2576" text="feedback"/>
-   <comment type="patch/comment" x="1036" y="2576" text="sum input and feedbackloop"/>
-   <comment type="patch/comment" x="1204" y="2576" text="filter"/>
-   <comment type="patch/comment" x="1316" y="2576" text="record into delay buffer"/>
-   <comment type="patch/comment" x="1470" y="2576" text="sum wet&amp;dry (delay)"/>
-   <patchobj type="patch/object" uuid="e6b2d589-8bdd-4713-ae26-75c71f0afa09" name="delay_4" x="434" y="2590">
+   <comment type="patch/comment" x="770" y="2044" text="left delay line (feedback - necessary for ping pong   ***************************************************************************************************************"/>
+   <comment type="patch/comment" x="938" y="2072" text="feedback"/>
+   <comment type="patch/comment" x="1008" y="2072" text="sum input and feedbackloop"/>
+   <comment type="patch/comment" x="1176" y="2072" text="filter"/>
+   <comment type="patch/comment" x="1288" y="2072" text="record into delay buffer"/>
+   <comment type="patch/comment" x="1442" y="2072" text="sum wet&amp;dry (delay)"/>
+   <patchobj type="patch/object" uuid="e6b2d589-8bdd-4713-ae26-75c71f0afa09" name="delay_4" x="406" y="2086">
       <params>
          <int32 name="fade" value="128"/>
          <int32 name="pitchfade" value="512"/>
@@ -6044,19 +6047,19 @@ outlet_timeB=timeB;
 //outlet_o=(inlet_i-((inlet_i/(0x07FFFFFF/param_entries))*(0x07FFFFFF/param_entries)))*param_entries;]]></code.krate>
       </object>
    </patchobj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_7" x="714" y="2590">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_7" x="686" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_8" x="826" y="2590">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_8" x="798" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_7" x="910" y="2590">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_7" x="882" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_5" x="994" y="2590">
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_5" x="966" y="2086">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -6064,19 +6067,19 @@ outlet_timeB=timeB;
          <objref attributeName="delayname" obj="fbackL"/>
       </attribs>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_21" x="1148" y="2590">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_21" x="1120" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_9" x="1246" y="2590">
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_9" x="1218" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_8" x="1330" y="2590">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_8" x="1302" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_6" x="1400" y="2590">
+   <obj type="jho/delay/read interp 32b" uuid="b5984ec2512c4f6a8f562f2a0b0e13aa" name="read_6" x="1372" y="2086">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -6084,47 +6087,47 @@ outlet_timeB=timeB;
          <objref attributeName="delayname" obj="fbackL"/>
       </attribs>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_22" x="1568" y="2590">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_22" x="1540" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_9" x="1638" y="2590">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_9" x="1610" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_10" x="1778" y="2590">
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_10" x="1750" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_23" x="1862" y="2590">
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_23" x="1834" y="2086">
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_3" x="1960" y="2590">
+   <obj type="filter/lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" name="lp_3" x="1932" y="2086">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="fbackL" x="2072" y="2590">
+   <obj type="jho/delay/write sdram 32b" uuid="8b544d2d29a0485c9a44775aaf36e96c" name="fbackL" x="2044" y="2086">
       <params/>
       <attribs>
          <combo attributeName="size" selection="1048576 (21.8s)"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="14" y="2786" text="&lt;html&gt;&lt;h3&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CONTROLS&lt;/span&gt; &lt;br&gt;Knob 1 = wet/dry &lt;br&gt;knob 2 = delay time (divisions if synced) &lt;br&gt;Knob 3 = Feedback &lt;br&gt;Knob 4 = Lo pass filter &lt;br&gt;Knob 5 = Ping pong (offsets right channel, when at max ping pong greatness is achieved) &lt;br&gt;Knob 6 = Modulation speed (divisions if synced) &lt;br&gt;Knob 7 = Modulation depth &lt;br&gt;Knob 8 = Sequencer speed (Sequencer steps up and down straight and dotted delay times, from the current delay time) &lt;br&gt;Knob 9 = Sequencer depth &lt;br&gt;Knob 10 = width - offsets either right or left channel slightly to achieve a wider sound. repeats get progressively wider &lt;br&gt; &lt;br&gt;Button S1 - tap tempo (if you hold down the tap button and move the encoder you can change the division that the taps create. I.e. if set to 8ths and you tap quarters,&lt;br&gt;you will get double the speed of your tap. This is ignored if midi time is set to sync, in which case it uses the synced time knob setting). &lt;br&gt; &lt;br&gt;Button S2 = Presetmode (more on that later) &lt;br&gt; &lt;br&gt;Encoder = BPM, afffects synced times and is also set by tap tempo &lt;br&gt; &lt;br&gt;L3 - short press turns sync on/off for delay time. Long press enables pitch artifacts when changing delay time. &lt;br&gt;L4 - short press turns sync on/off for the sequencer speed, long press turns sync on/off for the modulation speed. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;PRESET MODE&lt;/span&gt; &lt;br&gt;Press S2 to enter preset mode. &lt;br&gt;Turn the encoder to select a preset. &lt;br&gt;Press the encoder to load selected preset. &lt;br&gt;Press S1 to save current settings to the selected preset &lt;br&gt;Long press S1 to save all presets and current settings to the sd card (if you don&apos;t do this the presets are lost when you reboot the ksoloti!!!). &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;SYNCING&lt;/span&gt; &lt;br&gt;Sync is either midi, tap or BPM. &lt;br&gt;If you tap when the delay time is unsynced, it will sync to the tap until the delay time is changed with the knob. It will use the tap division. &lt;br&gt;If you tap when the delay time is synced, it will use the delay knob division. &lt;br&gt;Tap affects the BPM setting too. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CHANGES IN V2&lt;/span&gt; &lt;br&gt;The OLED screen displays when the patch is listening to midi clock. &lt;br&gt;The patch responds to midi note messages to change preset on channel 16 (you can sequence whole preset changes easily! You can switch these to program messages, or the midi channel, on the preset object.) &lt;br&gt;The patch shows when the input is overloaded (screen shows an asterisk to the left). &lt;br&gt;I&apos;ve added a &quot;centre&quot; parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean! &lt;br&gt;Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars."/>
-   <comment type="patch/comment" x="1988" y="2800" text="sum wet&amp;dry&amp;fback"/>
-   <obj type="drj/math/sum3" uuid="93cb11244902274d118a237aed86ae7d7fd46107" name="sum3_1" x="1988" y="2814">
+   <comment type="patch/comment" x="574" y="2282" text="&lt;html&gt;&lt;h3&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CONTROLS&lt;/span&gt; &lt;br&gt;Knob 1 = wet/dry &lt;br&gt;knob 2 = delay time (divisions if synced) &lt;br&gt;Knob 3 = Feedback &lt;br&gt;Knob 4 = Lo pass filter &lt;br&gt;Knob 5 = Ping pong (offsets right channel, when at max ping pong greatness is achieved) &lt;br&gt;Knob 6 = Modulation speed (divisions if synced) &lt;br&gt;Knob 7 = Modulation depth &lt;br&gt;Knob 8 = Sequencer speed (Sequencer steps up and down straight and dotted delay times, from the current delay time) &lt;br&gt;Knob 9 = Sequencer depth &lt;br&gt;Knob 10 = width - offsets either right or left channel slightly to achieve a wider sound. repeats get progressively wider &lt;br&gt; &lt;br&gt;Button S1 - tap tempo (if you hold down the tap button and move the encoder you can change the division that the taps create. I.e. if set to 8ths and you tap quarters,&lt;br&gt;you will get double the speed of your tap. This is ignored if midi time is set to sync, in which case it uses the synced time knob setting). &lt;br&gt; &lt;br&gt;Button S2 = Presetmode (more on that later) &lt;br&gt; &lt;br&gt;Encoder = BPM, afffects synced times and is also set by tap tempo &lt;br&gt; &lt;br&gt;L3 - short press turns sync on/off for delay time. Long press enables pitch artifacts when changing delay time. &lt;br&gt;L4 - short press turns sync on/off for the sequencer speed, long press turns sync on/off for the modulation speed. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;PRESET MODE&lt;/span&gt; &lt;br&gt;Press S2 to enter preset mode. &lt;br&gt;Turn the encoder to select a preset. &lt;br&gt;Press the encoder to load selected preset. &lt;br&gt;Press S1 to save current settings to the selected preset &lt;br&gt;Long press S1 to save all presets and current settings to the sd card (if you don&apos;t do this the presets are lost when you reboot the ksoloti!!!). &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;SYNCING&lt;/span&gt; &lt;br&gt;Sync is either midi, tap or BPM. &lt;br&gt;If you tap when the delay time is unsynced, it will sync to the tap until the delay time is changed with the knob. It will use the tap division. &lt;br&gt;If you tap when the delay time is synced, it will use the delay knob division. &lt;br&gt;Tap affects the BPM setting too. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CHANGES IN V2&lt;/span&gt; &lt;br&gt;The OLED screen displays when the patch is listening to midi clock. &lt;br&gt;The patch responds to midi note messages to change preset on channel 16 (you can sequence whole preset changes easily! You can switch these to program messages, or the midi channel, on the preset object.) &lt;br&gt;The patch shows when the input is overloaded (screen shows an asterisk to the left). &lt;br&gt;I&apos;ve added a &quot;centre&quot; parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean! &lt;br&gt;Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars."/>
+   <comment type="patch/comment" x="1960" y="2296" text="sum wet&amp;dry&amp;fback"/>
+   <obj type="drj/math/sum3" uuid="93cb11244902274d118a237aed86ae7d7fd46107" name="sum3_1" x="1960" y="2310">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1974" y="2912" text="sum wet&amp;dry&amp;fback"/>
-   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_11" x="1988" y="2926">
+   <comment type="patch/comment" x="1946" y="2408" text="sum wet&amp;dry&amp;fback"/>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_11" x="1960" y="2422">
       <params/>
       <attribs/>
    </obj>
-   <patchobj type="patch/object" uuid="45c87834-402c-40e5-90de-e52443abf0a9" name="output_1" x="2100" y="2926">
+   <patchobj type="patch/object" uuid="45c87834-402c-40e5-90de-e52443abf0a9" name="output_1" x="2072" y="2422">
       <params/>
       <attribs/>
       <object id="patch/object" uuid="45c87834-402c-40e5-90de-e52443abf0a9">
@@ -6930,7 +6933,6 @@ outlet_clipping=t;]]></code.krate>
       <NPresetEntries>32</NPresetEntries>
       <NModulationSources>8</NModulationSources>
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[<html><h3><span style="color:#0000AA">CONTROLS</span>
 <br>Knob 1 = wet/dry
@@ -6976,8 +6978,8 @@ outlet_clipping=t;]]></code.krate>
 <br>I've added a "centre" parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean!
 <br>Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars.]]></notes>
    <windowPos>
-      <x>-7</x>
-      <y>-7</y>
+      <x>0</x>
+      <y>0</y>
       <width>1550</width>
       <height>848</height>
    </windowPos>
