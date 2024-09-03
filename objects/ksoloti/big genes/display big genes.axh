@@ -57,7 +57,7 @@
          <table attributeName="str" table="123456789012345678901"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="112" y="406" text="&lt;html&gt;0: 4 lines of text, no scope&lt;br&gt;1: text in line1, scope in lines 2-4&lt;br&gt;2: scope in full screen"/>
+   <comment type="patch/comment" x="112" y="406" text="&lt;html&gt;0: 4 lines of text, no scope&lt;br&gt;1: line1 shows text, lines 2-4 show scope&lt;br&gt;2: full screen scope"/>
    <comment type="patch/comment" x="518" y="420" text="&lt;- you will not see a scope if this is off (saves memory)"/>
    <obj type="ctrl/i radio 4 h" uuid="f87ae81e3162014f3bdca0f56dbbdf9322e69dfd" name="i_1" x="112" y="462">
       <params>
