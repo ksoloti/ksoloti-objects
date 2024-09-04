@@ -1,6 +1,6 @@
 <patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1 style=&quot;font-size:36;&quot;&gt;Gills - Branch Manager"/>
-   <patcher type="patch/patcher" uuid="3e905b03-6209-49be-9d67-2687397393bb" name="internals" x="420" y="14">
+   <patcher type="patch/patcher" uuid="eb5f05c5-0d77-4bfd-a73e-c5353382b3ca" name="internals" x="420" y="14">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -515,7 +515,7 @@ else if (!(inlet_trig > 0)) {
    <comment type="patch/comment" x="350" y="210" text="&lt;html&gt;&lt;h1&gt;"/>
    <comment type="patch/comment" x="14" y="224" text="&lt;html&gt;&lt;h1 width=750px&gt;2. Upload this patch to SD card as startup. &lt;i&gt;Patch -&amp;gt; Upload to SD Card as Startup.&lt;/i&gt;&lt;br&gt;(Upload this patch window as it is. Ignore the patch/patcher above.)"/>
    <comment type="patch/comment" x="14" y="308" text="&lt;html&gt;&lt;h1 width=750px&gt;3. Open any patch you want to be in your list and select &lt;i&gt;Patch -&amp;gt; Upload to SD Card.&lt;/i&gt;&lt;br&gt;(Don&apos;t upload these &quot;as Startup&quot;!) Since v1.1.0 you can also batch-upload patches using the Patchbank window."/>
-   <comment type="patch/comment" x="14" y="392" text="&lt;html&gt;&lt;h1 width=750px&gt;4. From now on, you can long-press the right-side encoder to return to the Branch Manager and select a new patch."/>
+   <comment type="patch/comment" x="14" y="392" text="&lt;html&gt;&lt;h1 width=750px&gt;4. From now on, you can long-press the encoder (1+ sec) to return to the Branch Manager and select a new patch."/>
    <comment type="patch/comment" x="14" y="462" text="&lt;html&gt;&lt;h1 width=750px&gt;Known Issues:&lt;ul style=&quot;font-size:12px;&quot;&gt;&lt;li&gt;Each time you return to the Branch Manager, it will point to the first patch in the list.&lt;br&gt;It does not remember which patch you have seleted before.&lt;/li&gt;&lt;li&gt;Patches you had uploaded before you set up the &quot;Branch Controller&quot; in the Preferences will not be able to trigger&lt;br&gt;the Branch Manager. You will have to re-upload them so they get the Branch Controller feature.&lt;/li&gt;&lt;li&gt;The display is not cleared after you select a new patch.&lt;br&gt;If the selected patch does not use the display, the Branch Manager info will stay frozen on the screen.&lt;/li&gt;"/>
    <nets/>
    <settings>
