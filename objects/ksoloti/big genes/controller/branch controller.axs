@@ -10,7 +10,7 @@
    <obj type="rbrt/control/click hold S" uuid="99efc8b8-7803-4f15-8ab2-8d0adace10c6" name="click_1" x="154" y="14">
       <params/>
       <attribs>
-         <spinner attributeName="long" value="2500"/>
+         <spinner attributeName="long" value="3000"/>
       </attribs>
    </obj>
    <patchobj type="patch/object" uuid="f63597e0-40c5-4cf3-8442-123b99498a23" name="loadSD_startPatch" x="294" y="14">
@@ -32,23 +32,24 @@ If the index is out of range, the sdcard startup patch is loaded instead.
          <includes/>
          <code.declaration><![CDATA[int ntrig;]]></code.declaration>
          <code.init><![CDATA[ntrig = 1;]]></code.init>
-         <code.krate><![CDATA[if ((inlet_trig > 0) && !ntrig) {
+         <code.krate><![CDATA[if (inlet_trig && !ntrig) {
 	ntrig = 1;
+	codec_clearbuffer();
 	LoadPatchStartSD();
 }
-else if (!(inlet_trig > 0)) {
+else if (!inlet_trig) {
 	ntrig = 0;
 }]]></code.krate>
       </object>
    </patchobj>
    <nets>
       <net>
-         <source obj="click_1" outlet="long"/>
-         <dest obj="loadSD_startPatch" inlet="trig"/>
-      </net>
-      <net>
          <source obj="encoder_2" outlet="sw"/>
          <dest obj="click_1" inlet="gate"/>
+      </net>
+      <net>
+         <source obj="click_1" outlet="long"/>
+         <dest obj="loadSD_startPatch" inlet="trig"/>
       </net>
    </nets>
    <settings>
@@ -56,8 +57,8 @@ else if (!(inlet_trig > 0)) {
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>240</x>
-      <y>160</y>
+      <x>522</x>
+      <y>226</y>
       <width>494</width>
       <height>261</height>
    </windowPos>

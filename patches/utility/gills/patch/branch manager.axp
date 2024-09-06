@@ -1,6 +1,6 @@
 <patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1 style=&quot;font-size:36;&quot;&gt;Gills - Branch Manager"/>
-   <patcher type="patch/patcher" uuid="eb5f05c5-0d77-4bfd-a73e-c5353382b3ca" name="internals" x="420" y="14">
+   <patcher type="patch/patcher" uuid="169a1a48-ea49-46fb-a0ef-da972f2da9ee" name="internals" x="420" y="14">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -183,14 +183,39 @@ FRESULT scan_files_for_patchbin(char* path, char* path_short) {
 		report_fatfs_error(res, 0);
 	}
 	return res;
-}]]></code.declaration>
+}
+
+
+msg_t ThreadX2() {
+	codec_clearbuffer();
+	scan_files_for_patchbin(p, p_short);
+	while (!chThdShouldTerminate()) {
+		chThdSleepMilliseconds(10);
+	}
+	chThdExit((msg_t)0);
+}
+
+
+static msg_t ThreadX(void *arg) {
+    ((attr_parent *)arg)->ThreadX2();
+}
+
+
+WORKING_AREA(waThreadX, 4096);
+Thread *Thd;]]></code.declaration>
                <code.init><![CDATA[sdcard_unmount();
 sdcard_attemptMountIfUnmounted();  
 
-scan_files_for_patchbin(p, p_short);
+codec_clearbuffer();
+// chThdSleepMilliseconds(10);
+
+Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, ThreadX, (void *)this);
+// scan_files_for_patchbin(p, p_short);
 
 disp_ndirsWithPatch = ndirs_with_patch;
 disp_ndirs = ndirs;]]></code.init>
+               <code.dispose><![CDATA[chThdTerminate( Thd );
+chThdWait( Thd );]]></code.dispose>
                <code.krate><![CDATA[patchToLoad = inlet_patchToLoad > ndirs_with_patch ? ndirs_with_patch : inlet_patchToLoad; 	/* Limit to total found number of patches */
 
 if (_patchToLoad != patchToLoad) {											/* If patch just started or inlet has changed*/
@@ -203,29 +228,6 @@ outlet_patchNameAtIndexLine2 = &p_name[256 * patchToLoad + 21];
 
 
 outlet_numpatches = ndirs_with_patch;]]></code.krate>
-            </object>
-         </patchobj>
-         <patchobj type="patch/object" uuid="e1f62562-34af-45be-8375-a031031a4ae6" name="clear_oled" x="588" y="14">
-            <params/>
-            <attribs>
-               <objref attributeName="oled" obj="display_1"/>
-            </attribs>
-            <object id="patch/object" uuid="e1f62562-34af-45be-8375-a031031a4ae6">
-               <inlets>
-                  <bool32.rising name="trig"/>
-               </inlets>
-               <outlets/>
-               <displays/>
-               <params/>
-               <attribs>
-                  <objref name="oled"/>
-               </attribs>
-               <includes/>
-               <code.declaration><![CDATA[uint8_t _trig = 1;]]></code.declaration>
-               <code.krate><![CDATA[if (inlet_trig && !_trig) {
-	attr_oled.cmd(0xAE); /* disable oled */
-}
-_trig = inlet_trig;]]></code.krate>
             </object>
          </patchobj>
          <obj type="math/-1" uuid="5fd46bab471bb6509ae83de702dea72933683a98" name="-1_1" x="28" y="28">
@@ -334,67 +336,11 @@ outlet_out = &c[0];]]></code.krate>
                <table attributeName="str" table="       BRANCH MANAGER"/>
             </attribs>
          </obj>
-         <patchobj type="patch/object" uuid="73e16288-fc1b-4cb1-8164-d2d06de3da3c" name="delayedpulse" x="462" y="420">
-            <params>
-               <frac32.s.map name="delay" value="-64.0"/>
-            </params>
-            <attribs/>
-            <object id="patch/object" uuid="73e16288-fc1b-4cb1-8164-d2d06de3da3c">
-               <sDescription>Generates a single pulse after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. The generated pulse is so small you won&apos;t notice it on a display! Extended range version.</sDescription>
-               <author>Johannes Taelman</author>
-               <license>BSD</license>
-               <helpPatch>timer.axh</helpPatch>
-               <inlets>
-                  <bool32.rising name="trig" description="trigger"/>
-               </inlets>
-               <outlets>
-                  <bool32.pulse name="pulse" description="pulse output"/>
-               </outlets>
-               <displays/>
-               <params>
-                  <frac32.s.map.klineartime.exp name="delay" noLabel="true"/>
-               </params>
-               <attribs/>
-               <includes/>
-               <code.declaration><![CDATA[int32_t val;
-int ntrig;]]></code.declaration>
-               <code.init><![CDATA[/* edit: initializing both to 1 so that the signal must go low first 
- * before allowing a trigger
- */
-val = 1;
-ntrig = 1;]]></code.init>
-               <code.krate><![CDATA[if ((inlet_trig > 0) && !ntrig) {
-	val = 1 << 30;
-	ntrig = 1;
-	outlet_pulse = 0;
-}
-else {
-	if (!(inlet_trig > 0)) {
-		ntrig = 0;
-	}
-
-	if (val>0) {
-		
-		int32_t t;
-		MTOF(-param_delay,t);
-		val -= t>>3;
-
-		if (val<=0) {
-			outlet_pulse = 1;
-		}
-		else {
-			outlet_pulse = 0;
-		}
-	}
-	else {
-		outlet_pulse = 0;
-	}
-}]]></code.krate>
-            </object>
-         </patchobj>
-         <patchobj type="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf" name="loadpatch_1" x="602" y="420">
+         <patchobj type="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf" name="loadpatch_1" x="560" y="392">
             <params/>
-            <attribs/>
+            <attribs>
+               <objref attributeName="clear_oled" obj="display_1"/>
+            </attribs>
             <object id="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf">
                <sDescription>load a patch from sdcard</sDescription>
                <author>Johannes Taelman</author>
@@ -406,13 +352,18 @@ else {
                <outlets/>
                <displays/>
                <params/>
-               <attribs/>
+               <attribs>
+                  <objref name="clear_oled"/>
+               </attribs>
                <includes/>
                <code.declaration><![CDATA[char filename[256+12];
 int ntrig;]]></code.declaration>
-               <code.init><![CDATA[ntrig = 1;
-]]></code.init>
-               <code.krate><![CDATA[if ((inlet_trig > 0) && !ntrig) {
+               <code.init><![CDATA[ntrig = 1;]]></code.init>
+               <code.krate><![CDATA[if (inlet_trig && !ntrig) {
+	i2cAcquireBus(&I2CD1);
+	attr_clear__oled.cmd(0xAE); /* disable oled */
+	i2cReleaseBus(&I2CD1);
+
 	strcpy(filename, inlet_fn);
 	uint16_t len = strlen(filename);	/* Get end position of string */
 	filename[len]   = '/';			/* Append necessary filename */
@@ -428,10 +379,11 @@ int ntrig;]]></code.declaration>
 	filename[len+10] = 0;
 
 	LogTextMessage("Branch Manager: Loading %s", inlet_fn);
+	codec_clearbuffer();
 	LoadPatch(filename);
 	ntrig = 1;
 }
-else if (!(inlet_trig > 0)) {
+else if (!inlet_trig) {
 	ntrig = 0;
 }]]></code.krate>
             </object>
@@ -453,8 +405,7 @@ else if (!(inlet_trig > 0)) {
             </net>
             <net>
                <source obj="gills_encoder" outlet="sw"/>
-               <dest obj="delayedpulse" inlet="trig"/>
-               <dest obj="clear_oled" inlet="trig"/>
+               <dest obj="loadpatch_1" inlet="trig"/>
             </net>
             <net>
                <source obj="slash" outlet="out"/>
@@ -475,10 +426,6 @@ else if (!(inlet_trig > 0)) {
             <net>
                <source obj="get_patchnames" outlet="patchNameAtIndexLine2"/>
                <dest obj="display_1" inlet="line3"/>
-            </net>
-            <net>
-               <source obj="delayedpulse" outlet="pulse"/>
-               <dest obj="loadpatch_1" inlet="trig"/>
             </net>
             <net>
                <source obj="-1_1" outlet="result"/>
@@ -513,10 +460,10 @@ else if (!(inlet_trig > 0)) {
    <comment type="patch/comment" x="14" y="168" text="&lt;html&gt;&lt;h2&gt;copy paste ---&gt;"/>
    <comment type="patch/comment" x="140" y="182" text="ksoloti/gills/controller/branch controller"/>
    <comment type="patch/comment" x="350" y="210" text="&lt;html&gt;&lt;h1&gt;"/>
-   <comment type="patch/comment" x="14" y="224" text="&lt;html&gt;&lt;h1 width=750px&gt;2. Upload this patch to SD card as startup. &lt;i&gt;Patch -&amp;gt; Upload to SD Card as Startup.&lt;/i&gt;&lt;br&gt;(Upload this patch window as it is. Ignore the patch/patcher above.)"/>
-   <comment type="patch/comment" x="14" y="308" text="&lt;html&gt;&lt;h1 width=750px&gt;3. Open any patch you want to be in your list and select &lt;i&gt;Patch -&amp;gt; Upload to SD Card.&lt;/i&gt;&lt;br&gt;(Don&apos;t upload these &quot;as Startup&quot;!) Since v1.1.0 you can also batch-upload patches using the Patchbank window."/>
+   <comment type="patch/comment" x="14" y="224" text="&lt;html&gt;&lt;h1 width=750px&gt;2. Upload this patch to SD card as startup. &lt;i&gt;[Patch -&amp;gt; Upload to SD Card as Startup]&lt;/i&gt;.&lt;br&gt;(Upload this patch window as it is. Ignore the patch/patcher above.)"/>
+   <comment type="patch/comment" x="14" y="308" text="&lt;html&gt;&lt;h1 width=750px&gt;3. Open any patch you want to be in your list and select &lt;i&gt;[Patch -&amp;gt; Upload to SD Card]&lt;/i&gt;.&lt;br&gt;(Don&apos;t upload these &quot;as Startup&quot;!) Since v1.1.0 you can also batch-upload patches using the Patchbank window."/>
    <comment type="patch/comment" x="14" y="392" text="&lt;html&gt;&lt;h1 width=750px&gt;4. From now on, you can long-press the encoder (1+ sec) to return to the Branch Manager and select a new patch."/>
-   <comment type="patch/comment" x="14" y="462" text="&lt;html&gt;&lt;h1 width=750px&gt;Known Issues:&lt;ul style=&quot;font-size:12px;&quot;&gt;&lt;li&gt;Each time you return to the Branch Manager, it will point to the first patch in the list.&lt;br&gt;It does not remember which patch you have seleted before.&lt;/li&gt;&lt;li&gt;Patches you had uploaded before you set up the &quot;Branch Controller&quot; in the Preferences will not be able to trigger&lt;br&gt;the Branch Manager. You will have to re-upload them so they get the Branch Controller feature.&lt;/li&gt;&lt;li&gt;The display is not cleared after you select a new patch.&lt;br&gt;If the selected patch does not use the display, the Branch Manager info will stay frozen on the screen.&lt;/li&gt;"/>
+   <comment type="patch/comment" x="14" y="462" text="&lt;html&gt;&lt;h1 width=750px&gt;Known Issues:&lt;ul style=&quot;font-size:12px;&quot;&gt;&lt;li&gt;Each time you return to the Branch Manager, it will point to the first patch in the list.&lt;br&gt;It does not remember which patch you have seleted before.&lt;/li&gt;&lt;li&gt;Patches you had uploaded before you set up the &quot;Branch Controller&quot; in the Preferences will not be able to trigger&lt;br&gt;the Branch Manager. You will have to re-upload them so they get the Branch Controller feature.&lt;/li&gt;&lt;li&gt;The display is cleared after you select a new patch. If the selected patch does not make use of any display objects, it will stay black.&lt;/li&gt;"/>
    <nets/>
    <settings>
       <subpatchmode>no</subpatchmode>
