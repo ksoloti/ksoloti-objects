@@ -1,6 +1,6 @@
 <patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1 style=&quot;font-size:36;&quot;&gt;Big Genes - Branch Manager"/>
-   <patcher type="patch/patcher" uuid="70e5abd3-b0fd-42b2-af54-5e50397b4233" name="internals" x="532" y="14">
+   <patcher type="patch/patcher" uuid="6dbf9ef8-4265-40fb-b0df-11ace70c2cd2" name="internals" x="532" y="14">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -10,7 +10,7 @@
                <spinner attributeName="min" value="0"/>
             </attribs>
             <object id="patch/object" uuid="23f6ec14-b93c-4daf-8b0b-06de46d1d5c6">
-               <sDescription>Reads the rotary encoder on Ksoloti Gills.
+               <sDescription>Reads a rotary encoder on Ksoloti Big Genes.
 &quot;min&quot;, &quot;max&quot; set the range. Default is 0 to 127.
 When the &quot;set&quot; inlet changes, the value is set directly (good for setting init or preset values, modulation).</sDescription>
                <author>Gavin, sebiik</author>
@@ -33,26 +33,39 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
                   <spinner name="min" MinValue="-65536" MaxValue="65535" DefaultValue="0"/>
                </attribs>
                <includes/>
-               <code.declaration><![CDATA[#define ENC_A_PORT GPIOG
-#define ENC_A_PIN 10
+               <code.declaration><![CDATA[#ifndef BIGGENES_ENC1_A_PORT /* Check for this one define to represent all below. */
 
-#define ENC_B_PORT GPIOA
-#define ENC_B_PIN 15
+#define BIGGENES_ENC1_A_PORT GPIOG
+#define BIGGENES_ENC1_A_PIN 11
 
-#define ENC_SW_PORT GPIOA
-#define ENC_SW_PIN 10
+#define BIGGENES_ENC1_B_PORT GPIOG
+#define BIGGENES_ENC1_B_PIN 12
+
+#define BIGGENES_ENC1_SW_PORT GPIOB
+#define BIGGENES_ENC1_SW_PIN 5
+
+#define BIGGENES_ENC2_A_PORT GPIOG
+#define BIGGENES_ENC2_A_PIN 10
+
+#define BIGGENES_ENC2_B_PORT GPIOA
+#define BIGGENES_ENC2_B_PIN 15
+
+#define BIGGENES_ENC2_SW_PORT GPIOA
+#define BIGGENES_ENC2_SW_PIN 10
+
+#endif
 
 int32_t encoder_val = 0;
 int32_t set_last = 0;
 
-bool_t a = true;
-bool_t a_last = true;]]></code.declaration>
+bool_t b = true;
+bool_t b_last = true;]]></code.declaration>
                <code.init><![CDATA[/* Configure encoder pins as input */
-palSetPadMode(ENC_A_PORT, ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
-palSetPadMode(ENC_B_PORT, ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(BIGGENES_ENC2_A_PORT, BIGGENES_ENC2_A_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(BIGGENES_ENC2_B_PORT, BIGGENES_ENC2_B_PIN, PAL_MODE_INPUT_PULLUP);
 
 /* Configure encoder switch as input */
-palSetPadMode(ENC_SW_PORT, ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
+palSetPadMode(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
                <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
 if (inlet_set != set_last) {
 	set_last = encoder_val = inlet_set;
@@ -61,36 +74,38 @@ if (inlet_set != set_last) {
 	encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
 }
 
-a = palReadPad(ENC_A_PORT, ENC_A_PIN);
+b = palReadPad(BIGGENES_ENC2_B_PORT, BIGGENES_ENC2_B_PIN);
 
 /* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
-if (!a && a_last) {
-	/* If pin A is low but wasn't before, we have caught an event. */
+if (!b && b_last) {
+	/* If pin B is low but wasn't before, we have caught an event. */
 		
-	if (palReadPad(ENC_B_PORT, ENC_B_PIN)) {
-		/* If pin B is currently HIGH it means we're turning counterclockwise */
+	if (palReadPad(BIGGENES_ENC2_A_PORT, BIGGENES_ENC2_A_PIN)) {
+		/* If pin A is currently HIGH it means we're turning counterclockwise */
 		if (encoder_val > attr_min) encoder_val -= 1;
 	}
 	else {
-		/* If pin B is currently LOW it means we're turning clockwise */
+		/* If pin A is currently LOW it means we're turning clockwise */
 		/* max value is passed via inlet */
 		if (encoder_val < inlet_max) encoder_val += 1;
 	}
 }
 
 /* Register changes */
-a_last = a;
+b_last = b;
 outlet_out = disp_value = encoder_val;
 
 
 /* Now read encoder switch */
-outlet_sw = disp_switch = palReadPad(ENC_SW_PORT, ENC_SW_PIN)<<27;]]></code.krate>
+outlet_sw = disp_switch = palReadPad(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN)<<27;]]></code.krate>
             </object>
          </patchobj>
          <patchobj type="patch/object" uuid="6b7b49f2-dec3-414d-9aa0-b37fc62f086f" name="get_patchnames" x="196" y="14">
             <params/>
             <attribs/>
             <object id="patch/object" uuid="6b7b49f2-dec3-414d-9aa0-b37fc62f086f">
+               <sDescription>For use with the &quot;Branch Manager&quot; system</sDescription>
+               <author>Ksoloti</author>
                <license>GPL</license>
                <inlets>
                   <int32.positive name="patchToLoad"/>
@@ -188,14 +203,39 @@ FRESULT scan_files_for_patchbin(char* path, char* path_short) {
 		report_fatfs_error(res, 0);
 	}
 	return res;
-}]]></code.declaration>
+}
+
+
+msg_t ThreadX2() {
+	codec_clearbuffer();
+	scan_files_for_patchbin(p, p_short);
+	while (!chThdShouldTerminate()) {
+		chThdSleepMilliseconds(10);
+	}
+	chThdExit((msg_t)0);
+}
+
+
+static msg_t ThreadX(void *arg) {
+    ((attr_parent *)arg)->ThreadX2();
+}
+
+
+WORKING_AREA(waThreadX, 4096);
+Thread *Thd;]]></code.declaration>
                <code.init><![CDATA[sdcard_unmount();
 sdcard_attemptMountIfUnmounted();  
 
-scan_files_for_patchbin(p, p_short);
+codec_clearbuffer();
+// chThdSleepMilliseconds(10);
+
+Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, ThreadX, (void *)this);
+// scan_files_for_patchbin(p, p_short);
 
 disp_ndirsWithPatch = ndirs_with_patch;
 disp_ndirs = ndirs;]]></code.init>
+               <code.dispose><![CDATA[chThdTerminate( Thd );
+chThdWait( Thd );]]></code.dispose>
                <code.krate><![CDATA[patchToLoad = inlet_patchToLoad > ndirs_with_patch ? ndirs_with_patch : inlet_patchToLoad; 	/* Limit to total found number of patches */
 
 if (_patchToLoad != patchToLoad) {											/* If patch just started or inlet has changed*/
@@ -322,8 +362,9 @@ outlet_out = &c[0];]]></code.krate>
                <objref attributeName="clear_oled" obj="display_1"/>
             </attribs>
             <object id="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf">
-               <sDescription>load a patch from sdcard</sDescription>
-               <author>Johannes Taelman</author>
+               <sDescription>load a patch from sdcard
+Edits for use with &quot;Branch Manager&quot; system</sDescription>
+               <author>Johannes Taelman, Ksoloti</author>
                <license>BSD</license>
                <inlets>
                   <bool32.rising name="trig" description="trigger"/>
@@ -342,8 +383,9 @@ int ntrig;]]></code.declaration>
                <code.krate><![CDATA[if (inlet_trig && !ntrig) {
 	i2cAcquireBus(&I2CD1);
 	attr_clear__oled.cmd(0xAE); /* disable oled */
+	chThdSleepMilliseconds(1);
 	i2cReleaseBus(&I2CD1);
-	
+
 	strcpy(filename, inlet_fn);
 	uint16_t len = strlen(filename);	/* Get end position of string */
 	filename[len]   = '/';			/* Append necessary filename */
@@ -359,9 +401,7 @@ int ntrig;]]></code.declaration>
 	filename[len+10] = 0;
 
 	LogTextMessage("Branch Manager: Loading %s", inlet_fn);
-	uint8_t i; for (i=0; i<BUFSIZE*2; i++) {
-		outbuf[i] = 0;
-	}
+	codec_clearbuffer();
 	LoadPatch(filename);
 	ntrig = 1;
 }
@@ -451,8 +491,8 @@ else if (!inlet_trig) {
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>256</x>
-      <y>54</y>
+      <x>318</x>
+      <y>134</y>
       <width>1051</width>
       <height>782</height>
    </windowPos>
