@@ -34,8 +34,8 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
 int32_t encoder_val = 0;
 int32_t set_last = 0;
 
-bool_t a = true;
-bool_t a_last = true;]]></code.declaration>
+bool_t b = true;
+bool_t b_last = true;]]></code.declaration>
       <code.init><![CDATA[/* Configure encoder pins as input */
 palSetPadMode(GILLS_ENC_PORT, GILLS_ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
 palSetPadMode(GILLS_ENC_PORT, GILLS_ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
@@ -50,24 +50,24 @@ if (inlet_set != set_last) {
 	encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
 }
 
-a = palReadPad(GILLS_ENC_PORT, GILLS_ENC_A_PIN);
+b = palReadPad(GILLS_ENC_PORT, GILLS_ENC_A_PIN);
 
 /* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
-if (!a && a_last) {
-	/* If pin A is low but wasn't before, we have caught an event. */
+if (!b && b_last) {
+	/* If pin B is low but wasn't before, we have caught an event. */
 		
 	if (palReadPad(GILLS_ENC_PORT, GILLS_ENC_B_PIN)) {
-		/* If pin B is currently HIGH it means we're turning counterclockwise */
+		/* If pin A is currently HIGH it means we're turning counterclockwise */
 		if (encoder_val > attr_min) encoder_val -= 1;
 	}
 	else {
-		/* If pin B is currently LOW it means we're turning clockwise */
+		/* If pin A is currently LOW it means we're turning clockwise */
 		if (encoder_val < attr_max) encoder_val += 1;
 	}
 }
 
 /* Register changes */
-a_last = a;
+b_last = b;
 outlet_out = disp_value = encoder_val;
 
 
