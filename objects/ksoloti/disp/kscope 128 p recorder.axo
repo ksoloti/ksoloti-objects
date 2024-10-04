@@ -43,7 +43,7 @@ if (!inlet_record && ntrig) {
 
 cpt++;
 
-if(index <= 128 && cpt >= param_subSample) {
+if(index < 128 && cpt >= param_subSample) {
 	cpt=0;
 	disp_scope[index] = t[index] = (uint8_t)(inlet_in >> 20);
 	index++;
