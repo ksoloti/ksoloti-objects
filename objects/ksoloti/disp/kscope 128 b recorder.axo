@@ -1,0 +1,52 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="kscope 128 b recorder" uuid="0f1bdf8c-5b4d-459d-9002-f72b6609a840">
+      <sDescription>Slow bipolar control rate signal oscilloscope (time domain), showing 128 consecutive samples or sub samples.
+Increase the number box to sample longer time frames.
+Use the record inlet to trigger one full sampling cycle.</sDescription>
+      <author>Smashed Transistors based on Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets>
+         <frac32.bipolar name="in" description="input"/>
+         <bool32.rising name="record"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <int8array128.vbar name="scope"/>
+      </displays>
+      <params>
+         <int32 name="subSample" noLabel="true">
+            <MinValue i="1"/>
+            <MaxValue i="256"/>
+         </int32>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int8_t t[128];
+uint8_t index, cpt;
+uint8_t ntrig;]]></code.declaration>
+      <code.init><![CDATA[uint8_t i;
+for (i = 0; i < 128; i++) t[i] = 0;
+index = 0;
+cpt = 0;
+ntrig = 0;]]></code.init>
+      <code.krate><![CDATA[if (inlet_record && !ntrig) {
+	index = 0;
+	uint8_t i;
+	for (i = 0; i < 128; i++) {
+		disp_scope[i] = t[i] = 0;
+	}
+	ntrig = 1;
+}
+if (!inlet_record && ntrig) {
+	ntrig = 0;
+}
+
+cpt++;
+
+if(index < 128 && cpt >= param_subSample) {
+	cpt=0;
+	disp_scope[index] = t[index] = (int8_t)(inlet_in >> 21);
+	index++;
+}]]></code.krate>
+   </obj.normal>
+</objdefs>
