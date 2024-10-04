@@ -15,14 +15,15 @@ Use the record inlet to trigger one full sampling cycle.</sDescription>
          <uint8array128.vbar name="scope"/>
       </displays>
       <params>
-         <int32 name="subSample" noLabel="true">
+         <int32 name="interval" description="increase to slow down recording (record only every n-th k-rate value)">
             <MinValue i="1"/>
-            <MaxValue i="256"/>
+            <MaxValue i="65535"/>
          </int32>
       </params>
       <attribs/>
       <code.declaration><![CDATA[uint8_t t[128];
-uint8_t index, cpt;
+uint8_t index;
+uint16_t cpt;
 uint8_t ntrig;]]></code.declaration>
       <code.init><![CDATA[uint8_t i;
 for (i = 0; i < 128; i++) t[i] = 0;
@@ -43,8 +44,8 @@ if (!inlet_record && ntrig) {
 
 cpt++;
 
-if(index < 128 && cpt >= param_subSample) {
-	cpt=0;
+if(index < 128 && cpt >= param_interval) {
+	cpt = 0;
 	disp_scope[index] = t[index] = (uint8_t)(inlet_in >> 20);
 	index++;
 }]]></code.krate>
