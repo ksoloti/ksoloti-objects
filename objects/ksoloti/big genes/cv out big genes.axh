@@ -4,7 +4,7 @@
    <comment type="patch/comment" x="14" y="154" text="&lt;html&gt;&lt;h2&gt;1. Go live and tweak the SCALE trimmer while switching between 1V and 2V below. &lt;span style=&quot;color: #00A000;&quot;&gt;You can also use encoder 2 to dial through the voltages.&lt;/span&gt;&lt;br&gt;Measure the output and try to get close to an interval of one volt.The offset does not matter yet, for example something close to 1.42V and 2.42V is good."/>
    <comment type="patch/comment" x="14" y="238" text="&lt;html&gt;&lt;h2&gt;2. Switch to 0V below and tweak the offset trimmer to get close to 0V at the output."/>
    <comment type="patch/comment" x="14" y="294" text="&lt;html&gt;&lt;h2&gt;3. Redo steps 1 and 2 until your measured output is as close as possible to the selected values.&lt;br&gt;Switch between all values between -5V and +5V and compare with the measured output. Make adjustments if necessary."/>
-   <patcher type="patch/patcher" uuid="afc059de-7e44-406d-a06a-7081cdd22f60" name="cv handler" x="448" y="392">
+   <patcher type="patch/patcher" uuid="278576df-dd3c-4231-9046-e9b5eeb31553" name="cv handler" x="448" y="392">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -107,7 +107,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
    </obj>
    <comment type="patch/comment" x="126" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
    <comment type="patch/comment" x="210" y="448" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
-   <patcher type="patch/patcher" uuid="658ce333-dc8f-4889-b113-2200c0759d82" name="oled stuff" x="448" y="490">
+   <patcher type="patch/patcher" uuid="b323c0db-7148-424d-81a4-3b9cb99bcc4b" name="oled stuff" x="448" y="490">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -223,8 +223,8 @@ outlet_out = (val * 12)<<21;]]></code.krate>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>412</x>
-      <y>211</y>
+      <x>234</x>
+      <y>41</y>
       <width>1045</width>
       <height>788</height>
    </windowPos>
