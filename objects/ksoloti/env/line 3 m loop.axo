@@ -1,14 +1,15 @@
 <objdefs>
-   <obj.normal id="line 2 m loop" uuid="ca6fa83252b4e4dcb354f99f6a1f4bd0b07814cd" sha="3bf6afb5080781e0466402aef23248e31975243a">
-      <upgradeSha>bf32dd2eca86c2c7cb550a288074f1618ebb6360</upgradeSha>
-      <sDescription>two piecewise linear ramps, extended range, time modulation inputs, with loop on/off inlet.</sDescription>
+   <obj.normal id="line 3 m loop" uuid="a4929113bc19cdcdea2396f011111f245461b68f" sha="6e1757b1ea9e738073481f4cdacb0e953c99a91c">
+      <upgradeSha>6a4e518a13b33c7851c48cd4cfae1476080d0b67</upgradeSha>
+      <sDescription>Three piecewise linear ramps, time modulation inputs, with loop on/off inlet.</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
             <inlets>
          <bool32.risingfalling name="gate" description="If loop is off, trigger once. If loop is on, trigger and loop as long as gate is high, decay/release otherwise."/>
-         <bool32.risingfalling name="loop" description="&lt;html&gt;Loop on/off.&lt;br&gt;While loop is on and gate is high, the envelope will loop back and forth between&lt;br&gt;level1 and level2, with the rate set by timeB, essentially creating a triangle shape.&lt;br&gt;If either gate or loop go low during the loop cycle, the envelope finishes its cycle and stops at level2."/>
+         <bool32.risingfalling name="loop" description="&lt;html&gt;Loop on/off.&lt;br&gt;While loop is on and gate is high, the envelope will loop back and forth between&lt;br&gt;level2 and level3, with the rate set by timeC, essentially creating a triangle shape.&lt;br&gt;If either gate or loop go low during the loop cycle, the envelope finishes its cycle and stops at level3."/>
          <frac32.bipolar name="timeA" description="Time A (level0 to level1) modulation"/>
          <frac32.bipolar name="timeB" description="Time B (level1 to level2) modulation"/>
+         <frac32.bipolar name="timeC" description="Time C (level2 to level3) modulation"/>
       </inlets>
       <outlets>
          <frac32.positive name="out" description="output"/>
@@ -21,6 +22,8 @@
          <frac32.u.map name="level1"/>
          <frac32.s.map.klineartime.exp name="timeB" description="time B (level1 to level2)"/>
          <frac32.u.map name="level2"/>
+         <frac32.s.map.klineartime.exp name="timeC" description="time C (level2 to level3)"/>
+         <frac32.u.map name="level3"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
@@ -34,7 +37,6 @@ ntrig = 0;
 ]]></code.init>
       <code.krate><![CDATA[
 if (inlet_gate && !ntrig) {
-    /* start trigger received */
     time1 = 0;
     phase1 = 1;
     val = param_level0;
@@ -44,9 +46,9 @@ else if (phase1 == 1) {
     int32_t t;
     int32_t timeA2 = param_timeA + inlet_timeA;
     MTOF(-timeA2, t);
-    time1 += t >> 2;
+    time1 += (t >> 2);
     if (time1 >= 0) {
-        val = param_level0 + (___SMMUL(param_level1-param_level0, time1) << 1);
+        val = param_level0 + (___SMMUL(param_level1 - param_level0, time1) << 1);
     }
     else {
         phase1 = 2;
@@ -60,30 +62,44 @@ else if (phase1 == 2) {
     MTOF(-timeB2, t);
     time1 += (t >> 2);
     if (time1 >= 0) {
-        val = param_level1 + (___SMMUL(param_level2-param_level1, time1) << 1);
+        val = param_level1 + (___SMMUL(param_level2 - param_level1, time1) << 1);
+    }
+    else {
+        phase1 = 3;
+        val = param_level2;
+        time1 = 0;
+    }
+}
+else if (phase1 == 3) {
+    int32_t t;
+    int32_t timeC2 = param_timeC + inlet_timeC;
+    MTOF(-timeC2, t);
+    time1 += (t >> 2);
+    if (time1 >= 0) {
+        val = param_level2 + (___SMMUL(param_level3 - param_level2, time1) << 1);
     }
     else {
         if (inlet_loop && inlet_gate) {
-            phase1 = 3;
+            phase1 = 4;
             time1 = 0;
         }
         else {
             phase1 = 0;
         }
-        val = param_level2;
+        val = param_level3;
     }
 }
-else if (phase1 == 3) {
+else if (phase1 == 4) {
     int32_t t;
-    int32_t timeB2 = param_timeB + inlet_timeB;
-    MTOF(-timeB2, t);
+    int32_t timeC2 = param_timeC + inlet_timeC;
+    MTOF(-timeC2, t);
     time1 += (t >> 2);
     if (time1 >= 0) {
-        val = param_level2 + (___SMMUL(param_level1 - param_level2, time1) << 1);
+        val = param_level3 + (___SMMUL(param_level2 - param_level3, time1) << 1);
     }
     else {
-        phase1 = 2;
-        val = param_level2;
+        phase1 = 3;
+        val = param_level3;
         time1 = 0;
     }
 }
