@@ -3,6 +3,7 @@
       <sDescription>Attack/decay envelope, linear attack, exponential decay, with loop on/off inlet.</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
+      <helpPatch>env loop.axh</helpPatch>
             <inlets>
          <bool32.risingfalling name="gate" description="If loop is off, trigger once. If loop is on, trigger and loop as long as gate is high, decay/release otherwise."/>
          <bool32.risingfalling name="loop" description="loop on/off"/>
