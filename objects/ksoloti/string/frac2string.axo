@@ -1,0 +1,94 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="frac2string" uuid="8ecdef07-a6df-4735-b820-619b55881955">
+      <sDescription>Convert bipolar frac (blue) value to a string.
+
+&quot;decimals&quot; lets you set the number of decimals after the point (64.00,  64.0,  64)</sDescription>
+      <author>Ksoloti</author>
+      <license>GPL</license>
+      <helpPatch>frac2string.axh</helpPatch>
+      <inlets>
+         <frac32.bipolar name="in"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="str"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="decimals">
+            <MenuEntries>
+               <string>2</string>
+               <string>1</string>
+               <string>0</string>
+            </MenuEntries>
+            <CEntries>
+               <string>2</string>
+               <string>1</string>
+               <string>0</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[static const uint32_t divs = (1 << 21);
+
+char c[8];
+
+uint32_t digitA;
+uint32_t digitB;
+
+#if (attr_decimals > 0)
+uint32_t digitC;
+#endif
+
+#if (attr_decimals > 1)
+uint32_t digitD;
+#endif]]></code.declaration>
+      <code.krate><![CDATA[uint8_t i = 0;
+int32_t value = inlet_in;
+
+/* if negative frac */
+if (value < 0) {
+	value = 0 - value;
+	c[i++]='-'; /* set minus sign */
+}
+else {
+	c[i++]=' '; /* clear minus sign */
+}
+
+/* ---------------------------------------- */
+digitA = (value / divs) / 10;
+
+if (value >= 0x07FFB000) {
+	/* lazy limiter for 64.00 case */
+	digitB = 4;
+#if (attr_decimals > 0)	
+	digitC = 0;
+#endif
+#if (attr_decimals > 1)	
+	digitD = 0;
+#endif
+}
+else {
+	digitB = (value / (divs)) - (digitA * 10);
+#if (attr_decimals > 0)
+	digitC = (value / (divs / 10)) - ((digitA * 100) + (digitB * 10));
+#endif
+#if (attr_decimals > 1)
+	digitD = (value / (divs / 100)) - ((digitC * 10) + (digitA * 1000) + (digitB * 100));
+#endif
+}
+/* ---------------------------------------- */
+
+c[i++] = '0' + digitA;
+c[i++] = '0' + digitB;
+#if (attr_decimals > 0)
+c[i++] = '.';
+c[i++] = '0' + digitC;
+#endif
+#if (attr_decimals > 1)
+c[i++] = '0' + digitD;
+#endif
+c[i] = '\0'; /* string terminator */
+
+outlet_str = &c[0];]]></code.krate>
+   </obj.normal>
+</objdefs>
