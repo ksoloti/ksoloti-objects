@@ -3,7 +3,7 @@
    <comment type="patch/comment" x="252" y="56" text="...convert it to a string"/>
    <obj type="ctrl/dial b" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_1" x="14" y="70">
       <params>
-         <frac32.s.map name="value" value="-64.0"/>
+         <frac32.s.map name="value" value="-4.0"/>
       </params>
       <attribs/>
    </obj>
@@ -13,7 +13,7 @@
          <combo attributeName="decimals" selection="2"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="252" y="140" text="optional: change &quot;decimals&quot; to display fewer decimal digits"/>
+   <comment type="patch/comment" x="378" y="112" text="optional: change &quot;decimals&quot; to display fewer decimal digits"/>
    <comment type="patch/comment" x="252" y="224" text="optional: add some info..."/>
    <comment type="patch/comment" x="448" y="224" text="...send it to the Gills/Big Genes display"/>
    <obj type="rbrt/string/prepend" uuid="f6e727a7-2a8c-463f-9598-913ca0cf0df5" name="prepend_1" x="252" y="238">
