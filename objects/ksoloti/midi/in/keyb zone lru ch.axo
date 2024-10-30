@@ -1,0 +1,117 @@
+<objdefs>
+   <obj.normal id="keyb zone lru ch" uuid="36a44969a4f8b980273e94dca846b7544a3c45d2" sha="b5981bfbddee6927782c171abbd63d632fd34ba5">
+      <upgradeSha>b9b28cf52b3421369e367f3718404222910c57a5</upgradeSha>
+      <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity, least recently used, specified MIDI channel</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="note" description="midi note number"/>
+         <bool32 name="gate" description="key pressed - holds on legato notes"/>
+         <bool32 name="gate2" description="key pressed - retriggers on legato notes"/>
+         <frac32.positive name="velocity" description="note-on velocity"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="startNote" MinValue="0" MaxValue="127" DefaultValue="0"/>
+         <spinner name="endNote" MinValue="0" MaxValue="127" DefaultValue="127"/>
+         <combo name="channel" description="Select specific MIDI channel to listen on.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int8_t _note;
+int32_t _gate;
+int32_t _gate2;
+uint8_t _velo;
+uint8_t _rvelo;
+uint32_t np[attr_endNote-attr_startNote+1];
+uint32_t p;
+]]></code.declaration>
+      <code.init><![CDATA[_gate = 0;
+_gate2 = 0;
+_note = 0;
+p = 1;
+int j;
+for(j=0;j<attr_endNote-attr_startNote+1;j++) np[j]=0;
+]]></code.init>
+      <code.krate><![CDATA[outlet_note= _note<<21;
+outlet_gate= _gate;
+outlet_gate2= _gate2;
+_gate2 = _gate;
+outlet_velocity= _velo<<20;
+outlet_releaseVelocity= _rvelo<<20;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + attr_channel) && (data2)) {
+  if ((data1 >= attr_startNote)&&(data1 <= attr_endNote)) {
+    _velo = data2;
+    _note = data1-64;
+    _gate = 1<<27;
+    _gate2 = 0;
+    np[data1-attr_startNote]=p++;
+  }
+} else if (((status == MIDI_NOTE_ON + attr_channel) && (!data2))||
+          (status == MIDI_NOTE_OFF + attr_channel)) {
+if ((data1 >= attr_startNote)&&(data1 <= attr_endNote)) {
+   _rvelo = data2;
+np[data1-attr_startNote]=0;
+int j;
+int np2 = 0;
+int n2 = 0;
+for(j=0;j<attr_endNote-attr_startNote+1;j++){
+   if (np[j]>np2) {
+      np2=np[j];
+      n2 = j;
+   }
+}
+if (n2>0) {
+  int nn = n2+attr_startNote-64;
+  if (nn != _note) {
+    _gate2 = 0;
+    _note = nn;
+  }
+}
+else _gate = 0;
+}
+} else if ((status == MIDI_CONTROL_CHANGE + attr_channel)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
+  _gate = 0;
+}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>

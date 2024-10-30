@@ -1,0 +1,95 @@
+<objdefs>
+   <obj.normal id="keyb touch ch" uuid="edfcb4cfd6b2064e95f5a7ee644bca56252ec11f" sha="a633ca9af7fd8b648063b5958bb5f25cfb42174">
+      <upgradeSha>583b14fe738d269a156ff5842bde32606dcf64bf</upgradeSha>
+      <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity. Polyphonic touch output., specified MIDI channel</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="note" description="midi note number (-64..63)"/>
+         <bool32 name="gate" description="key pressed, no retrigger legato"/>
+         <bool32 name="gate2" description="key pressed, retrigger on legato"/>
+         <frac32.positive name="velocity" description="note-on velocity"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity"/>
+         <frac32.positive name="touch" description="polyphonic aftertouch"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="channel" description="Select specific MIDI channel to listen on.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int8_t _note;
+int32_t _gate;
+int32_t _gate2;
+uint8_t _velo;
+uint8_t _rvelo;
+uint8_t _touch;
+]]></code.declaration>
+      <code.init><![CDATA[_gate = 0;
+_note = 0;
+_touch = 0;
+]]></code.init>
+      <code.krate><![CDATA[outlet_note= _note<<21;
+outlet_gate= _gate;
+outlet_gate2= _gate2;
+_gate2 = _gate;
+outlet_velocity= _velo<<20;
+outlet_touch = _touch<<20;
+outlet_releaseVelocity= _rvelo<<20;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + attr_channel) && (data2)) {
+  _velo = data2;
+  _note = data1-64;
+  _gate = 1<<27;
+  _gate2 = 0;
+} else if (((status == MIDI_NOTE_ON + attr_channel) && (!data2))||
+          (status == MIDI_NOTE_OFF + attr_channel)) {
+  if (_note == data1-64) {
+    _rvelo = data2;
+    _gate = 0;
+  }
+} else if ((status == attr_channel + MIDI_POLY_PRESSURE)&&(data1-64 == _note)) {
+  _touch = data2;
+} else if ((status == MIDI_CONTROL_CHANGE + attr_channel)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
+  _gate = 0;
+}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>

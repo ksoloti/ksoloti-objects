@@ -1,0 +1,68 @@
+<objdefs>
+   <obj.normal id="touch ch" uuid="7e3a4d718388f7d5213accadf5a80121a7c35cc9" sha="19f5c79f0104c14d673160c3fee210c96ce3b62a">
+      <upgradeSha>cb01f331517bc8be44bcf77add271dab64bb91df</upgradeSha>
+      <sDescription>Midi channel pressure input, specified MIDI channel</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.positive name="o" description="channel pressure, 0..64"/>
+         <bool32.pulse name="trig" description="trigger output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="channel" description="Select specific MIDI channel to listen on.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int32_t _press;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[_press = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[outlet_o = _press;
+outlet_trig = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if (status == MIDI_CHANNEL_PRESSURE + attr_channel) {  _press = (data1)<<20;
+  ntrig = 1;
+}]]></code.midihandler>
+   </obj.normal>
+</objdefs>

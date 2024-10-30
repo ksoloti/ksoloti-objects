@@ -1,0 +1,68 @@
+<objdefs>
+   <obj.normal id="pgm ch" uuid="6165409901fee5a0781b41bac3513f51c2120d67" sha="16dc65111592a1cd78e9d146f6205699e5ce1155">
+      <upgradeSha>dc477d6b12f96e244a30d89d03d0274a9e2417aa</upgradeSha>
+      <sDescription>Midi program change, specified MIDI channel</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32 name="o" description="program"/>
+         <bool32.pulse name="trig" description="trigger output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="channel" description="Select specific MIDI channel to listen on.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int8_t _pgm;
+int8_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[_pgm = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[outlet_o = _pgm;
+outlet_trig = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if (status == MIDI_PROGRAM_CHANGE + attr_channel) {  _pgm = data1;
+  ntrig = 1;
+}]]></code.midihandler>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,64 @@
+<objdefs>
+   <obj.normal id="script ch" uuid="92cbee1cb01566f753d6515bcc16c32f0baa37a3" sha="3ee8b91485e8ee55e2bc5f205ec797d8a6986231">
+      <upgradeSha>82709d8f2cd722b129cb94768cdc4a23b41a5230</upgradeSha>
+      <sDescription>script with 2 outputs, triggered by MIDI input, specified MIDI channel</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32 name="out1_" description="out1"/>
+         <frac32 name="out2_" description="out2"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <text name="script"/>
+         <combo name="channel" description="Select specific MIDI channel to listen on.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int32_t out1,out2;
+]]></code.declaration>
+      <code.init><![CDATA[out1=0;out2=0;
+]]></code.init>
+      <code.krate><![CDATA[outlet_out1__ = this->out1;
+outlet_out2__ = this->out2;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status & 0x0F) == attr_channel) { attr_script }]]></code.midihandler>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,68 @@
+<objdefs>
+   <obj.normal id="cc i ch " uuid="614eb76edef3b43632fa1fcda25aab54f821daf6" sha="74a848b235a3e6e117925d2dadafaa6f6c84b9b">
+      <upgradeSha>7f43740c4d7e4145d07d22ce4cf4516a7cbd4c73</upgradeSha>
+      <sDescription>Receives Midi Continuous Controller messages, integer output (0-127), specified MIDI channel</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32.positive name="midiCC" description="midi CC 0-127"/>
+         <bool32.pulse name="trig" description="trigger output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="cc" MinValue="0" MaxValue="127" DefaultValue="0"/>
+         <spinner name="default" MinValue="0" MaxValue="127" DefaultValue="0"/>
+         <combo name="channel" description="Select specific MIDI channel to listen on.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int32_t ccv;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[ccv = attr_default;
+]]></code.init>
+      <code.krate><![CDATA[outlet_midiCC= ccv;
+outlet_trig = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == MIDI_CONTROL_CHANGE + attr_channel)&&(data1 == attr_cc)) { ccv = data2; ntrig = 1;}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>

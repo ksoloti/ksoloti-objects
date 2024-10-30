@@ -1,0 +1,68 @@
+<objdefs>
+   <obj.normal id="bend ch" uuid="7bd8cace52a8c26ed62d80f65e238408d5d621f4" sha="282d4ab3e18f8fd47ae4a1f6a5f7b208ad22e1e9">
+      <upgradeSha>84fc4df2ea385612e1295f33f4bfffbc8b501534</upgradeSha>
+      <sDescription>Midi pitch bend input, specified MIDI channel</sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="bend" description="pitch bend, -64..64"/>
+         <bool32.pulse name="trig" description="trigger output"/>
+      </outlets>
+      <displays/>
+      <params/>
+   <attribs>
+         <combo name="channel" description="Select specific MIDI channel to listen on.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+   </attribs>
+      <code.declaration><![CDATA[int32_t _bend;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[_bend = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[outlet_bend = _bend;
+outlet_trig = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if (status == MIDI_PITCH_BEND + attr_channel) {  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
+  ntrig = 1;
+}]]></code.midihandler>
+   </obj.normal>
+</objdefs>
