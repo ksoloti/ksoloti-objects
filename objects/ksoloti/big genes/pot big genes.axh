@@ -1,93 +1,286 @@
 <patch-1.0 appVersion="1.0.12">
-   <comment type="patch/comment" x="350" y="0" text="&lt;html&gt;&lt;h1&gt;Big Genes pot layout:&lt;/html&gt;"/>
-   <comment type="patch/comment" x="364" y="56" text="&lt;html&gt;&lt;code&gt;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&lt;br/&gt; pot1&amp;nbsp;&amp;nbsp;&amp;nbsp;pot2&amp;nbsp;&amp;nbsp;&amp;nbsp;pot3&amp;nbsp;&amp;nbsp;&amp;nbsp;pot4&lt;br/&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9862;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br/&gt; pot5&amp;nbsp;&amp;nbsp;&amp;nbsp;pot6&amp;nbsp;&amp;nbsp;&amp;nbsp;pot7&amp;nbsp;&amp;nbsp;&amp;nbsp;pot8&lt;br/&gt;&lt;/code&gt;&lt;/html&gt;"/>
-   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_2" x="84" y="154">
+   <comment type="patch/comment" x="28" y="14" text="&lt;html&gt;&lt;h2&gt;The &quot;pot p&quot; object reads a pot and outputs a &lt;u&gt;unipolar&lt;/u&gt; value from 0 to 64."/>
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_1" x="28" y="56">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="1"/>
       </attribs>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_1" x="196" y="154">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_1" x="140" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_3" x="280" y="154">
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_2" x="238" y="56">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="2"/>
       </attribs>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_3" x="392" y="154">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_2" x="350" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_5" x="476" y="154">
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_3" x="448" y="56">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="3"/>
       </attribs>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_5" x="588" y="154">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_3" x="560" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_7" x="672" y="154">
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_4" x="658" y="56">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="4"/>
       </attribs>
    </obj>
-   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_7" x="784" y="154">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_4" x="770" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_1" x="84" y="252">
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_5" x="28" y="168">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="5"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_2" x="196" y="252">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_5" x="140" y="168">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_4" x="280" y="252">
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_6" x="238" y="168">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="6"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_4" x="392" y="252">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_6" x="350" y="168">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_6" x="476" y="252">
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_7" x="448" y="168">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="7"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_6" x="588" y="252">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_7" x="560" y="168">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_8" x="672" y="252">
+   <obj type="ksoloti/big genes/pot p" uuid="c0d0da2a-8aaa-4079-a442-285af3a74fa6" name="pot_8" x="658" y="168">
       <params/>
       <attribs>
          <combo attributeName="pot" selection="8"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_8" x="784" y="252">
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_8" x="770" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="28" y="336" text="&lt;html&gt;&lt;h2&gt;The &quot;pot b&quot; object reads a pot and outputs a &lt;u&gt;bipolar&lt;/u&gt; value from -64 to 64."/>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_9" x="28" y="378">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="1"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_11" x="140" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_10" x="238" y="378">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="2"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_12" x="350" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_11" x="448" y="378">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="3"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_13" x="560" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_12" x="658" y="378">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="4"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_14" x="770" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_13" x="28" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="5"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_15" x="140" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_14" x="238" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="6"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_16" x="350" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_15" x="448" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="7"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_17" x="560" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b" uuid="f17bc429-511e-4bec-9b60-0c456bbe2a43" name="pot_16" x="658" y="490">
+      <params/>
+      <attribs>
+         <combo attributeName="pot" selection="8"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_18" x="770" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="28" y="644" text="&lt;html&gt;&lt;h2&gt;Alternatively, the &quot;pot p 2&quot; and &quot;pot b 2&quot; objects read the &lt;u&gt;values of two adjacent pots&lt;/u&gt; for convenience and to save canvas space."/>
+   <obj type="ksoloti/big genes/pot p 2" uuid="5f3d2718-1ff8-4408-adbd-0efdb75eb9e0" name="pot_17" x="28" y="686">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="1 | 2"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_21" x="168" y="686">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_22" x="238" y="686">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot p 2" uuid="5f3d2718-1ff8-4408-adbd-0efdb75eb9e0" name="pot_18" x="322" y="686">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="3 | 4"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_23" x="462" y="686">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_24" x="532" y="686">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot p 2" uuid="5f3d2718-1ff8-4408-adbd-0efdb75eb9e0" name="pot_19" x="616" y="686">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="5 | 6"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_25" x="756" y="686">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_26" x="826" y="686">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot p 2" uuid="5f3d2718-1ff8-4408-adbd-0efdb75eb9e0" name="pot_20" x="28" y="798">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="7 | 8"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_27" x="168" y="798">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_28" x="238" y="798">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b 2" uuid="b876bdb9-a5b1-4777-aa97-a647bf3800e2" name="pot_21" x="28" y="966">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="1 | 2"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_31" x="168" y="966">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_32" x="238" y="966">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b 2" uuid="b876bdb9-a5b1-4777-aa97-a647bf3800e2" name="pot_22" x="322" y="966">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="3 | 4"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_33" x="462" y="966">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_34" x="532" y="966">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b 2" uuid="b876bdb9-a5b1-4777-aa97-a647bf3800e2" name="pot_23" x="616" y="966">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="5 | 6"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_35" x="756" y="966">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_36" x="826" y="966">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/pot b 2" uuid="b876bdb9-a5b1-4777-aa97-a647bf3800e2" name="pot_24" x="28" y="1078">
+      <params/>
+      <attribs>
+         <combo attributeName="pots" selection="7 | 8"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_37" x="168" y="1078">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_38" x="238" y="1078">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source obj="pot_2" outlet="out"/>
+         <source obj="pot_1" outlet="out"/>
          <dest obj="dial_1" inlet="in"/>
       </net>
       <net>
-         <source obj="pot_1" outlet="out"/>
+         <source obj="pot_2" outlet="out"/>
          <dest obj="dial_2" inlet="in"/>
       </net>
       <net>
@@ -95,24 +288,120 @@
          <dest obj="dial_3" inlet="in"/>
       </net>
       <net>
-         <source obj="pot_5" outlet="out"/>
-         <dest obj="dial_5" inlet="in"/>
-      </net>
-      <net>
-         <source obj="pot_7" outlet="out"/>
-         <dest obj="dial_7" inlet="in"/>
-      </net>
-      <net>
          <source obj="pot_4" outlet="out"/>
          <dest obj="dial_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_5" outlet="out"/>
+         <dest obj="dial_5" inlet="in"/>
       </net>
       <net>
          <source obj="pot_6" outlet="out"/>
          <dest obj="dial_6" inlet="in"/>
       </net>
       <net>
+         <source obj="pot_7" outlet="out"/>
+         <dest obj="dial_7" inlet="in"/>
+      </net>
+      <net>
          <source obj="pot_8" outlet="out"/>
          <dest obj="dial_8" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_9" outlet="out"/>
+         <dest obj="dial_11" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_10" outlet="out"/>
+         <dest obj="dial_12" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_11" outlet="out"/>
+         <dest obj="dial_13" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_12" outlet="out"/>
+         <dest obj="dial_14" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_13" outlet="out"/>
+         <dest obj="dial_15" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_14" outlet="out"/>
+         <dest obj="dial_16" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_15" outlet="out"/>
+         <dest obj="dial_17" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_16" outlet="out"/>
+         <dest obj="dial_18" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_17" outlet="outA"/>
+         <dest obj="dial_21" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_17" outlet="outB"/>
+         <dest obj="dial_22" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_18" outlet="outA"/>
+         <dest obj="dial_23" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_18" outlet="outB"/>
+         <dest obj="dial_24" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_19" outlet="outA"/>
+         <dest obj="dial_25" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_19" outlet="outB"/>
+         <dest obj="dial_26" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_20" outlet="outA"/>
+         <dest obj="dial_27" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_20" outlet="outB"/>
+         <dest obj="dial_28" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_21" outlet="outA"/>
+         <dest obj="dial_31" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_21" outlet="outB"/>
+         <dest obj="dial_32" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_22" outlet="outA"/>
+         <dest obj="dial_33" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_22" outlet="outB"/>
+         <dest obj="dial_34" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_23" outlet="outA"/>
+         <dest obj="dial_35" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_23" outlet="outB"/>
+         <dest obj="dial_36" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_24" outlet="outA"/>
+         <dest obj="dial_37" inlet="in"/>
+      </net>
+      <net>
+         <source obj="pot_24" outlet="outB"/>
+         <dest obj="dial_38" inlet="in"/>
       </net>
    </nets>
    <settings>
@@ -120,9 +409,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>160</x>
-      <y>160</y>
-      <width>968</width>
-      <height>480</height>
+      <x>210</x>
+      <y>50</y>
+      <width>1098</width>
+      <height>699</height>
    </windowPos>
 </patch-1.0>
