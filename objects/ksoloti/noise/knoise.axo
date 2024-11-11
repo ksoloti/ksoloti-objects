@@ -1,0 +1,32 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="knoise" uuid="12a410e2-8d22-4f75-8cfc-a8f5c2fc7fcd">
+      <sDescription>&quot;knoise - The K is Anything but Silent.&quot;
+
+An attempt at an arguably better-sounding white noise.</sDescription>
+      <author>Ksoloti</author>
+      <license>GPL 3.0</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer.bipolar name="out"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[outlet_out[0]  = (1 << 27) - ((0x94559CD1 + GenerateRandomNumber()) >> 4);
+outlet_out[1]  = (1 << 27) - ((0x85C77F79 + GenerateRandomNumber()) >> 4);
+outlet_out[2]  = (1 << 27) - ((0xFD22EF49 + GenerateRandomNumber()) >> 4);
+outlet_out[3]  = (1 << 27) - ((0x44E534AC + GenerateRandomNumber()) >> 4);
+outlet_out[4]  = (1 << 27) - ((0xC2009B2E + GenerateRandomNumber()) >> 4);
+outlet_out[5]  = (1 << 27) - ((0x7D129582 + GenerateRandomNumber()) >> 4);
+outlet_out[6]  = (1 << 27) - ((0xA4A8F391 + GenerateRandomNumber()) >> 4);
+outlet_out[7]  = (1 << 27) - ((0x28255E27 + GenerateRandomNumber()) >> 4);
+outlet_out[8]  = (1 << 27) - ((0x94519CD1 + GenerateRandomNumber()) >> 4);
+outlet_out[9]  = (1 << 27) - ((0x4BC67F79 + GenerateRandomNumber()) >> 4);
+outlet_out[10] = (1 << 27) - ((0xFDD9EF49 + GenerateRandomNumber()) >> 4);
+outlet_out[11] = (1 << 27) - ((0xD4E734AC + GenerateRandomNumber()) >> 4);
+outlet_out[12] = (1 << 27) - ((0x62027B2E + GenerateRandomNumber()) >> 4);
+outlet_out[13] = (1 << 27) - ((0xBD149782 + GenerateRandomNumber()) >> 4);
+outlet_out[14] = (1 << 27) - ((0x44A7F891 + GenerateRandomNumber()) >> 4);
+outlet_out[15] = (1 << 27) - ((0xC8245E27 + GenerateRandomNumber()) >> 4);]]></code.krate>
+   </obj.normal>
+</objdefs>
