@@ -29,8 +29,8 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
 	int val = -((in >> 1) + offs) + (1<<26);
 	return __SSAT(val, 28);
 }]]></code.declaration>
-      <code.init><![CDATA[palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
-palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+      <code.init><![CDATA[palSetPadMode(GPIOA, 4, PAL_MODE_OUTPUT_OPENDRAIN);
+palSetPadMode(GPIOA, 5, PAL_MODE_OUTPUT_OPENDRAIN);
 RCC->APB1ENR |= 0x20000000;
 DAC->CR |= 0x00010001;]]></code.init>
       <code.dispose><![CDATA[DAC->CR = 0x0;
