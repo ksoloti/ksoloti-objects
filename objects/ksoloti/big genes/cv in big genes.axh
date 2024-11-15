@@ -1,0 +1,310 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1&gt;You can use either an external 1V/oct source  &lt;span style=&quot;color:#800080;&quot;&gt;or Big Genes itself&lt;/span&gt; to calibrate CV inputs X and Y.&lt;br&gt; &lt;span style=&quot;color:#800080;&quot;&gt;If using Big Genes itself, make sure you have calibrated the CV outputs&lt;br&gt;as described in &lt;i&gt;Help &gt; Help Patches &gt; ksoloti-objects &gt; big genes &gt; cv out big genes&lt;/i&gt;.&lt;br&gt;Then patch a cable from CV out 1 or 2 jack into the CV input X/Y jack."/>
+   <comment type="patch/comment" x="14" y="154" text="&lt;html&gt;&lt;h2 style=&quot;color:#A00000;&quot;&gt;If you have set the respective UNIPOLAR jumper on the Big Genes PCB, values will be transposed."/>
+   <comment type="patch/comment" x="14" y="238" text="&lt;html&gt;&lt;h2&gt;1. Go live and tweak the OFFSET trimmer (under the OLED display) for input X so that CV_IN_VAL jumps as close around &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt; as possible."/>
+   <comment type="patch/comment" x="14" y="294" text="&lt;html&gt;&lt;h2&gt;2. Apply 1V from your CV source to the CV input jack. &lt;span style=&quot;color:#800080;&quot;&gt;(or switch Big Genes CV out to 1V below. Turn the right encoder to quickly switch between voltages)&lt;/span&gt;."/>
+   <comment type="patch/comment" x="14" y="350" text="&lt;html&gt;&lt;h2&gt;3. If CV_IN_VAL is &lt;span style=&quot;color:#00A000;&quot;&gt;BELOW&lt;/span&gt; 12.00 now, turn the SCALE trimmer &lt;span style=&quot;color:#00A000;&quot;&gt;CLOCKWISE&lt;/span&gt; for one quarter of a turn or so, to increase the interval.&lt;br&gt;If CV_IN_VAL is &lt;span style=&quot;color:#00A000;&quot;&gt;ABOVE&lt;/span&gt; 12.00, turn the SCALE trimmer &lt;span style=&quot;color:#00A000;&quot;&gt;COUNTERCLOCKWISE&lt;/span&gt; for one quarter of a turn or so, to decrease the interval. &lt;br&gt;&lt;span style=&quot;color:#A00000;&quot;&gt;Note that the value changes are quite counter-intuitive:&lt;br&gt;if you increase the SCALE trimmer, CV_IN_VALUE will seemingly first drop (because the whole SCALE/OFFSET ratio will have changed.&lt;/span&gt;"/>
+   <comment type="patch/comment" x="14" y="462" text="&lt;html&gt;&lt;h2&gt;4. Apply 0V from your CV source &lt;span style=&quot;color:#800080;&quot;&gt;(or switch Big Genes CV out to 0V below)&lt;/span&gt;.&lt;br&gt;Just like in step 1, tweak the OFFSET trimmer for input X so that CV_IN_VAL jumps as close around &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt; as possible."/>
+   <comment type="patch/comment" x="14" y="546" text="&lt;html&gt;&lt;h2&gt;5. Redo steps 2 to 4 until your measured output is as close as possible to &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt;  and &lt;span style=&quot;color:#00A000;&quot;&gt;12.00&lt;/span&gt;."/>
+   <comment type="patch/comment" x="14" y="602" text="&lt;html&gt;&lt;h2&gt;6. Apply voltages from -5V to 5V &lt;span style=&quot;color:#800080;&quot;&gt;(or switch between values between -5V and +5V below)&lt;/span&gt; and compare with CV_IN_VAL. &lt;br&gt;One Volt difference should correspond to &lt;span style=&quot;color:#00A000;&quot;&gt;12.00&lt;/span&gt; units (= semitones) as closely as possible. Make adjustments if necessary.&lt;br&gt;It is normal that values at the lower and upper ends are less precise.&lt;br&gt; Consider tolerating some drift at the lower and upper ends and focusing on getting the middle octaves right."/>
+   <patchobj type="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba" name="voltage switcher" x="28" y="728">
+      <params>
+         <int32.vradio name="value" value="5"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba">
+         <sDescription>positive integer control, vertical radio buttons</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>ctrl.axh</helpPatch>
+         <inlets/>
+         <outlets>
+            <int32.positive name="out" description="output"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32.vradio name="value" noLabel="true">
+               <MaxValue i="11"/>
+            </int32.vradio>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[outlet_out = 5-param_value;]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="126" y="728" text="&lt;html&gt;Bipolar&lt;br&gt;(default):"/>
+   <comment type="patch/comment" x="210" y="728" text="&lt;html&gt;Unipolar&lt;br&gt;(jumper set):"/>
+   <patcher type="patch/patcher" uuid="0898103c-3c05-4f50-837b-0a1a428f5bb0" name="cv out helper" x="308" y="728">
+      <params/>
+      <attribs/>
+      <subpatch appVersion="1.0.12">
+         <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="volt" x="70" y="154">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="ksoloti/big genes/encoder" uuid="1d83da76-97a3-4e59-85ce-9b2cdfd047d7" name="encoder_1" x="168" y="154">
+            <params/>
+            <attribs>
+               <combo attributeName="encoder" selection="2"/>
+               <spinner attributeName="min" value="-5"/>
+               <spinner attributeName="max" value="5"/>
+            </attribs>
+         </obj>
+         <patcher type="patch/patcher" uuid="a7d13616-ae92-4144-8b89-4edf07995ef1" name="cv handler" x="308" y="154">
+            <params/>
+            <attribs/>
+            <subpatch appVersion="1.0.12">
+               <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="index" x="266" y="140">
+                  <params/>
+                  <attribs/>
+               </obj>
+               <patchobj type="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a" name="handle" x="364" y="140">
+                  <params/>
+                  <attribs/>
+                  <object id="patch/object" uuid="551b8ac5-ad99-40d3-a8b8-be2444fac63a">
+                     <author>Are Leistad</author>
+                     <license>BSD</license>
+                     <helpPatch>mux.axh</helpPatch>
+                     <inlets>
+                        <int32.positive name="in" description="select"/>
+                     </inlets>
+                     <outlets>
+                        <frac32 name="out" description="output"/>
+                     </outlets>
+                     <displays/>
+                     <params/>
+                     <attribs/>
+                     <includes/>
+                     <code.declaration><![CDATA[int val = 0;]]></code.declaration>
+                     <code.krate><![CDATA[val = inlet_in > 5 ? 5 : inlet_in < -5 ? -5 : inlet_in;
+outlet_out = (val * 12)<<21;]]></code.krate>
+                  </object>
+               </patchobj>
+               <obj type="patch/outlet f" uuid="d18a9a550bcaaebac94e25983bd0e27dbfd7233c" name="out" x="462" y="140">
+                  <params/>
+                  <attribs/>
+               </obj>
+               <nets>
+                  <net>
+                     <source obj="index" outlet="inlet"/>
+                     <dest obj="handle" inlet="in"/>
+                  </net>
+                  <net>
+                     <source obj="handle" outlet="out"/>
+                     <dest obj="out" inlet="outlet"/>
+                  </net>
+               </nets>
+               <settings>
+                  <subpatchmode>no</subpatchmode>
+               </settings>
+               <notes><![CDATA[]]></notes>
+               <windowPos>
+                  <x>920</x>
+                  <y>0</y>
+                  <width>780</width>
+                  <height>620</height>
+               </windowPos>
+            </subpatch>
+         </patcher>
+         <obj type="ksoloti/big genes/cv out b 2" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd0" name="cv_1" x="406" y="154">
+            <params/>
+            <attribs>
+               <combo attributeName="offset" selection="E4 (0) = 0V (Axoloti)"/>
+            </attribs>
+         </obj>
+         <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_1" x="574" y="154">
+            <params/>
+            <attribs/>
+         </obj>
+         <patcher type="patch/patcher" uuid="529d7f41-5ad4-44c0-bc4e-385ca1cc76c2" name="oled stuff" x="308" y="252">
+            <params/>
+            <attribs/>
+            <subpatch appVersion="1.0.12">
+               <obj type="gpio/i2c/config" uuid="b095a33e56de5fcd23740a7d983bc0bafb315d81" name="config_1" x="308" y="0">
+                  <params/>
+                  <attribs/>
+               </obj>
+               <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_2" x="252" y="42">
+                  <params/>
+                  <attribs>
+                     <table attributeName="str" table="CV CALIBR."/>
+                  </attribs>
+               </obj>
+               <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="252" y="112">
+                  <params/>
+                  <attribs>
+                     <table attributeName="str" table="CV 1&amp;2:"/>
+                  </attribs>
+               </obj>
+               <obj type="tiar/HW/OLED128x64niceWOScope" uuid="5bde8c3d-fe37-4133-138e-edb113767bc8" name="OLED128x64niceWOScope_1" x="476" y="112">
+                  <params/>
+                  <attribs>
+                     <combo attributeName="type" selection="SH1106"/>
+                     <combo attributeName="I2CADDR" selection="0x3C"/>
+                  </attribs>
+               </obj>
+               <obj type="patch/inlet i" uuid="f11927f00c59219df0c50f73056aa19f125540b7" name="value" x="84" y="182">
+                  <params/>
+                  <attribs/>
+               </obj>
+               <obj type="math/*" uuid="6a31299e3a491edd8c4df0e809a519a35cc08a3b" name="*_1" x="252" y="182">
+                  <params/>
+                  <attribs/>
+               </obj>
+               <obj type="tiar/HW/bar" uuid="29bab9de-7b6b-4c8e-87ee-75013c6b6e2f" name="bar_1" x="322" y="182">
+                  <params/>
+                  <attribs/>
+               </obj>
+               <obj type="const/i" uuid="e202f44b2df17ae0b3e663b98ea6b14c8ff00408" name="i_2" x="84" y="224">
+                  <params/>
+                  <attribs>
+                     <spinner attributeName="value" value="12"/>
+                  </attribs>
+               </obj>
+               <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_3" x="252" y="252">
+                  <params/>
+                  <attribs>
+                     <table attributeName="str" table="0 1 2 3 4 5"/>
+                  </attribs>
+               </obj>
+               <nets>
+                  <net>
+                     <source obj="c_1" outlet="out"/>
+                     <dest obj="OLED128x64niceWOScope_1" inlet="line2"/>
+                  </net>
+                  <net>
+                     <source obj="c_2" outlet="out"/>
+                     <dest obj="OLED128x64niceWOScope_1" inlet="line1"/>
+                  </net>
+                  <net>
+                     <source obj="bar_1" outlet="out"/>
+                     <dest obj="OLED128x64niceWOScope_1" inlet="line3"/>
+                  </net>
+                  <net>
+                     <source obj="*_1" outlet="result"/>
+                     <dest obj="bar_1" inlet="in"/>
+                  </net>
+                  <net>
+                     <source obj="i_2" outlet="out"/>
+                     <dest obj="*_1" inlet="b"/>
+                  </net>
+                  <net>
+                     <source obj="c_3" outlet="out"/>
+                     <dest obj="OLED128x64niceWOScope_1" inlet="line4"/>
+                  </net>
+                  <net>
+                     <source obj="value" outlet="inlet"/>
+                     <dest obj="*_1" inlet="a"/>
+                  </net>
+               </nets>
+               <settings>
+                  <subpatchmode>no</subpatchmode>
+               </settings>
+               <notes><![CDATA[]]></notes>
+               <windowPos>
+                  <x>920</x>
+                  <y>0</y>
+                  <width>780</width>
+                  <height>620</height>
+               </windowPos>
+            </subpatch>
+         </patcher>
+         <nets>
+            <net>
+               <source obj="cv handler" outlet="out"/>
+               <dest obj="dial_1" inlet="in"/>
+               <dest obj="cv_1" inlet="cv1"/>
+               <dest obj="cv_1" inlet="cv2"/>
+            </net>
+            <net>
+               <source obj="encoder_1" outlet="out"/>
+               <dest obj="cv handler" inlet="index"/>
+               <dest obj="oled stuff" inlet="value"/>
+            </net>
+            <net>
+               <source obj="volt" outlet="inlet"/>
+               <dest obj="encoder_1" inlet="set"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+         <windowPos>
+            <x>0</x>
+            <y>0</y>
+            <width>780</width>
+            <height>620</height>
+         </windowPos>
+      </subpatch>
+   </patcher>
+   <comment type="patch/comment" x="672" y="728" text="&lt;html&gt;&lt;h2&gt;CV_IN_VAL:"/>
+   <comment type="patch/comment" x="126" y="770" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
+   <comment type="patch/comment" x="210" y="770" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
+   <obj type="ksoloti/big genes/cv in b" uuid="42dfd99d-0a21-42e4-9006-51849ed005f9" name="cv_1" x="462" y="770">
+      <params/>
+      <attribs>
+         <combo attributeName="jack" selection="X"/>
+      </attribs>
+   </obj>
+   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_1" x="574" y="770">
+      <params>
+         <frac32.u.map name="time" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="cv_in_val_x" x="686" y="770">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/big genes/cv in b" uuid="42dfd99d-0a21-42e4-9006-51849ed005f9" name="cv_in_x_" x="462" y="868">
+      <params/>
+      <attribs>
+         <combo attributeName="jack" selection="Y"/>
+      </attribs>
+   </obj>
+   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_2" x="574" y="868">
+      <params>
+         <frac32.u.map name="time" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="cv_in_val_y" x="686" y="868">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="14" y="966" text="&lt;html&gt;&lt;h2&gt;Repeat the whole shebang for CV input Y."/>
+   <comment type="patch/comment" x="14" y="1022" text="&lt;html&gt;&lt;h1 style=&quot;color:#A00000;&quot;&gt;Note: If you set or clear a UNIPOLAR jumper later on you may have to re-calibrate the respective CV channel."/>
+   <nets>
+      <net>
+         <source obj="cv_1" outlet="out"/>
+         <dest obj="smooth_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="smooth_1" outlet="out"/>
+         <dest obj="cv_in_val_x" inlet="in"/>
+      </net>
+      <net>
+         <source obj="voltage switcher" outlet="out"/>
+         <dest obj="cv out helper" inlet="volt"/>
+      </net>
+      <net>
+         <source obj="cv_in_x_" outlet="out"/>
+         <dest obj="smooth_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="smooth_2" outlet="out"/>
+         <dest obj="cv_in_val_y" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>-7</x>
+      <y>-7</y>
+      <width>1550</width>
+      <height>848</height>
+   </windowPos>
+</patch-1.0>
