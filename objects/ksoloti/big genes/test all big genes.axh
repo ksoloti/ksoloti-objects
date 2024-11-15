@@ -386,74 +386,87 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="168" y="2422" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1&gt;2 CV outputs"/>
-   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_3" x="462" y="2492">
+   <comment type="patch/comment" x="168" y="2408" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1&gt;2 CV + Gate outputs"/>
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_3" x="266" y="2478">
       <params>
          <frac32.s.map name="pitch" value="-36.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd1" name="cv_7" x="574" y="2492">
+   <obj type="ksoloti/big genes/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd1" name="cv_7" x="378" y="2478">
       <params/>
       <attribs>
          <combo attributeName="output" selection="CV1 (PA4)"/>
          <combo attributeName="offset" selection="E4 (0) = 0V (Axoloti)"/>
       </attribs>
    </obj>
-   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_4" x="770" y="2492">
+   <obj type="ksoloti/big genes/gate out" uuid="a9f603ff-485b-4417-98e5-73de698b8a6e" name="gate_1" x="546" y="2478">
+      <params/>
+      <attribs>
+         <combo attributeName="gate" selection="1"/>
+      </attribs>
+   </obj>
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_4" x="770" y="2478">
       <params>
          <frac32.s.map name="pitch" value="-48.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd1" name="cv_8" x="882" y="2492">
+   <obj type="ksoloti/big genes/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd1" name="cv_8" x="882" y="2478">
       <params/>
       <attribs>
          <combo attributeName="output" selection="CV2 (PA5)"/>
          <combo attributeName="offset" selection="E4 (0) = 0V (Axoloti)"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="462" y="2590" text="Simple sine wave LFOs sent out via the CV outputs."/>
-   <comment type="patch/comment" x="0" y="2660" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1&gt;2 Audio in/outputs"/>
-   <obj type="audio/in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" name="in_1" x="266" y="2758">
+   <obj type="ksoloti/big genes/gate out" uuid="a9f603ff-485b-4417-98e5-73de698b8a6e" name="gate_2" x="1050" y="2478">
+      <params/>
+      <attribs>
+         <combo attributeName="gate" selection="2"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="266" y="2576" text="Simple sine wave LFOs sent out via the CV output..."/>
+   <comment type="patch/comment" x="546" y="2576" text="... and gate output"/>
+   <comment type="patch/comment" x="168" y="2646" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1&gt;2 Audio in/outputs"/>
+   <obj type="audio/in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" name="in_1" x="266" y="2744">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="378" y="2758">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="378" y="2744">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="532" y="2758">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="532" y="2744">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="756" y="2758">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="756" y="2744">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="868" y="2758">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="868" y="2744">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_4" x="1134" y="2758">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_4" x="1134" y="2744">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="1008" y="2772" text="&lt;- scope_3!"/>
-   <comment type="patch/comment" x="1008" y="2800" text="This is the signal we"/>
-   <comment type="patch/comment" x="1008" y="2814" text="see on the display."/>
-   <comment type="patch/comment" x="168" y="2870" text="Plug a signal into the input jacks."/>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="756" y="2870">
+   <comment type="patch/comment" x="1008" y="2758" text="&lt;- scope_3!"/>
+   <comment type="patch/comment" x="1008" y="2786" text="This is the signal we"/>
+   <comment type="patch/comment" x="1008" y="2800" text="see on the display."/>
+   <comment type="patch/comment" x="168" y="2856" text="Plug a signal into the input jacks."/>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="756" y="2856">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="168" y="2884" text="If you plug only the left input,"/>
-   <comment type="patch/comment" x="168" y="2898" text="the signal will be forwarded to the right."/>
-   <obj type="audio/inconfig" uuid="9a80ef3c19f2a8f81da3a3b7c1c44d18126b97d9" name="inconfig_1" x="266" y="2968">
+   <comment type="patch/comment" x="168" y="2870" text="If you plug only the left input,"/>
+   <comment type="patch/comment" x="168" y="2884" text="the signal will be forwarded to the right."/>
+   <obj type="audio/inconfig" uuid="9a80ef3c19f2a8f81da3a3b7c1c44d18126b97d9" name="inconfig_1" x="266" y="2954">
       <params/>
       <attribs>
          <combo attributeName="gain" selection="0dB"/>
@@ -461,85 +474,85 @@
          <combo attributeName="mode" selection="Stereo"/>
       </attribs>
    </obj>
-   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="1176" y="2968">
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="1176" y="2954">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="364" y="2996" text="&lt;--  you can adjust the input gain"/>
-   <comment type="patch/comment" x="364" y="3010" text="&lt;-- and boost"/>
-   <comment type="patch/comment" x="364" y="3024" text="You can feed line level signals to your Big Genes this way!"/>
-   <comment type="patch/comment" x="756" y="3024" text="Sending two simple sine oscillators to the outputs."/>
-   <comment type="patch/comment" x="756" y="3038" text="But wait! Looks like we are frequency-modulating them with the input signals!"/>
-   <comment type="patch/comment" x="168" y="3150" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1&gt;MIDI in/output"/>
-   <comment type="patch/comment" x="182" y="3220" text="If you send MIDI via a TRS cable"/>
-   <obj type="ksoloti/midi/in/monitor ext" uuid="b3967eef-65e1-4597-9ebb-56114f7a1a25" name="monitor_1" x="406" y="3220">
+   <comment type="patch/comment" x="364" y="2982" text="&lt;--  you can adjust the input gain"/>
+   <comment type="patch/comment" x="364" y="2996" text="&lt;-- and boost"/>
+   <comment type="patch/comment" x="364" y="3010" text="You can feed line level signals to your Big Genes this way!"/>
+   <comment type="patch/comment" x="756" y="3010" text="Sending two simple sine oscillators to the outputs."/>
+   <comment type="patch/comment" x="756" y="3024" text="But wait! Looks like we are frequency-modulating them with the input signals!"/>
+   <comment type="patch/comment" x="168" y="3136" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1&gt;MIDI in/output"/>
+   <comment type="patch/comment" x="182" y="3206" text="If you send MIDI via a TRS cable"/>
+   <obj type="ksoloti/midi/in/monitor ext" uuid="b3967eef-65e1-4597-9ebb-56114f7a1a25" name="monitor_1" x="406" y="3206">
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/square" uuid="de6909eb64db13af5b43f979a4c130024b3a4793" name="square_1" x="672" y="3220">
+   <obj type="lfo/square" uuid="de6909eb64db13af5b43f979a4c130024b3a4793" name="square_1" x="672" y="3206">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_5" x="770" y="3220">
+   <obj type="disp/bool" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_5" x="770" y="3206">
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_5" x="854" y="3220">
+   <obj type="lfo/sine" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="sine_5" x="854" y="3206">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_15" x="980" y="3220">
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_15" x="980" y="3206">
       <params>
          <frac32.u.map name="value" value="50.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="midi/out/note" uuid="a76ae870da278cbbce5501a57ce7bd0e0ea4215c" name="note_1" x="1078" y="3220">
+   <obj type="midi/out/note" uuid="a76ae870da278cbbce5501a57ce7bd0e0ea4215c" name="note_1" x="1078" y="3206">
       <params/>
       <attribs>
          <combo attributeName="device" selection="din"/>
          <spinner attributeName="channel" value="1"/>
       </attribs>
    </obj>
-   <obj type="logic/latch" uuid="14750683752bd43205826430adb7168dae3cc2c" name="latch_1" x="1218" y="3220">
+   <obj type="logic/latch" uuid="14750683752bd43205826430adb7168dae3cc2c" name="latch_1" x="1218" y="3206">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="182" y="3234" text="into the MIDI in jack,"/>
-   <comment type="patch/comment" x="182" y="3248" text="or via a class-compliant"/>
-   <comment type="patch/comment" x="182" y="3262" text="controller at the Host USB port,"/>
-   <comment type="patch/comment" x="182" y="3276" text="you should see stuff happening here. -&gt;"/>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_16" x="1218" y="3290">
+   <comment type="patch/comment" x="182" y="3220" text="into the MIDI in jack,"/>
+   <comment type="patch/comment" x="182" y="3234" text="or via a class-compliant"/>
+   <comment type="patch/comment" x="182" y="3248" text="controller at the Host USB port,"/>
+   <comment type="patch/comment" x="182" y="3262" text="you should see stuff happening here. -&gt;"/>
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_16" x="1218" y="3276">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="854" y="3318" text="Oscillates between"/>
-   <comment type="patch/comment" x="980" y="3318" text="Fixed velocity."/>
-   <comment type="patch/comment" x="672" y="3332" text="Creates a trigger."/>
-   <comment type="patch/comment" x="854" y="3332" text="notes and 127."/>
-   <comment type="patch/comment" x="1064" y="3346" text="Send random MIDI notes"/>
-   <comment type="patch/comment" x="1064" y="3360" text="via the MIDI out TRS jack!"/>
-   <comment type="patch/comment" x="938" y="3388" text="&lt;html&gt;&lt;h3&gt;Change &quot;device&quot; to send MIDI elsewhere:"/>
-   <comment type="patch/comment" x="182" y="3402" text="Incoming MIDI notes on channel 1"/>
-   <obj type="midi/in/keyb" uuid="53b04874696932f38aceaa168bd5d9efb743716d" name="keyb_1" x="434" y="3402">
+   <comment type="patch/comment" x="854" y="3304" text="Oscillates between"/>
+   <comment type="patch/comment" x="980" y="3304" text="Fixed velocity."/>
+   <comment type="patch/comment" x="672" y="3318" text="Creates a trigger."/>
+   <comment type="patch/comment" x="854" y="3318" text="notes and 127."/>
+   <comment type="patch/comment" x="1064" y="3332" text="Send random MIDI notes"/>
+   <comment type="patch/comment" x="1064" y="3346" text="via the MIDI out TRS jack!"/>
+   <comment type="patch/comment" x="938" y="3374" text="&lt;html&gt;&lt;h3&gt;Change &quot;device&quot; to send MIDI elsewhere:"/>
+   <comment type="patch/comment" x="182" y="3388" text="Incoming MIDI notes on channel 1"/>
+   <obj type="midi/in/keyb" uuid="53b04874696932f38aceaa168bd5d9efb743716d" name="keyb_1" x="434" y="3388">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="182" y="3416" text="control pitch of the above sine oscillators. -&gt;"/>
-   <comment type="patch/comment" x="182" y="3444" text="Go to View -&gt; Settings to change"/>
-   <comment type="patch/comment" x="938" y="3444" text="(din): Traditional DIN or TRS MIDI connector."/>
-   <comment type="patch/comment" x="182" y="3458" text="MIDI channel for this patch,"/>
-   <comment type="patch/comment" x="182" y="3472" text="or use special objects to listen to a specified"/>
-   <comment type="patch/comment" x="938" y="3472" text="(usb host port x): Send MIDI to a device connected at the USB host port."/>
-   <comment type="patch/comment" x="182" y="3486" text="channel, e.g. ksoloti/midi/in/keyb ch"/>
-   <comment type="patch/comment" x="938" y="3500" text="(internal port x): Send MIDI back to midi/in objects inside this patch itself!"/>
-   <comment type="patch/comment" x="938" y="3514" text="(Caution: This might create an infinite feedback loop.)"/>
-   <comment type="patch/comment" x="938" y="3542" text="(usb device port 1): Send MIDI to a host (DAW) via the USB prog port."/>
-   <comment type="patch/comment" x="168" y="3654" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1 style=&quot;font-size:84px; color: #808080;&quot;&gt;^ &lt;span style=&quot;color: #80a080;&quot;&gt;S&lt;/span&gt;croll to the &lt;span style=&quot;color: #a08080;&quot;&gt;T&lt;/span&gt;op ^"/>
+   <comment type="patch/comment" x="182" y="3402" text="control pitch of the above sine oscillators. -&gt;"/>
+   <comment type="patch/comment" x="182" y="3430" text="Go to View -&gt; Settings to change"/>
+   <comment type="patch/comment" x="938" y="3430" text="(din): Traditional DIN or TRS MIDI connector."/>
+   <comment type="patch/comment" x="182" y="3444" text="MIDI channel for this patch,"/>
+   <comment type="patch/comment" x="182" y="3458" text="or use special objects to listen to a specified"/>
+   <comment type="patch/comment" x="938" y="3458" text="(usb host port x): Send MIDI to a device connected at the USB host port."/>
+   <comment type="patch/comment" x="182" y="3472" text="channel, e.g. ksoloti/midi/in/keyb ch"/>
+   <comment type="patch/comment" x="938" y="3486" text="(internal port x): Send MIDI back to midi/in objects inside this patch itself!"/>
+   <comment type="patch/comment" x="938" y="3500" text="(Caution: This might create an infinite feedback loop.)"/>
+   <comment type="patch/comment" x="938" y="3528" text="(usb device port 1): Send MIDI to a host (DAW) via the USB prog port."/>
+   <comment type="patch/comment" x="168" y="3640" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1 style=&quot;font-size:84px; color: #808080;&quot;&gt;^ &lt;span style=&quot;color: #80a080;&quot;&gt;S&lt;/span&gt;croll to the &lt;span style=&quot;color: #a08080;&quot;&gt;T&lt;/span&gt;op ^"/>
    <nets>
       <net>
          <source obj="encoder_1" outlet="sw"/>
@@ -659,10 +672,12 @@
       <net>
          <source obj="sine_3" outlet="wave"/>
          <dest obj="cv_7" inlet="cv"/>
+         <dest obj="gate_1" inlet="in"/>
       </net>
       <net>
          <source obj="sine_4" outlet="wave"/>
          <dest obj="cv_8" inlet="cv"/>
+         <dest obj="gate_2" inlet="in"/>
       </net>
       <net>
          <source obj="square_1" outlet="wave"/>
@@ -688,24 +703,12 @@
          <dest obj="led_1" inlet="in"/>
       </net>
       <net>
-         <source obj="tri_4_b_1" outlet="180"/>
-         <dest obj="led_2" inlet="in"/>
-      </net>
-      <net>
          <source obj="tri_4_b_2" outlet="0"/>
          <dest obj="led_3a" inlet="in"/>
       </net>
       <net>
-         <source obj="tri_4_b_2" outlet="180"/>
-         <dest obj="led_3b" inlet="in"/>
-      </net>
-      <net>
          <source obj="tri_4_b_3" outlet="0"/>
          <dest obj="led_4a" inlet="in"/>
-      </net>
-      <net>
-         <source obj="tri_4_b_3" outlet="180"/>
-         <dest obj="led_4b" inlet="in"/>
       </net>
       <net>
          <source obj="i_3" outlet="out"/>
@@ -744,6 +747,18 @@
          <dest obj="sine_1" inlet="pitch"/>
          <dest obj="sine_2" inlet="pitch"/>
       </net>
+      <net>
+         <source obj="tri_4_b_2" outlet="180"/>
+         <dest obj="led_3b" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tri_4_b_1" outlet="180"/>
+         <dest obj="led_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tri_4_b_3" outlet="180"/>
+         <dest obj="led_4b" inlet="in"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
@@ -753,8 +768,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>0</y>
+      <x>-7</x>
+      <y>-7</y>
       <width>1550</width>
       <height>848</height>
    </windowPos>
