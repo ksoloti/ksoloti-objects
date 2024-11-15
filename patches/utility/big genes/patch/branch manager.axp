@@ -300,7 +300,7 @@ outlet_out = &c[0];]]></code.krate>
                <spinner attributeName="size" value="15"/>
             </attribs>
          </obj>
-         <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="588" y="168">
+         <obj type="ksoloti/big genes/display" uuid="d21f1023-b829-4934-b142-5eedb601a570" name="display_1" x="588" y="168">
             <params/>
             <attribs>
                <combo attributeName="useScope" selection="off"/>
