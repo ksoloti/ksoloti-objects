@@ -89,9 +89,6 @@ PF6, PF7, PF8, PF9</sDescription>
 			newValue = (newValue << 1) - analogResolution + attr_threshold;
 		}
 
-		/* get difference between new input value and current smooth value */
-		uint32_t diff = abs((int32_t)(newValue - smoothValue));
-
 		/* 
 		 * Measure the difference between the new value and current value
 		 * and use another exponential moving average to work out what
