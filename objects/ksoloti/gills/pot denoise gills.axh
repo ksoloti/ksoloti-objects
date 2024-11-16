@@ -43,6 +43,7 @@
       <params/>
       <attribs/>
    </obj>
+   <comment type="patch/comment" x="168" y="280" text="&lt;html&gt;&lt;b&gt;threshold attribute&lt;/b&gt;: The lower the threshold, the more sensitive the input.&lt;br&gt;Too low a threshold will lead to flickering values, too high a threshold might cause stepping and imprecise values."/>
    <nets>
       <net>
          <source obj="pot_1" outlet="out"/>
@@ -66,8 +67,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>240</x>
-      <y>160</y>
+      <x>563</x>
+      <y>142</y>
       <width>780</width>
       <height>620</height>
    </windowPos>
