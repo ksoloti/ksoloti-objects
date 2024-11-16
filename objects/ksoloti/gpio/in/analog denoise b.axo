@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="analog smooth b" uuid="1c26d18a-2e84-4f87-8ff8-db5a4f73ae6d">
+   <obj.normal id="analog denoise b" uuid="1c26d18a-2e84-4f87-8ff8-db5a4f73ae6d">
       <sDescription>Reads an analog in pin on Ksoloti Core with anti-jitter / smoothing. Bipolar output.
 Smoothing code based on ResponsiveAnalogRead library by dxinteractive (Damien Clarke).
 Pins:
