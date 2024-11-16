@@ -1,6 +1,6 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="analog denoise p" uuid="a7279dcd-9588-410d-8e22-e60f878005e2">
-      <sDescription>Reads an analog in pin on Ksoloti Core with anti-jitter / smoothing. Unipolar output.
+      <sDescription>Reads an analog in pin on Ksoloti Core with anti-jitter/smoothing. Unipolar output.
 Smoothing code based on ResponsiveAnalogRead library by dxinteractive (Damien Clarke).
 Pins:
 PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
