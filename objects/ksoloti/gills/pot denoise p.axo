@@ -3,7 +3,7 @@
       <sDescription>Reads a pot on Ksoloti Gills with anti-jitter/smoothing. Unipolar output.
 Smoothing code based on ResponsiveAnalogRead library by dxinteractive (Damien Clarke).
 
-"threshold" attribute: The lower the threshold, the more sensitive the input.
+&quot;threshold&quot; attribute: The lower the threshold, the more sensitive the input.
 Too low a threshold will lead to flickering values, too high a threshold might cause stepping and imprecise values.
 
 Pins:
