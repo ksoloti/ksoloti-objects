@@ -2,7 +2,7 @@
    <obj.normal id="unpack k 4" uuid="4caf3061-a70e-4164-86c8-68c0c028ecd3">
       <sDescription>Use one spilink audio channel to send/receive up to 16 control rate values between linked boards.
 </sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>GPL</license>
       <helpPatch>spilink.axh</helpPatch>
       <inlets/>

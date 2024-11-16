@@ -9,7 +9,7 @@ due to hardware limitations:
 * PA6 &amp; PB4 simultaneously
 If used for PWM at the same time, the two respective pins will have the same value!
 The patcher will display a warning but does not prevent you from going live.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>GPL v3</license>
       <inlets>
          <frac32.positive name="in" description="pwm ratio"/>

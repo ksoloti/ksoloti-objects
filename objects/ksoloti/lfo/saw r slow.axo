@@ -1,7 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="saw r slow" uuid="7bf77792-c5b7-4c3f-9b0b-cb033314890c">
       <sDescription>saw wave LFO, rising slope, pitch input, phase reset. Time divisor allows for very slow cycles. Note that the frequency display will only display the base frequency and not the one after time division.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>lfo.axh</helpPatch>
       <inlets>

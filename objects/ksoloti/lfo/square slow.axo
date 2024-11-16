@@ -1,7 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="square slow" uuid="17e20917-cf18-4df2-837a-76473890c3c4">
       <sDescription>square wave LFO, boolean output, frequency input. Time divisor allows for very slow cycles. Note that the frequency display will only display the base frequency and not the one after time division.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>lfo.axh</helpPatch>
       <inlets>

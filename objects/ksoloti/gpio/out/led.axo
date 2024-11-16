@@ -3,7 +3,7 @@
       <sDescription>Controls a single LED on Ksoloti Core.
 LED1: green, PG6
 LED2: red, PC6</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets>
          <bool32 name="in" description="positive = true"/>

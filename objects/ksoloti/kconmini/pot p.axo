@@ -3,7 +3,7 @@
       <sDescription>Reads a pot on Alt Circuits K-Control Mini. Unipolar output.
 Pins:
 PA0, PA1, PA2, PA3.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>pot.axh</helpPatch>
       <inlets/>

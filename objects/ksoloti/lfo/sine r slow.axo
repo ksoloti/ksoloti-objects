@@ -1,7 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="sine r slow" uuid="e00eb6f9-9a34-4023-b5c1-dcb4ec0fc1d1">
       <sDescription>sine wave LFO, linear interpolated table. Pitch, reset, and phase inputs. Time divisor allows for very slow cycles. Note that the frequency display will only display the base frequency and not the one after time division.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>lfo.axh</helpPatch>
       <inlets>

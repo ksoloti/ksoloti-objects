@@ -8,7 +8,7 @@ LED1 (green, PG6) using software
 LED2 (red, PC6) using hardware timer 8
 LED3 (dual-color, PB3 and PB4) using hardware timers 2 and 3
 LED4 (dual-color, PB6 and PB7) using hardware timer 4</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>led gills.axh</helpPatch>
       <inlets>

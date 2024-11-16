@@ -13,7 +13,7 @@
                <sDescription>Reads a rotary encoder on Ksoloti Big Genes.
 &quot;min&quot;, &quot;max&quot; set the range. Default is 0 to 127.
 When the &quot;set&quot; inlet changes, the value is set directly (good for setting init or preset values, modulation).</sDescription>
-               <author>Gavin, sebiik</author>
+               <author>Gavin, Ksoloti</author>
                <license>BSD</license>
                <helpPatch>logic.axh</helpPatch>
                <inlets>

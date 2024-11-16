@@ -5,7 +5,7 @@ LED1: green, PG6
 LED2: red, PC6
 LED3: dual-color, PB3 and PB4
 LED4: dual-color, PB6 and PB7</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
 	  <helpPatch>led gills.axh</helpPatch>
       <inlets>

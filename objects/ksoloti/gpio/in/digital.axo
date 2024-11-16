@@ -3,7 +3,7 @@
       <sDescription>Reads a digital input pin. 3.3V logic maximum!
 Object compatible with the Ksoloti board only.
 Note that PA9 pullup does not work due to a ChibiOS bug.</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <helpPatch>in digital.axh</helpPatch>
       <inlets/>

@@ -2,7 +2,7 @@
    <obj.normal id="recv 1" uuid="dca54b00-5b02-41d0-a78c-4a02f672f8bd">
       <sDescription>Send/receive audio between linked boards.
 </sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>GPL</license>
       <helpPatch>spilink.axh</helpPatch>
       <inlets/>

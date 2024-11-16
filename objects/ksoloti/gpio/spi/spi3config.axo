@@ -2,7 +2,7 @@
    <obj.normal id="spi3config" uuid="d3e75d8a02e2ccabbbc2af3bc2fcdb8ea65a6134" sha="62af644b09e7f654b36d66533da8ea5971ddb351">
       <upgradeSha>de87118df6aa11e19d10babb34b404522255b5a3</upgradeSha>
       <sDescription>Configures the SPI3 interface. Pin mapping: PA15=NSS PB3=SCK PB4=MISO PD6=MOSI</sDescription>
-      <author>Johannes Taelman, sebiik</author>
+      <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets/>
       <outlets/>
