@@ -1,0 +1,103 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="denoise" uuid="1a41cdaa-6f94-4cff-9344-9339ea230e98">
+      <sDescription>General-purpose anti-jitter/smoothing filter. Universal (unipolar and bipolar) output.
+Smoothing code based on ResponsiveAnalogRead library by dxinteractive (Damien Clarke).
+
+&quot;threshold&quot; attribute: The lower the threshold, the more sensitive the input.
+Too low a threshold will lead to flickering values, too high a threshold might cause stepping and imprecise values.</sDescription>
+      <author>Ksoloti</author>
+      <license>GPL 3.0</license>
+      <inlets>
+         <frac32 name="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="threshold" MinValue="0" MaxValue="128" DefaultValue="12"/>
+      </attribs>
+      <code.declaration><![CDATA[class ResponsiveAnalogRead {
+	public:
+
+	int32_t getValue() {
+        /* Get the responsive value from last update */
+        return responsiveValue;
+	}
+
+
+	void update(int32_t val) {
+		prevResponsiveValue = responsiveValue;
+		responsiveValue = getResponsiveValue(val);
+	}
+
+
+	int32_t getResponsiveValue(int32_t newValue) {
+
+		/*
+		 * Sleep and edge snap are hard-enabled.
+		 * If the new value is very close to an edge, drag it a little closer to the edges.
+		 * This'll make it easier to pull the output values right to the extremes without sleeping,
+		 * and it'll make movements right near the edge appear larger, making it easier to wake up
+           */
+		if (abs(newValue) < activity_threshold) {
+			newValue = (newValue << 1) - activity_threshold;
+		}
+		else if (newValue > analogResolution - activity_threshold) {
+			newValue = (newValue << 1) - analogResolution + activity_threshold;
+		}
+
+		/* 
+		 * Measure the difference between the new value and current value
+		 * and use another exponential moving average to work out what
+		 * the current margin of error is.
+		 */
+		errorEMA += ___SMMUL(((newValue - smoothValue) - errorEMA), 0x40000000);
+
+		/* Recalculate sleeping status */
+		is_sleeping = abs(errorEMA) < activity_threshold;
+
+		/*
+		 * If sleeping,then don't update responsiveValue in this k-cycle,
+		 * just output the existing responsiveValue.
+		 */
+		if (is_sleeping) {
+			return smoothValue;
+		}
+
+		/* Calculate the exponential moving average. */
+		smoothValue += (newValue - smoothValue);
+
+		/* Ensure output is within bounds */
+		if (smoothValue < (-analogResolution)) {
+			smoothValue = (-analogResolution);
+		}
+        	else if (smoothValue > analogResolution - 1) {
+			smoothValue = analogResolution - 1;
+		}
+
+		/* Expected output is unsigned integer. */
+		return smoothValue;
+	}
+
+
+	private:
+	static const int32_t analogResolution = (1 << 27); /* 27 bit resolution */
+	static const int32_t activity_threshold = (attr_threshold << 15);
+
+	int32_t responsiveValue;
+	int32_t prevResponsiveValue;
+
+	int32_t smoothValue = 0;
+	int32_t errorEMA = 0;
+
+	bool_t is_sleeping = false;
+};
+
+
+ResponsiveAnalogRead ralog; /* Create class instance */]]></code.declaration>
+      <code.krate><![CDATA[ralog.update(inlet_in);
+outlet_out = ralog.getValue();]]></code.krate>
+   </obj.normal>
+</objdefs>
