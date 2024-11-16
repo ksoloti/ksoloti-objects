@@ -2,6 +2,10 @@
    <obj.normal id="pot denoise b" uuid="272c7491-a4b5-4d79-b8cc-1110e858446e">
       <sDescription>Reads a pot on Ksoloti Gills with anti-jitter/smoothing. Bipolar output.
 Smoothing code based on ResponsiveAnalogRead library by dxinteractive (Damien Clarke).
+
+"threshold" attribute: The lower the threshold, the more sensitive the input.
+Too low a threshold will lead to flickering values, too high a threshold might cause stepping and imprecise values.
+
 Pins:
 PA0, PA1, PA2, PA3, PA6,
 PA7, PB0, PB1, PC4, PC5.</sDescription>
@@ -15,7 +19,7 @@ PA7, PB0, PB1, PC4, PC5.</sDescription>
       <displays/>
       <params/>
       <attribs>
-         <combo name="pin">
+         <combo name="pot">
             <MenuEntries>
                <string>1</string>
                <string>2</string>
@@ -54,7 +58,7 @@ PA7, PB0, PB1, PC4, PC5.</sDescription>
 
 	void update() {
 		prevResponsiveValue = responsiveValue;
-		responsiveValue = getResponsiveValue(adcvalues[attr_pin]);
+		responsiveValue = getResponsiveValue(adcvalues[attr_pot]);
 	}
 
 
