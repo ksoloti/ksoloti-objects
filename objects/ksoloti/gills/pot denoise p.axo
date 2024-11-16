@@ -1,0 +1,130 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="pot denoise p" uuid="ff8498a6-7d87-40b1-b51c-8a6f6ea791ff">
+      <sDescription>Reads a pot on Ksoloti Gills with anti-jitter/smoothing. Unipolar output.
+Smoothing code based on ResponsiveAnalogRead library by dxinteractive (Damien Clarke).
+Pins:
+PA0, PA1, PA2, PA3, PA6,
+PA7, PB0, PB1, PC4, PC5.</sDescription>
+      <author>Ksoloti</author>
+      <license>GPL 3.0</license>
+      <helpPatch>pot denoise gills.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32.positive name="out"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="pin">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>11</string>
+               <string>12</string>
+            </CEntries>
+         </combo>
+         <spinner name="threshold" MinValue="0" MaxValue="128" DefaultValue="12"/>
+      </attribs>
+      <code.declaration><![CDATA[class ResponsiveAnalogRead {
+	public:
+
+	uint32_t getValue() {
+        /* Get the responsive value from last update */
+        return responsiveValue;
+	}
+
+
+	void update() {
+		prevResponsiveValue = responsiveValue;
+		responsiveValue = getResponsiveValue(adcvalues[attr_pin]);
+	}
+
+
+	uint32_t getResponsiveValue(uint32_t newValue) {
+
+		/*
+		 * Sleep and edge snap are hard-enabled.
+		 * If the new value is very close to an edge, drag it a little closer to the edges.
+		 * This'll make it easier to pull the output values right to the extremes without sleeping,
+		 * and it'll make movements right near the edge appear larger, making it easier to wake up
+           */
+		if (newValue < attr_threshold) {
+			newValue = (newValue << 1) - attr_threshold;
+		}
+		else if (newValue > analogResolution - attr_threshold) {
+			newValue = (newValue << 1) - analogResolution + attr_threshold;
+		}
+
+		/* get difference between new input value and current smooth value */
+		uint32_t diff = abs((int32_t)(newValue - smoothValue));
+
+		/* 
+		 * Measure the difference between the new value and current value
+		 * and use another exponential moving average to work out what
+		 * the current margin of error is.
+		 */
+		errorEMA += ___SMMUL(((newValue - smoothValue) - errorEMA), 0x40000000);
+
+		/* Recalculate sleeping status */
+		is_sleeping = abs(errorEMA) < attr_threshold;
+
+		/*
+		 * If sleeping,then don't update responsiveValue in this k-cycle,
+		 * just output the existing responsiveValue.
+		 */
+		if (is_sleeping) {
+			return smoothValue;
+		}
+
+		/* Calculate the exponential moving average. */
+		smoothValue += (newValue - smoothValue);
+
+		/* Ensure output is within bounds */
+		if (smoothValue < 0) {
+			smoothValue = 0;
+		}
+        	else if (smoothValue > analogResolution - 1) {
+			smoothValue = analogResolution - 1;
+		}
+
+		/* Expected output is unsigned integer. */
+		return (uint32_t) smoothValue;
+	}
+
+
+	private:
+	static const uint16_t analogResolution = 4096; /* ADC has 12 bit resolution */
+
+	uint32_t responsiveValue;
+	uint32_t prevResponsiveValue;
+
+	int32_t smoothValue = 0;
+	int32_t errorEMA = 0;
+
+	bool_t is_sleeping = false;
+};
+
+
+ResponsiveAnalogRead ralog; /* Create class instance */]]></code.declaration>
+      <code.krate><![CDATA[ralog.update();
+outlet_out = (ralog.getValue() << 15);]]></code.krate>
+   </obj.normal>
+</objdefs>
