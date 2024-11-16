@@ -1,13 +1,13 @@
 <patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1&gt;You can use either an external 1V/oct source  &lt;span style=&quot;color:#800080;&quot;&gt;or Big Genes itself&lt;/span&gt; to calibrate CV inputs X and Y.&lt;br&gt; &lt;span style=&quot;color:#800080;&quot;&gt;If using Big Genes itself, make sure you have calibrated the CV outputs&lt;br&gt;as described in &lt;i&gt;Help &gt; Help Patches &gt; ksoloti-objects &gt; big genes &gt; cv out big genes&lt;/i&gt;.&lt;br&gt;Then patch a cable from CV out 1 or 2 jack into the CV input X/Y jack."/>
    <comment type="patch/comment" x="14" y="154" text="&lt;html&gt;&lt;h2 style=&quot;color:#A00000;&quot;&gt;If you have set the respective UNIPOLAR jumper on the Big Genes PCB, values will be transposed."/>
-   <comment type="patch/comment" x="14" y="238" text="&lt;html&gt;&lt;h2&gt;1. Go live and tweak the OFFSET trimmer (under the OLED display) for input X so that CV_IN_VAL jumps as close around &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt; as possible."/>
-   <comment type="patch/comment" x="14" y="294" text="&lt;html&gt;&lt;h2&gt;2. Apply 1V from your CV source to the CV input jack. &lt;span style=&quot;color:#800080;&quot;&gt;(or switch Big Genes CV out to 1V below. Turn the right encoder to quickly switch between voltages)&lt;/span&gt;."/>
-   <comment type="patch/comment" x="14" y="350" text="&lt;html&gt;&lt;h2&gt;3. If CV_IN_VAL is &lt;span style=&quot;color:#00A000;&quot;&gt;BELOW&lt;/span&gt; 12.00 now, turn the SCALE trimmer &lt;span style=&quot;color:#00A000;&quot;&gt;CLOCKWISE&lt;/span&gt; for one quarter of a turn or so, to increase the interval.&lt;br&gt;If CV_IN_VAL is &lt;span style=&quot;color:#00A000;&quot;&gt;ABOVE&lt;/span&gt; 12.00, turn the SCALE trimmer &lt;span style=&quot;color:#00A000;&quot;&gt;COUNTERCLOCKWISE&lt;/span&gt; for one quarter of a turn or so, to decrease the interval. &lt;br&gt;&lt;span style=&quot;color:#A00000;&quot;&gt;Note that the value changes are quite counter-intuitive:&lt;br&gt;if you increase the SCALE trimmer, CV_IN_VALUE will seemingly first drop (because the whole SCALE/OFFSET ratio will have changed.&lt;/span&gt;"/>
-   <comment type="patch/comment" x="14" y="462" text="&lt;html&gt;&lt;h2&gt;4. Apply 0V from your CV source &lt;span style=&quot;color:#800080;&quot;&gt;(or switch Big Genes CV out to 0V below)&lt;/span&gt;.&lt;br&gt;Just like in step 1, tweak the OFFSET trimmer for input X so that CV_IN_VAL jumps as close around &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt; as possible."/>
-   <comment type="patch/comment" x="14" y="546" text="&lt;html&gt;&lt;h2&gt;5. Redo steps 2 to 4 until your measured output is as close as possible to &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt;  and &lt;span style=&quot;color:#00A000;&quot;&gt;12.00&lt;/span&gt;."/>
-   <comment type="patch/comment" x="14" y="602" text="&lt;html&gt;&lt;h2&gt;6. Apply voltages from -5V to 5V &lt;span style=&quot;color:#800080;&quot;&gt;(or switch between values between -5V and +5V below)&lt;/span&gt; and compare with CV_IN_VAL. &lt;br&gt;One Volt difference should correspond to &lt;span style=&quot;color:#00A000;&quot;&gt;12.00&lt;/span&gt; units (= semitones) as closely as possible. Make adjustments if necessary.&lt;br&gt;It is normal that values at the lower and upper ends are less precise.&lt;br&gt; Consider tolerating some drift at the lower and upper ends and focusing on getting the middle octaves right."/>
-   <patchobj type="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba" name="voltage switcher" x="28" y="728">
+   <comment type="patch/comment" x="14" y="210" text="&lt;html&gt;&lt;h3&gt;1. Go live and tweak the OFFSET trimmer (under the OLED display) for input X so that CV_IN_VAL jumps as close around &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt; as possible."/>
+   <comment type="patch/comment" x="14" y="266" text="&lt;html&gt;&lt;h3&gt;2. Apply 1V from your CV source to the CV input jack. &lt;span style=&quot;color:#800080;&quot;&gt;(or switch Big Genes CV out to 1V below. Turn the right encoder to quickly switch between voltages)&lt;/span&gt;."/>
+   <comment type="patch/comment" x="14" y="322" text="&lt;html&gt;&lt;h3&gt;3. If CV_IN_VAL is &lt;span style=&quot;color:#00A000;&quot;&gt;BELOW&lt;/span&gt; 12.00 now, turn the SCALE trimmer &lt;span style=&quot;color:#00A000;&quot;&gt;CLOCKWISE&lt;/span&gt; for one quarter of a turn or so, to increase the interval.&lt;br&gt;If CV_IN_VAL is &lt;span style=&quot;color:#00A000;&quot;&gt;ABOVE&lt;/span&gt; 12.00, turn the SCALE trimmer &lt;span style=&quot;color:#00A000;&quot;&gt;COUNTERCLOCKWISE&lt;/span&gt; for one quarter of a turn or so, to decrease the interval. &lt;br&gt;&lt;span style=&quot;color:#A00000;&quot;&gt;Note that the value changes are quite counter-intuitive:&lt;br&gt;if you increase the SCALE trimmer, CV_IN_VALUE will seemingly first drop (because the whole SCALE/OFFSET ratio will have changed.&lt;/span&gt;"/>
+   <comment type="patch/comment" x="14" y="420" text="&lt;html&gt;&lt;h3&gt;4. Apply 0V from your CV source &lt;span style=&quot;color:#800080;&quot;&gt;(or switch Big Genes CV out to 0V below)&lt;/span&gt;.&lt;br&gt;Just like in step 1, tweak the OFFSET trimmer for input X so that CV_IN_VAL jumps as close around &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt; as possible."/>
+   <comment type="patch/comment" x="14" y="490" text="&lt;html&gt;&lt;h3&gt;5. Redo steps 2 to 4 until your measured output is as close as possible to &lt;span style=&quot;color:#00A000;&quot;&gt;0.00&lt;/span&gt;  and &lt;span style=&quot;color:#00A000;&quot;&gt;12.00&lt;/span&gt;."/>
+   <comment type="patch/comment" x="14" y="546" text="&lt;html&gt;&lt;h3&gt;6. Apply voltages from -5V to 5V &lt;span style=&quot;color:#800080;&quot;&gt;(or switch between values between -5V and +5V below)&lt;/span&gt; and compare with CV_IN_VAL. &lt;br&gt;One Volt difference should correspond to &lt;span style=&quot;color:#00A000;&quot;&gt;12.00&lt;/span&gt; units (= semitones) as closely as possible. Make adjustments if necessary.&lt;br&gt;It is normal that values at the lower and upper ends are less precise.&lt;br&gt; Consider tolerating some drift at the lower and upper ends and focusing on getting the middle octaves right."/>
+   <patchobj type="patch/object" uuid="a290c276-ee32-4aa9-82a8-61e9ff3c33ba" name="voltage switcher" x="14" y="658">
       <params>
          <int32.vradio name="value" value="5"/>
       </params>
@@ -32,9 +32,9 @@
          <code.krate><![CDATA[outlet_out = 5-param_value;]]></code.krate>
       </object>
    </patchobj>
-   <comment type="patch/comment" x="126" y="728" text="&lt;html&gt;Bipolar&lt;br&gt;(default):"/>
-   <comment type="patch/comment" x="210" y="728" text="&lt;html&gt;Unipolar&lt;br&gt;(jumper set):"/>
-   <patcher type="patch/patcher" uuid="0898103c-3c05-4f50-837b-0a1a428f5bb0" name="cv out helper" x="308" y="728">
+   <comment type="patch/comment" x="112" y="658" text="&lt;html&gt;Bipolar&lt;br&gt;(default):"/>
+   <comment type="patch/comment" x="196" y="658" text="&lt;html&gt;Unipolar&lt;br&gt;(jumper set):"/>
+   <patcher type="patch/patcher" uuid="08fa7827-cb9b-4708-b191-241b53614268" name="cv out helper" x="294" y="658">
       <params/>
       <attribs/>
       <subpatch appVersion="1.0.12">
@@ -50,7 +50,7 @@
                <spinner attributeName="max" value="5"/>
             </attribs>
          </obj>
-         <patcher type="patch/patcher" uuid="a7d13616-ae92-4144-8b89-4edf07995ef1" name="cv handler" x="308" y="154">
+         <patcher type="patch/patcher" uuid="d0e5e157-7663-4282-b1d9-f9ddbba429f0" name="cv handler" x="308" y="154">
             <params/>
             <attribs/>
             <subpatch appVersion="1.0.12">
@@ -116,7 +116,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
             <params/>
             <attribs/>
          </obj>
-         <patcher type="patch/patcher" uuid="529d7f41-5ad4-44c0-bc4e-385ca1cc76c2" name="oled stuff" x="308" y="252">
+         <patcher type="patch/patcher" uuid="34a533df-8c34-427d-b4f7-be3652cc0357" name="oled stuff" x="308" y="252">
             <params/>
             <attribs/>
             <subpatch appVersion="1.0.12">
@@ -238,43 +238,43 @@ outlet_out = (val * 12)<<21;]]></code.krate>
          </windowPos>
       </subpatch>
    </patcher>
-   <comment type="patch/comment" x="672" y="728" text="&lt;html&gt;&lt;h2&gt;CV_IN_VAL:"/>
-   <comment type="patch/comment" x="126" y="770" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
-   <comment type="patch/comment" x="210" y="770" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
-   <obj type="ksoloti/big genes/cv in b" uuid="42dfd99d-0a21-42e4-9006-51849ed005f9" name="cv_1" x="462" y="770">
+   <comment type="patch/comment" x="644" y="658" text="&lt;html&gt;&lt;h2&gt;CV_IN_VAL:"/>
+   <comment type="patch/comment" x="112" y="700" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V&lt;br/&gt;-1V&lt;br/&gt;-2V&lt;br/&gt;-3V&lt;br/&gt;-4V&lt;br/&gt;-5V"/>
+   <comment type="patch/comment" x="196" y="700" text="&lt;html&gt;&lt;b&gt;&lt;span style=&quot;font-size:8;&quot;&gt;10V&lt;br/&gt;9V&lt;br/&gt;8V&lt;br/&gt;7V&lt;br/&gt;6V&lt;br/&gt;5V&lt;br/&gt;4V&lt;br/&gt;3V&lt;br/&gt;2V&lt;br/&gt;1V&lt;br/&gt;&amp;lt;&amp;lt;&amp;lt; 0V"/>
+   <obj type="ksoloti/big genes/cv in b" uuid="42dfd99d-0a21-42e4-9006-51849ed005f9" name="cv_1" x="448" y="700">
       <params/>
       <attribs>
          <combo attributeName="jack" selection="X"/>
       </attribs>
    </obj>
-   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_1" x="574" y="770">
+   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_1" x="560" y="700">
       <params>
          <frac32.u.map name="time" value="8.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="cv_in_val_x" x="686" y="770">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="cv_in_val_x" x="672" y="700">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/big genes/cv in b" uuid="42dfd99d-0a21-42e4-9006-51849ed005f9" name="cv_in_x_" x="462" y="868">
+   <obj type="ksoloti/big genes/cv in b" uuid="42dfd99d-0a21-42e4-9006-51849ed005f9" name="cv_in_x_" x="448" y="798">
       <params/>
       <attribs>
          <combo attributeName="jack" selection="Y"/>
       </attribs>
    </obj>
-   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_2" x="574" y="868">
+   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_2" x="560" y="798">
       <params>
          <frac32.u.map name="time" value="8.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="cv_in_val_y" x="686" y="868">
+   <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="cv_in_val_y" x="672" y="798">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="14" y="966" text="&lt;html&gt;&lt;h2&gt;Repeat the whole shebang for CV input Y."/>
-   <comment type="patch/comment" x="14" y="1022" text="&lt;html&gt;&lt;h1 style=&quot;color:#A00000;&quot;&gt;Note: If you set or clear a UNIPOLAR jumper later on you may have to re-calibrate the respective CV channel."/>
+   <comment type="patch/comment" x="14" y="896" text="&lt;html&gt;&lt;h2&gt;- Repeat the whole shebang for CV input Y."/>
+   <comment type="patch/comment" x="14" y="952" text="&lt;html&gt;&lt;h1 style=&quot;color:#A00000;&quot;&gt;Note: If you set or clear a UNIPOLAR jumper later on you may have to re-calibrate the respective CV channel."/>
    <nets>
       <net>
          <source obj="cv_1" outlet="out"/>
@@ -303,8 +303,8 @@ outlet_out = (val * 12)<<21;]]></code.krate>
    <notes><![CDATA[]]></notes>
    <windowPos>
       <x>-7</x>
-      <y>-7</y>
-      <width>1550</width>
+      <y>0</y>
+      <width>964</width>
       <height>848</height>
    </windowPos>
 </patch-1.0>
