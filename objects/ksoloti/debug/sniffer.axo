@@ -1,0 +1,38 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="sniffer" uuid="7b8f573f-b684-4e3b-8777-3c897c80a04f">
+      <sDescription>Can be used to display any (public) variable used inside any object.
+Useful for doing calculations and checking on values while patching or coding objects.
+
+Usage: Paste the object name to sniff at in the &quot;sniffobj&quot; text field.
+Then open the &quot;sniffvariable&quot; edit box and paste the variable to sniff at, plain and without semicolon or other symbols.
+
+Example: We want to display the variable &quot;stuff_happening&quot; inside the object labeled &quot;my_filter1&quot;.
+sniffobj: my_filter1
+sniffvariable: stuff_happening
+
+zoom: aka bitshift left. A zoom of 0 displays the unscaled sniffed-at value. Each number above 0 doubles the sniffed-at value.
+Example: You want to see some variable &quot;my_counter&quot; on the chart but it only goes from 0 to 255.
+Increase &quot;zoom&quot; until the value fills out the chart box. (Should be at zoom of 19?)</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays>
+         <int32.label name="int"/>
+         <int32.hexlabel name="hex"/>
+         <frac32.s.chart name="chart"/>
+         <frac32.s.dial name="dial"/>
+      </displays>
+      <params>
+         <int32 name="zoom">
+            <MinValue i="0"/>
+            <MaxValue i="30"/>
+         </int32>
+      </params>
+      <attribs>
+         <objref name="sniffobj"/>
+         <text name="sniffvariable"/>
+      </attribs>
+      <code.krate><![CDATA[disp_int = disp_hex = disp_chart = disp_dial = attr_sniffobj.attr_sniffvariable * (1 << param_zoom);]]></code.krate>
+   </obj.normal>
+</objdefs>
