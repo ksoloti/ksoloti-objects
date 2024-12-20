@@ -1,6 +1,6 @@
 <patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="28" y="28" text="&lt;html&gt;&lt;h1 style=&quot;color:#800000;&quot;&gt;How to set up spilink between two Cores:&lt;/h1&gt;&lt;/html&gt;"/>
-   <comment type="patch/comment" x="28" y="70" text="&lt;html&gt;&lt;h3&gt;First of all make sure you set the Firmware Mode in preferences to + SPILink! Then restart Patcher.&lt;/h2&gt;&lt;/html&gt;"/>
+   <comment type="patch/comment" x="28" y="70" text="&lt;html&gt;&lt;h3&gt;First of all make sure you set the Firmware Mode in preferences to + SPILink!&lt;/h2&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="112" text="&lt;html&gt;&lt;h3&gt;1. Close the solder jumper labeled &quot;SPILINK&quot; on the bottom side of the Core you want to be syncing. That is, the Master Core should have this jumper open, the Synced Core should have it closed.&lt;/h2&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="154" text="&lt;html&gt;&lt;h3&gt;2. Think about how you want to power both cores. It may be a good idea to also close the jumper labeled &quot;VBUS_DISABLE&quot; on the Synced Core (since Core v0.6 only) then power it directly via a 5V pin and Ground from the Master Core.&lt;/h2&gt;&lt;/html&gt;"/>
    <comment type="patch/comment" x="28" y="196" text="&lt;html&gt;&lt;h3&gt;3. Connect PB3, PB4, PD5, PD6 of both Cores together. That is, connect PB3 to PB3, PB4 to PB4, etc. This is the SPI connection.&lt;/h2&gt;&lt;/html&gt;"/>
