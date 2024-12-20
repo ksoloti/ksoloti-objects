@@ -1,0 +1,25 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="time waster" uuid="50bb887e2b01468197105d4f872d1106">
+      <sDescription>Waste Time.</sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <helpPatch>waster.axh</helpPatch>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params>
+         <int32 name="us" description="How many microseconds per k-rate cycle (333 microseconds) will you waste?">
+            <MinValue i="0"/>
+            <MaxValue i="333"/>
+         </int32>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[uint32_t Phase;
+uint32_t r;]]></code.declaration>
+      <code.krate><![CDATA[{
+	int tStart = hal_lld_get_counter_value();
+	while(RTT2US(hal_lld_get_counter_value() - tStart) < param_us)
+		;
+}]]></code.krate>
+   </obj.normal>
+</objdefs>
