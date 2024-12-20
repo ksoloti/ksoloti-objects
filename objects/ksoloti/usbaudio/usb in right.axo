@@ -1,0 +1,24 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="usb in right" uuid="c62e66f990f44fae80831e6cbaff2572">
+      <sDescription>USB audio input, right channel.
+Requires "+ USBAudio firmware mode (set in Preferences) or the patch will throw an error!
+      </sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="wave" description="Right channel"/>
+      </outlets>
+      <displays>
+         <frac32.vu name="vu" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0; j<BUFSIZE; j++) {
+	outlet_wave[j] = UsbInputRight[j];
+}
+disp_vu = outlet_wave[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

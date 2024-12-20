@@ -1,0 +1,28 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="usb in stereo" uuid="97497df749dd47a19a18f4a78ebc58e6">
+      <sDescription>USB audio input, stereo.
+Requires "+ USBAudio" firmware mode (set in Preferences) or the patch will throw an error!
+      </sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="left" description="Left channel"/>
+         <frac32buffer name="right" description="Right channel"/>
+      </outlets>
+      <displays>
+         <frac32.vu name="vuLeft"/>
+         <frac32.vu name="vuRight"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0; j<BUFSIZE; j++) {
+	outlet_left[j] = UsbInputLeft[j];
+	outlet_right[j] = UsbInputRight[j];
+}
+disp_vuLeft = outlet_left[0];
+disp_vuRight = outlet_right[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>
