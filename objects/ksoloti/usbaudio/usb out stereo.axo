@@ -1,7 +1,7 @@
 <objdefs appVersion="1.1.0">
    <obj.normal id="usb out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9">
       <sDescription>USB audio output, stereo.
-Requires "+ USBAudio" firmware mode (set in Preferences) or the patch will throw an error!
+Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!
 </sDescription>
       <author>Andrew Capon</author>
       <license>BSD</license>

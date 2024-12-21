@@ -1,7 +1,7 @@
 <objdefs appVersion="1.1.0">
    <obj.normal id="usb out left" uuid="b1038841c23b24a069e0a5fd6076554ba">
       <sDescription>USB audiooutput, left channel (or mono).
-Requires "+ USBAudio" firmware mode (set in Preferences) or the patch will throw an error!
+Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!
       </sDescription>
       <author>Andrew Capon</author>
       <license>BSD</license>
