@@ -1,4 +1,4 @@
-<patch-1.0 appVersion="1.0.12">
+<patch-1.0 appVersion="1.1.0">
    <comment type="patch/comment" x="1456" y="14" text="load default preset"/>
    <obj type="table/alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" name="data" x="1148" y="28">
       <params/>
@@ -5321,7 +5321,7 @@ outlet_clipping=t;]]></code.krate>
                   <string>16384 (341ms)</string>
                   <string>32768 (682ms)</string>
                   <string>65536 (1.36s)</string>
-                  <string>131072 (2.37s)</string>
+                  <string>131072 (2.73s)</string>
                   <string>262144 (5.46s)</string>
                   <string>524288 (10.9s)</string>
                   <string>1048576 (21.8s)</string>
@@ -5602,7 +5602,7 @@ outlet_timeB=timeB;
                   <string>16384 (341ms)</string>
                   <string>32768 (682ms)</string>
                   <string>65536 (1.36s)</string>
-                  <string>131072 (2.37s)</string>
+                  <string>131072 (2.73s)</string>
                   <string>262144 (5.46s)</string>
                   <string>524288 (10.9s)</string>
                   <string>1048576 (21.8s)</string>
@@ -5886,7 +5886,7 @@ outlet_timeB=timeB;
                   <string>16384 (341ms)</string>
                   <string>32768 (682ms)</string>
                   <string>65536 (1.36s)</string>
-                  <string>131072 (2.37s)</string>
+                  <string>131072 (2.73s)</string>
                   <string>262144 (5.46s)</string>
                   <string>524288 (10.9s)</string>
                   <string>1048576 (21.8s)</string>
@@ -6116,7 +6116,7 @@ outlet_timeB=timeB;
          <combo attributeName="size" selection="1048576 (21.8s)"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" x="574" y="2282" text="&lt;html&gt;&lt;h3&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CONTROLS&lt;/span&gt; &lt;br&gt;Knob 1 = wet/dry &lt;br&gt;knob 2 = delay time (divisions if synced) &lt;br&gt;Knob 3 = Feedback &lt;br&gt;Knob 4 = Lo pass filter &lt;br&gt;Knob 5 = Ping pong (offsets right channel, when at max ping pong greatness is achieved) &lt;br&gt;Knob 6 = Modulation speed (divisions if synced) &lt;br&gt;Knob 7 = Modulation depth &lt;br&gt;Knob 8 = Sequencer speed (Sequencer steps up and down straight and dotted delay times, from the current delay time) &lt;br&gt;Knob 9 = Sequencer depth &lt;br&gt;Knob 10 = width - offsets either right or left channel slightly to achieve a wider sound. repeats get progressively wider &lt;br&gt; &lt;br&gt;Button S1 - tap tempo (if you hold down the tap button and move the encoder you can change the division that the taps create. I.e. if set to 8ths and you tap quarters,&lt;br&gt;you will get double the speed of your tap. This is ignored if midi time is set to sync, in which case it uses the synced time knob setting). &lt;br&gt; &lt;br&gt;Button S2 = Presetmode (more on that later) &lt;br&gt; &lt;br&gt;Encoder = BPM, afffects synced times and is also set by tap tempo &lt;br&gt; &lt;br&gt;L3 - short press turns sync on/off for delay time. Long press enables pitch artifacts when changing delay time. &lt;br&gt;L4 - short press turns sync on/off for the sequencer speed, long press turns sync on/off for the modulation speed. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;PRESET MODE&lt;/span&gt; &lt;br&gt;Press S2 to enter preset mode. &lt;br&gt;Turn the encoder to select a preset. &lt;br&gt;Press the encoder to load selected preset. &lt;br&gt;Press S1 to save current settings to the selected preset &lt;br&gt;Long press S1 to save all presets and current settings to the sd card (if you don&apos;t do this the presets are lost when you reboot the ksoloti!!!). &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;SYNCING&lt;/span&gt; &lt;br&gt;Sync is either midi, tap or BPM. &lt;br&gt;If you tap when the delay time is unsynced, it will sync to the tap until the delay time is changed with the knob. It will use the tap division. &lt;br&gt;If you tap when the delay time is synced, it will use the delay knob division. &lt;br&gt;Tap affects the BPM setting too. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CHANGES IN V2&lt;/span&gt; &lt;br&gt;The OLED screen displays when the patch is listening to midi clock. &lt;br&gt;The patch responds to midi note messages to change preset on channel 16 (you can sequence whole preset changes easily! You can switch these to program messages, or the midi channel, on the preset object.) &lt;br&gt;The patch shows when the input is overloaded (screen shows an asterisk to the left). &lt;br&gt;I&apos;ve added a &quot;centre&quot; parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean! &lt;br&gt;Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars."/>
+   <comment type="patch/comment" x="574" y="2282" text="&lt;html&gt;&lt;div width=&quot;800px&quot;&gt;&lt;h3&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CONTROLS&lt;/span&gt; &lt;br&gt;Knob 1 = wet/dry &lt;br&gt;knob 2 = delay time (divisions if synced) &lt;br&gt;Knob 3 = Feedback &lt;br&gt;Knob 4 = Lo pass filter &lt;br&gt;Knob 5 = Ping pong (offsets right channel, when at max ping pong greatness is achieved) &lt;br&gt;Knob 6 = Modulation speed (divisions if synced) &lt;br&gt;Knob 7 = Modulation depth &lt;br&gt;Knob 8 = Sequencer speed (Sequencer steps up and down straight and dotted delay times, from the current delay time) &lt;br&gt;Knob 9 = Sequencer depth &lt;br&gt;Knob 10 = width - offsets either right or left channel slightly to achieve a wider sound. repeats get progressively wider &lt;br&gt; &lt;br&gt;Button S1 - tap tempo (if you hold down the tap button and move the encoder you can change the division that the taps create. I.e. if set to 8ths and you tap quarters,&lt;br&gt;you will get double the speed of your tap. This is ignored if midi time is set to sync, in which case it uses the synced time knob setting). &lt;br&gt; &lt;br&gt;Button S2 = Presetmode (more on that later) &lt;br&gt; &lt;br&gt;Encoder = BPM, afffects synced times and is also set by tap tempo &lt;br&gt; &lt;br&gt;L3 - short press turns sync on/off for delay time. Long press enables pitch artifacts when changing delay time. &lt;br&gt;L4 - short press turns sync on/off for the sequencer speed, long press turns sync on/off for the modulation speed. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;PRESET MODE&lt;/span&gt; &lt;br&gt;Press S2 to enter preset mode. &lt;br&gt;Turn the encoder to select a preset. &lt;br&gt;Press the encoder to load selected preset. &lt;br&gt;Press S1 to save current settings to the selected preset &lt;br&gt;Long press S1 to save all presets and current settings to the sd card (if you don&apos;t do this the presets are lost when you reboot the ksoloti!!!). &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;SYNCING&lt;/span&gt; &lt;br&gt;Sync is either midi, tap or BPM. &lt;br&gt;If you tap when the delay time is unsynced, it will sync to the tap until the delay time is changed with the knob. It will use the tap division. &lt;br&gt;If you tap when the delay time is synced, it will use the delay knob division. &lt;br&gt;Tap affects the BPM setting too. &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;span style=&quot;color:#0000AA&quot;&gt;CHANGES IN V2&lt;/span&gt; &lt;br&gt;The OLED screen displays when the patch is listening to midi clock. &lt;br&gt;The patch responds to midi note messages to change preset on channel 16 (you can sequence whole preset changes easily! You can switch these to program messages, or the midi channel, on the preset object.) &lt;br&gt;The patch shows when the input is overloaded (screen shows an asterisk to the left). &lt;br&gt;I&apos;ve added a &quot;centre&quot; parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean! &lt;br&gt;Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars."/>
    <comment type="patch/comment" x="1960" y="2296" text="sum wet&amp;dry&amp;fback"/>
    <obj type="drj/math/sum3" uuid="93cb11244902274d118a237aed86ae7d7fd46107" name="sum3_1" x="1960" y="2310">
       <params/>
@@ -6978,8 +6978,8 @@ outlet_clipping=t;]]></code.krate>
 <br>I've added a "centre" parameter for each knob on the gills input object which can be adjusted for when the physical knob is centered but the patch is off centre, if you see what I mean!
 <br>Delay time is extended to 20 seconds ish, and synced knob values go to 4 bars.]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>0</y>
+      <x>185</x>
+      <y>104</y>
       <width>1550</width>
       <height>848</height>
    </windowPos>
