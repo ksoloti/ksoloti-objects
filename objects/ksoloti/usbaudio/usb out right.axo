@@ -1,7 +1,7 @@
 <objdefs appVersion="1.1.0">
    <obj.normal id="usb out right" uuid="359a6d16d33b4d29a8060b6151eff149">
       <sDescription>USB audio output, right channel.
-Requires "+ USBAudio" firmware mode (set in Preferences) or the patch will throw an error!
+Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!
       </sDescription>
       <author>Andrew Capon</author>
       <license>BSD</license>
