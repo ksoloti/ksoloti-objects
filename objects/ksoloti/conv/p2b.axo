@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="p2b" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5f" sha="5f55b7ee58828996387d37c5431384eb14c9dd17">
+      <upgradeSha>1036bdea372166d396fc75329ed1d057bd4af3fc</upgradeSha>
+      <sDescription>unipolar to bipolar
+Exact same function like conv/unipolar2bipolar, only the name is shortened.
+	  </sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[outlet_o = (inlet_i - (1 << 26)) << 1;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="p2b" uuid="3345c38145a8120f27f13de7d1507d9aa22862af" sha="69427841cd6b343811d10c93fc97e3219f85ac5b">
+      <upgradeSha>8525be5d55df51043f07b379c6d326988e993947</upgradeSha>
+      <sDescription>unipolar to bipolar
+Exact same function like conv/unipolar2bipolar, only the name is shortened.
+	  </sDescription>
+      <author>Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[outlet_o = (inlet_i - (1 << 26)) << 1;]]></code.srate>
+   </obj.normal>
+</objdefs>
