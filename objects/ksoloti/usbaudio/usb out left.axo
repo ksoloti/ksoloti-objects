@@ -1,0 +1,24 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="usb out left" uuid="b1038841c23b24a069e0a5fd6076554ba">
+      <sDescription>USB audiooutput, left channel (or mono).
+Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!
+      </sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="wave" description="Left channel"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.vu name="vu" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0; j<BUFSIZE; j++) {
+	UsbOutputLeft[j] += __SSAT(inlet_wave[j], 28);
+}
+disp_vu = inlet_wave[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>
