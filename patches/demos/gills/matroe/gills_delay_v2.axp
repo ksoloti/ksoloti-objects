@@ -1,4 +1,4 @@
-<patch-1.0 appVersion="1.1.0">
+<patch-1.0 appVersion="1.0.12">
    <comment type="patch/comment" x="1456" y="14" text="load default preset"/>
    <obj type="table/alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" name="data" x="1148" y="28">
       <params/>
