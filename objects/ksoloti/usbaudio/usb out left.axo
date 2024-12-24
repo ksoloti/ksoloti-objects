@@ -5,6 +5,7 @@ Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch 
       </sDescription>
       <author>Andrew Capon</author>
       <license>BSD</license>
+	  <helpPatch>usbaudio.axh</helpPatch>
       <inlets>
          <frac32buffer name="wave" description="Left channel"/>
       </inlets>

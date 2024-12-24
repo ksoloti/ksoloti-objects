@@ -1,10 +1,11 @@
 <objdefs appVersion="1.1.0">
    <obj.normal id="usb in right" uuid="c62e66f990f44fae80831e6cbaff2572">
       <sDescription>USB audio input, right channel.
-Requires "+ USBAudio firmware mode (set in Preferences) or the patch will throw an error!
+Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!
       </sDescription>
       <author>Andrew Capon</author>
       <license>BSD</license>
+	  <helpPatch>usbaudio.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32buffer name="wave" description="Right channel"/>
