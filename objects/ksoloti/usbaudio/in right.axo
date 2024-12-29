@@ -1,15 +1,15 @@
 <objdefs appVersion="1.1.0">
-   <obj.normal id="usb out right" uuid="359a6d16d33b4d29a8060b6151eff149">
-      <sDescription>USB audio output, right channel.
+   <obj.normal id="in right" uuid="c62e66f990f44fae80831e6cbaff2572">
+      <sDescription>USB audio input, right channel.
 Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!
       </sDescription>
       <author>Andrew Capon</author>
       <license>BSD</license>
 	  <helpPatch>usbaudio.axh</helpPatch>
-      <inlets>
+      <inlets/>
+      <outlets>
          <frac32buffer name="wave" description="Right channel"/>
-      </inlets>
-      <outlets/>
+      </outlets>
       <displays>
          <frac32.vu name="vu" noLabel="true"/>
       </displays>
@@ -17,9 +17,9 @@ Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch 
       <attribs/>
       <code.krate><![CDATA[int j;
 for(j=0; j<BUFSIZE; j++) {
-	UsbOutputRight[j] += __SSAT(inlet_wave[j], 28);
+	outlet_wave[j] = UsbInputRight[j];
 }
-disp_vu = inlet_wave[0];
+disp_vu = outlet_wave[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

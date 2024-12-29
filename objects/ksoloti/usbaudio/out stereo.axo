@@ -1,16 +1,16 @@
 <objdefs appVersion="1.1.0">
-   <obj.normal id="usb in stereo" uuid="97497df749dd47a19a18f4a78ebc58e6">
-      <sDescription>USB audio input, stereo.
+   <obj.normal id="out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9">
+      <sDescription>USB audio output, stereo.
 Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!
       </sDescription>
       <author>Andrew Capon</author>
       <license>BSD</license>
 	  <helpPatch>usbaudio.axh</helpPatch>
-      <inlets/>
-      <outlets>
+      <inlets>
          <frac32buffer name="left" description="Left channel"/>
          <frac32buffer name="right" description="Right channel"/>
-      </outlets>
+      </inlets>
+      <outlets/>
       <displays>
          <frac32.vu name="vuLeft"/>
          <frac32.vu name="vuRight"/>
@@ -19,11 +19,11 @@ Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch 
       <attribs/>
       <code.krate><![CDATA[int j;
 for(j=0; j<BUFSIZE; j++) {
-	outlet_left[j] = UsbInputLeft[j];
-	outlet_right[j] = UsbInputRight[j];
+	UsbOutputLeft[j] += __SSAT(inlet_left[j], 28);
+	UsbOutputRight[j] += __SSAT(inlet_right[j], 28);
 }
-disp_vuLeft = outlet_left[0];
-disp_vuRight = outlet_right[0];
+disp_vuLeft = inlet_left[0];
+disp_vuRight = inlet_right[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>
