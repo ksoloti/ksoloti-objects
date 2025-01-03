@@ -18,7 +18,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/usbaudio/out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9" name="usb_2" x="406" y="224">
+   <obj type="ksoloti/usbaudio/out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9" name="usb_2" x="420" y="294">
       <params/>
       <attribs/>
    </obj>
