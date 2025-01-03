@@ -156,7 +156,7 @@ WORKING_AREA(waThreadX, 1024); /* 750 is not enough, try 1024 or more */
 Thread *Thd;]]></code.declaration>
       <code.init><![CDATA[trig_load = trig_save = ntrig = 0;
 
-Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), LOWPRIO, (tfunc_t)ThreadX, (void *)this);]]></code.init>
+Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), LOWPRIO, (void*) ThreadX, (void *)this);]]></code.init>
       <code.dispose><![CDATA[chThdTerminate( Thd );
 chThdWait( Thd );]]></code.dispose>
       <code.krate><![CDATA[trig_load = inlet_load;

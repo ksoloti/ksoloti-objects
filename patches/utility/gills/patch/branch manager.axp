@@ -216,7 +216,7 @@ sdcard_attemptMountIfUnmounted();
 codec_clearbuffer();
 // chThdSleepMilliseconds(10);
 
-Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (tfunc_t)ThreadX, (void *)this);
+Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (void*) ThreadX, (void *)this);
 // scan_files_for_patchbin(p, p_short);
 
 disp_ndirsWithPatch = ndirs_with_patch;
