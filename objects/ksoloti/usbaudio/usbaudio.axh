@@ -2,7 +2,7 @@
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;div style=&quot;font-size:2em; color:#808000;&quot;&gt;You must flash your Core with the USBAudio firmware&lt;br&gt; (set in Preferences) for this patch to run!"/>
    <comment type="patch/comment" x="14" y="98" text="The signals the host sends out to the Ksoloti USB audio inputs..."/>
    <comment type="patch/comment" x="350" y="98" text="...are being forwarded to Ksoloti&apos;s hardware audio outputs."/>
-   <obj type="ksoloti/usbaudio/usb in stereo" uuid="97497df749dd47a19a18f4a78ebc58e6" name="usb_1" x="98" y="126">
+   <obj type="ksoloti/usbaudio/in stereo" uuid="97497df749dd47a19a18f4a78ebc58e6" name="usb_1" x="98" y="126">
       <params/>
       <attribs/>
    </obj>
@@ -18,7 +18,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/usbaudio/usb out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9" name="usb_2" x="406" y="294">
+   <obj type="ksoloti/usbaudio/out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9" name="usb_2" x="406" y="224">
       <params/>
       <attribs/>
    </obj>
