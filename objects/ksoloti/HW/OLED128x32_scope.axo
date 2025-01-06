@@ -226,7 +226,7 @@ static msg_t ThreadX(void *arg) {
 // 128 is not enough, try 192 <-----------
 WORKING_AREA(waThreadX, 192);
 Thread *Thd;]]></code.declaration>
-      <code.init><![CDATA[Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (void*) ThreadX, (void *)this);]]></code.init>
+      <code.init><![CDATA[Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (tfunc_t)ThreadX, (void *)this);]]></code.init>
       <code.dispose><![CDATA[chThdTerminate( Thd );
 chThdWait( Thd );]]></code.dispose>
    </obj.normal>

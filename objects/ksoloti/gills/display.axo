@@ -594,7 +594,7 @@ uint8_t i; for (i = 0; i < TEXT_LINELENGTH * 4; i++) {
     text[i] = textBuf[i] = ' ';
 }
 
-Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (void*) ThreadX, (void *)this);]]></code.init>
+Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (tfunc_t)ThreadX, (void *)this);]]></code.init>
       <code.dispose><![CDATA[chThdTerminate( Thd );
 chThdWait( Thd );
 
