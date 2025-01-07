@@ -1,46 +1,77 @@
-<objdefs appVersion="1.0.12">
+<objdefs appVersion="1.1.0">
    <obj.normal id="monitor ext" uuid="b3967eef-65e1-4597-9ebb-56114f7a1a25">
-      <sDescription>Provides in-patcher information about incoming midi-data.
-Extended with channel, pitchbend, and channel pressure.</sDescription>
-      <author>robert schirmer, Ksoloti</author>
+      <sDescription>Provides in-patcher information about incoming MIDI data.
+Extended with device, port, channel, pitchbend, channel pressure, and number of currently held notes.
+
+MIDI device number:
+    0:   MIDI_DEVICE_OMNI               (For filtering)
+    1:   MIDI_DEVICE_DIN                  (MIDI via hardware DIN / TRS jacks)
+    2:   MIDI_DEVICE_USB_DEVICE    (This Ksoloti Core is acting as MIDI device over USB prog port)
+    3:   MIDI_DEVICE_USB_HOST       (This Ksoloti Core is hosting a device via USB host port)
+    4:   MIDI_DEVICE_DIGITAL_X1     (x1 pins - not implemented)
+    5:   MIDI_DEVICE_DIGITAL_X2     (x2 pins - not implemented)
+    15: MIDI_DEVICE_INTERNAL       (Internal MIDI (e.g. midi/intern objects within this patch))
+
+MIDI port number:
+    Varies with each device; Some devices only have one port,
+    some devices have many ports and several of those ports
+    may be actual MIDI device ports.
+    Ksoloti will try to listen to all MIDI ports it can detect.</sDescription>
+      <author>Robert Schirmer, Ksoloti</author>
       <license>BSD</license>
       <inlets/>
       <outlets/>
       <displays>
-         <int32.label name="channel"/>
-         <int32.label name="note "/>
-         <int32.label name="velocity "/>
-         <bool32 name="gate "/>
-         <int32.label name="cc "/>
-         <int32.label name="value "/>
-         <int32.label name="bend"/>
-         <int32.label name="chpress"/>
+         <int32.label name="device" description="&lt;html&gt;MIDI device number:&lt;br/&gt;     0: MIDI_DEVICE_OMNI                 (For filtering)&lt;br/&gt;     1: MIDI_DEVICE_DIN                    (MIDI via hardware DIN / TRS jacks)&lt;br/&gt;     2: MIDI_DEVICE_USB_DEVICE      (This Ksoloti Core is acting as MIDI device over USB prog port)&lt;br/&gt;     3: MIDI_DEVICE_USB_HOST         (This Ksoloti Core is hosting a device via USB host port)&lt;br/&gt;&lt;s&gt;     4: MIDI_DEVICE_DIGITAL_X1        (x1 pins - not implemented)&lt;/s&gt;&lt;br/&gt;&lt;s&gt;     5: MIDI_DEVICE_DIGITAL_X2        (x2 pins - not implemented)&lt;/s&gt;&lt;br/&gt;    15: MIDI_DEVICE_INTERNAL         (Internal MIDI (e.g. midi/intern objects within this patch))"/>
+         <int32.label name="port" description="&lt;html&gt;MIDI port number:&lt;br/&gt;     Varies with each device; Some devices only have one port,&lt;br/&gt;     some devices have many ports and several of those ports&lt;br/&gt;     may be actual MIDI device ports.&lt;br/&gt;     Ksoloti will try to listen to all MIDI ports it can detect."/>
+         <int32.label name="channel" description="MIDI channel of most recently received message"/>
+         <int32.label name="note " description="Note Number of most recently received Note message"/>
+         <int32.label name="velocity " description="Velocity of most recently received Note message"/>
+         <bool32 name="gate" description="Lights up if most recently received Note message was a Note On."/>
+         <int32.label name="cc " description="Most recently received Control Change number"/>
+         <int32.label name="ccvalue " description="Value of most recently received Control Change"/>
+         <int32.label name="bend" description="Pitch bend"/>
+         <int32.label name="chpress" description="Channel pressure"/>
+         <int32.label name="notes_held" description="Number of currently held notes."/>
       </displays>
       <params/>
       <attribs/>
-      <code.declaration><![CDATA[uint8_t chnl;
+      <code.declaration><![CDATA[uint8_t _device, _port;
+uint8_t chnl;
 uint8_t gate, note, velo;
 uint8_t ccnumber, ccvalue;
 uint16_t bend;
-uint8_t chpress;]]></code.declaration>
-      <code.krate><![CDATA[disp_note = note;
+uint8_t chpress;
+uint8_t notes_held;]]></code.declaration>
+      <code.init><![CDATA[//bend = 1<<14;]]></code.init>
+      <code.krate><![CDATA[disp_device = _device;
+disp_port = _port;
+disp_channel = chnl+1; /* showing 1-16, not 0-15 */
+disp_note = note;
 disp_velocity = velo;
 disp_gate = gate;
 disp_cc = ccnumber;
-disp_value = ccvalue;
+disp_ccvalue = ccvalue;
 disp_bend = bend;
 disp_chpress = chpress;
-disp_channel = chnl+1; /* showing 1-16, not 0-15 */]]></code.krate>
+disp_notes_held = notes_held;]]></code.krate>
       <code.midihandler><![CDATA[uint8_t msg = (status & 0xF0);
 chnl = (status & 0x0F);
+
+_device = dev;
+_port = port;
 
 if ((msg == MIDI_NOTE_ON) && (data2)) {
 	gate = 1;
 	note = data1;
 	velo = data2;
+	++notes_held;
 }
 else if (((msg == MIDI_NOTE_ON) && (!data2)) || (msg == MIDI_NOTE_OFF)) {
 	gate = 0;
+	note = data1;
+	velo = data2;
+	--notes_held;
 }
 else if (msg == MIDI_CONTROL_CHANGE) {
 	ccnumber = data1;
