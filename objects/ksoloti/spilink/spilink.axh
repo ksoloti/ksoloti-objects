@@ -44,7 +44,8 @@
          <includes/>
          <code.declaration><![CDATA[int32_t tdelta_min = INT32_MAX;
 int32_t tdelta_max = INT32_MIN;]]></code.declaration>
-         <code.krate><![CDATA[extern unsigned int spidb_interrupt_timestamp;
+         <code.krate><![CDATA[#if FW_SPILINK
+extern unsigned int spidb_interrupt_timestamp;
 extern unsigned int codec_interrupt_timestamp;
 
 int tdelta = spidb_interrupt_timestamp - codec_interrupt_timestamp;
@@ -61,6 +62,10 @@ if (tdelta<tdelta_min) tdelta_min = tdelta;
 disp_tdelta_min = tdelta_min;
 disp_tdelta_max = tdelta_max;
 disp_tdelta = spidb_interrupt_timestamp - codec_interrupt_timestamp;
+#elif !defined(FW_SPILINK_WARNED)
+#define FW_SPILINK_WARNED
+#warning "This patch contains SPILink objects, but the device is not running SPILink firmware! The objects in question have been muted."
+#endif
 
 volatile int i = param_dsp*10;
 while(i--) {}]]></code.krate>

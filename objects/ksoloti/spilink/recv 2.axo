@@ -1,6 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="recv 2" uuid="902ab129-3090-427d-90d9-a49d62dd5ec1">
       <sDescription>Send/receive audio between linked boards.
+Requires &quot;+ SPILink&quot; firmware mode (set in Preferences) or the patch will throw an error!
 </sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>GPL</license>
@@ -24,11 +25,21 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[int i;
-for(i=0; i<BUFSIZE; i++)
-{
+      <code.krate><![CDATA[
+int i;
+for(i=0; i<BUFSIZE; i++) {
+#if FW_SPILINK
 	outlet_outA[i] = spilink_rx_samples->channel[attr_channels].samples[i];
 	outlet_outB[i] = spilink_rx_samples->channel[attr_channels+1].samples[i];
-}]]></code.krate>
+#else
+	outlet_outA[i] = 0;
+	outlet_outB[i] = 0;
+#endif
+}
+
+#if !defined(FW_SPILINK) && !defined(FW_SPILINK_WARNED)
+#define FW_SPILINK_WARNED
+#warning "This patch contains SPILink objects, but the device is not running SPILink firmware! The objects in question have been muted."
+#endif]]></code.krate>
    </obj.normal>
 </objdefs>
