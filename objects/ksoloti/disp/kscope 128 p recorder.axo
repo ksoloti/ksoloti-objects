@@ -12,7 +12,7 @@ Use the record inlet to trigger one full sampling cycle.</sDescription>
       </inlets>
       <outlets/>
       <displays>
-         <uint8array128.vbar name="scope"/>
+         <uint8array128.vbar name="scope" noLabel="true"/>
       </displays>
       <params>
          <int32 name="interval" description="increase to slow down recording (record only every n-th k-rate value)">
