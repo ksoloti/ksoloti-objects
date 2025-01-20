@@ -21,12 +21,10 @@ Use the record inlet to trigger one full sampling cycle.</sDescription>
          </int32>
       </params>
       <attribs/>
-      <code.declaration><![CDATA[uint8_t t[128];
-uint8_t index;
+      <code.declaration><![CDATA[uint8_t index;
 uint16_t cpt;
 uint8_t ntrig;]]></code.declaration>
-      <code.init><![CDATA[uint8_t i;
-for (i = 0; i < 128; i++) t[i] = 0;
+      <code.init><![CDATA[
 index = 0;
 cpt = 0;
 ntrig = 0;]]></code.init>
@@ -34,7 +32,7 @@ ntrig = 0;]]></code.init>
 	index = 0;
 	uint8_t i;
 	for (i = 0; i < 128; i++) {
-		disp_scope[i] = t[i] = 0;
+		disp_scope[i] = 0;
 	}
 	ntrig = 1;
 }
@@ -46,7 +44,7 @@ cpt++;
 
 if(index < 128 && cpt >= param_interval) {
 	cpt = 0;
-	disp_scope[index] = t[index] = (uint8_t)(inlet_in >> 20);
+	disp_scope[index] = (uint8_t)(inlet_in >> 20);
 	index++;
 }]]></code.krate>
    </obj.normal>
