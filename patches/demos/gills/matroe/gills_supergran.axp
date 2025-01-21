@@ -1,0 +1,6984 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="1372" y="364" text="loads default patch to table"/>
+   <patchobj type="patch/object" uuid="fb19b8eb-5043-4691-8d79-6687bef8045a" name="fill_1" x="1372" y="378">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+         <spinner attributeName="initdelay" value="6000"/>
+         <spinner attributeName="range" value="32"/>
+         <spinner attributeName="offset" value="0"/>
+      </attribs>
+      <object id="patch/object" uuid="fb19b8eb-5043-4691-8d79-6687bef8045a">
+         <license>GPL</license>
+         <inlets/>
+         <outlets/>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+            <spinner name="initdelay" MinValue="0" MaxValue="600000000" DefaultValue="0"/>
+            <spinner name="range" MinValue="0" MaxValue="600000000" DefaultValue="0"/>
+            <spinner name="offset" MinValue="0" MaxValue="600000000" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int init;
+int i;
+int active;
+int checking;
+int v;
+int datapresent;
+int array[attr_range] = {
+67108864,
+33554432,
+71303168,
+33554432,
+67108864,
+79691776,
+67108864,
+0,
+0,
+67108864,
+0,
+0,
+14680064,
+57671680,
+29360128,
+134213632,
+0,
+0,
+0,
+0,
+67108864,
+16777216,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0
+};]]></code.declaration>
+         <code.init><![CDATA[init=attr_initdelay;
+checking=1;
+i=0;]]></code.init>
+         <code.krate><![CDATA[//delay start
+if ((init>0) && !active){
+	init-=1;
+	if (init==0){
+		active=1;
+	}
+}
+
+if (active){
+// check if data present
+	if ((checking>0) && (i<attr_range)){
+		v=attr_table.array[__USAT((attr_offset+i),attr_table.LENGTHPOW)];
+		if (v!=0){
+			
+			checking+=1;
+		}
+		i+=1;
+		if (i==attr_range){
+			if (checking==1){
+				//if NO data present load array into table
+				datapresent=1;
+				checking=0;
+				i=0;
+			}
+			else {
+				//if data present stop
+				datapresent=0;
+				checking=0;
+				active=0;
+			}
+		}
+	}
+	else if (!checking && datapresent){
+		attr_table.array[__USAT((attr_offset+i),attr_table.LENGTHPOW)]=array[i]>>attr_table.GAIN;
+		i+=1;
+		if (i==attr_range){
+			datapresent=0;
+			active=0;
+		}
+	
+		
+	}
+
+
+
+
+
+
+
+
+
+
+	
+}]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="table/alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" name="data" x="1176" y="532">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="8192"/>
+         <file attributeName="filename" file="../gillsGRANDATAX"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="56" y="546" text="gills inputs"/>
+   <patchobj type="patch/object" uuid="6688182a-996f-4370-812b-d60a9f2fec6b" name="1_2" x="56" y="560">
+      <params>
+         <int32 name="knobmoving" value="1500"/>
+         <frac32.u.map name="dead" value="0.09999990463256836"/>
+         <frac32.u.map name="resolution" value="0.5"/>
+         <frac32.s.map name="centre1" value="0.0"/>
+         <frac32.s.map name="centre2" value="0.0"/>
+         <frac32.s.map name="centre3" value="0.0"/>
+         <frac32.s.map name="centre4" value="0.0"/>
+         <frac32.s.map name="centre5" value="0.0"/>
+         <frac32.s.map name="centre6" value="0.0"/>
+         <frac32.s.map name="centre7" value="0.0"/>
+         <frac32.s.map name="centre8" value="0.0"/>
+         <frac32.s.map name="centre9" value="0.0"/>
+         <frac32.s.map name="centre10" value="0.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="avglength" selection="64"/>
+         <spinner attributeName="encodermin" value="0"/>
+         <spinner attributeName="encodermax" value="32"/>
+      </attribs>
+      <object id="patch/object" uuid="6688182a-996f-4370-812b-d60a9f2fec6b">
+         <sDescription>Input handler for  gills, uses a combination of averaging and dead zone to smooth knob jitter and has selectable resolution for knob output.</sDescription>
+         <author>Mattilyn Mattroe</author>
+         <license>I require 2 fillet burgers and 9 spicy wings delivered to me from the crown point chicken shop every time the object is used</license>
+         <helpPatch>analog.axh</helpPatch>
+         <inlets/>
+         <outlets>
+            <frac32.positive name="knob1"/>
+            <frac32.positive name="knob2"/>
+            <frac32.positive name="knob3"/>
+            <frac32.positive name="knob4"/>
+            <frac32.positive name="knob5"/>
+            <frac32.positive name="knob6"/>
+            <frac32.positive name="knob7"/>
+            <frac32.positive name="knob8"/>
+            <frac32.positive name="knob9"/>
+            <frac32.positive name="knob10"/>
+            <int32 name="controlID" description="number of last used control, knobs = 0-9 , buttons=10-13, encoder 14"/>
+            <bool32 name="knobmoving" description="outlet is on when any knob is changing, and turns off when knobs stop moving &amp; timer has ended (knob moving param)"/>
+            <bool32 name="S1"/>
+            <bool32 name="S2"/>
+            <bool32 name="L3"/>
+            <bool32 name="L4"/>
+            <int32 name="SID" description="S buttons id, s1=0, s2=1"/>
+            <bool32 name="Sgate" description="outlet turns on when s1 or s2 are pressed"/>
+            <int32 name="LID" description="L buttons id, L3=0, L4 =1"/>
+            <bool32 name="Lgate" description="outlet turns on when L3 or L4 are pressed"/>
+            <int32 name="encoder" description="encoder value"/>
+            <bool32 name="encoderSW" description="encoder button"/>
+            <bool32.pulse name="encoderup" description="sends trig everytime encoder turned clockwise"/>
+            <bool32.pulse name="encoderdwn" description="sends trig every time controller turned anticlockwise"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="knobmoving" description="time that the knobmoving outlet stays on after knob stops moving - I set to 1500">
+               <MinValue i="0"/>
+               <MaxValue i="66666"/>
+            </int32>
+            <frac32.u.map name="dead" description="dead zone - control only changes once it changes more than the dead zone - I set to 0.05"/>
+            <frac32.u.map name="resolution" description="resolution of knob outlets, I set to 0.1"/>
+            <frac32.s.map name="centre1"/>
+            <frac32.s.map name="centre2"/>
+            <frac32.s.map name="centre3"/>
+            <frac32.s.map name="centre4"/>
+            <frac32.s.map name="centre5"/>
+            <frac32.s.map name="centre6"/>
+            <frac32.s.map name="centre7"/>
+            <frac32.s.map name="centre8"/>
+            <frac32.s.map name="centre9"/>
+            <frac32.s.map name="centre10"/>
+         </params>
+         <attribs>
+            <combo name="avglength" description="amount of averaging used on knob input to smooth jitter -  I set to 64">
+               <MenuEntries>
+                  <string>2</string>
+                  <string>4</string>
+                  <string>8</string>
+                  <string>16</string>
+                  <string>32</string>
+                  <string>64</string>
+                  <string>128</string>
+                  <string>256</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>1</string>
+                  <string>2</string>
+                  <string>3</string>
+                  <string>4</string>
+                  <string>5</string>
+                  <string>6</string>
+                  <string>7</string>
+                  <string>8</string>
+               </CEntries>
+            </combo>
+            <spinner name="encodermin" description="minimum encoder value" MinValue="0" MaxValue="500" DefaultValue="0"/>
+            <spinner name="encodermax" description="maximum encoder value" MinValue="0" MaxValue="500" DefaultValue="64"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int i;
+int Fmoving;
+int controlID;
+int initid;
+
+int s1;
+int s1trig;
+
+int s2trig;
+int s2;
+int l3trig;
+int l3;
+int l4trig;
+int l4;
+int outs1;
+int outs2;
+int outl3;
+int outl4;
+int timer;
+
+int Fmove;
+int32_t out[10];
+int32_t centre[10];
+int32_t in[10];
+int32_t previn[10];
+int32_t t[10];
+int32_t difference;
+uint32_t faderout[10];
+uint32_t fcopy[10];
+uint32_t resolution;
+bool init;
+bool sID;
+bool lID;
+bool sgate;
+bool lgate;
+bool encoderup;
+bool encoderdwn;
+bool ebutton;
+bool etrig;
+// encoer stuff
+
+#define ENC_PORT GPIOC
+#define ENC_A_PIN 7
+#define ENC_B_PIN 1
+#define ENC_SW_PORT GPIOA
+#define ENC_SW_PIN 9
+
+int32_t encoder_val = 0;
+int32_t set_last = 0;
+
+bool_t a = true;
+bool_t a_last = true;
+
+//averaging
+//averaging lengths:   
+/////////
+      #ifdef FIFO_EXP
+        #undef FIFO_EXP
+      #endif
+      #ifdef FIFO_LEN
+        #undef FIFO_LEN
+      #endif
+      #ifdef FIFO_MASK
+        #undef FIFO_MASK
+      #endif
+      #define FIFO_EXP attr_avglength
+      #define FIFO_LEN (1<<FIFO_EXP)
+      #define FIFO_MASK (FIFO_LEN-1)
+      typedef struct _AveragerContextA
+      {
+        int32_t fifoA[FIFO_LEN];
+        int32_t fifo_iA;
+        int32_t accA;
+      } AveragerContextA;
+      AveragerContextA avgA;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageA( AveragerContextA *avgA, int32_t new_valueA )
+      {
+        avgA->fifo_iA             = (avgA->fifo_iA + 1) & FIFO_MASK;
+        avgA->accA               -= avgA->fifoA[avgA->fifo_iA];
+        avgA->accA              += new_valueA;
+        avgA->fifoA[avgA->fifo_iA]  = new_valueA;
+        return avgA->accA >> FIFO_EXP;
+      }
+/////////
+
+      typedef struct _AveragerContextB
+      {
+        int32_t fifoB[FIFO_LEN];
+        int32_t fifo_iB;
+        int32_t accB;
+      } AveragerContextB;
+      AveragerContextB avgB;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageB( AveragerContextB *avgB, int32_t new_valueB )
+      {
+        avgB->fifo_iB             = (avgB->fifo_iB + 1) & FIFO_MASK;
+        avgB->accB               -= avgB->fifoB[avgB->fifo_iB];
+        avgB->accB              += new_valueB;
+        avgB->fifoB[avgB->fifo_iB]  = new_valueB;
+        return avgB->accB >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextC
+      {
+        int32_t fifoC[FIFO_LEN];
+        int32_t fifo_iC;
+        int32_t accC;
+      } AveragerContextC;
+      AveragerContextC avgC;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageC( AveragerContextC *avgC, int32_t new_valueC )
+      {
+        avgC->fifo_iC             = (avgC->fifo_iC + 1) & FIFO_MASK;
+        avgC->accC               -= avgC->fifoC[avgC->fifo_iC];
+        avgC->accC              += new_valueC;
+        avgC->fifoC[avgC->fifo_iC]  = new_valueC;
+        return avgC->accC >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextD
+      {
+        int32_t fifoD[FIFO_LEN];
+        int32_t fifo_iD;
+        int32_t accD;
+      } AveragerContextD;
+      AveragerContextD avgD;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageD( AveragerContextD *avgD, int32_t new_valueD )
+      {
+        avgD->fifo_iD             = (avgD->fifo_iD + 1) & FIFO_MASK;
+        avgD->accD               -= avgD->fifoD[avgD->fifo_iD];
+        avgD->accD              += new_valueD;
+        avgD->fifoD[avgD->fifo_iD]  = new_valueD;
+        return avgD->accD >> FIFO_EXP;
+      }
+
+/////////////////////
+
+      typedef struct _AveragerContextE
+      {
+        int32_t fifoE[FIFO_LEN];
+        int32_t fifo_iE;
+        int32_t accE;
+      } AveragerContextE;
+      AveragerContextE avgE;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageE( AveragerContextE *avgE, int32_t new_valueE )
+      {
+        avgE->fifo_iE             = (avgE->fifo_iE + 1) & FIFO_MASK;
+        avgE->accE               -= avgE->fifoE[avgE->fifo_iE];
+        avgE->accE              += new_valueE;
+        avgE->fifoE[avgE->fifo_iE]  = new_valueE;
+        return avgE->accE >> FIFO_EXP;
+      }
+/////////
+
+      typedef struct _AveragerContextF
+      {
+        int32_t fifoF[FIFO_LEN];
+        int32_t fifo_iF;
+        int32_t accF;
+      } AveragerContextF;
+      AveragerContextF avgF;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageF( AveragerContextF *avgF, int32_t new_valueF )
+      {
+        avgF->fifo_iF             = (avgF->fifo_iF + 1) & FIFO_MASK;
+        avgF->accF               -= avgF->fifoF[avgF->fifo_iF];
+        avgF->accF              += new_valueF;
+        avgF->fifoF[avgF->fifo_iF]  = new_valueF;
+        return avgF->accF >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextG
+      {
+        int32_t fifoG[FIFO_LEN];
+        int32_t fifo_iG;
+        int32_t accG;
+      } AveragerContextG;
+      AveragerContextG avgG;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageG( AveragerContextG *avgG, int32_t new_valueG )
+      {
+        avgG->fifo_iG             = (avgG->fifo_iG + 1) & FIFO_MASK;
+        avgG->accG               -= avgG->fifoG[avgG->fifo_iG];
+        avgG->accG              += new_valueG;
+        avgG->fifoG[avgG->fifo_iG]  = new_valueG;
+        return avgG->accG >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextH
+      {
+        int32_t fifoH[FIFO_LEN];
+        int32_t fifo_iH;
+        int32_t accH;
+      } AveragerContextH;
+      AveragerContextH avgH;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageH( AveragerContextH *avgH, int32_t new_valueH )
+      {
+        avgH->fifo_iH             = (avgH->fifo_iH + 1) & FIFO_MASK;
+        avgH->accH               -= avgH->fifoH[avgH->fifo_iH];
+        avgH->accH              += new_valueH;
+        avgH->fifoH[avgH->fifo_iH]  = new_valueH;
+        return avgH->accH >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextI
+      {
+        int32_t fifoI[FIFO_LEN];
+        int32_t fifo_iI;
+        int32_t accI;
+      } AveragerContextI;
+      AveragerContextI avgI;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageI( AveragerContextI *avgI, int32_t new_valueI )
+      {
+        avgI->fifo_iI             = (avgI->fifo_iI + 1) & FIFO_MASK;
+        avgI->accI               -= avgI->fifoI[avgI->fifo_iI];
+        avgI->accI              += new_valueI;
+        avgI->fifoI[avgI->fifo_iI]  = new_valueI;
+        return avgI->accI >> FIFO_EXP;
+      }
+
+/////////
+
+      typedef struct _AveragerContextJ
+      {
+        int32_t fifoJ[FIFO_LEN];
+        int32_t fifo_iJ;
+        int32_t accJ;
+      } AveragerContextJ;
+      AveragerContextJ avgJ;
+      __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t moving_averageJ( AveragerContextJ *avgJ, int32_t new_valueJ )
+      {
+        avgJ->fifo_iJ             = (avgJ->fifo_iJ + 1) & FIFO_MASK;
+        avgJ->accJ               -= avgJ->fifoJ[avgJ->fifo_iJ];
+        avgJ->accJ              += new_valueJ;
+        avgJ->fifoJ[avgJ->fifo_iJ]  = new_valueJ;
+        return avgJ->accJ >> FIFO_EXP;
+      }]]></code.declaration>
+         <code.init><![CDATA[palSetPadMode(GPIOB,5,PAL_MODE_INPUT_PULLDOWN);
+palSetPadMode(GPIOA,10,PAL_MODE_INPUT_PULLDOWN);
+palSetPadMode(GPIOB,12,PAL_MODE_INPUT_PULLDOWN);
+palSetPadMode(GPIOB,13,PAL_MODE_INPUT_PULLDOWN);
+initid=500;
+s1trig=1;
+s2trig=1;
+l3trig=1;
+l4trig=1;
+Fmoving=1;
+Fmove=3000;
+init=1;
+
+/* Configure encoder pins as input */
+palSetPadMode(ENC_PORT, ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
+palSetPadMode(ENC_PORT, ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
+
+/* Configure encoder switch as input */
+palSetPadMode(ENC_SW_PORT, ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
+         <code.krate><![CDATA[if (param_resolution>0){
+	resolution=param_resolution;
+}
+else {
+	resolution=1;
+}
+
+
+in[0] = moving_averageA( &avgA, (adcvalues[0]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[1] = moving_averageB( &avgB, (adcvalues[1]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[2] = moving_averageC( &avgC, (adcvalues[2]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[3] = moving_averageD( &avgD, (adcvalues[3]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[4] = moving_averageE( &avgE, (adcvalues[6]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[5] = moving_averageF( &avgF, (adcvalues[7]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[6] = moving_averageG( &avgG, (adcvalues[8]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[7] = moving_averageH( &avgH, (adcvalues[9]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[8] = moving_averageI( &avgI, (adcvalues[11]<<15)>>FIFO_EXP )<<FIFO_EXP;
+in[9] = moving_averageJ( &avgJ, (adcvalues[12]<<15)>>FIFO_EXP )<<FIFO_EXP;
+
+
+centre[0]=(param_centre1)+(1<<26);
+centre[1]=(param_centre2)+(1<<26);
+centre[2]=(param_centre3)+(1<<26);
+centre[3]=(param_centre4)+(1<<26);
+centre[4]=(param_centre5)+(1<<26);
+centre[5]=(param_centre6)+(1<<26);
+centre[6]=(param_centre7)+(1<<26);
+centre[7]=(param_centre8)+(1<<26);
+centre[8]=(param_centre9)+(1<<26);
+centre[9]=((param_centre10)+(1<<26));
+//timer param replacement from original
+timer=4;
+
+for (i = 0;i<10;i++){
+	
+	if ((in[i]!=previn[i])&&(t[i]==0)){
+		int32_t difference=in[i]-fcopy[i];
+		if (difference<0){
+			difference=0-difference;
+		}
+		if (difference>=param_dead){
+			t[i]=timer;
+		}
+		previn[i]=in[i];    
+	}
+	if (t[i]>0){
+		t[i]-=1;
+	}
+	if (t[i]>0){
+		controlID=i;
+		if (in[i]<(param_dead<<1)){
+			faderout[i]=0;
+		}
+		else if (in[i]>=((1<<27)-(param_dead<<1))){
+			//faderout[i]=1<<27;
+			faderout[i]=0x07FFFFFF;
+		}
+		else {
+			  int32_t b = in[i] >> (27-1);              // i [0 2[
+			  int32_t a = (in[i] & ((1<<(27-1)) - 1));  // a q26
+			  if(b < 1){ // [0 1[             q27         q26   q21           q27 
+			    out[i] = ___SMMLA(centre[i] - 0, a, 0>> 6) << 6;
+			  } else {   // [1 2[
+			    out[i] = ___SMMLA(0x07FFFFFF - centre[i], a, centre[i] >> 6) << 6;
+			  }
+			faderout[i]=(out[i]/resolution)*resolution;
+			}
+		fcopy[i]=in[i];
+		
+		Fmoving=1;
+	}
+	
+}
+/////////////
+
+//if (Fmoving&&!init){
+if (Fmoving){
+	Fmove=param_knobmoving;
+}
+if (Fmove>0){
+	Fmove-=1;
+}
+if ((Fmove==0)&&init){
+	controlID=0;
+	init=0;
+}
+
+
+// write outputs
+
+outlet_knob1 = faderout[0];
+outlet_knob2 = faderout[1];
+outlet_knob3 = faderout[2];
+outlet_knob4 = faderout[3];
+outlet_knob5 = faderout[4];
+outlet_knob6 = faderout[5];
+outlet_knob7 = faderout[6];
+outlet_knob8 = faderout[7];
+outlet_knob9 = faderout[8];
+outlet_knob10 = faderout[9];
+
+
+
+
+
+s1=palReadPad(GPIOB,5)<<27;
+if (s1&&!s1trig){
+	outs1=1;
+	controlID=10;
+	sID=0;
+	s1trig=1;
+	}
+else if (!s1){
+		s1trig=0;
+		outs1=0;
+		}
+
+s2= palReadPad(GPIOA,10)<<27;
+
+if (s2&&!s2trig){
+	outs2=1;
+	controlID=11;
+	s2trig=1;
+	sID=1;
+	
+	}
+else if (!s2){
+		s2trig=0;
+		outs2=0;
+		}
+
+
+l3=palReadPad(GPIOB,12)<<27;
+if (l3&&!l3trig){
+	outl3=1;
+	controlID=12;
+	l3trig=1;
+	lID=0;
+	}
+else if (!l3){
+		l3trig=0;
+		outl3=0;
+		}
+
+l4=palReadPad(GPIOB,13)<<27;
+if (l4&&!l4trig){
+	outl4=1;
+	controlID=13;
+	l4trig=1;
+	lID=1;
+	}
+else if (!l4){
+		l4trig=0;
+		outl4=0;
+		}
+
+
+
+
+outlet_S2= outs2;
+outlet_S1= outs1;
+outlet_L3= outl3;
+outlet_L4= outl4;
+
+if (outs1 || outs2){
+	sgate=1;
+}
+else {
+	sgate=0;
+}
+
+if (outl3 || outl4){
+	lgate=1;
+}
+else {
+	lgate=0;
+}
+
+
+a = palReadPad(ENC_PORT, ENC_A_PIN);
+
+/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
+if (!a && a_last) {
+	/* If pin A is low but wasn't before, we have caught an event. */
+		
+	if (palReadPad(ENC_PORT, ENC_B_PIN)) {
+		/* If pin B is currently HIGH it means we're turning counterclockwise */
+		if (encoder_val > attr_encodermin) encoder_val -= 1;
+		encoderdwn=1;
+		controlID=14;
+	}
+	else {
+		/* If pin B is currently LOW it means we're turning clockwise */
+		if (encoder_val < attr_encodermax) encoder_val += 1;
+		encoderup=1;
+		controlID=14;
+	}
+}
+
+/* Register changes */
+a_last = a;
+outlet_encoder  = encoder_val;
+
+
+/* Now read encoder switch */
+ebutton=palReadPad(GPIOA, 9)<<27;
+if (ebutton && !etrig){
+	controlID=14;
+	etrig=1;
+}
+else if (!ebutton) { 
+	etrig=0;
+}
+outlet_encoderSW  = ebutton;
+if (initid>0){
+	initid-=1;
+	controlID=0;
+}
+outlet_controlID=controlID;
+
+outlet_Sgate=sgate;
+outlet_SID=sID;
+outlet_Lgate=lgate;
+outlet_LID=lID;
+outlet_knobmoving=Fmove;
+outlet_encoderup=encoderup;
+outlet_encoderdwn=encoderdwn;
+encoderdwn=0;
+encoderup=0;
+Fmoving=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="logic/toggle" uuid="f42f0d3aab552c17bc78b9e65f85dc24f977503d" name="toggle_3" x="420" y="588">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="7e2fe4f3-8258-475f-8bc8-4f2b822172f3" name="led_2" x="644" y="588">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="4 red"/>
+      </attribs>
+      <object id="patch/object" uuid="7e2fe4f3-8258-475f-8bc8-4f2b822172f3">
+         <sDescription>Controls a single LED color on Ksoloti Gills.
+LED1: green, PG6
+LED2: red, PC6
+LED3: dual-color, PB3 and PB4
+LED4: dual-color, PB6 and PB7</sDescription>
+         <author>Johannes Taelman, sebiik</author>
+         <license>BSD</license>
+         <helpPatch>led.axh</helpPatch>
+         <inlets>
+            <bool32 name="in" description="positive = true"/>
+         </inlets>
+         <outlets/>
+         <displays/>
+         <params/>
+         <attribs>
+            <combo name="led">
+               <MenuEntries>
+                  <string>1</string>
+                  <string>2</string>
+                  <string>3 blue</string>
+                  <string>3 red</string>
+                  <string>4 blue</string>
+                  <string>4 red</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0x66</string>
+                  <string>0x26</string>
+                  <string>0x13</string>
+                  <string>0x14</string>
+                  <string>0x16</string>
+                  <string>0x17</string>
+               </CEntries>
+            </combo>
+         </attribs>
+         <includes/>
+         <code.init><![CDATA[palSetPadMode(GPIOB,6, PAL_MODE_OUTPUT_PUSHPULL);
+
+palSetPadMode(GPIOB,7, PAL_MODE_OUTPUT_PUSHPULL);]]></code.init>
+         <code.krate><![CDATA[if (!inlet_in){
+	palWritePad(GPIOB,6, 1);
+	palWritePad(GPIOB,7, 0);
+}
+else if (inlet_in){
+	palWritePad(GPIOB,7, 1);
+	palWritePad(GPIOB,6, 0);
+}]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="1526" y="602">
+      <params/>
+      <attribs>
+         <table attributeName="str" table="../gillsGRANDATAX"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="476" y="644" text="bank 1"/>
+   <comment type="patch/comment" x="308" y="658" text="write controls to table"/>
+   <comment type="patch/comment" x="476" y="658" text="read controls from table"/>
+   <comment type="patch/comment" x="1358" y="658" text="preset loader/saver"/>
+   <patchobj type="patch/object" uuid="2949beb1-14af-4178-b69c-b334798a2738" name="object_1" x="308" y="672">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+         <combo attributeName="device" selection="din"/>
+         <spinner attributeName="channel" value="16"/>
+      </attribs>
+      <object id="patch/object" uuid="2949beb1-14af-4178-b69c-b334798a2738">
+         <inlets>
+            <int32 name="offset"/>
+            <int32 name="controlID"/>
+            <bool32.risingfalling name="bank"/>
+            <bool32 name="knobmoving"/>
+            <bool32.risingfalling name="hold"/>
+            <frac32 name="i1"/>
+            <frac32 name="i2"/>
+            <frac32 name="i3"/>
+            <frac32 name="i4"/>
+            <frac32 name="i5"/>
+            <frac32 name="i6"/>
+            <frac32 name="i7"/>
+            <frac32 name="i8"/>
+            <frac32 name="i9"/>
+            <frac32 name="i10"/>
+            <bool32 name="i11"/>
+         </inlets>
+         <outlets>
+            <int32 name="bankoffset"/>
+            <int32 name="controlID"/>
+         </outlets>
+         <displays>
+            <int32.label name="d1"/>
+         </displays>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+            <combo name="device">
+               <MenuEntries>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>MIDI_DEVICE_DIN, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 2</string>
+                  <string>MIDI_DEVICE_USB_HOST, 3</string>
+                  <string>MIDI_DEVICE_USB_HOST, 4</string>
+                  <string>MIDI_DEVICE_INTERNAL, 1</string>
+                  <string>MIDI_DEVICE_INTERNAL, 2</string>
+                  <string>MIDI_DEVICE_USB_DEVICE, 1</string>
+               </CEntries>
+            </combo>
+            <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="1"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[uint32_t prev1;
+uint32_t prev2;
+uint32_t prev3;
+uint32_t prev4;
+uint32_t prev5;
+uint32_t prev6;
+uint32_t prev7;
+uint32_t prev8;
+uint32_t prev9;
+uint32_t prev10;
+uint32_t prev11;
+uint32_t prev12;
+uint32_t prev15;
+uint32_t value;
+uint32_t v;
+int offset;
+int bank;
+int midibank;
+int bankoffset;
+int bankmidioffset;
+int prevb;
+int midiCC[32];
+int midiV;
+int ccV[128];
+int cc;
+int cctrig;
+int midistart;
+int midiend;
+int controlID;
+bool trig11;
+bool trig12;
+bool trig13;
+bool trig14;]]></code.declaration>
+         <code.init><![CDATA[midiCC[0]=20;
+midiCC[1]=21;
+midiCC[2]=22;
+midiCC[3]=23;
+midiCC[4]=24;
+midiCC[5]=25;
+midiCC[6]=26;
+midiCC[7]=27;
+midiCC[8]=28;
+midiCC[9]=29;
+midiCC[10]=30;
+midiCC[11]=31;
+midiCC[12]=32;
+midiCC[13]=33;
+midiCC[14]=34;
+midiCC[15]=35;
+midiCC[16]=36;
+midiCC[17]=37;
+midiCC[18]=38;
+midiCC[19]=39;
+midiCC[20]=40;
+midiCC[21]=41;
+
+
+
+midistart=20;
+midiend=34;
+
+bankoffset=11;
+bankmidioffset=11;]]></code.init>
+         <code.krate><![CDATA[offset=inlet_offset;
+if (!inlet_hold){
+// knobs = 0-9
+//reverse button = 10
+// 11-19 are free
+// 20 -29 are knobs bank
+
+
+if (inlet_bank!=prevb){
+	if (!inlet_knobmoving){
+		if (inlet_bank){
+			bank=bankoffset;
+			midibank=bankmidioffset;
+		}
+		else if (!inlet_bank){
+			bank=0;
+			midibank=0;
+		}
+		prevb=inlet_bank;
+	}
+	
+}
+if ((inlet_controlID!=10)  &&  (inlet_controlID!=11)  &&  (inlet_controlID!=13)&&  (inlet_controlID!=14)){
+	if (inlet_controlID==12){
+		controlID=10;
+	}
+	else {
+		controlID=inlet_controlID;
+	}
+	
+	
+}
+
+	
+
+
+
+if (inlet_i1 != prev1){
+	attr_table.array [__USAT((offset+0+bank),attr_table.LENGTHPOW)]= inlet_i1>>attr_table.GAIN;
+//	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), CCVALUE, (inlet_v0 >>20));
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[0+midibank], (inlet_i1 >>20));
+	prev1=inlet_i1;
+}
+
+if (inlet_i2 != prev2){
+	attr_table.array [__USAT((offset+1+bank),attr_table.LENGTHPOW)]= inlet_i2>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[1+midibank], (inlet_i2 >>20));
+	prev2=inlet_i2;
+}
+
+if (inlet_i3 != prev3){
+	attr_table.array [__USAT((offset+2+bank),attr_table.LENGTHPOW)]= inlet_i3>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[2+midibank], (inlet_i3 >>20));
+	prev3=inlet_i3;
+}
+
+if (inlet_i4 != prev4){
+	attr_table.array [__USAT((offset+3+bank),attr_table.LENGTHPOW)]= inlet_i4>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[3+midibank], (inlet_i4 >>20));
+	prev4=inlet_i4;
+}
+
+if (inlet_i5 != prev5){
+	attr_table.array [__USAT((offset+4+bank),attr_table.LENGTHPOW)]= inlet_i5>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[4+midibank], (inlet_i5 >>20));
+	prev5=inlet_i5;
+}
+
+if (inlet_i6 != prev6){
+	attr_table.array [__USAT((offset+5+bank),attr_table.LENGTHPOW)]= inlet_i6>>attr_table.GAIN;
+	//int ccv;
+	//ccv=midiCC[5];
+	//MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), ccv, (inlet_i6 >>20));
+	//LogTextMessage("Control ch%2D cc%3D v%3D    dev%3D port%3D ", ccv, ccv, ccv, ccv, (inlet_i6 >>20));
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[5+midibank], (inlet_i6 >>20));
+	prev6=inlet_i6;
+}
+
+if (inlet_i7 != prev7){
+	attr_table.array [__USAT((offset+6+bank),attr_table.LENGTHPOW)]= inlet_i7>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[6+midibank], (inlet_i7 >>20));
+	prev7=inlet_i7;
+}
+
+if (inlet_i8 != prev8){
+	attr_table.array [__USAT((offset+7+bank),attr_table.LENGTHPOW)]= inlet_i8>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[7+midibank], (inlet_i8 >>20));
+	prev8=inlet_i8;
+}
+
+if (inlet_i9 != prev9){
+	attr_table.array [__USAT((offset+8+bank),attr_table.LENGTHPOW)]= inlet_i9>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[8+midibank], (inlet_i9 >>20));
+	prev9=inlet_i9;
+}
+
+if (inlet_i10 != prev10){
+	attr_table.array [__USAT((offset+9+bank),attr_table.LENGTHPOW)]= inlet_i10>>attr_table.GAIN;
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[9+midibank], (inlet_i10 >>20));
+	prev10=inlet_i10;
+}
+
+//// THE BELOW IS NOT IN BANK!!!!
+
+
+if (inlet_i11 && !trig11){
+	
+	//bool
+	value=attr_table.array [__USAT((offset+10+bank),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+	trig11=1;
+	if (!bank){
+		if (!value){
+		 v=inlet_i11<<21;
+		 midiV=127;
+		}
+		
+		else {
+			midiV=0;
+			v=0;
+		}
+	}
+	else {
+		v=value;
+		v+=(1<<21);
+		if (v>(8<<21)){
+			v=0<<21;
+		}
+	}
+	MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + (attr_channel-1), midiCC[10+midibank], midiV);
+	attr_table.array [__USAT((offset+10+bank),attr_table.LENGTHPOW)]=v>>attr_table.GAIN;
+	
+}
+else if (!inlet_i11){
+	trig11=0;
+}
+
+
+
+
+if (cctrig){
+	cctrig=0;
+	attr_table.array [__USAT((offset+(cc-midistart)),attr_table.LENGTHPOW)]= ccV[cc]>>attr_table.GAIN;
+}
+
+}
+else {
+	prev1=inlet_i1;
+	prev2=inlet_i2;
+	prev3=inlet_i3;
+	prev4=inlet_i4;
+	prev5=inlet_i5;
+	prev6=inlet_i6;
+	prev7=inlet_i7;
+	prev8=inlet_i8;
+	prev9=inlet_i9;
+	prev10=inlet_i10;
+	
+}
+
+outlet_controlID=controlID+midibank;
+outlet_bankoffset=bankoffset;]]></code.krate>
+         <code.midihandler><![CDATA[if (status == (attr_channel-1) + MIDI_CONTROL_CHANGE)
+{
+	if ((data1>=midistart) && (data1<=midiend)){
+		cctrig=1;
+		cc=data1;
+		if (data2==127){
+			ccV[data1]=0x07FFFFFF;
+		}
+		else{
+			ccV[data1]=data2<<20;
+		}
+	}
+}]]></code.midihandler>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee" name="tableread_1" x="476" y="672">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+      </attribs>
+      <object id="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee">
+         <sDescription>read 8 values from a table,starting from &apos;offset&apos;</sDescription>
+         <author>robert schirmer</author>
+         <license>who cares</license>
+         <inlets>
+            <int32 name="offset" description="sets an offset for writing to the table"/>
+         </inlets>
+         <outlets>
+            <frac32 name="v1"/>
+            <frac32 name="v2"/>
+            <frac32 name="v3"/>
+            <frac32 name="v4"/>
+            <frac32 name="v5"/>
+            <frac32 name="v6"/>
+            <frac32 name="v7"/>
+            <frac32 name="v8"/>
+            <frac32 name="v9"/>
+            <frac32 name="v10"/>
+            <bool32 name="v11"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int offset;]]></code.declaration>
+         <code.krate><![CDATA[offset=inlet_offset;
+
+outlet_v1= attr_table.array[__USAT((offset + 0),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v2= attr_table.array[__USAT((offset + 1),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v3= attr_table.array[__USAT((offset + 2),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v4= attr_table.array[__USAT((offset + 3),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v5= attr_table.array[__USAT((offset + 4),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v6= attr_table.array[__USAT((offset + 5),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v7= attr_table.array[__USAT((offset + 6),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v8= attr_table.array[__USAT((offset + 7),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v9= attr_table.array[__USAT((offset + 8),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v10= attr_table.array[__USAT((offset + 9),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v11= attr_table.array[__USAT((offset + 10),attr_table.LENGTHPOW)]<<attr_table.GAIN;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="ksoloti/gills/led" uuid="d4980ecb-5e48-42a3-bdcf-2ddfb1f5c712" name="led_1" x="644" y="672">
+      <params/>
+      <attribs>
+         <combo attributeName="led" selection="3 blue"/>
+      </attribs>
+   </obj>
+   <obj type="deadsy/input/debounce1" uuid="dd7c32f9-81e3-4570-bea6-1e87c04029ed" name="debounce1_1" x="882" y="672">
+      <params/>
+      <attribs>
+         <spinner attributeName="period" value="3"/>
+         <combo attributeName="mode" selection="fast 0 to 1"/>
+      </attribs>
+   </obj>
+   <patchobj type="patch/object" uuid="e21be394-7de5-40c5-b61d-ac2f837afb91" name="object_6" x="1008" y="672">
+      <params>
+         <int32 name="s1longpress" value="6000"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="e21be394-7de5-40c5-b61d-ac2f837afb91">
+         <inlets>
+            <bool32 name="s1"/>
+            <bool32 name="s2"/>
+            <bool32 name="Eup"/>
+            <bool32 name="Edown"/>
+            <bool32 name="Ebutton"/>
+         </inlets>
+         <outlets>
+            <bool32.pulse name="tap"/>
+            <bool32.pulse name="Pup"/>
+            <bool32.pulse name="Pdown"/>
+            <bool32 name="Pmode"/>
+            <bool32.pulse name="Tup"/>
+            <bool32.pulse name="Tdown"/>
+            <bool32 name="Tmode"/>
+            <bool32.pulse name="Pload"/>
+            <bool32.pulse name="Psave"/>
+            <bool32 name="tablesave"/>
+            <bool32.pulse name="tapdivUP"/>
+            <bool32.pulse name="tapdivDOWN"/>
+            <bool32 name="tapon"/>
+            <bool32 name="bypass"/>
+            <bool32 name="midirevert"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="s1longpress">
+               <MinValue i="1000"/>
+               <MaxValue i="1000000"/>
+            </int32>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int presetmode;
+int s2trig;
+int s1trig;
+int save;
+int tablepause;
+int tablesave;
+int timer;
+int bypass;
+int etrig;
+int midiR;]]></code.declaration>
+         <code.init><![CDATA[bypass=0;]]></code.init>
+         <code.krate><![CDATA[if (inlet_s2 && !s2trig){
+	s2trig=1;
+	if (!presetmode && !bypass) {
+		presetmode=1;
+	}
+	else {
+		presetmode=0;
+	}
+}
+else if (!inlet_s2){
+	s2trig=0;
+}
+
+if (presetmode){
+	
+	if (inlet_s1 && !s1trig){
+		timer=param_s1longpress;
+		s1trig=1;
+	}
+	if (timer>0){
+		tablepause=1;
+		timer-=1;
+		if (timer==0){
+			tablesave=1;
+			tablepause=0;
+			//s1trig-0;
+			presetmode=0;
+			
+		}
+	}
+	if (!inlet_s1){
+		if (s1trig && tablepause){
+			tablepause=0;
+			save=1;
+			presetmode=0;
+			timer=0;
+		}
+		else if (s1trig && !tablepause){
+			
+		}
+		s1trig=0;
+	}
+
+	
+	outlet_tap=0;
+	outlet_Pup=inlet_Eup;
+	outlet_Pdown=inlet_Edown;
+	
+	outlet_Pload=inlet_Ebutton;
+	if (outlet_Pload){
+		//presetmode=0;
+		etrig=1;
+	}
+
+	
+	outlet_Tup=0;
+	outlet_Tdown=0;
+	outlet_tap=0;
+	outlet_tapdivUP=0;
+	outlet_tapdivDOWN=0;
+}
+
+else if (!presetmode){
+	if (!inlet_s1){
+		s1trig=0;
+		outlet_Tup=inlet_Eup;
+		outlet_Tdown=inlet_Edown;
+		outlet_tapdivUP=0;
+		outlet_tapdivDOWN=0;
+		outlet_tapon=0;
+		if (inlet_Ebutton && !etrig){
+			etrig=1;
+			if (!bypass){
+				bypass=1;
+			}
+			else {
+				bypass=0;
+			}
+		}
+		else if (!inlet_Ebutton){
+			etrig=0;
+		}
+	}
+	else {
+		outlet_Tup=0;
+		outlet_Tdown=0;
+
+		outlet_tapdivUP=inlet_Eup;
+		outlet_tapdivDOWN=inlet_Edown;
+		outlet_tapon=1;
+		if (inlet_Ebutton && !etrig){
+			etrig=1;
+		
+				midiR=1;
+		
+		}
+		else if (!inlet_Ebutton){
+			etrig=0;
+		}
+		
+	}
+	if (!s1trig){
+	outlet_tap=inlet_s1;
+	}
+	else {
+		outlet_tap=0;
+	}
+	if (!inlet_s1){
+		s1trig=0;
+	}
+	
+	
+	outlet_Pup=0;
+	outlet_Pdown=0;
+	outlet_Pload=0;	
+	
+}
+
+
+outlet_midirevert=midiR;
+midiR=0;
+
+
+outlet_bypass=bypass;
+outlet_Pmode=presetmode;
+outlet_Tmode=!presetmode;
+outlet_Psave=save;
+outlet_tablesave=tablesave;
+
+tablesave=0;
+save=0;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="3e22ffde-7932-4678-a3f0-9010b257d905" name="preset_1" x="1358" y="672">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+         <spinner attributeName="range" value="32"/>
+         <combo attributeName="sendDevice" selection="din"/>
+         <combo attributeName="sendmidi" selection="off"/>
+         <spinner attributeName="channel" value="16"/>
+         <combo attributeName="type" selection="midi note"/>
+         <spinner attributeName="initdelay" value="56"/>
+      </attribs>
+      <object id="patch/object" uuid="3e22ffde-7932-4678-a3f0-9010b257d905">
+         <sDescription>copy the elements of a table from table &apos;src&apos; to table &apos;dst&apos;
+the length of the area to copy is defined by &apos;range&apos;,
+the read offset is defined by inlet&apos;src&apos; and the write offset by &apos;dst&apos;
+&apos;speed&apos; sets the copying speed in terms of audio-rate (16 is really fast!)
+if &apos;splat&apos; is enabled,tcopy will preserve the original contents of the destination table.
+if &apos;clear&apos; is enabled,tcopy will clear the contents of the table.</sDescription>
+         <author>Robert Schirmer</author>
+         <license>BSD</license>
+         <helpPatch>data.axh</helpPatch>
+         <inlets>
+            <int32 name="preset"/>
+            <bool32.rising name="load" description="start copying"/>
+            <int32 name="offset"/>
+            <bool32.rising name="save"/>
+            <bool32.rising name="saveinitpreset"/>
+            <bool32 name="delayinitpreset"/>
+            <bool32.rising name="presetUP"/>
+            <bool32.rising name="presetDOWN"/>
+         </inlets>
+         <outlets>
+            <int32 name="preset"/>
+            <bool32.pulse name="initsaved"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table" description="name of the source -table"/>
+            <spinner name="range" MinValue="1" MaxValue="300" DefaultValue="1"/>
+            <combo name="sendDevice">
+               <MenuEntries>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>MIDI_DEVICE_DIN, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 2</string>
+                  <string>MIDI_DEVICE_USB_HOST, 3</string>
+                  <string>MIDI_DEVICE_USB_HOST, 4</string>
+                  <string>MIDI_DEVICE_INTERNAL, 1</string>
+                  <string>MIDI_DEVICE_INTERNAL, 2</string>
+                  <string>MIDI_DEVICE_USB_DEVICE, 1</string>
+               </CEntries>
+            </combo>
+            <combo name="sendmidi">
+               <MenuEntries>
+                  <string>off</string>
+                  <string>on</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0</string>
+                  <string>1</string>
+               </CEntries>
+            </combo>
+            <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="1"/>
+            <combo name="type">
+               <MenuEntries>
+                  <string>midi note</string>
+                  <string>program change</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0</string>
+                  <string>1</string>
+               </CEntries>
+            </combo>
+            <spinner name="initdelay" MinValue="0" MaxValue="12000000" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[uint32_t i;
+uint32_t ii;
+uint32_t previi;
+uint32_t src;
+uint32_t dst;
+
+
+
+
+
+
+uint32_t range;
+
+uint32_t start;
+
+uint32_t soffset;
+//int snapshot;#
+int preset;
+int ntrig;
+int Mpreset;
+int Mtrig;
+
+int speed;
+//int save;
+int strig;
+int s;
+int o;
+int prevsnap;
+
+int init;
+int savinginit;
+int initsaved;
+int Utrig;
+int Dtrig;
+
+
+
+
+//int ppptrig;]]></code.declaration>
+         <code.init><![CDATA[ntrig = 1;
+
+//snapshot=1;
+speed = 2;
+init=attr_initdelay;]]></code.init>
+         <code.krate><![CDATA[start=inlet_offset;
+range=attr_range;
+if (inlet_preset!=prevsnap){
+	prevsnap=inlet_preset;
+	preset=inlet_preset;
+}
+
+if (inlet_presetUP && !Utrig){
+	Utrig=1;
+	preset+=1;
+	if (preset>99){
+		preset=0;
+	}
+}
+else if (!inlet_presetUP){
+	Utrig=0;
+}
+
+if (inlet_presetDOWN && !Dtrig){
+	Dtrig=1;
+	preset-=1;
+	if (preset<0){
+		preset=99;
+	}
+}
+else if (!inlet_presetDOWN){
+	Dtrig=0;
+}
+
+if (Mtrig){
+
+//	s=1;
+	preset=Mpreset;
+	ntrig = 1;
+//	save=0;
+	i = 0;
+	ii=0;
+	previi=-1;
+	src = (preset*range) + start + range + range;
+	dst = 0 + start;
+}
+
+if (inlet_load&& !ntrig && !Mtrig){ 
+//	snapshot=inlet_snapshot+1;
+	s=1;
+	ntrig = 1;
+//	save=0;
+	i = 0;
+	ii=0;
+	previi=-1; 
+	src = (preset*range) + start + range + range;
+	dst = 0 + start;
+}
+
+
+if (inlet_save&& !ntrig && !Mtrig ){ 
+//	snapshot=inlet_snapshot+1;
+	ntrig = 1;
+//	save=1;
+	i = 0;
+	ii=0;
+	previi=-1;
+	src = 0 + start;
+		dst = (preset*range) + start + range + range;
+}
+
+
+if (init>0){
+	
+	if (inlet_delayinitpreset){
+			init=attr_initdelay;
+		}
+	else {
+		     init-=1;
+		}
+	if (init==1){
+		init=0;
+		s=1;
+		ntrig = 1;
+//		save=0;
+		i = 0;
+		ii=0;
+		previi=-1;
+		src = 0 + start+range;
+		dst = 0 + start;
+			
+		}
+}
+
+if (inlet_saveinitpreset && !strig){
+	strig=1;
+//	snapshot=inlet_snapshot+1;
+	ntrig = 1;
+//	save=1;
+	i = 0;
+	ii=0;
+	previi=-1;
+	src = 0 + start;
+	dst = 0 + start + range;
+	savinginit=1;
+
+
+	
+}
+else if (!inlet_saveinitpreset){
+	strig=0;
+}
+//if (param_initpatch && !ppptrig){
+//	s=1;
+//	ntrig = 1;
+//	save=0;
+//	i = 0;
+//	ii=0;
+//	previi=-1;
+//	src = 0 + start+range;
+//	dst = 0 + start;
+
+
+
+	
+//	ppptrig=1;
+//}
+//else if (!param_initpatch){
+//	ppptrig=0;
+//}
+
+if ((ii<range)&&(ntrig)){
+	
+	if (ii!=previi){
+	
+  attr_table.array[ii + dst]=  attr_table.array[ii  + src] ;
+		
+  previi=ii;
+	}
+  
+  i += 1;
+  ii=i/speed;	
+ // if (ii==range){
+ // 	ntrig=0;
+//  }
+}
+
+if ((ii==range) && !inlet_load && !inlet_save && !Mtrig &&ntrig){
+  	ntrig=0;
+  	if (savinginit){
+  		attr_table.array [__USAT((start+range+14),attr_table.LENGTHPOW)]= (14<<21)>>attr_table.GAIN;;
+  		savinginit=0;
+  		initsaved=1;
+  		
+  	}
+  	//saveinit=0;
+  	if (s && attr_sendmidi){
+  		
+  	o=1;
+  	if (!attr_type){
+  	MidiSend3((midi_device_t) attr_sendDevice, MIDI_NOTE_ON + (attr_channel-1),preset,78);
+  	}
+  	else if (attr_type){
+  	MidiSend2((midi_device_t) attr_sendDevice , MIDI_PROGRAM_CHANGE + (attr_channel-1),preset-1);
+  	}
+  	s=0;
+  	}
+  	
+  }
+if (attr_sendmidi){
+	if (o>0){
+	  if (o==4){
+	  	if (!attr_type){
+		  MidiSend3((midi_device_t) attr_sendDevice, MIDI_NOTE_OFF + (attr_channel-1),preset,10);
+	  	}
+	  }
+	  o+=1;
+	}
+}
+outlet_preset=preset;
+
+outlet_initsaved=initsaved;
+initsaved=0;
+Mtrig=0;]]></code.krate>
+         <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + (attr_channel-1)) && (data2)) {
+	
+	if (!attr_type){
+	Mpreset=data1;
+	Mtrig=1;
+	}
+
+	
+}
+else if (status == MIDI_PROGRAM_CHANGE + (attr_channel-1)) {  
+	if (attr_type){
+	Mpreset= data1;
+	Mtrig=1;
+	}
+}]]></code.midihandler>
+      </object>
+   </patchobj>
+   <obj type="table/save" uuid="3e4108b607d56d9e1cd10abb898b58eea11e53b2" name="save_1" x="1554" y="672">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="476" y="952" text="bank 2"/>
+   <patchobj type="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee" name="tableread_2" x="476" y="966">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+      </attribs>
+      <object id="patch/object" uuid="f058245d-0bd0-4842-8610-6333c9ca06ee">
+         <sDescription>read 8 values from a table,starting from &apos;offset&apos;</sDescription>
+         <author>robert schirmer</author>
+         <license>who cares</license>
+         <inlets>
+            <int32 name="offset" description="sets an offset for writing to the table"/>
+         </inlets>
+         <outlets>
+            <frac32 name="v1"/>
+            <frac32 name="v2"/>
+            <frac32 name="v3"/>
+            <frac32 name="v4"/>
+            <frac32 name="v5"/>
+            <frac32 name="v6"/>
+            <frac32 name="v7"/>
+            <frac32 name="v8"/>
+            <frac32 name="v9"/>
+            <frac32 name="v10"/>
+            <frac32 name="v11"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int offset;]]></code.declaration>
+         <code.krate><![CDATA[offset=inlet_offset;
+
+outlet_v1= attr_table.array[__USAT((offset + 0),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v2= attr_table.array[__USAT((offset + 1),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v3= attr_table.array[__USAT((offset + 2),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v4= attr_table.array[__USAT((offset + 3),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v5= attr_table.array[__USAT((offset + 4),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v6= attr_table.array[__USAT((offset + 5),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v7= attr_table.array[__USAT((offset + 6),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v8= attr_table.array[__USAT((offset + 7),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v9= attr_table.array[__USAT((offset + 8),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v10= attr_table.array[__USAT((offset + 9),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+outlet_v11= attr_table.array[__USAT((offset + 10),attr_table.LENGTHPOW)]<<attr_table.GAIN;]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="966" y="1050" text="clock"/>
+   <patchobj type="patch/object" uuid="6da7343a-46c1-4b5b-8ffd-f6e4242b745c" name="1_1" x="910" y="1064">
+      <params>
+         <bool32.tgl name="bpmstyle" value="0"/>
+         <bool32.tgl name="bpmlock" value="0"/>
+         <int32 name="ppq" value="1"/>
+         <int32 name="ppqmax" value="0"/>
+      </params>
+      <attribs>
+         <combo attributeName="in" selection="omni"/>
+         <combo attributeName="thru" selection="off"/>
+         <combo attributeName="Thruput" selection="din"/>
+      </attribs>
+      <object id="patch/object" uuid="6da7343a-46c1-4b5b-8ffd-f6e4242b745c">
+         <sDescription>Midi clock slave</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>midi_in.axh</helpPatch>
+         <inlets>
+            <int32 name="bpm"/>
+            <bool32.rising name="bpmUP"/>
+            <bool32.rising name="bpmDOWN"/>
+            <bool32 name="reset"/>
+            <bool32 name="stop"/>
+            <bool32 name="tap"/>
+            <frac32.positive name="ppqgate"/>
+            <bool32.rising name="midirevert"/>
+         </inlets>
+         <outlets>
+            <bool32 name="midiactive" description="Song is playing"/>
+            <int32 name="bpmkbeat"/>
+            <int32 name="bpmsbeat"/>
+            <int32 name="kbeat" description="average length of a beat at k rate"/>
+            <int32 name="sbeat"/>
+            <bool32.pulse name="start" description="start trigger"/>
+            <bool32.pulse name="stop" description="stop trigger"/>
+            <bool32.pulse name="1ppq" description="beat trigger, 1ppq"/>
+            <int32 name="bpm" description="rough bpm"/>
+            <bool32 name="bartrig" description="triggers every bar"/>
+            <int32 name="count"/>
+            <bool32 name="tapping"/>
+            <int32 name="ppq"/>
+            <bool32 name="ppqgate"/>
+            <bool32 name="o1"/>
+            <bool32 name="bpmchange"/>
+            <bool32 name="bpmreset"/>
+            <bool32 name="mode"/>
+         </outlets>
+         <displays>
+            <int32.label name="kbeat"/>
+            <int32.label name="bpm"/>
+         </displays>
+         <params>
+            <bool32.tgl name="bpmstyle"/>
+            <bool32.tgl name="bpmlock"/>
+            <int32 name="ppq">
+               <MinValue i="1"/>
+               <MaxValue i="96"/>
+            </int32>
+            <int32 name="ppqmax">
+               <MinValue i="0"/>
+               <MaxValue i="6666666"/>
+            </int32>
+         </params>
+         <attribs>
+            <combo name="in">
+               <MenuEntries>
+                  <string>omni</string>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>true</string>
+                  <string>dev == MIDI_DEVICE_DIN &amp;&amp; port == 1</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 1</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 2</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 3</string>
+                  <string>dev == MIDI_DEVICE_USB_HOST &amp;&amp; port == 4</string>
+                  <string>dev == MIDI_DEVICE_INTERNAL &amp;&amp; port == 1</string>
+                  <string>dev == MIDI_DEVICE_INTERNAL &amp;&amp; port == 2</string>
+                  <string>dev == MIDI_DEVICE_USB_DEVICE &amp;&amp; port == 1</string>
+               </CEntries>
+            </combo>
+            <combo name="thru">
+               <MenuEntries>
+                  <string>off</string>
+                  <string>on</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0</string>
+                  <string>1</string>
+               </CEntries>
+            </combo>
+            <combo name="Thruput">
+               <MenuEntries>
+                  <string>din</string>
+                  <string>usb host port 1</string>
+                  <string>usb host port 2</string>
+                  <string>usb host port 3</string>
+                  <string>usb host port 4</string>
+                  <string>internal port 1</string>
+                  <string>internal port 2</string>
+                  <string>usb device port 1</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>MIDI_DEVICE_DIN, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 1</string>
+                  <string>MIDI_DEVICE_USB_HOST, 2</string>
+                  <string>MIDI_DEVICE_USB_HOST, 3</string>
+                  <string>MIDI_DEVICE_USB_HOST, 4</string>
+                  <string>MIDI_DEVICE_INTERNAL, 1</string>
+                  <string>MIDI_DEVICE_INTERNAL, 2</string>
+                  <string>MIDI_DEVICE_USB_DEVICE, 1</string>
+               </CEntries>
+            </combo>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int tap[4];
+int tapcount;
+int t;
+int avg;
+int ntrig;
+int counttaken;
+int lastcount;
+int outcount;
+int outrig;
+int tapping;
+int newtap;
+int prevavg;
+int ppq1;
+int resetC;
+int tapstart;
+int trighold;
+int prevfinal;
+
+
+int bpmclock;
+int bpmtrig;
+int bpmcount;
+
+int prevtest;
+int prevppq;
+int ppq;
+int ppqclock;
+int ppqout;
+int barclock;
+int incount;
+int k;
+int prevc;
+
+int _pos;
+int stepos;
+
+
+
+int ch;
+int CCa;
+int CCb;
+
+//int prevkb;
+int prevbpm;
+int active;
+int stablebpm;
+int solidbpm;
+int change;
+int rchange;
+int xchange;
+int changed;
+int pkb;
+int lastbpm;
+int finalbpm;
+int pstable;
+int pst;
+int cl;
+int start;
+int stop;
+int pulse;
+int bartrig;
+int kbeat;
+int Okbeat;
+int sent1;
+int sent2;
+int stable;
+int resetbavg;
+int setbpm;
+int beatavg[4];
+int Bavg;
+int ppqgate;
+int ppqwidth;
+int bpm;
+int pbpm;
+int barpos;
+int kbarpos;
+int Pbarpos;
+int mode;
+int Xkbeat[3];
+int Xstart[3];
+int Xstop[3];
+int Xbarpos[3];
+int midipickup;
+int tmpb;
+int Utrig;
+int Dtrig;
+int Ubpm;
+int prevUbpm;
+int pppbpm;
+int bpmreset;
+int holding;
+//uint32_t kph;
+//uint32_t kclock;
+//uint32_t pkclock;
+bool midihold;
+bool started;
+bool init;
+bool ppqtrig;
+bool midiactive;
+bool rtrig;
+bool strig;]]></code.declaration>
+         <code.init><![CDATA[active = 0;
+barpos=0;
+Pbarpos=0;
+t=-1;
+tapcount=-1;
+
+ch=15;
+CCa=80;
+CCb=81;
+mode=1;
+//_active = 0;
+midiactive=0;
+_pos = -1;
+
+Ubpm=119;
+	kbeat=1500;
+	Bavg=kbeat;
+avg=kbeat;
+prevavg=kbeat;
+
+ppq1=4;
+
+stepos=-1;
+
+setbpm=1;
+init=3;
+midipickup=1;
+holding=1000;]]></code.init>
+         <code.krate><![CDATA[// modes
+// 0 = BPM/tap
+// 1 = midi
+if (inlet_midirevert){
+	mode=1;
+}
+
+//tap ***********************************************************************
+outcount+=1;
+if ((outcount>=avg)){
+	if ((avg>20)&&!trighold){
+		outrig=1;
+	}
+	outcount=0;
+}
+// timer
+if (t>=0){
+	t+=1;
+}
+if ((t>=((avg>>1)+avg))&&(avg>20)){
+	newtap=0;
+	tapping=0;
+}
+
+//tap
+if (inlet_tap&&!ntrig){
+	
+	if (!tapping){
+		
+		
+		if (barpos==0){
+//		Pbarpos=barpos+1;
+		}
+		tapcount=-1;
+			outrig=1;
+			outcount=0;
+			tapping=1;
+			newtap=1;
+			resetC=1;
+			trighold=1;
+			avg=0x07FFFFFF;
+			tap[0]=0;
+			tap[1]=0;
+			tap[2]=0;
+	}
+	tapping=1;
+	ntrig=1;
+
+		
+	if (tapcount>=0){
+		
+		tap[tapcount]=t;
+		if (trighold){
+			outrig=1;
+			}
+		if (newtap){
+			
+			avg=(tap[0]+tap[1]+tap[2])/(tapcount+1);
+		}
+		
+		if (!newtap){
+		avg=(tap[0]+ tap[1]+tap[2])/3;
+		}
+	}
+	lastcount=tapcount;
+	tapcount+=1;
+	if ((tapcount>=0)&&trighold){
+		
+		trighold=0;
+		outcount=0;
+		outrig=1;
+	}
+	if (tapcount==1){
+		midihold=0;
+		mode=0;
+	}
+	if (tapcount>=3){
+		
+		newtap=0;
+		//outcount=0;
+		//outrig=1;
+		
+		tapcount=0;
+	}
+
+	t=0;
+}
+
+
+if (!inlet_tap){
+	ntrig=0;
+}
+
+
+if (outrig){
+	ppq1+=1;
+	if (resetC){
+		ppq1=0;
+	}
+	if (ppq1==4){
+		tapstart=1;
+		bpmclock=0;
+	}
+}
+
+//outlet_trig=outrig;
+//outlet_tapping=tapping;
+
+Xkbeat[0]=prevavg;
+
+Xstart[0]=tapstart;
+tmpb=pkb;
+
+//bpm***********************************************************************
+if (inlet_bpm!=pkb){
+	midihold=0;
+	pkb=inlet_bpm;
+	if (inlet_bpm>0){
+		avg=180000/inlet_bpm;
+		}
+	else {
+		avg=180000;
+	}
+	mode=0;
+	if (!active){
+		Xstart[0]=1;
+		active=1;
+	}
+	//setbpm=1;
+}
+
+if (inlet_bpmUP && !Utrig){
+	Ubpm=finalbpm+1;
+	Utrig=1;
+}
+else if (!inlet_bpmUP){
+	Utrig=0;
+}
+
+if (inlet_bpmDOWN && !Dtrig){
+	Ubpm=finalbpm-1;
+	Dtrig=1;
+}
+else if (!inlet_bpmDOWN){
+	Dtrig=0;
+}
+if (Ubpm<=1){
+	Ubpm=1;
+}
+if (Ubpm>=600){
+	Ubpm=600;
+}
+if (Ubpm!=prevUbpm){
+	prevUbpm=Ubpm;
+	midihold=0;
+//	pkb=inlet_bpm;
+	if (Ubpm>0){
+		avg=180000/Ubpm;
+		}
+	else {
+		avg=180000;
+	}
+	mode=0;
+	if (!active){
+	//	Xstart[0]=1;
+	//	active=1;
+	}
+
+
+	
+}
+
+if (mode==1){
+	avg=180000/finalbpm;
+	prevavg=avg;
+}
+
+if ((avg!=prevavg)&&(avg!=0X07FFFFFF)){
+	prevavg=avg;
+	
+	
+}
+
+//midi CC
+Xkbeat[1]=(sent1<<6)+sent2;
+
+incount=(stepos/24);
+k+=1;
+if ((incount!=prevc)&&(stepos>=0)){
+	
+	Xbarpos[1]=incount-((incount>>2)<<2);
+	if (stepos>0){
+		Xkbeat[1]=k;
+		sent1=k>>6;
+		sent2=k-((k>>6)<<6);
+	}
+	prevc=incount;
+	k=0;
+}
+
+if (inlet_reset&&!rtrig){
+	rtrig=1;
+	outcount=0;
+	ppq1=0;
+	
+	//if (!active){
+		Xstart[0]=1;
+	//	}
+	if ((mode==2)&&!active){
+		mode=0;
+	}
+}
+else if (!inlet_reset){
+	rtrig=0;
+}
+//mode=0;
+
+kbeat=Xkbeat[mode];
+if (mode==1){
+	ppq1=incount;
+}
+kbarpos=ppq1-((ppq1>>2)<<2);
+
+start=Xstart[mode];
+stop=Xstop[mode];
+Xbarpos[0]=kbarpos;
+if (!mode){
+	//Xbarpos[0]=kbarpos;
+	}
+else {
+	//Xbarpos[0]=Xbarpos[1];
+}
+
+barpos=Xbarpos[mode];
+
+if (inlet_stop&&!strig){
+	strig=1;
+	stop=1;
+}
+else if (!inlet_stop){
+	strig=0;
+}
+
+if (start){
+	prevppq=-1;
+	resetbavg=1;
+	barpos=0;
+	Pbarpos=-1;
+	barclock=-1;
+	//kclock=0;
+	//pkclock=0;
+	kbarpos=0;
+	bpmclock=0;
+	bpmcount=0;
+	active=1;
+	
+}
+if (stop){
+	active=0;
+}
+
+
+
+
+
+
+
+if (barpos!=Pbarpos){
+	pulse=1;
+	Pbarpos=barpos;
+	if (barpos==0){
+			barclock+=1;
+			bartrig=1;
+			
+		
+		}
+
+		
+}
+
+
+
+
+
+int rawbpm=180000/kbeat;
+float bpm_float = 180000.0f/kbeat;
+int bpm_int = bpm_float;
+int tenth=(bpm_float - bpm_int)*10;
+
+
+
+if (tenth>=5){
+	bpm=rawbpm+1;
+}
+else {
+	bpm=rawbpm;
+}
+if (mode==0){
+	setbpm=1;
+}
+if (setbpm){
+	//bpm=inlet_bpm;
+	stablebpm=bpm;
+	solidbpm=bpm;
+	prevbpm=bpm;
+	change=0;
+	setbpm=0;
+	lastbpm=bpm;
+	finalbpm=bpm;
+}
+
+if (pulse){
+	if (bpm!=prevbpm){
+		if (change>(0)){
+			stablebpm=bpm;
+		}
+		if ( ((bpm>lastbpm)&&(bpm>prevbpm)) || ((bpm<lastbpm)&&(bpm<prevbpm)) ){
+			change+=1;
+		
+		}
+		else {
+			change=0;
+		}
+		stable=0;
+		//lastbpm=prevbpm;
+		lastbpm=prevbpm;
+		prevbpm=bpm;
+		
+	}
+	else {
+		if (change>(1)){
+			stablebpm=bpm;
+		}
+		if (stable>(1)){
+			stablebpm=bpm;
+		
+			
+		}
+		stable+=1;
+		change=0;
+	}
+
+	if (stablebpm==pstable){
+		if (pst<4){
+			pst+=1;	
+		}
+		if (pst>2){
+			solidbpm=stablebpm;
+		}
+		
+	}
+	else {
+		pst=0;
+	}
+	pstable=stablebpm;
+}
+if (!param_bpmstyle){
+	finalbpm=stablebpm;
+	
+}
+else {
+	finalbpm=solidbpm;
+}
+if (param_bpmlock){
+	Okbeat=180000/finalbpm;
+	if ((finalbpm!=prevfinal)&&!tapping){
+		avg=Okbeat;
+		prevavg=Okbeat;
+		prevfinal=finalbpm;
+	}
+	
+}
+else {
+	Okbeat=kbeat;
+}
+ppq=param_ppq;
+if (bpmclock<(Okbeat-(Okbeat/ppq))){
+	bpmclock+=1;
+	
+}
+
+if (pulse){
+	//disp_test=bpmclock/(bpmclock/24);
+	
+	bpmclock=0;
+}
+//         
+ppqclock=(bpmclock/(Okbeat/ppq))+(barpos*ppq)+(barclock*(ppq<<2));
+ppqout=ppqclock-((ppqclock/param_ppqmax)*param_ppqmax);
+
+if (ppqout!=prevppq){
+	ppqgate=1;
+	prevppq=ppqout;
+}
+ppqwidth=___SMMUL((Okbeat/ppq)<<3,inlet_ppqgate<<2);
+if (ppqwidth<3){
+	ppqwidth=3;
+}
+
+if (ppqgate>0){
+	ppqgate+=1;
+	if (ppqgate>=ppqwidth){
+		ppqgate=0;
+	}
+}
+if (init>0){
+	init-1;
+	if (init==3){
+		pkb=777;
+		if (inlet_bpm==0){
+			Ubpm=119;
+		}
+	}
+	else if (init==2){
+		midipickup=1;
+	}
+}
+if (finalbpm!=pppbpm){
+	pppbpm=finalbpm;
+	if ((mode==0) && !tapping){
+		bpmreset=1;
+	}
+}
+
+if (holding>0){
+	holding-=1;
+	bpmreset=0;
+}
+ 
+
+
+
+outlet_ppq=ppqout;
+outlet_ppqgate=ppqgate;
+outlet_bpmreset=bpmreset;
+
+outlet_midiactive = midiactive;
+outlet_mode=mode;
+outlet_start=Xstart[mode];
+outlet_kbeat=Okbeat;
+outlet_sbeat=Okbeat<<4;
+outlet_bpmsbeat=(180000/finalbpm)<<4;
+//outlet_start=start;
+outlet_stop=stop;
+outlet_bartrig=bartrig;
+outlet_1ppq=pulse;
+outlet_tapping=tapping;
+outlet_bpmkbeat=180000/finalbpm;
+
+outlet_count=barpos;
+outlet_bpm=finalbpm;
+disp_bpm=finalbpm;
+disp_kbeat=Okbeat;
+
+
+//ppqtrig=0;
+bpmreset=0;
+bpmtrig=0;
+start=0;
+stop=0;
+Xstart[0]=0;
+Xstart[1]=0;
+Xstop[1]=0;
+tapstart=0;
+resetC=0;
+outrig=0;
+pulse=0;
+bartrig=0;]]></code.krate>
+         <code.midihandler><![CDATA[if (attr_in){
+	if (status == MIDI_TIMING_CLOCK) {
+		if (midipickup){
+			//pkb=tmpb;
+		midihold=0;
+		mode=1;
+		//Xstart[1]=1;
+		_pos = 0;
+	  	stepos=-1;
+	  	midiactive=1;
+	  	started=1;
+		midipickup=0;
+			if ((_pos==0)&&midiactive){
+		  	//start=1;
+		  	Xstart[1]=1;
+		  	Xstart[0]=1;
+		  }
+		  _pos++;
+		  stepos++;
+		
+	}
+	if (midiactive){
+	
+	
+			if ((_pos==0)&&midiactive){
+		  	//start=1;
+		  	Xstart[1]=1;
+		  	Xstart[0]=1;
+		  }
+		  _pos++;
+		  stepos++;
+	}
+	
+	  
+	}
+	else if (status == MIDI_START){
+		midihold=0;
+		mode=1;
+		//Xstart[1]=1;
+		_pos = 0;
+	  	stepos=-1;
+	  	midiactive=1;
+	  	started=1;
+		
+		
+		if (attr_thru){
+			MidiSend1((midi_device_t) attr_Thruput, MIDI_START);
+		}
+	}
+	else if (status == MIDI_STOP){
+		mode=0;
+		midihold=1;
+		Xstop[1]=1;
+		midiactive=0;
+		_pos = -1;
+	  	stepos=-1;
+		//active=0;
+		if (attr_thru){
+			MidiSend1((midi_device_t) attr_Thruput, MIDI_STOP);
+		}
+	}
+	//if (status == MIDI_SONG_POSITION){
+	if ((status == (ch-1) + MIDI_CONTROL_CHANGE)&&(data1 == (CCb+1))){
+		//barpos=data1;
+		Xbarpos[1]=data2;
+		if (started){
+			started=0;
+		  	//start=1;
+		  	Xstart[1]=1;
+		  }
+		if ((barpos==0)&&!active){
+			//active=1;
+			//Xstart[2]=1;
+		}
+		if (attr_thru){
+			MidiSend3((midi_device_t) attr_Thruput, MIDI_CONTROL_CHANGE,data1,data2);
+		}
+		
+	}
+	
+	
+	if ((status == (ch-1) + MIDI_CONTROL_CHANGE)&&(data1 == CCa)){
+		
+		sent1=data2;
+		if (attr_thru){
+		MidiSend3((midi_device_t) attr_Thruput, MIDI_CONTROL_CHANGE + (ch-1),data1,data2);	
+		}
+	}
+	if ((status == (ch-1) + MIDI_CONTROL_CHANGE)&&(data1 == CCb)){
+		sent2=data2;
+		if (attr_thru){
+		MidiSend3((midi_device_t) attr_Thruput, MIDI_CONTROL_CHANGE + (ch-1),data1,data2);		
+		}
+	}
+}]]></code.midihandler>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="28" y="1722" text="screen handler"/>
+   <patchobj type="patch/object" uuid="f3e298a3-77b9-4d06-92a3-ba104d2edf22" name="1_3" x="28" y="1736">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="data"/>
+      </attribs>
+      <object id="patch/object" uuid="f3e298a3-77b9-4d06-92a3-ba104d2edf22">
+         <license>GPL</license>
+         <inlets>
+            <int32 name="controlID"/>
+            <int32 name="offset"/>
+            <bool32 name="delaysync"/>
+            <int32 name="delaydivision"/>
+            <int32 name="moddivision"/>
+            <int32 name="bpm"/>
+            <bool32 name="presetmode"/>
+            <int32 name="preset"/>
+            <bool32 name="tap"/>
+            <bool32 name="bypass"/>
+            <bool32 name="lfosync"/>
+            <bool32 name="seqsync"/>
+            <int32 name="seqdivision"/>
+            <int32.bipolar name="seqdepth"/>
+            <bool32 name="l3"/>
+            <bool32 name="l4"/>
+            <int32 name="tappedbpm"/>
+            <bool32 name="midion"/>
+            <bool32 name="inputclip"/>
+            <int32 name="tapdivision"/>
+         </inlets>
+         <outlets>
+            <frac32 name="value"/>
+            <charptr32 name="out1"/>
+            <charptr32 name="out2"/>
+            <charptr32 name="out3"/>
+            <charptr32 name="out4"/>
+         </outlets>
+         <displays>
+            <frac32.u.dial name="d1"/>
+         </displays>
+         <params/>
+         <attribs>
+            <objref name="table"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[char a[22];
+char b[22];
+char j[22];
+char midi[22];
+//char tap[22];
+char c[484];
+char d[180];
+char blank[22];
+char p[44];
+char q[44];
+char g[44];
+char lfo[44];
+char ww[44];
+char pit[44];
+
+int prev[12];
+int type[22];
+int otype;
+int value;
+int pvalue;
+int offset;
+int controlID;
+int index;
+int division;
+int dindex;
+int init;
+int bpmA;
+int bpmB;
+int bpmC;
+int Ioffset;
+int pA;
+int pB;
+int lfotimer;
+int prevC;
+int valueX;
+int prevCI;
+int tapped;
+int idchange;
+int tappedbpm;
+int bshift;
+
+int32_t digitA;
+int32_t digitB;
+int32_t digitC;
+int32_t digitD;
+int32_t digitE;
+int32_t digitF;
+
+bool presetmode;]]></code.declaration>
+         <code.init><![CDATA[init=12000;
+pvalue=0;
+
+// control labels
+// stpy(&c[(0*22)],"wet          v       ");
+ strcpy(&c[(0*22)],"     WET             ");
+ strcpy(&c[(1*22)],"    TIME             ");
+ strcpy(&c[(2*22)],"   FEEDBACK          ");
+ strcpy(&c[(3*22)],"  GRAIN SIZE         ");
+ strcpy(&c[(4*22)],"   DENSITY           ");
+ strcpy(&c[(5*22)],"    PITCH            ");
+ strcpy(&c[(6*22)],"   STRETCH           ");
+ strcpy(&c[(7*22)],"    SPRAY            ");
+ strcpy(&c[(8*22)]," PITCH SPRAY         ");
+ strcpy(&c[(9*22)]," GRAIN GAIN          ");
+strcpy(&c[(10*22)],"   REVERSE           ");
+strcpy(&c[(11*22)],"GRAIN EKO VOL        ");
+strcpy(&c[(12*22)],"GRAIN EKO TIME       ");
+strcpy(&c[(13*22)],"GRAIN EKO FBACK      ");
+strcpy(&c[(14*22)]," GRAIN SHAPE         ");
+strcpy(&c[(15*22)]," FEEDBACK MIX        ");
+strcpy(&c[(16*22)]," RANDOM OCTAVE       ");
+strcpy(&c[(17*22)],"   SHUFFLE           ");
+strcpy(&c[(18*22)],"  CORRUPTION         ");
+strcpy(&c[(19*22)]," DISINTEGRATE        ");
+strcpy(&c[(20*22)],"    WIDTH            ");
+strcpy(&c[(21*22)],"OCT MODE             ");
+  //  strcpy(&tap[0],"       BPM  120      ");
+      strcpy(&b[0],"       BPM  120      ");
+   strcpy(&midi[0],"        (MIDI)       ");
+      strcpy(&a[0]," TAP           PRESET");
+      strcpy(&g[0],"                     ");
+      strcpy(&q[0],"(save to SD)         ");
+      strcpy(&p[0],"STORE            BACK");
+     strcpy(&p[21],"       PRESET        ");
+
+     strcpy(&j[0],"      SUPERGRAN!!    ");
+   strcpy(&lfo[0],"   MOD SYNC          ");
+   strcpy(&pit[0],"   RE-PITCH          ");
+    strcpy(&ww[0],"         BYPASS      ");
+   //   strcpy(&d[0],"16bars  12bars  8bars   7bars   6bars   5bars   4bars   3bars   2bars   *bar    bar     *1/4    1/4");
+ strcpy(&d[(0*6)],"16bars");
+ strcpy(&d[(1*6)],"12bars");
+ strcpy(&d[(2*6)]," 8bars");
+ strcpy(&d[(3*6)]," 7bars");
+ strcpy(&d[(4*6)]," 6bars");
+ strcpy(&d[(5*6)]," 5bars");
+ strcpy(&d[(6*6)]," 4bars");
+ strcpy(&d[(7*6)]," 3bars");
+ strcpy(&d[(8*6)]," 2bars");
+ strcpy(&d[(9*6)]," .bar ");
+strcpy(&d[(10*6)],"  bar ");
+strcpy(&d[(11*6)],".1/2  ");
+strcpy(&d[(12*6)]," 1/2  ");
+strcpy(&d[(13*6)],".1/4  ");
+strcpy(&d[(14*6)]," 1/4  ");
+strcpy(&d[(15*6)],".1/8  ");
+strcpy(&d[(16*6)]," 1/8  ");
+strcpy(&d[(17*6)],".1/16 ");
+strcpy(&d[(18*6)]," 1/16 ");
+strcpy(&d[(19*6)],".1/32 ");
+strcpy(&d[(20*6)]," 1/32 ");
+strcpy(&d[(21*6)],".1/64 ");
+strcpy(&d[(22*6)]," 1/64 ");
+strcpy(&d[(23*6)],".1/128");
+strcpy(&d[(24*6)]," 1/128");
+strcpy(&d[(25*6)],".1/256");
+strcpy(&d[(26*6)]," 1/256");
+strcpy(&d[(27*6)],".1/512");
+strcpy(&d[(28*6)]," 1/512");
+
+
+ 
+// control type
+// type 0 = unused
+// type 1 = unipolar f
+// type 2 = bipolar f
+// type 3 = delay time
+// type 4 = bool toggle
+//type 5 = 2nd line bool toggle
+// type 6 = bipolar integer from inlet
+//type 8
+type[0]=1;
+type[1]=14;
+type[2]=1;
+type[3]=16;
+type[4]=2;
+type[5]=2;
+type[6]=2;
+type[7]=1;
+type[8]=1;
+type[9]=2;
+type[10]=4;
+type[11]=1;
+type[12]=16;
+type[13]=1;
+type[14]=1;
+type[15]=1;
+type[16]=1;
+type[17]=1;
+type[18]=1;
+type[19]=1;
+type[20]=2;
+type[21]=8;]]></code.init>
+         <code.krate><![CDATA[offset=inlet_offset;
+if (inlet_controlID!=prevCI){
+	
+		controlID=inlet_controlID;	
+		
+	idchange=1;
+	prevCI=inlet_controlID;
+}
+controlID=inlet_controlID;
+index=controlID*22;
+//  attr_table.array[__USAT((offset + 0),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+value= attr_table.array[__USAT((offset + controlID),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+if (value>=0x07FFF000){
+	value=0x08000000;
+	
+}
+disp_d1=value;
+otype=type[controlID];
+
+
+if (controlID==1){
+	division=inlet_delaydivision;
+}
+else if (controlID==5) {
+	division=inlet_moddivision;
+}
+else if (controlID==7) {
+	division=inlet_seqdivision;
+}
+
+
+tapped=attr_table.array[__USAT((15),attr_table.LENGTHPOW)]<<attr_table.GAIN;
+tappedbpm=attr_table.array[__USAT((16),attr_table.LENGTHPOW)];
+
+if (inlet_inputclip){
+	b[0]='*';
+	ww[0]='*';
+	p[21]='*';
+}
+else {
+	b[0]=' ';
+	ww[0]=' ';
+	p[21]=' ';
+}
+
+presetmode=inlet_presetmode;
+
+if ((otype==3)&& !inlet_delaysync && (controlID==1)){
+	if (!tapped){
+		otype=1;
+		
+	}
+	else {
+		otype=8;
+		index=14*22;
+		
+	}
+}
+if ((otype==3)&& !inlet_lfosync && (controlID==5)){
+	otype=1;
+}
+if ((otype==3)&& !inlet_seqsync && (controlID==7)){
+	otype=1;
+}
+// type 0 = unused
+// type 1 = unipolar f
+// type 2 = bipolar f
+// type 3 = delay time
+
+if (init>0){
+	init-=1;
+	outlet_out1=0;
+	outlet_out2=&j[0];
+	outlet_out3=0;
+	outlet_out4=0;
+
+	if (((value!=pvalue) || inlet_tap || inlet_preset || idchange) && (init<9000)){
+		
+		
+		init=0;
+	}
+	pvalue=value;
+}
+
+if (init==0){
+if (!inlet_bypass){
+	if ((otype==1) || (otype==2)){
+			if (otype==2){
+
+				value= (value-(1<<26))<<1;
+			}
+			//unipolar
+	//		digitD=(value>>21)/10;
+	//		digitE=(value>>21)-(digitD*10);
+	//		c[16+index]='0'+digitD;
+	//		c[17+index]='0'+digitE;
+	
+	
+			if (value<0){
+						value=0-value;
+						c[15+index]='-';
+					}
+			else{
+				c[15+index]=' ';
+			}
+			digitA=(value)/(1<<21)/10;
+			digitB=(((value)/(1<<21)))-(digitA*10);
+			digitD=((value)/((1<<21)/10))-((digitA*100)+(digitB*10));
+			digitE=((value)/((1<<21)/100))-((digitD*10)+(digitA*1000)+(digitB*100));
+	
+			c[16+index]='0'+digitA;
+			c[17+index]='0'+digitB;
+			c[18+index]='.';
+			c[19+index]='0'+digitD;
+			c[20+index]='0'+digitE;
+			}
+		else if (otype==2){
+			//bipolar
+			if (value<0){
+				value=0-value;
+				c[15+index]='-';
+			}
+			else{
+				c[15+index]='+';
+			}
+			
+			digitD=(value>>21)/10;
+			digitE=(value>>21)-(digitD*10);
+			c[16+index]='0'+digitD;
+			c[17+index]='0'+digitE;
+		}
+		else if (otype==3){
+			//delay time
+	
+					
+					dindex=division*6;
+				if (controlID==7){
+					Ioffset=1;
+				}
+				else {
+					Ioffset=0;
+				}
+					c[15+index+Ioffset]=d[0+dindex];
+					c[16+index+Ioffset]=d[1+dindex];
+					c[17+index+Ioffset]=d[2+dindex];
+					c[18+index+Ioffset]=d[3+dindex];
+					c[19+index+Ioffset]=d[4+dindex];
+					c[20+index+Ioffset]=d[5+dindex];
+				
+				
+		}
+		else if (otype==4){
+			if (value){
+				c[16+index]='o';
+				c[17+index]='n';
+				c[18+index]=' ';
+			}
+			else {
+				c[16+index]='o';
+				c[17+index]='f';
+				c[18+index]='f';
+			}
+			c[19+index]=' ';
+			c[20+index]=' ';
+			
+		}
+		else if (otype==6){
+			value=inlet_seqdepth;
+			if (value<0){
+						value=0-value;
+						c[17+index]='-';
+					}
+			else{
+				c[17+index]=' ';
+			}
+			
+			digitA=value/10;
+			digitB=value-(digitA*10);
+
+			c[18+index]='0'+digitA;
+			c[19+index]='0'+digitB;
+			
+			c[20+index]=' ';
+			c[21+index]=' ';
+			
+		}
+		else if (otype==8){
+					int vvv=value>>21;
+						
+					if (vvv<3){
+					c[9+index+Ioffset]='U';
+					c[10+index+Ioffset]='P';
+					c[11+index+Ioffset]='/';
+					c[12+index+Ioffset]='D';
+					c[13+index+Ioffset]='O';
+					c[14+index+Ioffset]='W';
+					c[15+index+Ioffset]='N';
+					c[16+index+Ioffset]=' ';
+					c[17+index+Ioffset]='0'+(vvv+1);
+					c[18+index+Ioffset]='o';
+					c[19+index+Ioffset]='c';
+					c[20+index+Ioffset]='t';
+
+						
+					
+					}
+					else if (vvv<6){
+						
+					c[9+index+Ioffset]=' ';
+					c[10+index+Ioffset]=' ';
+					c[11+index+Ioffset]='U';
+					c[12+index+Ioffset]='P';
+					c[13+index+Ioffset]=' ';
+					c[14+index+Ioffset]=' ';
+					c[15+index+Ioffset]=' ';
+					c[16+index+Ioffset]=' ';
+					c[17+index+Ioffset]='0'+(vvv-3+1);
+					c[18+index+Ioffset]='o';
+					c[19+index+Ioffset]='c';
+					c[20+index+Ioffset]='t';
+					
+					}
+					else if (vvv<9){
+					
+					c[9+index+Ioffset]=' ';
+					c[10+index+Ioffset]='D';
+					c[11+index+Ioffset]='O';
+					c[12+index+Ioffset]='W';
+					c[13+index+Ioffset]='N';
+					c[14+index+Ioffset]=' ';
+					c[15+index+Ioffset]=' ';
+					c[16+index+Ioffset]=' ';
+					c[17+index+Ioffset]='0'+(vvv-6+1);
+					c[18+index+Ioffset]='o';
+					c[19+index+Ioffset]='c';
+					c[20+index+Ioffset]='t';
+					}
+					//c[21+index+Ioffset]=d[5+dindex];
+		}
+		else if ( (otype>=10) && (otype<20) ) {
+			bshift=otype-10;
+			digitA=(value>>bshift)/(1<<21)/10;
+			digitB=(((value>>bshift)/(1<<21)))-(digitA*10);
+			digitC=((value>>bshift)/((1<<21)/10))-((digitA*100)+(digitB*10));
+			digitD=((value>>bshift)/((1<<21)/100))-((digitC*10)+(digitA*1000)+(digitB*100));
+			digitE=((value>>bshift)/((1<<21)/1000))-((digitC*100)+(digitA*10000)+(digitB*1000)+(digitD*10));
+			
+			if (digitA==0){
+				c[16+index]='0'+digitB;
+				c[17+index]='.';
+				c[18+index]='0'+digitC;
+				c[19+index]='0'+digitD;
+				c[20+index]='0'+digitE;
+				}
+			else {
+				c[16+index]='0'+digitA;
+				c[17+index]='0'+digitB;
+				c[18+index]='.';
+				c[19+index]='0'+digitC;
+				c[20+index]='0'+digitD;
+				}
+
+
+			
+		}
+		else if (otype==0){
+			//unused
+			c[19+index]=' ';
+			c[20+index]=' ';
+			
+		}
+		outlet_out1=&c[0+index];
+	if (!presetmode){
+		
+		
+		// second line
+		if ((!inlet_l3) && (!inlet_l4)){
+			bpmA=inlet_bpm/100;
+			bpmB=(inlet_bpm-(bpmA*100))/10;
+			bpmC=(inlet_bpm-(bpmA*100)-(bpmB*10));
+			
+			b[12]='0'+bpmA;
+			b[13]='0'+bpmB;
+			b[14]='0'+bpmC;
+			
+			outlet_out2=&b[0];
+			}
+		
+		
+		
+		
+		
+		
+		
+		outlet_out4=&a[0];
+		
+				
+			
+		if (inlet_midion){
+			outlet_out3=&midi[0];
+		}
+		else{
+		outlet_out3=&blank[0];
+		}
+		//outlet_out3=&midi[0];
+	}
+	else {
+		pA=inlet_preset/10;
+		pB=inlet_preset-(pA*10);
+		p[35]='0'+pA;
+		p[36]='0'+pB;
+		
+		//outlet_out1=&blank[0];
+		
+		outlet_out2=&p[21];
+		outlet_out3=&q[0];
+		outlet_out4=&p[0];
+	}
+	
+}
+else if (inlet_bypass){
+	outlet_out1=&blank[0];
+		
+		outlet_out2=&ww[0];
+		outlet_out3=&blank[0];
+		outlet_out4=&blank[0];
+}
+}
+
+
+
+
+
+
+
+
+
+outlet_value=value;
+idchange=0;
+//for(i=0;i<12;i++){
+//}]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="182" y="1736">
+      <params/>
+      <attribs>
+         <combo attributeName="useScope" selection="off"/>
+         <objref attributeName="scope" obj=""/>
+         <combo attributeName="narrowFont" selection="on"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" x="1680" y="1764" text="shuffle amount"/>
+   <comment type="patch/comment" x="1778" y="1764" text="corruption time"/>
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_3" x="560" y="1778">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_8" x="1680" y="1778">
+      <params>
+         <frac32.u.map name="value" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_9" x="1778" y="1778">
+      <params>
+         <frac32.u.map name="value" value="6.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="924" y="1876" text="grain echo time"/>
+   <obj type="math/*c" uuid="7d5ef61c3bcd571ee6bbd8437ef3612125dfb225" name="*c_4" x="756" y="1890">
+      <params>
+         <frac32.u.map name="amp" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_6" x="854" y="1890">
+      <params>
+         <frac32.u.map name="time" value="45.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_1" x="938" y="1890">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1106" y="1890" text="delayed buffer/granulator mix"/>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_84" x="1106" y="1904">
+      <params>
+         <frac32.u.map name="value" value="64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="b9d39eb1-e1c5-45d9-a32d-e690a0e06a27" name="crossfade_2" x="1176" y="1904">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="b9d39eb1-e1c5-45d9-a32d-e690a0e06a27">
+         <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32 name="drywet" description="a"/>
+         </inlets>
+         <outlets>
+            <frac32 name="dry"/>
+            <frac32 name="wet" description="a amplified in 6dB steps"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[outlet_dry= (__SSAT((0x07FFFFFF-inlet_drywet)<<1,28));
+outlet_wet= (__SSAT((inlet_drywet<<1),28));]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="280" y="1946" text="handles rndom ocatve settings"/>
+   <comment type="patch/comment" x="1428" y="1946" text="to pitch"/>
+   <patchobj type="patch/object" uuid="091253d4-8b54-4808-939f-dbf8c4270355" name="object_4" x="294" y="1960">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="091253d4-8b54-4808-939f-dbf8c4270355">
+         <inlets>
+            <int32 name="in"/>
+         </inlets>
+         <outlets>
+            <int32 name="range"/>
+            <int32 name="type"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[if (inlet_in<3){
+	outlet_type=2;
+	outlet_range=inlet_in+1;
+}
+else if (inlet_in<6){
+	outlet_type=0;
+	outlet_range=inlet_in-3+1;
+}
+else if (inlet_in<9){
+	outlet_type=1;
+	outlet_range=inlet_in-6+1;
+}]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_1" x="1372" y="1960">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="44553fdc8628c67ab535845ed1be304ad6c9553b" name="+_11" x="1484" y="1960">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1722" y="1974" text="to stretch"/>
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_2" x="1694" y="1988">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1008" y="2016" text="to DELAY TIME"/>
+   <comment type="patch/comment" x="1372" y="2016" text="to GRAIN SIZE"/>
+   <comment type="patch/comment" x="2128" y="2016" text="feeback blend (delayed buffer or granulator)"/>
+   <patchobj type="patch/object" uuid="94635b19-1ff5-45a5-b802-f6545b43bf3c" name="object_7" x="924" y="2030">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="94635b19-1ff5-45a5-b802-f6545b43bf3c">
+         <inlets>
+            <frac32 name="in"/>
+            <bool32 name="tap"/>
+         </inlets>
+         <outlets>
+            <frac32 name="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int prev;
+int out;
+int ntrig;]]></code.declaration>
+         <code.krate><![CDATA[if (inlet_in!=prev){
+	out=inlet_in;
+	prev=inlet_in;
+}
+
+if (inlet_tap && !ntrig){
+	ntrig=1;
+	out=16<<21;
+}
+else if (!inlet_tap){
+	ntrig=0;
+}
+
+
+outlet_out=out;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="math/*c" uuid="7d5ef61c3bcd571ee6bbd8437ef3612125dfb225" name="*c_1" x="1008" y="2030">
+      <params>
+         <frac32.u.map name="amp" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7d5ef61c3bcd571ee6bbd8437ef3612125dfb225" name="*c_2" x="1358" y="2030">
+      <params>
+         <frac32.u.map name="amp" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="94635b19-1ff5-45a5-b802-f6545b43bf3c" name="object_8" x="2016" y="2030">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="94635b19-1ff5-45a5-b802-f6545b43bf3c">
+         <inlets>
+            <frac32 name="in"/>
+            <bool32 name="bypass"/>
+         </inlets>
+         <outlets>
+            <frac32 name="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int prev;
+int out;
+int ntrig;
+int tempp;]]></code.declaration>
+         <code.krate><![CDATA[if (inlet_in!=prev){
+	out=inlet_in;
+	prev=inlet_in;
+}
+
+if (inlet_bypass && !ntrig){
+	ntrig=1;
+	tempp=out;
+	out=0;
+}
+else if (!inlet_bypass && ntrig){
+	out=tempp;
+	ntrig=0;
+}
+
+
+outlet_out=out;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="b9d39eb1-e1c5-45d9-a32d-e690a0e06a27" name="crossfade_3" x="2128" y="2030">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="b9d39eb1-e1c5-45d9-a32d-e690a0e06a27">
+         <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32 name="drywet" description="a"/>
+            <frac32 name="volume"/>
+         </inlets>
+         <outlets>
+            <frac32 name="dry"/>
+            <frac32 name="wet" description="a amplified in 6dB steps"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[outlet_dry=  ___SMMUL((__SSAT((0x07FFFFFF-inlet_drywet),28))<<3,inlet_volume<<2);
+outlet_wet= ___SMMUL( (__SSAT((inlet_drywet),28))<<3,inlet_volume<<2);]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="1666" y="2044" text="spray scaling"/>
+   <obj type="tiar/kfunc/u2u" uuid="2f123b5c-c14b-420b-901f-cd0cfaad394c" name="u2u_1" x="1624" y="2058">
+      <params>
+         <frac32.u.map name="p0" value="0.0"/>
+         <frac32.u.map name="p1" value="12.0"/>
+         <frac32.u.map name="p2" value="64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/&gt;&gt;" uuid="d883beaf50b7aae4803ed9941e8f123e87e1e3aa" name="&gt;&gt;_1" x="1722" y="2058">
+      <params/>
+      <attribs>
+         <spinner attributeName="shift" value="10"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/i" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_1" x="1232" y="2086">
+      <params>
+         <int32 name="value" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="840" y="2100" text="width"/>
+   <obj type="conv/unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" name="unipolar2bipolar_5" x="644" y="2114">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/inv" uuid="565521d3699b36d8095aa1c79b9ad0046fb133ce" name="inv_2" x="756" y="2114">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_1" x="826" y="2114">
+      <params>
+         <frac32.u.map name="time" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="4f299ee1-43bf-49aa-9fdc-b08c5ef94710" name="in_1" x="924" y="2114">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="4f299ee1-43bf-49aa-9fdc-b08c5ef94710">
+         <sDescription>Audio input, stereo</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets/>
+         <outlets>
+            <frac32buffer name="left" description="Left channel"/>
+            <frac32buffer name="right" description="Right channel"/>
+            <bool32 name="clipping"/>
+         </outlets>
+         <displays>
+            <frac32.vu name="vuLeft"/>
+            <frac32.vu name="vuRight"/>
+         </displays>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int t;]]></code.declaration>
+         <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   outlet_left[j] = AudioInputLeft[j];
+   outlet_right[j] = AudioInputRight[j];
+}
+disp_vuLeft=outlet_left[0];
+disp_vuRight=outlet_right[0];
+
+
+if (AudioInputLeft[0] >= (127<<20)){
+	t=1000;
+}
+if (AudioInputRight[0] >= (127<<20)){
+	t=1000;
+}
+
+if (t>0){
+	t-=1;
+}
+outlet_clipping=t;]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="1162" y="2128" text="superbuff"/>
+   <comment type="patch/comment" x="1372" y="2128" text="supergran"/>
+   <comment type="patch/comment" x="1848" y="2128" text="attenuate when more voices playing"/>
+   <patchobj type="patch/object" uuid="636b83f1-7df1-42ce-8a89-e4864b513f11" name="toggle_1" x="1078" y="2142">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="636b83f1-7df1-42ce-8a89-e4864b513f11">
+         <sDescription>constant boolean, toggle control</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>ctrl.axh</helpPatch>
+         <inlets/>
+         <outlets>
+            <bool32 name="o" description="output"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[outlet_o=1;]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="6817968a-edc7-43e0-ad03-8f1ed61a5faf" name="MikeWatt" x="1162" y="2142">
+      <params>
+         <int32 name="fade" value="64"/>
+         <bool32.tgl name="retrigstyle" value="1"/>
+      </params>
+      <attribs>
+         <combo attributeName="dubtrig" selection="internal"/>
+         <combo attributeName="size" selection="2097152 (21.8s)"/>
+         <combo attributeName="echosize" selection="1048576 (10.9s)"/>
+      </attribs>
+      <object id="patch/object" uuid="6817968a-edc7-43e0-ad03-8f1ed61a5faf">
+         <sDescription>Difficult to name. Pitchshifter, time-stretcher, play-rate adjuster (stretch+pitchshift), sampler, delay, granulizer...
+
+See inputs/controls for their functions (hoover above them)</sDescription>
+         <author>Remco van der most</author>
+         <license>BSD</license>
+         <helpPatch>delay.axh</helpPatch>
+         <inlets>
+            <int32 name="sbeat"/>
+            <int32 name="ppq"/>
+            <frac32buffer name="Lin"/>
+            <frac32buffer name="LFback"/>
+            <frac32buffer name="Rin" description="audio input"/>
+            <frac32buffer name="RFback"/>
+            <frac32buffer name="Lgrainecho"/>
+            <frac32buffer name="Rgrainecho"/>
+            <bool32.rising name="restart"/>
+            <bool32.rising name="play"/>
+            <bool32.rising name="stop"/>
+            <bool32.risingfalling name="replace"/>
+            <bool32 name="freeze"/>
+            <bool32.risingfalling name="freerun"/>
+            <bool32 name="swapFbackCh"/>
+         </inlets>
+         <outlets>
+            <bool32.pulse name="xtrig"/>
+            <int32 name="length"/>
+            <frac32.positive name="phase"/>
+            <bool32.pulse name="stop"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="fade" noLabel="true">
+               <MinValue i="1"/>
+               <MaxValue i="30000000"/>
+            </int32>
+            <bool32.tgl name="retrigstyle" description="off = resyncs at buffer restart( 4 bars ) , 1 = resyncs every 6 bars. 6 bars is useful for dotted rythms"/>
+         </params>
+         <attribs>
+            <combo name="dubtrig">
+               <MenuEntries>
+                  <string>internal</string>
+                  <string>external</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>0</string>
+                  <string>1</string>
+               </CEntries>
+            </combo>
+            <combo name="size">
+               <MenuEntries>
+                  <string>131072 (1.36s)</string>
+                  <string>262144 (2.73s)</string>
+                  <string>524288 (5.46s)</string>
+                  <string>1048576 (10.9s)</string>
+                  <string>2097152 (21.8s)</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>17</string>
+                  <string>18</string>
+                  <string>19</string>
+                  <string>20</string>
+                  <string>21</string>
+               </CEntries>
+            </combo>
+            <combo name="echosize">
+               <MenuEntries>
+                  <string>131072 (1.36s)</string>
+                  <string>262144 (2.73s)</string>
+                  <string>524288 (5.46s)</string>
+                  <string>1048576 (10.9s)</string>
+                  <string>2097152 (21.8s)</string>
+               </MenuEntries>
+               <CEntries>
+                  <string>17</string>
+                  <string>18</string>
+                  <string>19</string>
+                  <string>20</string>
+                  <string>21</string>
+               </CEntries>
+            </combo>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[//wholde buffer
+
+//half buffer
+static const uint32_t LENGTHPOWa = attr_size-1;
+static const uint32_t LENGTHa = 1<<(attr_size-1);
+static const uint32_t LENGTHMASKa = (1<<(attr_size-1))-1;
+//quarter buffer
+static const uint32_t LENGTHPOWb = attr_echosize;
+static const uint32_t LENGTHb = 1<<(attr_echosize);
+static const uint32_t LENGTHMASKb = (1<<(attr_echosize))-1;
+
+static const uint32_t BITS = 16;
+static const uint32_t GAIN = 12;
+int16_t *LEFT;
+int16_t *RIGHT;
+
+int16_t *echoarray;
+
+int32_t bufferarray_R[16];
+int32_t bufferarray_L[16];
+int32_t init;
+int32_t ovrfade;
+int32_t ovrenv;
+int32_t env[2];
+int32_t Oenv[2];
+int32_t Ienv[2];
+int32_t Ostep[2];
+int32_t Oprev[2];
+int32_t ovrrate;
+int32_t ovrcnt;
+int32_t prevO;
+int32_t stepO;
+int32_t rfade;
+int32_t renv;
+int32_t rate;
+
+int32_t mcnt;
+int32_t maxrate;
+int32_t mute;
+//int32_t rfadeO;
+int32_t feeback;
+//int32_t delay;
+//int32_t prevd;
+int32_t prevR;
+int32_t syncbusy;
+int32_t stepR;
+int32_t feedback;
+uint32_t x;
+uint32_t dubposGB;
+uint32_t maxlength;
+uint32_t writepos;
+uint32_t dubpos;
+uint32_t plength;
+//uint32_t dubclock;
+uint32_t deck;
+uint32_t xoffset;
+uint32_t synclength;
+uint32_t xposremainder;
+uint32_t xpos;
+uint32_t dub[2];
+uint32_t synclock;
+uint32_t trigclock;
+uint32_t trigpos;
+uint32_t prevsynclock;
+uint32_t xposGB;
+uint32_t length;
+uint32_t phase;
+uint32_t buffer;
+uint32_t bsize;
+uint32_t in_R;
+uint32_t fb_R;
+uint32_t in_L;
+uint32_t fb_L;
+uint32_t gfb;
+uint32_t gfbR;
+uint32_t dcount;
+uint32_t outpos;
+uint32_t outposGB;
+bool play;
+bool stop;
+bool prevp;
+bool Prep;
+//bool rec;
+bool dt;
+//bool overdub;
+bool delaymode;
+bool restarted;
+bool dubtrig;
+bool ovrin;
+bool repin;
+bool Pinovr;
+bool dubbing;
+//bool recording;
+bool start;
+bool strig;
+bool ptrig;
+bool xtrig;
+bool rtrig;
+bool freeze;
+//bool ott;
+bool hold;
+bool player;
+//bool dhold;
+bool det;
+bool mtrigger;
+bool synchold;]]></code.declaration>
+         <code.init><![CDATA[static int16_t _LEFT[attr_poly][LENGTHa] __attribute__ ((section (".sdram")));
+LEFT = &_LEFT[parent->polyIndex][0];
+{ 
+  int i;
+  for(i=0;i<LENGTHa;i++) LEFT[i]=0;
+}
+static int16_t _RIGHT[attr_poly][LENGTHa] __attribute__ ((section (".sdram")));
+RIGHT = &_RIGHT[parent->polyIndex][0];
+{ 
+  int i;
+  for(i=0;i<LENGTHa;i++) RIGHT[i]=0;
+}
+static int16_t _echoarray[attr_poly][LENGTHb] __attribute__ ((section (".sdram")));
+echoarray = &_echoarray[parent->polyIndex][0];
+{ 
+  int i;
+  for(i=0;i<LENGTHb;i++) echoarray[i]=0;
+}
+play=1;
+//prevp=1;
+bsize=16;
+bsize=16;
+init=16;
+syncbusy=512;
+maxlength=LENGTHa;
+xoffset=maxlength;
+player=1;
+//SO=32+bsize+bsize; buffer, data, preroll]]></code.init>
+         <code.krate><![CDATA[//maxlength=((((LENGTH>>1)-((bsize<<1)+(2048<<3)+32))>>4)<<4);
+maxlength=LENGTHa;
+maxrate=(((uint64_t)1<<31)/(maxlength>>1));
+freeze=inlet_freeze;
+//array[0+bsize]=((maxlength)/(1<<15));
+//array[1+bsize]=maxlength-(((maxlength)/(1<<15))<<15);
+if (inlet_sbeat>0){
+	// one beat << 4 = 4bars
+	synclength=inlet_sbeat<<4;
+	}
+else {
+	synclength=maxlength;
+}
+if (synclength>=maxlength){
+	synclength=maxlength-1;
+}
+trigpos+=(1<<4);
+dubpos+=(1<<4);
+dubposGB+=(1<<4);
+if (dubpos>=maxlength){
+	xoffset=maxlength;
+	dubpos=0;
+	xtrig;
+	
+}
+if (dubposGB>=(LENGTHb>>1)){
+	dubposGB=0;
+	
+}
+if (init){
+	xoffset=synclength;
+	dub[0]=xoffset;
+	dub[1]=xoffset;
+	dubpos=xoffset;
+	restarted=1;
+	ovrcnt=1;
+	init=0;
+}
+//synclock=bufferlength pseudo
+synclock=inlet_ppq-((inlet_ppq/16)*16);
+//trigclock=6barretrig
+if (param_retrigstyle){
+trigclock=inlet_ppq-((inlet_ppq/24)*24);
+}
+else {
+	trigclock=synclock;
+}
+if (synclock!=prevsynclock){
+	
+	if ((synclock==0)&&!inlet_freerun){
+		ovrcnt=1;
+	restarted=1;
+	xtrig=1;
+		//trigclock+=1;
+			
+	}
+	if (trigclock==0){
+				//trigclock=0;
+				trigpos=0;
+			}
+	if (inlet_ppq==0){
+		//trigpos=0;
+		//trigclock=0;
+	}
+	prevsynclock=synclock;
+}
+//disp_d=trigpos;
+//array[2+bsize]=((synclength)/(1<<15));
+//array[3+bsize]=synclength-(((synclength)/(1<<15))<<15);
+
+//length=(array[0+bsize]<<15)+array[1+bsize];
+//max length = half table length - (bsize (buffer) + bsize (leadin) + 2048<<3 (leadout) + 32 (controls))
+
+
+//disp_d4=Oenv[1];
+
+//if (synchold&& (array[2+bsize]==0)){
+//	ovrin=0;
+//}
+
+
+
+if (inlet_restart&&!rtrig){
+		//	if (player==0){
+		//			player=1;
+		//		}
+		//		else {
+		//			player=0;
+		//		}
+		//		xoffset=dubpos;
+		//		dubpos=0;
+			//(delaytrigger to sccount for buffer
+	ovrcnt=1;
+	restarted=1;
+	rtrig=1;
+}
+else if (!inlet_restart){
+	rtrig=0;
+}
+
+
+outpos=dubpos;
+outposGB=dubposGB;
+		
+
+
+
+
+rate=((uint64_t)1<<32)/synclength;
+phase=dubpos*rate;
+outlet_phase=phase>>5;
+
+if (inlet_freeze!=Pinovr){
+	//ovrcnt=(bsize>>4);
+	ovrcnt=2;
+	Pinovr=inlet_freeze;
+}
+if (inlet_replace!=Prep){
+	ovrcnt=2;
+	//ovrcnt=(bsize>>4);
+	Prep=inlet_replace;
+}
+if (ovrcnt>0){
+	ovrcnt-=1;
+	if (ovrcnt<=0){
+			if (restarted){
+				restarted=0;
+				if (player==0){
+					player=1;
+				}
+				else {
+					player=0;
+				}
+				xoffset=dubpos;
+				dubpos=0;
+				
+			}
+			if (!inlet_freeze){
+				//overdub=1;
+				ovrin=1;
+			}
+			else {
+				ovrin=0;
+			}
+			if (inlet_replace){
+				//overdub=1;
+				repin=1;
+				ovrin=1;
+			}
+			else {
+				repin=0;
+			}
+		
+	}
+}
+
+
+
+ovrrate=0x07FFFFFF/param_fade;
+if (ovrin){
+	if (ovrfade<0x07FFFFFF){
+		ovrfade+=ovrrate;
+		if (ovrfade>=0x07FFFFFF){
+			ovrfade=0x07FFFFFF;
+		}
+	}
+}
+else {
+	if (ovrfade>0){
+		ovrfade-=ovrrate;
+	}
+	if (ovrfade<=0){
+			ovrfade=0;
+			
+			//if (!ott){
+			//	ott=1;
+			//	if (!inlet_freeze){
+			//		ovrin=1;
+			//	}
+			//}
+		}
+}
+
+
+
+if (!repin&&inlet_freeze){
+	if (rfade<0x07FFFFFF){
+		rfade+=ovrrate;
+		if (rfade>=0x07FFFFFF){
+			rfade=0x07FFFFFF;
+		}
+	}
+}
+else {
+	if (rfade>0){
+		rfade-=ovrrate;
+		if (rfade<=0){
+			rfade=0;
+			
+		}
+	}
+}
+
+//rfadeO= ___SMMUL(rfade<<3,inlet_feedback<<2);
+//rfadeO=rfade;
+if (rfade>=0x07FFFFFE){
+	rfade=1<<27;
+}
+
+stepR = (rfade - prevR)>>4;
+int32_t renv = prevR;
+prevR = rfade;
+
+
+
+
+
+
+
+
+
+
+if (inlet_stop&&!strig){
+	strig=1;
+	play=0;
+}
+else if (!inlet_stop){
+	strig=0;
+}
+
+
+if (inlet_play&&!ptrig){
+	play=1;
+	ptrig=1;
+}
+else if (!inlet_play){
+	ptrig=0;
+}
+
+if (play!=prevp){
+	if (play){
+		if (!ovrin&&!inlet_freeze){
+			ovrin=1;
+		}
+		start=1;
+	}
+	else {
+		if (ovrin){
+			ovrin=0;
+		}
+		stop=1;
+	}
+	prevp=play;
+}
+
+
+
+
+//for (x = 0;x<2;x++){
+	
+	Ienv[0]=ovrfade;
+	Ostep[0]= (Ienv[0]- Oprev[0])>>4;
+   	Oenv[0]= Oprev[0];
+   	if (Oenv[0]>=0x07FFFFFE){
+		Oenv[0]=1<<27;
+	}
+   	Oprev[0] = Ienv[0];
+
+
+if (!play){
+	xtrig=0;
+}
+
+//disp_d5= 1031>>1<<1;
+
+outlet_length=synclength;
+//outlet_start=start;
+if (start){
+	xtrig=1;
+}
+
+outlet_stop=stop;
+outlet_xtrig=xtrig;
+
+
+
+
+start=0;
+stop=0;
+dubtrig=0;
+xtrig=0;]]></code.krate>
+         <code.srate><![CDATA[if (play){
+	//phase=dubpos*rate;
+//	outpos=dubpos[0];
+	}
+else {
+	phase=0;
+	outpos=0;
+}
+//outlet_pos=outpos;
+//outlet_phase=phase;
+//fb=__SSAT(inlet_Fback>>14,16);
+//gfb=__SSAT(inlet_Fforward>>14,16);
+if (!inlet_swapFbackCh){
+	fb_R=__SSAT(inlet_RFback,28)>>GAIN;
+	fb_L=__SSAT(inlet_LFback,28)>>GAIN;
+	}
+else {
+	fb_L=__SSAT(inlet_RFback,28)>>GAIN;
+	fb_R=__SSAT(inlet_LFback,28)>>GAIN;
+}
+gfb=__SSAT(inlet_Lgrainecho,28)>>GAIN;
+gfbR=__SSAT(inlet_Rgrainecho,28)>>GAIN;
+
+
+for (x = 0;x<2;x++){
+	LEFT[xpos] = __SSAT((___SMMUL(LEFT[xpos]<<3,renv<<2) + ___SMMUL((bufferarray_L[buffer]+fb_L)<<3,Oenv[0]<<2)),16);
+	RIGHT[xpos] = __SSAT((___SMMUL(RIGHT[xpos]<<3,renv<<2) + ___SMMUL((bufferarray_R[buffer]+fb_R)<<3,Oenv[0]<<2)),16);
+	//if (dubpos[0]<(maxlength+(2048<<3))){
+	if (x==player){
+		dub[x]=dubpos+ buffer_index;
+	}
+	else {
+		if (dub[x]<maxlength){
+		dub[x]+=1;
+		}
+	}
+	xpos=dub[x];
+		//xposremainder=xpos+xoffset;
+		
+		//buffer
+		
+
+}
+		//if ((xposremainder<maxlength)&&(xoffset>0)){
+		//	array[xposremainder+32+bsize] =__SSAT((___SMMUL(array[xpos+32+bsize]<<3,renv<<2) + ___SMMUL((array[buffer]+fb)<<3,Oenv[0]<<2)),16);
+		//}
+		
+
+
+		xposGB=dubposGB+ buffer_index;
+		//feed forward buffer
+		//array[xposGB+32+bsize+(maxlength)+bsize] =__SSAT(( ___SMMUL(gfb<<3,Oenv[0]<<2)),16);
+		echoarray[xposGB] =__SSAT((gfb),16);
+		echoarray[xposGB+(LENGTHb>>1)] =__SSAT((gfbR),16);
+		Oenv[0]+=Ostep[0];		
+		
+		if (xpos==0){
+			//xtrig=1;
+		}	
+		//dubpos[x] = (dubpos[x]+ 1)&LENGTHMASK;
+	//}
+
+
+		
+
+//}
+	
+	renv+=stepR;
+
+
+
+
+
+
+in_R=__SSAT(inlet_Rin,28)>>GAIN;
+in_L=__SSAT(inlet_Lin,28)>>GAIN;
+bufferarray_R[buffer]=in_R;
+bufferarray_L[buffer]=in_L;
+buffer+=1;
+if (buffer>=bsize){
+	buffer=0;
+}]]></code.srate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="0acbfb5c-eb34-44a0-98f0-cbb69ce2a4cf" name="xyx_1" x="1372" y="2142">
+      <params>
+         <int32 name="fade" value="256"/>
+      </params>
+      <attribs>
+         <objref attributeName="buffer" obj="MikeWatt"/>
+         <spinner attributeName="maxgrain" value="8"/>
+      </attribs>
+      <object id="patch/object" uuid="0acbfb5c-eb34-44a0-98f0-cbb69ce2a4cf">
+         <sDescription>convert to integer output</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <bool32 name="trigger"/>
+            <frac32.positive name="delay"/>
+            <bool32 name="reverse"/>
+            <bool32 name="freezeL"/>
+            <frac32.positive name="freezepos"/>
+            <frac32.positive name="freezesize"/>
+            <frac32.positive name="grainsize"/>
+            <frac32.positive name="shape"/>
+            <frac32.bipolar name="density"/>
+            <int32 name="densityrange"/>
+            <bool32 name="resyncgrain"/>
+            <frac32.positive name="disintegrate"/>
+            <frac32.positive name="spray"/>
+            <frac32.positive name="reversegrain"/>
+            <frac32.bipolar name="pitch"/>
+            <frac32 name="pitchspray"/>
+            <frac32.bipolar name="stretch"/>
+            <frac32 name="corrupt"/>
+            <frac32.positive name="corrupttime"/>
+            <frac32.bipolar name="posmod"/>
+            <frac32.positive name="randomoctave"/>
+            <int32 name="octrange"/>
+            <int32 name="octmode"/>
+            <frac32.positive name="octavespeed"/>
+            <frac32.positive name="shuffle"/>
+            <frac32.positive name="shufflerate"/>
+            <frac32.positive name="shufflerange"/>
+            <frac32buffer.positive name="grainecho"/>
+            <bool32 name="allgrains"/>
+            <frac32buffer.bipolar name="buffermod"/>
+            <bool32 name="stretchsyncmode"/>
+            <bool32 name="stretchsynctrigger"/>
+            <frac32.positive name="Rdelay"/>
+            <frac32.bipolar name="freezescrub"/>
+            <int32 name="scrubamount"/>
+            <bool32 name="stereodis"/>
+            <bool32 name="stereooct"/>
+            <bool32 name="stereorev"/>
+            <bool32 name="stereoshuff"/>
+            <bool32 name="stereospray"/>
+            <bool32 name="stereoPspray"/>
+            <frac32.positive name="panwidth"/>
+            <bool32 name="panmode"/>
+            <bool32 name="randompan"/>
+            <frac32.bipolar name="width"/>
+            <frac32.bipolar name="GEwidth"/>
+            <frac32.bipolar name="Rcorrupttime"/>
+            <bool32 name="stereocorrupt"/>
+            <frac32.bipolar name="Roctavespeed"/>
+            <bool32 name="shuffledirection"/>
+            <frac32buffer name="grainmod"/>
+            <frac32.positive name="panprob"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="delayedbufferL"/>
+            <frac32buffer name="delayedbufferR"/>
+            <frac32buffer name="granulatorL"/>
+            <frac32buffer name="granulatorR"/>
+            <frac32buffer name="grainechoL"/>
+            <frac32buffer name="grainechoR"/>
+            <frac32.positive name="grainphase"/>
+            <frac32.positive name="delayphase"/>
+            <int32 name="grainlength"/>
+            <int32 name="activeplayers"/>
+            <frac32 name="indense"/>
+         </outlets>
+         <displays/>
+         <params>
+            <int32 name="fade" noLabel="true">
+               <MinValue i="1"/>
+               <MaxValue i="4194304"/>
+            </int32>
+         </params>
+         <attribs>
+            <objref name="buffer"/>
+            <spinner name="maxgrain" MinValue="3" MaxValue="20" DefaultValue="0"/>
+         </attribs>
+         <includes/>
+         <code.declaration><![CDATA[int fade;
+int fadee;
+int fphase;
+int fphaseO;
+//int gshape;
+int bsize;
+int x;
+int t;
+int grain;
+int stage[20];
+//int curve;
+int maxgrain;
+int v;
+int pv;
+int SO;
+int init;
+int xgrain;
+int rtimer;
+int32_t prevshit;
+int32_t indense;
+int32_t tosted;
+int32_t ptest;
+int32_t pan;
+int32_t probPAN;
+int32_t randPAN;
+int32_t krate;
+int32_t remainder;
+int32_t xfade;
+int32_t xfadeGB;
+int32_t pgr;
+int32_t xf[2];
+int32_t xfGB[2];
+int32_t sprayL;
+int32_t sprayR;
+int32_t inPsprayL;
+int32_t inPsprayR;
+int32_t pitchsprayL;
+int32_t pitchsprayR;
+int32_t inTsprayL;
+int32_t inTsprayR;
+int32_t posmodL;
+int32_t posmodR;
+int32_t probPSR;
+int32_t RRdelay;
+int32_t haasdelayL;
+int32_t haasdelayR;
+int32_t GBhaasdelayL;
+int32_t GBhaasdelayR;
+int32_t probPS;
+int32_t inpitch;
+int32_t fd;
+int32_t fRate;   
+int32_t pRateL;   
+int32_t pRateR;   
+int32_t fBase;
+int32_t sRate;
+int32_t rate;
+int32_t dpos[2];
+int32_t dposGB;
+int32_t grainreverseL;
+int32_t reverseGL[20];
+int32_t grainreverseR;
+int32_t reverseGR[20];
+int32_t pgpos;
+int32_t pggpos;
+int32_t octup;
+int32_t spos;
+int32_t rspos;
+int32_t sloop;
+int32_t insloop;
+//int32_t octdown;
+//int32_t Goctup[20];
+//int32_t Goctdn[20];
+int32_t Gleft[20];
+int32_t Gright[20];
+int32_t GleftR[20];
+int32_t GrightL[20];
+int32_t octaveL;
+int32_t octaveR;
+
+
+int32_t leftVCA;
+int32_t rightVCA;
+int32_t leftVCAR;
+int32_t rightVCAL;
+int32_t shuffleL;
+int32_t shuffleR;
+//int32_t prate;
+int32_t PRATEL;
+int32_t PRATER;
+int32_t SRATE;
+int32_t GRATEL[20];
+int32_t GRATER[20];
+
+int32_t aprevtits;
+int32_t atits;
+
+int32_t genv[20];
+//uint32_t boff;
+int32_t gE[20];
+int32_t tmp_gE;
+int32_t tmp_genv;
+int32_t delayGBL;
+int32_t delayGBR;
+int32_t pdelayGB;
+int32_t Tmod;
+int32_t LgE;
+int32_t RgE;
+int32_t phase[2];
+int32_t rphase[2];
+int32_t phas;
+int32_t Dphase;
+int32_t DxpL;
+int32_t DxpR;
+
+uint32_t Sfrac;
+uint32_t bGAIN;
+uint32_t probR;
+uint32_t probLR;
+uint32_t probDR;
+uint32_t probS;
+uint32_t shufflerate;
+uint32_t pshuffle;
+uint32_t sdelay[2];
+uint32_t poctL;
+uint32_t octclockL;
+uint32_t poctR;
+uint32_t octclockR;
+uint32_t grainrate;
+uint32_t grainyrate;
+uint32_t slooppos;
+uint32_t sloopphaseN;
+uint32_t tmp_gps;
+uint32_t Roctavespeed;
+uint32_t tmp_gpsR;
+uint32_t gyrate;
+uint32_t grate;
+uint32_t grainphase[20];
+uint32_t stretchphase;
+uint32_t stretchstart;
+uint32_t pstretchstart;
+uint32_t synclength;
+uint32_t pg;
+uint32_t shufflev;
+uint32_t octm;
+uint32_t grainpos[2];
+uint32_t pos[20];
+uint32_t rpos[20];
+uint32_t gph[20];
+uint32_t gphR[20];
+uint32_t Tphase;
+uint32_t prevTp;
+uint32_t trigrate;
+uint32_t prevtrate;
+uint32_t tr;
+uint32_t delayphase[2];
+//uint32_t kpos;
+uint32_t kphase;
+uint32_t laststretch;
+uint32_t sposphase;
+uint32_t sphase[2];
+uint32_t gdelay;
+uint32_t phaseGB[2];
+uint32_t prevP[2];
+uint32_t inpos;
+//uint32_t kph;
+uint32_t probG;
+uint32_t probV;
+uint32_t probO;
+uint32_t probOR;
+uint32_t probORD;
+uint32_t probD;
+uint32_t lposL;
+uint32_t lposR;
+uint32_t dlength;
+uint32_t dlengthGB;
+//uint32_t pos;
+//uint32_t Opos;
+uint32_t out[2];
+uint32_t outR[2];
+uint32_t gX[20];
+uint32_t gXR[20];
+uint32_t gout[20];
+uint32_t holdG[20];
+uint32_t RRcorrupt;
+
+uint32_t nextgrain;
+uint32_t xout;
+uint32_t grainoutL;
+uint32_t grainoutR;
+//uint32_t lastmax;
+uint32_t length;
+uint32_t plength;
+uint32_t inlength;
+uint32_t outX[2];
+uint32_t outGB[2];
+//uint32_t corruptrate;
+uint32_t corruptphaseL;
+uint32_t corruptphaseR;
+uint32_t probVR;
+uint32_t pcorruptL;
+uint32_t pcorruptR;
+uint32_t gpos;
+//uint32_t lastpos;
+uint32_t prevpos;
+
+uint32_t phasGB;
+uint32_t outI;
+uint32_t shape;
+uint32_t outXX;
+uint32_t delay[2];
+uint32_t density;
+uint32_t pgrain;
+uint32_t grainlength;
+uint32_t opos;
+uint32_t inshufflerate;
+uint32_t oposGB;
+uint32_t AR;
+uint32_t xoffset;
+uint32_t activeplayers;
+uint32_t indelay[2];
+uint32_t indelayGB;
+uint32_t prevdposGB;
+uint32_t octL;
+uint32_t octR;
+
+
+uint32_t prevdpos[2];
+uint32_t loopcount;
+uint32_t trs;
+uint32_t pdelay[2];
+//uint64_t TX[32];
+uint32_t nglength;
+uint32_t shufflewidth;
+uint32_t freezelength;
+uint32_t freezesize;
+uint32_t sloopphase;
+
+uint32_t fakeopos;
+uint32_t freezeclock;
+uint32_t buffpos;
+uint32_t bpos;
+uint32_t slength;
+uint32_t prevscrub;
+uint32_t freezescrub;
+uint32_t mlength;
+uint32_t freezepos;
+uint32_t slooposN;
+float32_t ratio;
+float32_t pratioL;
+float32_t pratioR;
+float32_t sratio;
+bool octdownL;
+bool octdownR;
+bool lofi;
+bool dchange;
+bool rtrig;
+//bool play;
+//bool fadein;
+bool revon;
+bool phold;
+bool pholdGB;
+bool frtrig;
+bool prevplay;
+bool strig;
+bool player;
+bool playerGB;
+bool gtrig;
+bool graintrig;
+bool ptrig;
+//bool Rhold;
+int fakehold;
+bool ptrigGB;
+bool alternate;
+bool gforce;
+bool ttrig;
+int32_t test;
+bool testhold;
+bool freeze;
+bool resyncgrain;
+bool rstrig;
+bool testrig;
+bool xloop;
+bool xfading;
+bool xfadingGB;
+bool mutetrig;
+bool disintegratedL;
+bool disintegratedR;
+bool synchold;
+bool dun;
+bool panmode;
+bool panON;
+//+(attr_table.LENGTH>>1)]]></code.declaration>
+         <code.init><![CDATA[bsize=16;
+fadee=1<<6;
+fd=6;
+SO=32+bsize;
+ptrig=1;
+init=0;
+//play=1;
+xgrain=-1;
+//synchold=1;]]></code.init>
+         <code.krate><![CDATA[mlength=attr_buffer.maxlength;
+fphase=0x07FFFFFF/param_fade;
+bGAIN=attr_buffer.GAIN;
+revon=inlet_reverse;
+//int ingrain=param_maxgrain;
+//maxgrain=16;
+
+
+maxgrain=(attr_maxgrain)+1;
+
+
+length=attr_buffer.maxlength;
+
+xoffset=attr_buffer.xoffset;
+if (xoffset<=delay[0]){
+	xoffset=length;
+}
+synclength=attr_buffer.synclength;
+if (synclength>0){
+	slength=synclength;
+	}
+else {
+	slength=length;
+}
+
+
+//play=!inlet_mutegrains;	
+
+
+
+
+//gshape=inlet_grainshape- (inlet_grainshape>>2<<2);
+//curve=inlet_curve;
+//probG= right disintegrate probabilty && shuffle value
+probG = (uint32_t)(GenerateRandomNumber())>>5; 
+//probV=corrupt probabilty left
+probV = (uint32_t)(GenerateRandomNumber())>>5; 
+//probVR=corrupt probabilty right
+probVR = (uint32_t)(GenerateRandomNumber())>>5; 
+//prob O= octave amount probability left
+probO=(uint32_t)(GenerateRandomNumber())>>5; 
+//prob O= octave amount probability right
+probOR=(uint32_t)(GenerateRandomNumber())>>5; 
+//octave updown prob right & shuffle value right
+probORD=(uint32_t)(GenerateRandomNumber())>>5; 
+//probR= shuffle value & reverse grain left probability
+probR=(uint32_t)(GenerateRandomNumber())>>5;
+//probLR - grainrevers right
+probLR=(uint32_t)(GenerateRandomNumber())>>5;
+//probS= spray and octaveup?down probability left
+probS=(uint32_t)(GenerateRandomNumber())>>5;
+//probPS=pitchspray (bipolar!) left
+probPS=(int32_t)(GenerateRandomNumber())>>4;
+//probPSR=pitchspray (bipolar!) right
+probPSR=(int32_t)(GenerateRandomNumber())>>4;
+
+//right disintegrate
+probD=(uint32_t)(GenerateRandomNumber())>>5;
+//spray right
+probDR=(uint32_t)(GenerateRandomNumber())>>5;
+
+
+freeze=inlet_freezeL;
+if (freeze){
+	if (!frtrig){
+		freezescrub=0;
+		//sposphase=grainpos[0];
+		spos=spos+slooposN;
+		fakeopos=0;
+		
+		fakehold=2;
+		
+	}
+	frtrig=1;
+}
+else if (!freeze){
+	freezescrub=0;
+	frtrig=0;
+}
+
+
+if (!inlet_stereocorrupt){
+	probVR=probV;
+}
+probPAN=(uint32_t)(GenerateRandomNumber())>>5;
+if (probPAN<inlet_panprob){
+	panON=1;
+}
+else{
+	panON=0;
+}
+
+if (inlet_panmode==0) {
+	if (!inlet_randompan){
+		pan=inlet_panwidth;
+	}
+	else {
+		if (panON){
+			randPAN=(uint32_t)(GenerateRandomNumber())>>5;
+			pan=___SMMUL(randPAN<<3,inlet_panwidth<<2);
+			}
+		else {
+			pan=0;
+		}
+	}	
+	
+	leftVCA=(1<<27)-pan;
+	leftVCAR=pan;
+	rightVCA=(1<<27)-pan;
+	rightVCAL=pan;
+}
+else if (inlet_panmode==1) {
+	if (!inlet_randompan){
+		pan=inlet_panwidth;
+	}
+	else {
+		if (panON){
+			randPAN=(int32_t)(GenerateRandomNumber())>>5;
+			pan=((___SMMUL(randPAN<<3,inlet_panwidth<<2))>>1)+(1<<26);
+			}
+		else {
+			pan= (1<<26);
+		}
+	}
+	leftVCA=((1<<27)-pan)<<1;
+	rightVCA=pan<<1;
+	leftVCAR=0;
+	rightVCAL=0;
+}
+
+
+if (inlet_disintegrate<probG){
+	disintegratedL=0;
+}
+else {
+	disintegratedL=1;
+}
+if (!inlet_stereodis){
+	disintegratedR=disintegratedL;
+}
+else {	
+	if (inlet_disintegrate<probD){
+		disintegratedR=0;
+	}
+	else {
+		disintegratedR=1;
+	}
+}
+//kpos=attr_buffer.outpos;
+krate=((uint64_t)1<<32)/slength;
+kphase=(attr_buffer.trigpos*(krate>>5));
+
+freezelength=___SMMUL(inlet_freezesize<<3,slength<<2);
+if (freezelength<1){
+	freezelength=1;
+}
+freezesize=inlet_freezesize;
+
+
+
+	
+
+
+
+if (((inlet_reversegrain>>21)<=32)&&((inlet_reversegrain>>21)>=31)){
+	alternate=1;
+}
+else {
+	alternate=0;
+	if (probR<inlet_reversegrain){
+		grainreverseL=-1;	
+	}
+	else {
+		grainreverseL=1;
+	}
+	if (probLR<inlet_reversegrain){
+		grainreverseR=-1;	
+	}
+	else {
+		grainreverseR=1;
+	}
+}
+if (inlet_reverse){
+	
+	
+		if (grainreverseL<0){
+			grainreverseL=1;
+		}
+		else {
+			grainreverseL=-1;
+		}
+		if (grainreverseR<0){
+			grainreverseR=1;
+		}
+		else {
+			grainreverseR=-1;
+		}
+	
+
+}
+if (!inlet_stereorev){
+	grainreverseR=grainreverseL;
+}
+
+if (!freeze){
+	if (inlet_shufflerate>0){
+		shufflerate=kphase/inlet_shufflerate;
+		}
+	else {
+		shufflerate=kphase;
+	}
+	if (inlet_shufflerange>0){
+		shufflewidth=inlet_shufflerange;
+		}
+	else {
+		shufflewidth=0x07FFFFFF;
+	}
+	
+	if (shufflerate!=pshuffle){
+		pshuffle=shufflerate;
+		if ((probR<=inlet_shuffle)&&(inlet_shuffle>0) ){
+			shufflev=___SMMUL(probG<<3,shufflewidth<<2);
+			if (inlet_shufflerate>0){
+			shuffleL=0-((((((shufflev/inlet_shufflerate)+1)*inlet_shufflerate)<<5)/krate)*rate);
+			}
+			else {
+			shuffleL=0-((shufflev<<5)/krate)*rate;
+			}
+		}
+		else {
+			shuffleL=0;
+		}
+		if ((probORD<=inlet_shuffle)&&(inlet_shuffle>0) ){
+			shufflev=___SMMUL(probV<<3,shufflewidth<<2);
+			if (inlet_shufflerate>0){
+			shuffleR=0-((((((shufflev/inlet_shufflerate)+1)*inlet_shufflerate)<<5)/krate)*rate);
+			}
+			else {
+			shuffleR=0-((shufflev<<5)/krate)*rate;
+			}
+		}
+		else {
+			shuffleR=0;
+		}
+		
+	//probORD
+	}
+
+}	
+else {
+	shuffleL=0;	
+	shuffleR=0;	
+}
+if (!inlet_stereoshuff){
+	shuffleR=shuffleL;
+}
+if (inlet_shuffledirection){
+	shuffleL=-shuffleL;
+	shuffleR=-shuffleR;
+}
+//spray=(inlet_spray<<5);
+
+if (inlet_spray>0){
+inTsprayL=(probS-((probS/slength)*slength))*rate;
+inTsprayR=(probDR-((probDR/slength)*slength))*rate;
+}
+else {
+	inTsprayL=0;
+	inTsprayR=0;
+}
+sprayL=0-(___SMMUL(inlet_spray<<3,inTsprayL<<2));
+sprayR=0-(___SMMUL(inlet_spray<<3,inTsprayR<<2));
+if (!inlet_stereospray){
+	sprayR=sprayL;
+}
+
+//probDR
+//pitchspray
+inPsprayL= ___SMMUL(probPS<<3,(1<<21)<<2);
+pitchsprayL=___SMMUL((inlet_pitchspray>>1)<<3,inPsprayL<<2);
+if (!inlet_stereoPspray){
+	pitchsprayR=pitchsprayL;
+}
+else {
+inPsprayR= ___SMMUL(probPSR<<3,(1<<21)<<2);
+pitchsprayR=___SMMUL((inlet_pitchspray>>1)<<3,inPsprayR<<2);
+}
+
+posmodL=(inlet_posmod<<5)+sprayL+shuffleL;
+posmodR=(inlet_posmod<<5)+sprayR+shuffleR;
+//inpitch=
+MTOFEXTENDED(0,fBase);
+MTOFEXTENDED(inlet_pitch,fRate)
+MTOFEXTENDED(inlet_stretch,sRate)
+MTOFEXTENDED((pitchsprayL+inlet_pitch),pRateL)
+MTOFEXTENDED((pitchsprayR+inlet_pitch),pRateR)
+ratio=(float32_t)fRate/fBase;
+pratioL=(float32_t)pRateL/fBase;
+pratioR=(float32_t)pRateR/fBase;
+sratio=(float32_t)sRate/fBase;
+
+rate=((uint64_t)1<<32)/length;
+Sfrac=(rate*slength)>>5;
+//pitch increment
+int32_t RATE=(rate*ratio);
+//pitchspray increment
+int32_t PRATEL=(rate*(pratioL))-RATE;
+int32_t PRATER=(rate*(pratioR))-RATE;
+int32_t SRATE=rate*sratio;
+int32_t XSRATE=rate*sratio;
+if (inlet_reverse){
+	SRATE=-SRATE;
+}
+
+grainlength=___SMMUL(inlet_grainsize<<3,slength<<2);
+
+grainrate=(((uint64_t)1<<32)/(grainlength))>>4;
+grate=(((uint64_t)1<<32)/(grainlength))>>4;
+if (inlet_shape<=(48<<21)){
+	shape=inlet_shape;
+}
+else{
+	shape=((inlet_shape-(48<<21))<<3)+(48<<21);
+}
+gyrate= ___SMMUL(((grate<<3)-grate)<<3,shape<<2);
+grainyrate=grate+gyrate;
+
+if (inlet_octavespeed>0){
+	octm=inlet_octavespeed;
+
+			
+	
+	}
+else {
+	octm=inlet_grainsize;
+	
+	}
+
+octclockL=kphase/octm;
+if (inlet_Roctavespeed>0){
+		Roctavespeed=(___SMMUL((octm)<<3,inlet_Roctavespeed<<2));
+		
+		octclockR=(kphase+Roctavespeed)/octm;
+	}
+else {
+	
+	octclockR=octclockL;
+}
+
+
+
+/////////////////////////////	
+if (octclockL!=poctL){
+			octaveL=probO-((probO/(inlet_octrange+1))*(inlet_octrange+1));
+			if (inlet_octmode==0){
+				octdownL=0;
+			}
+			else if (inlet_octmode==1){
+				octdownL=1;
+			}
+			else if (inlet_octmode==2){
+				if (probS>=(1<<26)){
+				octdownL=1;
+				}
+				else {
+					octdownL=0;
+				}
+			}
+			
+			
+	poctL=octclockL;
+}
+//
+			if (inlet_randomoctave<probO){
+				octL=0;
+			}
+			else {
+				if (octaveL>0){
+					if (!octdownL){
+						octL=(octaveL*(RATE+PRATEL));
+						
+						}
+					else {
+							octL=0-((RATE+PRATEL)-((RATE+PRATEL)>>octaveL));
+							
+						}
+				}
+				
+				else {
+					octL=0;
+				}
+			}
+//////////////////////////////////////
+if(!inlet_stereooct){
+						probOR=probO;
+						probORD=probS;
+					}
+if (octclockR!=poctR){
+			
+			octaveR=probOR-((probOR/(inlet_octrange+1))*(inlet_octrange+1));
+			
+			if (inlet_octmode==0){
+				octdownR=0;
+			}
+			else if (inlet_octmode==1){
+				octdownR=1;
+			}
+			else if (inlet_octmode==2){
+				if (probORD>=(1<<26)){
+				octdownR=1;
+				}
+				else {
+					octdownR=0;
+				}
+			}
+			
+		
+	poctR=octclockR;
+}
+//
+			if (inlet_randomoctave<probOR){
+				octR=0;
+			}
+			else {
+				if (octaveR>0){
+					if (!octdownR){
+						octR=(octaveR*(RATE+PRATER));
+						
+						}
+					else {
+							octR=0-((RATE+PRATER)-((RATE+PRATER)>>octaveR));
+							
+						}
+				}
+				
+				else {
+					octR=0;
+				}
+			}
+///////////
+
+
+
+
+if (inlet_width>0){
+//	haasdelayR=___SMMUL(inlet_width<<3,384<<2);
+	haasdelayR=___SMMUL(inlet_width<<3,1920<<2);
+	haasdelayL=0;
+}
+else {
+//	haasdelayL=___SMMUL(-inlet_width<<3,384<<2);
+	haasdelayL=___SMMUL(-inlet_width<<3,1920<<2);
+	haasdelayR=0;
+}
+
+
+
+if (inlet_delay<0x07FFFFFF){
+	indelay[0]=___SMMUL(inlet_delay<<3,slength<<2) + haasdelayL;
+	}
+else {
+	indelay[0]=0;
+}
+
+	//indelay[1]=___SMMUL(inlet_Rdelay<<3,slength<<2);
+
+
+if (inlet_Rdelay>=0){
+RRdelay=inlet_delay+(___SMMUL((inlet_delay<<1)<<3,inlet_Rdelay<<2));
+}
+else {
+RRdelay=inlet_delay;
+}
+RRdelay=__SSAT(RRdelay,28);
+
+if (RRdelay<0x07FFFFFF){
+	indelay[1]=___SMMUL(RRdelay<<3,slength<<2) + haasdelayR;
+	}
+else {
+	indelay[1]=0;
+}
+
+if (indelay[0]==0){
+	indelay[0]=16;
+}
+if (indelay[1]==0){
+	indelay[1]=16;
+}
+
+
+if (indelay[0]<=grainlength){
+	grainreverseL=-1;	
+	grainreverseR=-1;	
+}
+//////////////
+if (inlet_GEwidth<0){
+	GBhaasdelayR=(___SMMUL(-inlet_GEwidth<<3,1920<<2))*(rate>>5);
+	GBhaasdelayL=0;
+}
+else {
+	GBhaasdelayL=(___SMMUL(inlet_GEwidth<<3,1920<<2))*(rate>>5);
+	GBhaasdelayR=0;
+}
+
+if (inlet_Rcorrupttime>=0){
+RRcorrupt=(___SMMUL((inlet_corrupttime)<<3,inlet_Rcorrupttime<<2));
+}
+else {
+RRcorrupt=0;
+}
+//RRcorrupt=__SSAT(RRcorrupt,28);
+
+//corruption clock
+corruptphaseL=kphase/inlet_corrupttime;
+corruptphaseR=(kphase+RRcorrupt)/inlet_corrupttime;
+if (corruptphaseL!=pcorruptL){
+	pcorruptL=corruptphaseL;
+	//prevpos=lpos;
+	lposL=delayphase[0];
+	//lposR=delayphase[1];
+	//	lastpos=lpos;
+	
+}
+if (corruptphaseR!=pcorruptR){
+	pcorruptR=corruptphaseR;
+	//prevpos=lpos;
+	lposR=delayphase[1];
+	//lposR=delayphase[1];
+	//	lastpos=lpos;
+	
+}
+if (freeze){
+	sdelay[0]=freezelength;
+	sdelay[1]=freezelength;
+}
+else if (!inlet_stretchsynctrigger){
+	sdelay[0]=delay[0];
+	sdelay[1]=delay[1];
+}
+else {
+	sdelay[0]=___SMMUL(inlet_corrupttime<<3,slength<<2);
+	sdelay[1]=___SMMUL(inlet_corrupttime<<3,slength<<2);
+}
+
+
+
+
+if (inlet_density>=0){
+	if(inlet_density >= (1<<27))
+	  indense = 0x07FFFFFF;
+	else if(inlet_density <= 0)
+	  indense = 0;
+	else{
+		  int32_t i = inlet_density >> (27-2);              // i [0 4[
+		  int32_t a = (inlet_density & ((1<<(27-2)) - 1));  // a q25
+		  if(i < 2){ // [0 2[
+		    if(i < 1){ // [0 1[             q27         q25   q20           q27 
+		      indense = ___SMMLA((1<<26) - 0, a, 0>> 7) << 7;
+		    } else {   // [1 2[
+		      indense = ___SMMLA((48<<21) - (1<<26), a, (1<<26) >> 7) << 7;
+		    }
+		  } else { // [2 4[
+		    if(i < 3){ // [2 3[
+		      indense = ___SMMLA((56<<21) - (48<<21), a, (48<<21) >> 7) << 7;
+		    } else {   // [3 4[
+		      indense = ___SMMLA(0x07FFFFFF - (56<<21), a, (56<<21) >> 7) << 7;
+		    }
+		  }
+		}
+		
+	density=___SMMUL((inlet_grainsize>>1)<<3,(((1<<27)+(0-indense)))<<2);
+	}
+else if (inlet_density<0){
+		indense=0;
+		uint32_t lowdensity = (0-inlet_density)>>inlet_densityrange;
+		if (lowdensity<=(1<<24)){
+			density=(___SMMUL((inlet_grainsize>>1)<<3,(lowdensity<<3)<<2)) + (inlet_grainsize>>1); 
+			}
+		else if (lowdensity>(1<<24)){
+			uint32_t tempin=(lowdensity<<3)<<5;
+			density=(___SMMUL(inlet_grainsize<<3,(tempin>>5)<<2)) + ((lowdensity>>24)*inlet_grainsize); 
+			}
+	}
+
+
+
+outlet_indense=indense;
+tr= ( ___SMMUL(density<<3,((slength))<<2) ) ;
+
+if (tr<=2){
+	tr=2;
+}
+// phase increment for density
+trigrate=(((uint64_t)1<<32)/(tr));
+
+
+resyncgrain=inlet_resyncgrain;
+// if density changes, trigger reset on next bar
+if (trigrate!=prevtrate){
+	rtimer=1500;
+	prevtrate=trigrate;
+	
+}
+
+if (rtimer>0){
+	rtimer-=1;
+	if (rtimer<=0){
+		rtimer=0;
+		//if ( (attr_buffer.outpos/(synclength>>2))  != prevshit ){
+			//gtrig=1;
+			resyncgrain=1;
+		//	prevshit=attr_buffer.outpos/(synclength>>2);
+			
+			
+		//}
+	}
+}
+
+if (inlet_trigger&&!ttrig){
+	ttrig=1;
+	gtrig=1;
+//	prevpos=lpos;
+	lposL=delayphase[0];
+	lposR=delayphase[0];
+		//lastpos=lpos;
+	
+}
+else if (!inlet_trigger){
+	ttrig=0;
+}
+
+
+
+
+if (( (indelay[0]!=pdelay[0]) || (indelay[1]!=pdelay[1])) &&!xfading){
+	delay[0]=indelay[0];
+	pdelay[0]=indelay[0];
+	delay[1]=indelay[1];
+	pdelay[1]=indelay[1];
+
+}
+
+
+//reset density clock and force a grain to play
+//if frozen, selct a new position
+if (gtrig){
+	graintrig=1;
+	prevTp=0;
+	Tphase=0;
+	gtrig=0;
+	gforce=1;
+	if (freeze){
+		
+		//sposphase=delayphase;
+		spos=(((dpos[0]/sdelay[0])*sdelay[0]));
+		
+		freezescrub=0;
+		//sposphase=grainpos;
+		fakeopos=0;
+		//sloopphaseN=0;
+		fakehold=2;
+	
+	}
+	
+	
+	
+}
+
+if (freeze){
+	if (inlet_freezepos!=pgpos){
+		freezescrub=0;
+		fakehold=1;
+		fakeopos=0;
+//		sloopphaseN=0;
+		spos=(___SMMUL(inlet_freezepos<<3,slength<<2));
+		
+		}
+//	if (freezesize==0){
+	//	sloopphaseN=0;
+//	}
+		
+	}
+pgpos=inlet_freezepos;
+
+if (inlet_freezescrub!=prevscrub){
+	if (inlet_freezescrub>=0){
+		freezescrub=(___SMMUL((inlet_freezescrub>>inlet_scrubamount)<<3,slength<<2))*rate;
+		}
+	else {
+		freezescrub=(slength*rate) +((___SMMUL((inlet_freezescrub>>inlet_scrubamount)<<3,slength<<2))*rate);
+		}
+	prevscrub=inlet_freezescrub;	
+}
+if (inlet_freezesize==0){
+	fakehold=0;
+}
+
+//if (!play){
+//	outlet_grainphase=0;
+//	outlet_delayphase=0;
+//}
+//else{
+	uint32_t phd=((grainpos[0])/rate)*krate;
+	uint32_t phdd=((delayphase[0])/rate)*krate;
+	outlet_grainphase=phd>>5;
+//	if (!inlet_freeze){
+	outlet_delayphase=phdd>>5;
+//	}
+//	}
+
+//if (!play&&!grainoutL&&!grainoutR){
+//	int kill;
+//	graintrig=0;
+//	for (kill = 0;kill<maxgrain;kill++){	
+//		stage[kill]=0;
+//		
+//		}
+//}
+
+//outlet_activeplayers=v;outlet_attenuate=indense;
+//disp_activeplayers=v;
+outlet_activeplayers=v;
+nglength=( ___SMMUL((0x07FFFFFF-inlet_shape)<<3,((grainlength>>1)+1)<<2))+(grainlength>>1);
+//disp_grainlength=nglength;
+outlet_grainlength=nglength;
+
+//disp_d1=stage[0];
+//disp_d2=stage[1];
+//disp_d3=stage[2];
+//disp_d4=stage[3];
+//disp_d5=stage[4];
+//disp_d6=stage[5];
+//disp_d7=stage[6];
+//disp_d8=stage[7];
+//disp_d9=stage[8];
+//disp_d10=stage[9];
+//disp_d11=stage[10];
+//disp_d12=stage[11];
+//disp_d13=stage[12];
+//disp_d14=stage[13];
+//disp_d15=stage[14];
+//disp_d16=stage[15];
+//disp_d17=stage[16];
+//disp_d18=stage[17];]]></code.krate>
+         <code.srate><![CDATA[//buffer clocks
+opos=attr_buffer.outpos+ buffer_index; 
+oposGB=attr_buffer.outposGB+ buffer_index; 
+
+
+
+//delay clocks
+dun=0;
+for (int q = 0;q<2;q++){
+	prevdpos[q]=dpos[q];
+	dpos[q]=opos-delay[q];
+	if (dpos[q]<0){
+		dpos[q]=xoffset+dpos[q];
+	}
+	if ((dpos[q]<prevdpos[q]) || (dpos[q]>(prevdpos[q]+1))){
+		if (!dun){
+			if (player==0){
+				player=1;
+			}
+			else {
+				player=0;
+			}
+			dun=1;
+		}
+		
+	}
+}
+
+
+//loop based on buffer clock - resets every delay repeat
+insloop=opos-((opos/(sdelay[0]))*(sdelay[0]));
+//set new loop point after new freeze trigger 
+if ((insloop==0)&&(fakehold>0)){
+	if ((fakehold==2)&&(freezesize>0)){
+		spos=(((dpos[0]/(sdelay[0]))*(sdelay[0])));
+	}
+	else if ((fakehold==1)&&(freezesize>0)){
+		spos=(___SMMUL(((inlet_freezepos/freezesize)*freezesize)<<3,slength<<2));
+	}
+	fakehold=0;
+}
+
+
+if (!fakehold){
+	sloop=insloop;
+	}
+else {
+	sloop=fakeopos-((fakeopos/(sdelay[0]))*(sdelay[0]));
+	fakeopos+=1;
+}
+uint32_t sloopphase=sloop*XSRATE;
+slooppos=(sloopphase/rate);
+slooposN=(slooppos-((slooppos/sdelay[0])*sdelay[0]));
+
+
+	
+
+//
+switch(revon>0?revon:0){
+	      case 0: 
+	     	{
+	     		if (!freeze){
+		     		spos=((opos/sdelay[0])*sdelay[0]) - sdelay[0];
+		     		}
+				if (spos<0){
+				spos=xoffset+spos;
+				}
+				//if (!inlet_freeze){
+				sposphase=(spos+slooposN)*rate;
+				//}
+				sphase[0]=sposphase+freezescrub;
+				
+			}
+	      break;
+	      case 1: 
+	     	{ 
+	     		if (!freeze){
+		     		spos=((opos/sdelay[0])*sdelay[0]);
+		     		}
+				if (!attr_buffer.freeze){
+					if (spos<=0){
+						spos=xoffset+(spos)-1;
+						}
+					}
+				else {
+					if (spos<=0){
+						spos=xoffset+(spos);
+						}
+				}
+				if (spos>=attr_buffer.maxlength){
+					spos=spos-attr_buffer.maxlength;
+				}
+				//if (!inlet_freeze){
+					sposphase=(spos-slooposN)*rate;
+				//}
+				sphase[0]=sposphase+freezescrub;
+			}
+	      break;
+	      
+		}
+
+rspos=(sphase[0]/rate)-(sdelay[1]-sdelay[0]);
+if (rspos<0){
+	rspos=xoffset+rspos;
+}
+sphase[1]=rspos*rate;
+
+
+
+
+delayphase[0]=dpos[0]*rate;
+delayphase[1]=dpos[1]*rate;
+
+//if (!play && fade){
+//	fade-=fphase;
+//	if (fade<=0){
+//		fade=0;
+//	}
+//}
+if (!player && xfade){
+	xfading=1;
+	xfade-=fphase;
+	if (xfade<=0){
+		xfade=0;
+		xfading=0;
+	}
+}
+xf[0]=0x07FFFFFF-xfade;
+xf[1]=xfade;
+
+
+
+if ((inlet_stretch==0) && (!inlet_reverse) && !freeze){
+	
+	int32_t tmp_gpo = (delayphase[0]>>5)+(posmodL>>5);
+	if ((tmp_gpo)>=0){
+		grainpos[0]=delayphase[0]+posmodL;
+		
+		
+		}
+	else {
+		grainpos[0]=delayphase[0]+posmodL+(xoffset*rate);
+		
+	}
+
+	int32_t tmp_gpoR = (delayphase[1]>>5)+(posmodR>>5);
+	if ((tmp_gpoR)>=0){
+		
+		grainpos[1]=delayphase[1]+posmodR;
+		
+		}
+	else {
+		
+		grainpos[1]=delayphase[1]+posmodR+(xoffset*rate);
+	}
+	}
+else {
+	int32_t tmp_gpo = (sphase[0]>>5)+(posmodL>>5);
+	if ((tmp_gpo)>=0){
+		grainpos[0]=sphase[0]+posmodL;
+		
+		}
+	else {
+		grainpos[0]=sphase[0]+posmodL+(xoffset*rate);
+	}
+	int32_t tmp_gpor = (sphase[1]>>5)+(posmodR>>5);
+	if ((tmp_gpor)>=0){
+		grainpos[1]=sphase[1]+posmodR;
+		
+		}
+	else {
+		grainpos[1]=sphase[1]+posmodR+(xoffset*rate);
+	}
+}
+	
+
+
+
+//delayed buffer playback
+for (int x = 0;x<2;x++){
+	
+	if (x==player){
+	phase[x]=dpos[0];
+	rphase[x]=dpos[1];
+	
+	}
+	else {
+		if (phase[x]<(length-1)){
+			phase[x]+=1;
+		
+		}
+		if (rphase[x]<(length-1)){
+			rphase[x]+=1;
+		
+		}
+	}
+
+	uint32_t T = ((phase[x]*rate)+(inlet_buffermod>>1))>>5;
+   	uint32_t asat = __USAT(T,27);
+    	int index = asat>>(27-attr_buffer.LENGTHPOWa);
+   	int32_t y1 = attr_buffer.LEFT[index]<<attr_buffer.GAIN;
+   	int32_t y2 = attr_buffer.LEFT[(index+1)&attr_buffer.LENGTHMASKa]<<attr_buffer.GAIN;
+   	int frac = (asat - (index<<(27-attr_buffer.LENGTHPOWa)))<<(attr_buffer.LENGTHPOWa+3);
+	int32_t rr;
+  	rr = ___SMMUL(y1,(1<<30)-frac);
+  	rr = ___SMMLA(y2,frac,rr);
+	out[x]= ___SMMUL((rr<<2)<<3,xf[x]<<2);
+
+	
+   	uint32_t TR = ((rphase[x]*rate)+(inlet_buffermod>>1))>>5;
+   	uint32_t asatR = __USAT(TR,27);
+    	int indexR = asatR>>(27-attr_buffer.LENGTHPOWa);
+   	int32_t y1R = attr_buffer.RIGHT[indexR]<<attr_buffer.GAIN;
+   	int32_t y2R = attr_buffer.RIGHT[indexR+1]<<attr_buffer.GAIN;
+   	int fracR = (asatR - (indexR<<(27-attr_buffer.LENGTHPOWa)))<<(attr_buffer.LENGTHPOWa+3);
+	int32_t rrR;
+  	rrR = ___SMMUL(y1R,(1<<30)-fracR);
+  	rrR = ___SMMLA(y2R,fracR,rrR);
+	outR[x]= ___SMMUL((rrR<<2)<<3,xf[x]<<2);
+	
+	
+}
+
+
+
+
+
+delayGBL=___SMMUL(inlet_grainecho<<3,(Sfrac>>1)<<2);
+//grain echo clock
+int32_t DphaseL = ((oposGB*rate)>>5) -delayGBL-GBhaasdelayL;
+	if ((DphaseL)>=0){
+		DxpL=DphaseL;
+		}
+	else {
+		DxpL=DphaseL+(((attr_buffer.LENGTHb>>1)*rate)>>5);
+	}
+delayGBR=___SMMUL(inlet_grainecho<<3,(Sfrac>>1)<<2);
+//grain echo clock
+int32_t DphaseR = ((oposGB*rate)>>5) -delayGBR-GBhaasdelayR;
+	if ((DphaseR)>=0){
+		DxpR=DphaseR;
+		}
+	else {
+		DxpR=DphaseR+(((attr_buffer.LENGTHb>>1)*rate)>>5);
+	}
+
+/// grain echo interpolate & playback
+
+uint32_t asatGBL = __USAT((DxpL),27);
+int indexGBL = asatGBL>>(27-attr_buffer.LENGTHPOWb);
+int32_t y1GB = attr_buffer.echoarray[indexGBL]<<attr_buffer.GAIN;
+int32_t y2GB = attr_buffer.echoarray[(indexGBL+1)]<<attr_buffer.GAIN;
+int fracGBL = (asatGBL - (indexGBL<<(27-attr_buffer.LENGTHPOWb)))<<(attr_buffer.LENGTHPOWb+3);
+int32_t rrGBL;
+rrGBL = ___SMMUL(y1GB,(1<<30)-fracGBL);
+rrGBL = ___SMMLA(y2GB,fracGBL,rrGBL);
+outGB[0]= rrGBL<<2;
+
+uint32_t asatGBR = __USAT((DxpR),27);
+int indexGBR = asatGBR>>(27-attr_buffer.LENGTHPOWb);
+int32_t y1GBR = attr_buffer.echoarray[indexGBR+(attr_buffer.LENGTHb>>1)]<<attr_buffer.GAIN;
+int32_t y2GBR = attr_buffer.echoarray[(indexGBR+1+(attr_buffer.LENGTHb>>1))]<<attr_buffer.GAIN;
+int fracGBR = (asatGBR - (indexGBR<<(27-attr_buffer.LENGTHPOWb)))<<(attr_buffer.LENGTHPOWb+3);
+int32_t rrGBR;
+rrGBR = ___SMMUL(y1GBR,(1<<30)-fracGBR);
+rrGBR = ___SMMLA(y2GBR,fracGBR,rrGBR);
+outGB[1]= rrGBR<<2;
+
+// grain trigger clock (density)
+Tphase+=trigrate;	
+if (resyncgrain){
+	Tphase=opos*trigrate;
+	prevTp=Tphase-trigrate;
+}
+
+if (Tphase<prevTp){
+		//if (play){
+		graintrig=1;
+	//	}
+	}
+prevTp=Tphase;
+
+//set grain settings and trigger
+if (graintrig){
+	graintrig=0;
+	pgrain=grain;
+	if (grain<maxgrain){
+		grain+=1;
+		}
+	if (grain>=maxgrain){
+		grain=0;
+	}
+	nextgrain=grain+1;
+	if (nextgrain>=maxgrain){
+		nextgrain=nextgrain-maxgrain;
+	}
+	if (stage[grain]>0){
+		//if grain already playing, don't trigger and tell it to try agin
+		graintrig=1;
+		grain=pgrain;
+
+		
+	}
+	else {
+
+		if (!disintegratedL || !disintegratedR || gforce){
+			gforce=0;
+			//activeplayers=v;
+			if (stage[xgrain]==0){
+				xgrain=grain;
+				v=pv;
+				pv=0;
+			}
+			if (stage[xgrain]>0){
+				pv+=1;
+				}
+			stage[grain]=1;
+			gph[grain]=0;
+			gphR[grain]=0;
+			
+			if (alternate){
+				if (grainreverseL<0){
+					grainreverseL=1;
+					grainreverseR=-1;
+				}
+				else {
+					grainreverseL=-1;
+					grainreverseR=1;
+				}
+			}
+			
+			reverseGL[grain]=grainreverseL;
+			reverseGR[grain]=grainreverseR;
+			
+			if (inlet_corrupt<probV){
+					
+				pos[grain]=grainpos[0];		
+				}
+			else {
+				int32_t tmp_gpo = (lposL>>5)+(posmodL>>5);
+				if ((tmp_gpo)<0){
+					tmp_gps=lposL+posmodL+(xoffset*rate);
+					}
+				else {
+					tmp_gps=lposL+posmodL;
+				}
+				int32_t tmp_gpoR = (lposR>>5)+(posmodR>>5);
+				
+				pos[grain]=tmp_gps;	
+				
+			}
+			
+			if (inlet_corrupt<probVR){
+				rpos[grain]=grainpos[1];		
+				}
+			else {
+				int32_t tmp_gpo = (lposL>>5)+(posmodL>>5);
+
+				int32_t tmp_gpoR = (lposR>>5)+(posmodR>>5);
+				if ((tmp_gpoR)<0){
+					tmp_gpsR=lposR+posmodR+(xoffset*rate);
+					}
+				else {
+					tmp_gpsR=lposR+posmodR;
+				}
+				rpos[grain]=tmp_gpsR;	
+			}
+
+			if ((reverseGL[grain]<0)&&((pos[grain]>>5)<=(inlet_grainsize))){
+						pos[grain]=pos[grain]+(xoffset*rate);
+						
+					}
+
+			if ((reverseGR[grain]<0)&&((rpos[grain]>>5)<=(inlet_grainsize))){
+						rpos[grain]=rpos[grain]+(xoffset*rate);
+						
+					}
+
+			
+			genv[grain]=0;
+			grainphase[grain]=0;
+			gX[grain]=0;	
+			GRATEL[grain]=PRATEL+octL;
+			GRATER[grain]=PRATER+octR;
+			if (!disintegratedL){
+				Gleft[grain]=leftVCA;
+				GleftR[grain]=leftVCAR;
+				}
+			else {
+				Gleft[grain]=0;
+				GleftR[grain]=0;
+			}
+			if (!disintegratedR){
+				Gright[grain]=rightVCA;
+				GrightL[grain]=rightVCAL;
+				}
+			else {
+				Gright[grain]=0;
+				GrightL[grain]=0;
+			}
+			
+			
+			if (inlet_allgrains>0){
+				holdG[grain]=1;
+			}
+			else {
+				holdG[grain]=0;
+			}
+			holdG[nextgrain]=0;
+			
+		}
+	}
+
+	
+}
+	
+grainoutL=0;
+grainoutR=0;
+//grain playback
+
+for (t = 0;t<maxgrain;t++){	
+	if (stage[t]>0){
+
+		//envelope
+		if (grainphase[t]<(1<<27)){
+			grainphase[t]+=grainrate;
+			if (genv[t]<0x07FFFFFF){
+				genv[t]+=grainyrate;	
+				}
+			else {
+				genv[t]=0x07FFFFFF;
+				}
+			}
+		else {
+			
+			genv[t]-=grainyrate;
+			if (genv[t]<=0){
+				genv[t]=0;
+				if (holdG[t]&&inlet_allgrains){
+					stage[t]=1;
+					grainphase[t]=0;
+					gph[t]=0;
+				}
+				else {
+					//v-=1;
+					stage[t]=0;
+				}
+			}
+			
+			
+		}
+		//read and interpolate
+		//left
+		//does grain mod even work? sounds like a square wave. Shit out of luck on that one
+		uint32_t TGL = (gph[t]+pos[t])+(inlet_grainmod>>1);
+	   	uint32_t asat = __USAT((TGL>>5),27);
+	   	//disp_d1=(inlet_grainmod>>1);
+	    	int index = asat>>(27-attr_buffer.LENGTHPOWa);
+	    	
+	    	
+	   	int32_t y1 = attr_buffer.LEFT[index]<<attr_buffer.GAIN;
+	   	int32_t y2 = attr_buffer.LEFT[index+1]<<attr_buffer.GAIN;
+	   	
+	  	 int frac = (asat - (index<<(27-attr_buffer.LENGTHPOWa)))<<(attr_buffer.LENGTHPOWa+3);
+	  	int32_t left;
+	  	left = ___SMMUL(y1,(1<<30)-frac);
+	  	left = ___SMMLA(y2,frac,left);
+	  	left= ___SMMUL((left<<2)<<3,genv[t]<<2);
+		
+
+		//right
+		uint32_t TGR = (gphR[t]+rpos[t])+(inlet_grainmod>>1);
+	   	uint32_t asatR = __USAT((TGR>>5),27);
+	    	int inde = (asatR>>(27-attr_buffer.LENGTHPOWa));
+	    	
+	    	
+	   	int32_t y1R = attr_buffer.RIGHT[inde]<<attr_buffer.GAIN;
+	   	int32_t y2R = attr_buffer.RIGHT[inde+1]<<attr_buffer.GAIN;
+	   	
+	  	 int fracR = (asatR - (inde<<(27-attr_buffer.LENGTHPOWa)))<<(attr_buffer.LENGTHPOWa+3);
+	  	int32_t right;
+	  	right = ___SMMUL(y1R,(1<<30)-fracR);
+	  	right = ___SMMLA(y2R,fracR,right);
+	  	right = ___SMMUL((right<<2)<<3,genv[t]<<2);
+	  	
+		//sum all grains for output
+		grainoutL+=( (___SMMUL(left<<3,Gleft[t]<<2))  +  (___SMMUL(right<<3,GrightL[t]<<2)) );
+		grainoutR+=( (___SMMUL(right<<3,Gright[t]<<2))  +  (___SMMUL(left<<3,GleftR[t]<<2)) );
+
+		//audio/sample clock
+		gph[t]+=((RATE+GRATEL[t])*reverseGL[t]);
+		gphR[t]+=((RATE+GRATER[t])*reverseGR[t]);
+//		*********************************************************************
+	}
+}
+
+//outlet_granulatorL=(___SMMUL(grainoutL<<3,fade<<2));
+//outlet_granulatorR=(___SMMUL(grainoutR<<3,fade<<2));
+//outlet_grainechoL=__SSAT((___SMMUL((outGB[0])<<3,fade<<2)),27);
+//outlet_grainechoR=__SSAT((___SMMUL((outGB[1])<<3,fade<<2)),27);
+
+//outlet_delayedbufferL=__SSAT((___SMMUL((out[0]+out[1])<<3,fade<<2)),27);
+//outlet_delayedbufferR=__SSAT((___SMMUL((outR[0]+outR[1])<<3,fade<<2)),27);
+
+outlet_granulatorL=grainoutL;
+outlet_granulatorR=grainoutR;
+outlet_grainechoL=__SSAT(outGB[0],27);
+outlet_grainechoR=__SSAT(outGB[1],27);
+
+outlet_delayedbufferL=__SSAT((out[0]+out[1]),27);
+outlet_delayedbufferR=__SSAT((outR[0]+outR[1]),27);
+	
+
+//if (play && (fade<0x07FFFFFF)){
+//	fade+=fphase;
+//	if (fade>=0x07FFFFFF){
+//	fade=0x07FFFFFF;
+//	}
+//}
+if (player && (xfade<0x07FFFFFF)){
+	xfading=1;
+	xfade+=fphase;
+	if (xfade>=0x07FFFFFF){
+		xfading=0;
+	xfade=0x07FFFFFF;
+	}
+}]]></code.srate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="1848" y="2142" text="boost when density below 0"/>
+   <patchobj type="patch/object" uuid="72c95f4b-a175-434a-9eab-97b0cedd487e" name="object_2" x="1848" y="2156">
+      <params>
+         <frac32.u.map name="more" value="32.0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="72c95f4b-a175-434a-9eab-97b0cedd487e">
+         <inlets>
+            <frac32.bipolar name="dense"/>
+            <frac32 name="pitch"/>
+            <frac32 name="stretch"/>
+            <frac32.positive name="pitchspray"/>
+            <frac32.positive name="spray"/>
+            <frac32 name="indense"/>
+         </inlets>
+         <outlets>
+            <frac32 name="attenuate"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.u.map name="more"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int spray;
+int attenuation;]]></code.declaration>
+         <code.krate><![CDATA[//int outAP;
+int Tspray=inlet_spray;
+int Pspray=inlet_pitchspray;
+
+
+
+if (Tspray>=Pspray){
+	//spray=0x07FFFFFF-(Tspray<<param_p1);
+	spray=0x07FFFFFF-Tspray;
+}
+else if (Tspray<Pspray) {
+	//spray=0x07FFFFFF-((Pspray>>1)+ 0x04000000 );
+	
+	spray=0x07FFFFFF-Pspray;
+	
+}
+else {
+	
+	spray=0x07FFFFFF;
+}
+
+//if (inlet_activeplayers>=(2+param_start)){
+//	outAP=inlet_activeplayers-(2+param_start);
+//}
+//else {
+//	outAP=0;
+//}
+
+
+uint32_t dense=( __SSAT(((0-inlet_dense)<<3),28))>>1;
+
+
+//uint32_t atXX=( ___SMMUL( (1<<(27-outAP)) <<3,(param_more)<<2))+ (0x07FFFFFF-param_more);
+
+//outlet_o1=0x07FFFFFF - (indense>>1);
+//uint32_t atX=inlet_i1;
+uint32_t atX=( ___SMMUL( (0x07FFFFFF-inlet_indense) <<3,(param_more)<<2))+ (0x07FFFFFF-param_more);
+if (atX>=0x07FFFFFF){
+	atX=0x07FFFFFF;
+}
+uint32_t atXinvert=0x07FFFFFF-atX;
+//uint32_t SPattenuate=___SMMUL(atXinvert<<3,spray<<2);
+uint32_t SPattenuate=___SMMUL(atXinvert<<3,(0x07FFFFFF-spray)<<2);
+//attenuation=0x07FFFFFF-SPattenuate;
+//attenuation=___SMMUL(atX<<3,spray<<2);
+
+if (inlet_pitch == inlet_stretch){
+	atX= (___SMMUL(atX<<3,atX<<2))+SPattenuate;
+//	atX= ___SMMUL(atX<<3,atX<<2);
+
+
+}
+
+if (inlet_dense<0){
+	atX=atX+dense;
+}
+
+outlet_attenuate=atX;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="math/smooth" uuid="6c5d08c282bb08bff24af85b4891447f99bcbc97" name="smooth_5" x="2044" y="2156">
+      <params>
+         <frac32.u.map name="time" value="40.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1624" y="2254" text="sends grain echo to granular feedback"/>
+   <comment type="patch/comment" x="1694" y="2268" text="careful now!"/>
+   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="toggle_4" x="1708" y="2282">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="2016" y="2282" text="granulatorleft"/>
+   <comment type="patch/comment" x="2100" y="2282" text="granulatorright"/>
+   <patchobj type="patch/object" uuid="94635b19-1ff5-45a5-b802-f6545b43bf3c" name="object_9" x="1610" y="2296">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="94635b19-1ff5-45a5-b802-f6545b43bf3c">
+         <inlets>
+            <frac32 name="in"/>
+            <bool32 name="bypass"/>
+         </inlets>
+         <outlets>
+            <frac32 name="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int prev;
+int out;
+int ntrig;
+int tempp;]]></code.declaration>
+         <code.krate><![CDATA[if (inlet_in!=prev){
+	out=inlet_in;
+	prev=inlet_in;
+}
+
+if (inlet_bypass && !ntrig){
+	ntrig=1;
+	tempp=out;
+	out=0;
+}
+else if (!inlet_bypass && ntrig){
+	out=tempp;
+	ntrig=0;
+}
+
+
+outlet_out=out;]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_1" x="2016" y="2296">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_2" x="2100" y="2296">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1680" y="2380" text="grain echo"/>
+   <patchobj type="patch/object" uuid="3c91e6e3-3f4e-47d4-bb6e-24ab43f24547" name="1_4" x="1610" y="2394">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="3c91e6e3-3f4e-47d4-bb6e-24ab43f24547">
+         <sDescription>&quot;voltage controlled amplifier&quot;, multiplies v and a inputs, with linear interpolation from k- to s-rate</sDescription>
+         <author>Remco van der Most</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32buffer name="a1" description="audio input"/>
+            <frac32buffer name="a2"/>
+            <frac32 name="v" description="gain input"/>
+            <frac32 name="b"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="v1" description="output"/>
+            <frac32buffer name="v2"/>
+            <frac32buffer name="b1"/>
+            <frac32buffer name="b2"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t prev;
+    int32_t step;
+int32_t prevb;
+    int32_t stepb;]]></code.declaration>
+         <code.krate><![CDATA[step = (inlet_v - prev)>>4;
+   int32_t i = prev;
+   prev = inlet_v;
+
+stepb = (inlet_b - prevb)>>4;
+   int32_t ib = prevb;
+   prevb = inlet_b;]]></code.krate>
+         <code.srate><![CDATA[outlet_v1 =  ___SMMUL(inlet_a1,i)<<5;
+   outlet_v2 =  ___SMMUL(inlet_a2,i)<<5;
+   i += step;
+
+outlet_b1 =  ___SMMUL(inlet_a1,ib)<<5;
+   outlet_b2 =  ___SMMUL(inlet_a2,ib)<<5;
+   ib += stepb;]]></code.srate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="224aa32c-1696-4526-baf3-eca0819ebcbe" name="+_7" x="1722" y="2394">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="224aa32c-1696-4526-baf3-eca0819ebcbe">
+         <sDescription>add</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32buffer name="in1" description="in2"/>
+            <frac32buffer name="in2" description="in2"/>
+            <bool32 name="kill2"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="out" description="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.srate><![CDATA[if (!inlet_kill2){
+outlet_out= inlet_in1+inlet_in2 ;
+}
+else {
+	outlet_out=inlet_in1;
+}]]></code.srate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="6916b083-e754-4df4-9ce5-e0a6b15b4e5b" name="+_8" x="1820" y="2394">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="6916b083-e754-4df4-9ce5-e0a6b15b4e5b">
+         <sDescription>add</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32buffer name="in1" description="in2"/>
+            <frac32buffer name="in2" description="in2"/>
+            <bool32 name="kill2"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="out" description="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.srate><![CDATA[if (!inlet_kill2){
+outlet_out= inlet_in1+inlet_in2 ;
+}
+else {
+	outlet_out=inlet_in1;
+}]]></code.srate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="1834" y="2520" text="output *************************************************************"/>
+   <comment type="patch/comment" x="1834" y="2534" text="grain gain"/>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_1" x="1932" y="2534">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_3" x="2016" y="2534">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="2114" y="2534" text="granulatorer vol"/>
+   <patchobj type="patch/object" uuid="cb348abb-e975-43a1-a337-68f755ba4cf1" name="*_6" x="1834" y="2548">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="cb348abb-e975-43a1-a337-68f755ba4cf1">
+         <sDescription>multiply</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32 name="a" description="input"/>
+            <frac32 name="b" description="input"/>
+         </inlets>
+         <outlets>
+            <frac32 name="result" description="output"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[outlet_result= ___SMMUL(inlet_a<<3,(inlet_b<<1)<<2);]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="sss/gain/vcaST" uuid="82f6d1d8-7fb6-413a-994e-96fdf4b98ee7" name="vcaST_6" x="2114" y="2548">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1918" y="2688" text="buffer vol &amp;buff fback"/>
+   <patchobj type="patch/object" uuid="819da615-22f4-4657-887f-7fc5f44be0f5" name="2_1" x="1932" y="2702">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="819da615-22f4-4657-887f-7fc5f44be0f5">
+         <sDescription>&quot;voltage controlled amplifier&quot;, multiplies v and a inputs, with linear interpolation from k- to s-rate</sDescription>
+         <author>Remco van der Most</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32buffer name="a1" description="audio input"/>
+            <frac32buffer name="a2"/>
+            <frac32 name="v" description="gain input"/>
+            <frac32 name="b"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="v1" description="output"/>
+            <frac32buffer name="v2"/>
+            <frac32buffer name="b1"/>
+            <frac32buffer name="b2"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t prev;
+    int32_t step;
+int32_t prevb;
+    int32_t stepb;]]></code.declaration>
+         <code.krate><![CDATA[step = (inlet_v - prev)>>4;
+   int32_t i = prev;
+   prev = inlet_v;
+
+stepb = (inlet_b - prevb)>>4;
+   int32_t ib = prevb;
+   prevb = inlet_b;]]></code.krate>
+         <code.srate><![CDATA[outlet_v1 =  ___SMMUL(inlet_a1,i)<<5;
+   outlet_v2 =  ___SMMUL(inlet_a2,i)<<5;
+   i += step;
+
+outlet_b1 =  ___SMMUL(inlet_a1,ib)<<5;
+   outlet_b2 =  ___SMMUL(inlet_a2,ib)<<5;
+   ib += stepb;]]></code.srate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="1610" y="2786" text="grain echo to buffer"/>
+   <comment type="patch/comment" x="2030" y="2786" text="grain+buffer"/>
+   <obj type="logic/inv" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_1" x="1624" y="2800">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_4" x="2030" y="2800">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="224aa32c-1696-4526-baf3-eca0819ebcbe" name="+_9" x="1582" y="2842">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="224aa32c-1696-4526-baf3-eca0819ebcbe">
+         <sDescription>add</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32buffer name="in1" description="in2"/>
+            <frac32buffer name="in2" description="in2"/>
+            <bool32 name="kill2"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="out" description="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.srate><![CDATA[if (!inlet_kill2){
+outlet_out= inlet_in1+inlet_in2 ;
+}
+else {
+	outlet_out=inlet_in1;
+}]]></code.srate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="6916b083-e754-4df4-9ce5-e0a6b15b4e5b" name="+_10" x="1680" y="2842">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="6916b083-e754-4df4-9ce5-e0a6b15b4e5b">
+         <sDescription>add</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32buffer name="in1" description="in2"/>
+            <frac32buffer name="in2" description="in2"/>
+            <bool32 name="kill2"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="out" description="out"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.srate><![CDATA[if (!inlet_kill2){
+outlet_out= inlet_in1+inlet_in2 ;
+}
+else {
+	outlet_out=inlet_in1;
+}]]></code.srate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="2030" y="2870" text="grain+buffer"/>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_5" x="2030" y="2884">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="2114" y="2884" text="wet vol"/>
+   <comment type="patch/comment" x="2226" y="2884" text="input vol"/>
+   <patchobj type="patch/object" uuid="b9d39eb1-e1c5-45d9-a32d-e690a0e06a27" name="crossfade_1" x="1890" y="2898">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="b9d39eb1-e1c5-45d9-a32d-e690a0e06a27">
+         <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>math.axh</helpPatch>
+         <inlets>
+            <frac32 name="drywet" description="a"/>
+            <bool32 name="bypass"/>
+         </inlets>
+         <outlets>
+            <frac32 name="dry"/>
+            <frac32 name="wet" description="a amplified in 6dB steps"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[int drywet=inlet_drywet;
+if (inlet_bypass){
+	drywet=0;
+}
+outlet_dry=  __SSAT((0x07FFFFFF-drywet)<<1,28);
+outlet_wet= __SSAT((drywet<<1),28);]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="sss/gain/vcaST" uuid="82f6d1d8-7fb6-413a-994e-96fdf4b98ee7" name="vcaST_2" x="2114" y="2898">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="sss/gain/vcaST" uuid="82f6d1d8-7fb6-413a-994e-96fdf4b98ee7" name="vcaST_3" x="2226" y="2898">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="2338" y="2898" text="input + wet"/>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_2" x="2338" y="2912">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="2338" y="2982" text="input + wet"/>
+   <comment type="patch/comment" x="2464" y="2982" text="audio output"/>
+   <comment type="patch/comment" x="1582" y="2996" text="grain to buffer"/>
+   <obj type="math/+" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_6" x="2338" y="2996">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="a6852d8f-46ac-4100-96b1-6ba721fe62ac" name="out_1" x="2464" y="2996">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="a6852d8f-46ac-4100-96b1-6ba721fe62ac">
+         <sDescription>Audio output, stereo</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets>
+            <frac32buffer name="left" description="Left channel"/>
+            <frac32buffer name="right" description="Right channel"/>
+         </inlets>
+         <outlets/>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   AudioOutputLeft[j] += __SSAT(inlet_left[j],28);
+   AudioOutputRight[j] += __SSAT(inlet_right[j],28);
+}]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="sss/gain/vcaST" uuid="82f6d1d8-7fb6-413a-994e-96fdf4b98ee7" name="vcaST_5" x="1582" y="3010">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="1960" y="3038" text="to buffer"/>
+   <obj type="drj/math/sum3" uuid="93cb11244902274d118a237aed86ae7d7fd46107" name="sum3_1" x="1750" y="3052">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="drj/math/sum3" uuid="93cb11244902274d118a237aed86ae7d7fd46107" name="sum3_2" x="1848" y="3052">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="0e5b5059-c6fa-40b8-8b7b-b6775ee52306" name="hp_1" x="1960" y="3052">
+      <params>
+         <frac32.s.map name="freq" value="-33.16999959945679"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="0e5b5059-c6fa-40b8-8b7b-b6775ee52306">
+         <sDescription>1st order hipass filter</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>filter.axh</helpPatch>
+         <inlets>
+            <frac32buffer name="inL" description="input"/>
+            <frac32buffer name="inR"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="outL" description="output"/>
+            <frac32buffer name="outR"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.s.map.pitch name="freq" noLabel="true"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t val;
+int32_t valR;]]></code.declaration>
+         <code.init><![CDATA[val = 0;]]></code.init>
+         <code.krate><![CDATA[int32_t f;
+   MTOF(param_freq,f);]]></code.krate>
+         <code.srate><![CDATA[val = ___SMMLA((inlet_inL-val)<<1,f,val);
+valR = ___SMMLA((inlet_inR-valR)<<1,f,valR);
+outlet_outL= inlet_inL-val;
+
+outlet_outR= inlet_inR-valR;]]></code.srate>
+      </object>
+   </patchobj>
+   <obj type="math/sat" uuid="a64166c1389cd0d5c62a8d3cd5963613be84e9e8" name="sat_1" x="2114" y="3108">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/sat" uuid="a64166c1389cd0d5c62a8d3cd5963613be84e9e8" name="sat_2" x="2380" y="3108">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="2198" y="3136" text="safety compression"/>
+   <comment type="patch/comment" x="2478" y="3136" text="safety compression"/>
+   <comment type="patch/comment" x="1274" y="3150" text="&lt;html&gt;&lt;div width=480px&gt; &lt;h2&gt;&lt;u&gt;Basic Controls:&lt;/u&gt;&lt;/h2&gt; Button S1 = tap tempo. Sets BPM and changes delay time to 1/4. &lt;br/&gt; Button S2 = turns preset mode on/off. &lt;br/&gt; Button L4 = toggles between control pages. If green, page = 1, if red page = 2. &lt;br/&gt; Encoder turn = changes BPM. &lt;br/&gt; Encoder button = bypass (when not in preset mode)  &lt;br/&gt; &lt;h2&gt;&lt;u&gt;Control Page 1:&lt;/u&gt;&lt;/h2&gt; Knob 1  = dry/wet &lt;br/&gt; Knob 2  = delay time &lt;br/&gt; Knob 3  = feedback &lt;br/&gt; Knob 4  = grain size &lt;br/&gt; Knob 5  = grain density. When above 0, grains are more and more stacked on top of each other. If below 0, they are spread further apart. &lt;br/&gt; Knob 6  = pitch &lt;br/&gt; Knob 7  = stretch (when pitch and stretch match, no time stretching happens, the delay playback is sped up or down.) &lt;br/&gt; Knob 8  = spray (random grain positioning) stereo &lt;br/&gt; Knob 9  = pitch spray (random grain pitch) stereo &lt;br/&gt; Knob 10 = grain gain (volume of grains, doesn&apos;t affect feedback) &lt;br/&gt; Button L3 = reverse delay on/off. Reverses delay! &lt;br/&gt;  &lt;h2&gt;&lt;u&gt;Control Page 2:&lt;/u&gt;&lt;/h2&gt; Knob 1  = grain echo amount (grain echo is a seperate delay line only active on the grains) &lt;br/&gt; Knob 2  = grain echo time &lt;br/&gt; Knob 3  = grain echo feedback &lt;br/&gt; Knob 4  = grain shape. when at 0 grains have a triangle shape (envelope), at 64 they have an almost square shape. &lt;br/&gt; Knob 5  = feedback mix. When 0, feedback is not re-processed by  the granulizer ( if pitch shifted up, pitch does not increase every repeat). If at full amount, feedback is processed by the granulizer (if pitch is                  up, each repeat gets higher in pitch. If you see what I mean!).  &lt;br/&gt; Knob 6  = Random octave. increases the possibilty of grains playing at a different octave. Stereo. &lt;br/&gt; Knob 7  = Shuffle. Increases the possibilty that grains are played back with a random position within the last bar of the buffer.  Stereo. &lt;br/&gt; Knob 8  = Corruption. Increases the possibility that the grain is played back from a set point that is within the last beat and a half from the current time. Play with it!  Stereo. &lt;br/&gt; Knob 9  = disintegrate. Increases the possibilty a grain is muted. &lt;br/&gt; Knob 10 = width. offsets delay time slightly between right and left channels, for both main delay and grain echo. &lt;br/&gt; Button L3 = cycles through random octave modes, up&amp;down by 1, 2, or 3 octaves, up by 1, 2, or 3 octaves, down by 1,2, or, you guessed it, 3 octaves &lt;br/&gt;  &lt;h2&gt;&lt;u&gt;Preset mode:&lt;/u&gt;&lt;/h2&gt; When in preset mode (button S2), the encoder selects the preset. Push the encoder to load preset. &lt;br/&gt; Press S1 to store the current preset to the current preset number during this session. Long press S1 to save all presets to SD card (if you do not save them to SD card, all presets are lost when the patch is stopped). &lt;br/&gt; Note that only long-pressing S1 will not save your current knob settings to a preset! If you want your current knob settings saved, short-press S1 to store to a specified preset first, then long-press S1 to save the updated preset list to SD card. &lt;br/&gt;&lt;br/&gt; A note on sync - the effect is always synced to BPM. This can be set by the encoder (when not in preset mode), tap (by tapping S1) or MIDI sync (should happen automatically when MIDI clock is recieved). &lt;br/&gt; All time controls are synced, including grain size. On these controls, 1.00 equals 1 beat. &lt;br/&gt;&lt;br/&gt; When the patch is started for the first time, it should load a straightforward 1 octave up pitch-shifted delay. After you&apos;ve saved settings to SD card (S2 to enter preset mode, then short-press S1 to store, then long-press S1 to save to SD card), it should load the current settings that where there when it was last saved to SDcard. &lt;br/&gt;&lt;br/&gt; I hope you enjoy. Let me know if there are any problems or confusion!"/>
+   <obj type="env/follower" uuid="356ce1d18ac6b51704833f94dac5dea823fb8223" name="follower_1" x="2114" y="3150">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="5.3ms"/>
+      </attribs>
+   </obj>
+   <obj type="math/gain" uuid="6b4dd3da49f98e54900f6c20031f38f4624fa364" name="gain_1" x="2198" y="3150">
+      <params>
+         <frac32.u.map name="amp" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/follower" uuid="356ce1d18ac6b51704833f94dac5dea823fb8223" name="follower_2" x="2380" y="3150">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="5.3ms"/>
+      </attribs>
+   </obj>
+   <obj type="math/gain" uuid="6b4dd3da49f98e54900f6c20031f38f4624fa364" name="gain_2" x="2464" y="3150">
+      <params>
+         <frac32.u.map name="amp" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_3" x="1932" y="3206">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_4" x="2030" y="3206">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="884a7ce3-2dc9-4c2c-b11f-d404f49d4bd5" name="comp_3" x="2296" y="3206">
+      <params>
+         <frac32.u.map name="tresh" value="11.5"/>
+         <frac32.u.map name="ratio" value="64.0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="884a7ce3-2dc9-4c2c-b11f-d404f49d4bd5">
+         <sDescription>Dynamic range compressor. Gain calculation only. Envelope follower, attack, decay and VCA are not included.</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <helpPatch>comp.axh</helpPatch>
+         <inlets>
+            <frac32 name="in" description="in"/>
+            <frac32 name="in2"/>
+         </inlets>
+         <outlets>
+            <frac32 name="out" description="out"/>
+            <frac32 name="out2"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.u.map name="tresh"/>
+            <frac32.u.map name="ratio"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t frac_log(int32_t a) {
+	Float_t f;
+	f.f = a;
+	int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
+	int32_t r3 = logt[f.parts.mantissa>>15]<<10;
+	return r1 + r3;
+}
+
+int32_t frac_exp(int32_t a) {
+	int8_t s = (a>>24)+4;
+	uint8_t ei = a>>16;
+	if (s>=0)
+	     return expt[ei]<<s;
+	else return expt[ei]>>(-s);
+}]]></code.declaration>
+         <code.krate><![CDATA[int32_t inlog = frac_log(inlet_in);
+int32_t treshlog = frac_log(param_tresh);
+int32_t over = inlog-treshlog;
+int32_t gain;
+if (over<0){
+	gain = 0x80000;
+} else {
+	gain = frac_exp(-___SMMUL(over,param_ratio)<<5);
+}
+outlet_out = gain<<8;//___SMMUL(inlet_in,gain);
+
+inlog = frac_log(inlet_in2);
+treshlog = frac_log(param_tresh);
+over = inlog-treshlog;
+gain;
+if (over<0){
+	gain = 0x80000;
+} else {
+	gain = frac_exp(-___SMMUL(over,param_ratio)<<5);
+}
+outlet_out2 = gain<<8;//___SMMUL(inlet_in,gain);]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_16" x="2380" y="3248">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_15" x="2492" y="3248">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="object_8" outlet="out"/>
+         <dest obj="crossfade_3" inlet="volume"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v2"/>
+         <dest obj="object_7" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v6"/>
+         <dest obj="unipolar2bipolar_1" inlet="i"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v1"/>
+         <dest obj="crossfade_1" inlet="drywet"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v4"/>
+         <dest obj="*c_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v7"/>
+         <dest obj="unipolar2bipolar_2" inlet="i"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v8"/>
+         <dest obj="u2u_1" inlet="in"/>
+         <dest obj="object_2" inlet="spray"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v9"/>
+         <dest obj="object_2" inlet="pitchspray"/>
+         <dest obj="xyx_1" inlet="pitchspray"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob3"/>
+         <dest obj="object_1" inlet="i3"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob4"/>
+         <dest obj="object_1" inlet="i4"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob5"/>
+         <dest obj="object_1" inlet="i5"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob6"/>
+         <dest obj="object_1" inlet="i6"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob7"/>
+         <dest obj="object_1" inlet="i7"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob8"/>
+         <dest obj="object_1" inlet="i8"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob9"/>
+         <dest obj="object_1" inlet="i9"/>
+      </net>
+      <net>
+         <source obj="c_1" outlet="out"/>
+         <dest obj="save_1" inlet="filename"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="encoderSW"/>
+         <dest obj="debounce1_1" inlet="i0"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="S2"/>
+         <dest obj="object_6" inlet="s2"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="S1"/>
+         <dest obj="object_6" inlet="s1"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="L3"/>
+         <dest obj="1_3" inlet="l3"/>
+         <dest obj="object_1" inlet="i11"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="L4"/>
+         <dest obj="toggle_3" inlet="trig"/>
+         <dest obj="1_3" inlet="l4"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="bpm"/>
+         <dest obj="1_3" inlet="bpm"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="encoderup"/>
+         <dest obj="object_6" inlet="Eup"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="encoderdwn"/>
+         <dest obj="object_6" inlet="Edown"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="controlID"/>
+         <dest obj="object_1" inlet="controlID"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v11"/>
+         <dest obj="led_1" inlet="in"/>
+         <dest obj="1_3" inlet="delaysync"/>
+         <dest obj="xyx_1" inlet="reverse"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pmode"/>
+         <dest obj="1_3" inlet="presetmode"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tap"/>
+         <dest obj="1_1" inlet="tap"/>
+         <dest obj="object_7" inlet="tap"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Tup"/>
+         <dest obj="1_1" inlet="bpmUP"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Tdown"/>
+         <dest obj="1_1" inlet="bpmDOWN"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pload"/>
+         <dest obj="preset_1" inlet="load"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Psave"/>
+         <dest obj="preset_1" inlet="save"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tapon"/>
+         <dest obj="1_3" inlet="tap"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob1"/>
+         <dest obj="object_1" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob2"/>
+         <dest obj="object_1" inlet="i2"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="bypass"/>
+         <dest obj="crossfade_1" inlet="bypass"/>
+         <dest obj="1_3" inlet="bypass"/>
+         <dest obj="object_8" inlet="bypass"/>
+         <dest obj="object_9" inlet="bypass"/>
+         <dest obj="object_1" inlet="hold"/>
+      </net>
+      <net>
+         <source obj="debounce1_1" outlet="o0"/>
+         <dest obj="object_6" inlet="Ebutton"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knob10"/>
+         <dest obj="object_1" inlet="i10"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out1"/>
+         <dest obj="display_1" inlet="line1"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out2"/>
+         <dest obj="display_1" inlet="line2"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out3"/>
+         <dest obj="display_1" inlet="line3"/>
+      </net>
+      <net>
+         <source obj="1_3" outlet="out4"/>
+         <dest obj="display_1" inlet="line4"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="mode"/>
+         <dest obj="1_3" inlet="midion"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="midirevert"/>
+         <dest obj="1_1" inlet="midirevert"/>
+      </net>
+      <net>
+         <source obj="1_2" outlet="knobmoving"/>
+         <dest obj="preset_1" inlet="delayinitpreset"/>
+         <dest obj="object_1" inlet="knobmoving"/>
+      </net>
+      <net>
+         <source obj="preset_1" outlet="initsaved"/>
+         <dest obj="save_1" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="in_1" outlet="left"/>
+         <dest obj="vcaST_3" inlet="a1"/>
+         <dest obj="MikeWatt" inlet="Lin"/>
+      </net>
+      <net>
+         <source obj="vcaST_3" outlet="o1"/>
+         <dest obj="+_2" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="xyx_1" outlet="granulatorL"/>
+         <dest obj="vca_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="vcaST_6" outlet="o1"/>
+         <dest obj="+_4" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="+_4" outlet="out"/>
+         <dest obj="vcaST_2" inlet="a1"/>
+      </net>
+      <net>
+         <source obj="vcaST_5" outlet="o1"/>
+         <dest obj="sum3_1" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v5"/>
+         <dest obj="unipolar2bipolar_3" inlet="i"/>
+      </net>
+      <net>
+         <source obj="xyx_1" outlet="delayedbufferL"/>
+         <dest obj="2_1" inlet="a1"/>
+      </net>
+      <net>
+         <source obj="crossfade_3" outlet="wet"/>
+         <dest obj="vcaST_5" inlet="v"/>
+      </net>
+      <net>
+         <source obj="crossfade_1" outlet="dry"/>
+         <dest obj="vcaST_3" inlet="v"/>
+      </net>
+      <net>
+         <source obj="crossfade_1" outlet="wet"/>
+         <dest obj="vcaST_2" inlet="v"/>
+      </net>
+      <net>
+         <source obj="crossfade_3" outlet="dry"/>
+         <dest obj="2_1" inlet="b"/>
+      </net>
+      <net>
+         <source obj="crossfade_2" outlet="dry"/>
+         <dest obj="2_1" inlet="v"/>
+      </net>
+      <net>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="+_1" inlet="in1"/>
+         <dest obj="+_7" inlet="in1"/>
+         <dest obj="+_9" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="comp_3" outlet="out"/>
+         <dest obj="dial_16" inlet="in"/>
+         <dest obj="vca_3" inlet="v"/>
+      </net>
+      <net>
+         <source obj="follower_1" outlet="amp"/>
+         <dest obj="gain_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="gain_1" outlet="out"/>
+         <dest obj="comp_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="smooth_5" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
+         <dest obj="vca_2" inlet="v"/>
+      </net>
+      <net>
+         <source obj="crossfade_2" outlet="wet"/>
+         <dest obj="*_6" inlet="a"/>
+      </net>
+      <net>
+         <source obj="*_6" outlet="result"/>
+         <dest obj="vcaST_6" inlet="v"/>
+      </net>
+      <net>
+         <source obj="xyx_1" outlet="delayedbufferR"/>
+         <dest obj="2_1" inlet="a2"/>
+      </net>
+      <net>
+         <source obj="vcaST_2" outlet="o1"/>
+         <dest obj="+_2" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="+_5" outlet="out"/>
+         <dest obj="vcaST_2" inlet="a2"/>
+      </net>
+      <net>
+         <source obj="vcaST_2" outlet="o2"/>
+         <dest obj="+_6" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="xyx_1" outlet="granulatorR"/>
+         <dest obj="vca_2" inlet="a"/>
+      </net>
+      <net>
+         <source obj="vcaST_5" outlet="o2"/>
+         <dest obj="sum3_2" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="vca_2" outlet="o"/>
+         <dest obj="+_3" inlet="in1"/>
+         <dest obj="+_8" inlet="in1"/>
+         <dest obj="+_10" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="vcaST_6" outlet="o2"/>
+         <dest obj="+_5" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="2_1" outlet="v1"/>
+         <dest obj="+_4" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="2_1" outlet="v2"/>
+         <dest obj="+_5" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="2_1" outlet="b1"/>
+         <dest obj="sum3_1" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="2_1" outlet="b2"/>
+         <dest obj="sum3_2" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="+_6" outlet="out"/>
+         <dest obj="out_1" inlet="right"/>
+      </net>
+      <net>
+         <source obj="+_2" outlet="out"/>
+         <dest obj="out_1" inlet="left"/>
+      </net>
+      <net>
+         <source obj="follower_2" outlet="amp"/>
+         <dest obj="gain_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="gain_2" outlet="out"/>
+         <dest obj="comp_3" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="comp_3" outlet="out2"/>
+         <dest obj="dial_15" inlet="in"/>
+         <dest obj="vca_4" inlet="v"/>
+      </net>
+      <net>
+         <source obj="vcaST_3" outlet="o2"/>
+         <dest obj="+_6" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="in_1" outlet="right"/>
+         <dest obj="vcaST_3" inlet="a2"/>
+         <dest obj="MikeWatt" inlet="Rin"/>
+      </net>
+      <net>
+         <source obj="sum3_2" outlet="out"/>
+         <dest obj="hp_1" inlet="inR"/>
+      </net>
+      <net>
+         <source obj="sum3_1" outlet="out"/>
+         <dest obj="hp_1" inlet="inL"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="ppq"/>
+         <dest obj="MikeWatt" inlet="ppq"/>
+      </net>
+      <net>
+         <source obj="1_1" outlet="bpmsbeat"/>
+         <dest obj="MikeWatt" inlet="sbeat"/>
+      </net>
+      <net>
+         <source obj="+_11" outlet="out"/>
+         <dest obj="object_2" inlet="pitch"/>
+         <dest obj="xyx_1" inlet="pitch"/>
+      </net>
+      <net>
+         <source obj="unipolar2bipolar_2" outlet="o"/>
+         <dest obj="object_2" inlet="stretch"/>
+         <dest obj="xyx_1" inlet="stretch"/>
+      </net>
+      <net>
+         <source obj="unipolar2bipolar_3" outlet="o"/>
+         <dest obj="object_2" inlet="dense"/>
+         <dest obj="xyx_1" inlet="density"/>
+      </net>
+      <net>
+         <source obj="dial_84" outlet="out"/>
+         <dest obj="crossfade_2" inlet="drywet"/>
+      </net>
+      <net>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="xyx_1" inlet="delay"/>
+      </net>
+      <net>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="xyx_1" inlet="grainsize"/>
+      </net>
+      <net>
+         <source obj="u2u_1" outlet="out"/>
+         <dest obj="&gt;&gt;_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v10"/>
+         <dest obj="*_6" inlet="b"/>
+      </net>
+      <net>
+         <source obj="sat_1" outlet="out"/>
+         <dest obj="follower_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="sat_2" outlet="out"/>
+         <dest obj="follower_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="vca_3" outlet="o"/>
+         <dest obj="MikeWatt" inlet="LFback"/>
+      </net>
+      <net>
+         <source obj="vca_4" outlet="o"/>
+         <dest obj="MikeWatt" inlet="RFback"/>
+      </net>
+      <net>
+         <source obj="hp_1" outlet="outL"/>
+         <dest obj="sat_1" inlet="in"/>
+         <dest obj="vca_3" inlet="a"/>
+      </net>
+      <net>
+         <source obj="hp_1" outlet="outR"/>
+         <dest obj="sat_2" inlet="in"/>
+         <dest obj="vca_4" inlet="a"/>
+      </net>
+      <net>
+         <source obj="object_2" outlet="attenuate"/>
+         <dest obj="smooth_5" inlet="in"/>
+      </net>
+      <net>
+         <source obj="xyx_1" outlet="indense"/>
+         <dest obj="object_2" inlet="indense"/>
+      </net>
+      <net>
+         <source obj="toggle_3" outlet="o"/>
+         <dest obj="led_2" inlet="in"/>
+         <dest obj="object_1" inlet="bank"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="bankoffset"/>
+         <dest obj="tableread_2" inlet="offset"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v6"/>
+         <dest obj="xyx_1" inlet="randomoctave"/>
+      </net>
+      <net>
+         <source obj="unipolar2bipolar_5" outlet="o"/>
+         <dest obj="inv_2" inlet="in"/>
+         <dest obj="xyx_1" inlet="width"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v5"/>
+         <dest obj="crossfade_3" inlet="drywet"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v4"/>
+         <dest obj="xyx_1" inlet="shape"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v1"/>
+         <dest obj="1_4" inlet="v"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v2"/>
+         <dest obj="*c_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="object_9" outlet="out"/>
+         <dest obj="1_4" inlet="b"/>
+      </net>
+      <net>
+         <source obj="in_1" outlet="clipping"/>
+         <dest obj="1_3" inlet="inputclip"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="controlID"/>
+         <dest obj="1_3" inlet="controlID"/>
+      </net>
+      <net>
+         <source obj="xyx_1" outlet="grainechoL"/>
+         <dest obj="1_4" inlet="a1"/>
+      </net>
+      <net>
+         <source obj="xyx_1" outlet="grainechoR"/>
+         <dest obj="1_4" inlet="a2"/>
+      </net>
+      <net>
+         <source obj="1_4" outlet="v1"/>
+         <dest obj="+_1" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="1_4" outlet="v2"/>
+         <dest obj="+_3" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="+_1" outlet="out"/>
+         <dest obj="vcaST_6" inlet="a1"/>
+      </net>
+      <net>
+         <source obj="+_3" outlet="out"/>
+         <dest obj="vcaST_6" inlet="a2"/>
+      </net>
+      <net>
+         <source obj="+_7" outlet="out"/>
+         <dest obj="MikeWatt" inlet="Lgrainecho"/>
+      </net>
+      <net>
+         <source obj="+_8" outlet="out"/>
+         <dest obj="MikeWatt" inlet="Rgrainecho"/>
+      </net>
+      <net>
+         <source obj="1_4" outlet="b1"/>
+         <dest obj="+_7" inlet="in2"/>
+         <dest obj="+_9" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="1_4" outlet="b2"/>
+         <dest obj="+_8" inlet="in2"/>
+         <dest obj="+_10" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="*c_4" outlet="out"/>
+         <dest obj="smooth_6" inlet="in"/>
+      </net>
+      <net>
+         <source obj="smooth_6" outlet="out"/>
+         <dest obj="interp_1" inlet="i"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="tablesave"/>
+         <dest obj="preset_1" inlet="saveinitpreset"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pup"/>
+         <dest obj="preset_1" inlet="presetUP"/>
+      </net>
+      <net>
+         <source obj="object_6" outlet="Pdown"/>
+         <dest obj="preset_1" inlet="presetDOWN"/>
+      </net>
+      <net>
+         <source obj="preset_1" outlet="preset"/>
+         <dest obj="1_3" inlet="preset"/>
+      </net>
+      <net>
+         <source obj="toggle_4" outlet="o"/>
+         <dest obj="inv_1" inlet="i"/>
+         <dest obj="+_7" inlet="kill2"/>
+         <dest obj="+_8" inlet="kill2"/>
+      </net>
+      <net>
+         <source obj="inv_1" outlet="o"/>
+         <dest obj="+_9" inlet="kill2"/>
+         <dest obj="+_10" inlet="kill2"/>
+      </net>
+      <net>
+         <source obj="+_9" outlet="out"/>
+         <dest obj="vcaST_5" inlet="a1"/>
+      </net>
+      <net>
+         <source obj="+_10" outlet="out"/>
+         <dest obj="vcaST_5" inlet="a2"/>
+      </net>
+      <net>
+         <source obj="toggle_1" outlet="o"/>
+         <dest obj="xyx_1" inlet="stereodis"/>
+         <dest obj="xyx_1" inlet="stereooct"/>
+         <dest obj="xyx_1" inlet="stereorev"/>
+         <dest obj="xyx_1" inlet="stereoshuff"/>
+         <dest obj="xyx_1" inlet="stereospray"/>
+         <dest obj="xyx_1" inlet="stereoPspray"/>
+         <dest obj="xyx_1" inlet="stereocorrupt"/>
+      </net>
+      <net>
+         <source obj="inv_2" outlet="out"/>
+         <dest obj="smooth_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="smooth_1" outlet="out"/>
+         <dest obj="xyx_1" inlet="GEwidth"/>
+      </net>
+      <net>
+         <source obj="object_4" outlet="range"/>
+         <dest obj="xyx_1" inlet="octrange"/>
+      </net>
+      <net>
+         <source obj="object_4" outlet="type"/>
+         <dest obj="xyx_1" inlet="octmode"/>
+      </net>
+      <net>
+         <source obj="&gt;&gt;_1" outlet="result"/>
+         <dest obj="xyx_1" inlet="spray"/>
+      </net>
+      <net>
+         <source obj="object_7" outlet="out"/>
+         <dest obj="*c_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="xyx_1" inlet="grainecho"/>
+      </net>
+      <net>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="xyx_1" inlet="densityrange"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v10"/>
+         <dest obj="unipolar2bipolar_5" inlet="i"/>
+      </net>
+      <net>
+         <source obj="unipolar2bipolar_1" outlet="o"/>
+         <dest obj="+_11" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v9"/>
+         <dest obj="xyx_1" inlet="disintegrate"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v8"/>
+         <dest obj="xyx_1" inlet="corrupt"/>
+      </net>
+      <net>
+         <source obj="dial_8" outlet="out"/>
+         <dest obj="xyx_1" inlet="shufflerange"/>
+      </net>
+      <net>
+         <source obj="dial_9" outlet="out"/>
+         <dest obj="xyx_1" inlet="corrupttime"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v7"/>
+         <dest obj="xyx_1" inlet="shuffle"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v11"/>
+         <dest obj="object_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_1" outlet="v3"/>
+         <dest obj="object_8" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tableread_2" outlet="v3"/>
+         <dest obj="object_9" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>22</x>
+      <y>40</y>
+      <width>1413</width>
+      <height>756</height>
+   </windowPos>
+</patch-1.0>
