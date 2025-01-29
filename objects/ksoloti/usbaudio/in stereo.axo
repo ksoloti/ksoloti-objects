@@ -17,11 +17,23 @@ Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch 
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[int j;
-for(j=0; j<BUFSIZE; j++) {
+      <code.krate><![CDATA[
+int j;
+for (j=0; j<BUFSIZE; j++) {
+#if FW_USBAUDIO
 	outlet_left[j] = UsbInputLeft[j];
 	outlet_right[j] = UsbInputRight[j];
+#else
+	outlet_left[j] = 0;
+	outlet_right[j] = 0;
+#endif
 }
+
+#if !defined(FW_USBAUDIO) && !defined(FW_USBAUDIO_WARNED)
+#define FW_USBAUDIO_WARNED
+#warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
+#endif
+
 disp_vuLeft = outlet_left[0];
 disp_vuRight = outlet_right[0];
 ]]></code.krate>

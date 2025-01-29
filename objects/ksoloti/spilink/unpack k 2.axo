@@ -1,6 +1,7 @@
 <objdefs appVersion="1.0.12">
    <obj.normal id="unpack k 2" uuid="f96a9093-762d-423c-953d-000eb8f03b03">
       <sDescription>Use one spilink audio channel to send/receive up to 16 control rate values between linked boards.
+Requires &quot;+ SPILink&quot; firmware mode (set in Preferences) or the patch will throw an error!
 </sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>GPL</license>
@@ -50,7 +51,13 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[outlet_outA = spilink_rx_samples->channel[attr_channel].samples[attr_slots];
-outlet_outB = spilink_rx_samples->channel[attr_channel].samples[attr_slots+1];]]></code.krate>
+      <code.krate><![CDATA[#if FW_SPILINK
+outlet_outA = spilink_rx_samples->channel[attr_channel].samples[attr_slots];
+outlet_outB = spilink_rx_samples->channel[attr_channel].samples[attr_slots+1];
+
+#elif !defined(FW_SPILINK_WARNED)
+#define FW_SPILINK_WARNED
+#warning "This patch contains SPILink objects, but the device is not running SPILink firmware! The objects in question have been muted."
+#endif]]></code.krate>
    </obj.normal>
 </objdefs>
