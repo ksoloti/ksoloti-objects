@@ -1,0 +1,21 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="falling" uuid="d787020c-8906-43c3-9ebb-b8e694f14304">
+      <sDescription>Generates a trigger pulse when there is a falling edge on the input.
+This is the logical opposite of tiar/logic/rising.</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="in"/>
+      </inlets>
+      <outlets>
+         <bool32.pulse name="trig"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[bool _in;]]></code.declaration>
+      <code.init><![CDATA[_in = false;]]></code.init>
+      <code.krate><![CDATA[outlet_trig = (!inlet_in && _in);
+_in = inlet_in;]]></code.krate>
+   </obj.normal>
+</objdefs>
