@@ -1,0 +1,33 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="read ms" uuid="480b2eb8-5317-48f0-ba10-72ff509ac8f3">
+      <sDescription>Delay read, 32-bit, non-interpolated.
+Used to read the delay line from a &quot;delay/write ms&quot; object.
+
+* IMPORTANT: This object can only read the &quot;ksoloti/delay/write ms&quot; object. Other &quot;delay/write&quot; objects will cause an error. *</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>delay ms.axh</helpPatch>
+      <inlets>
+         <frac32buffer name="time" description="delay time (fraction of total delayline size)"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="audio output"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="time" noLabel="true"/>
+      </params>
+      <attribs>
+         <objref name="delayname"/>
+      </attribs>
+      <code.srate><![CDATA[/* Number of samples that the read pointer runs behind the write pointer. Effectively defines the delay time. */
+uint32_t read_offs = ___SMMUL(__USAT(param_time + inlet_time, 27), (attr_delayname.LENGTH - BUFSIZE) << 5); 
+
+/* Subtract read offset from the current write pointer to get read pointer position. Also some "buffer size VS running sample within the buffer" juggling. */ 
+uint32_t delay1 = attr_delayname.LENGTH + attr_delayname.writepos - read_offs - BUFSIZE + buffer_index;
+
+
+/* Spit out sample at current read pointer*/
+outlet_out = attr_delayname.array[delay1 % attr_delayname.LENGTH];]]></code.srate>
+   </obj.normal>
+</objdefs>

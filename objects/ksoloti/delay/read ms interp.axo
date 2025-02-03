@@ -1,0 +1,49 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="read ms interp" uuid="8d04632c-58b7-4ca6-b7f3-a555997e5ab3">
+      <sDescription>Delay read, 32-bit, linear interpolated.
+Used to read the delay line from a &quot;delay/write ms&quot; object.
+
+* IMPORTANT: This object can only read the &quot;ksoloti/delay/write ms&quot; object. Other &quot;delay/write&quot; objects will cause an error. *</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>delay ms.axh</helpPatch>
+      <inlets>
+         <frac32buffer name="time" description="delay time (fraction of total delayline size)"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="audio output"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="time" noLabel="true"/>
+      </params>
+      <attribs>
+         <objref name="delayname"/>
+      </attribs>
+      <code.srate><![CDATA[/* Scale and clip delay inputs*/
+uint32_t tmp_d = __USAT(param_time + inlet_time, 27);
+
+/* Number of samples that the read pointer runs behind the write pointer. Effectively defines the delay time. */
+uint32_t read_offs = ___SMMUL(tmp_d, (attr_delayname.LENGTH - BUFSIZE) << 5); 
+
+/* Subtract read offset from the current write pointer to get read pointer position. Also some "buffer size VS running sample within the buffer" juggling. */ 
+uint32_t delay1 = attr_delayname.LENGTH + attr_delayname.writepos - read_offs - BUFSIZE + buffer_index - 1;
+
+/* Calculate relative magnitudes depending on fraction of read pointer */ 
+uint32_t tmp_mult = attr_delayname.LENGTH << 3;
+uint32_t tmp_w1 = (tmp_d * tmp_mult) & 0x7FFFFFFF;
+uint32_t tmp_w2 = 0x7FFFFFFF - tmp_w1;
+
+/* Get two adjacent samples at current read pointer */
+int32_t tmp_a1 = attr_delayname.array[delay1 % attr_delayname.LENGTH];
+int32_t tmp_a2 = attr_delayname.array[(delay1 + 1) % attr_delayname.LENGTH];
+
+
+/* Cross-fade the two samples */
+int32_t tmp_r = ___SMMUL(tmp_a1, tmp_w1);
+tmp_r = ___SMMLA(tmp_a2, tmp_w2, tmp_r);
+
+/* Spit out sample */
+outlet_out = tmp_r << 1;]]></code.srate>
+   </obj.normal>
+</objdefs>

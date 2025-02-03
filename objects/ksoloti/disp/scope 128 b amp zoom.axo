@@ -1,0 +1,67 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="scope 128 b amp zoom" uuid="e0b10a76-6a8e-4710-9af3-2ee896dff63a">
+      <sDescription>Bipolar audio rate amplitude oscilloscope (time domain), showing the amplitude of 128 consecutive samples or sub samples.
+Increase &quot;interval&quot; to sample longer time frames.
+Increase &quot;magnify&quot; to magnify signal vertically.
+Use the &quot;record&quot; inlet to trigger one full sampling cycle.
+The logic &quot;end&quot; outlet sends a pulse when one full sampling cycle has finished.</sDescription>
+      <author>Smashed Transistors based on Johannes Taelman, Ksoloti</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets>
+         <frac32buffer.bipolar name="in" description="Wave input."/>
+         <bool32.rising name="record" description="Start recording."/>
+      </inlets>
+      <outlets>
+         <bool32 name="end" description="&lt;html&gt;end: Sends a pulse when the recording is finished (reaches the end of the display).&lt;br/&gt;Patch this outlet back in the record inlet to have the display record continuously.&lt;br/&gt;Patch this outlet into the recording inlet of another recorder to record longer periods."/>
+      </outlets>
+      <displays>
+         <uint8array128.vbar name="scope" noLabel="true"/>
+      </displays>
+      <params>
+         <int32 name="magnify" description="Up to 8x magnification. 0 means no magnification, each value above 0 doubles the magnification.">
+            <MinValue i="0"/>
+            <MaxValue i="3"/>
+         </int32>
+         <int32 name="interval" description="increase this to slow down recording speed (record only every n-th audio buffer at k-rate)">
+            <MinValue i="1"/>
+            <MaxValue i="65535"/>
+         </int32>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[uint8_t index;
+uint16_t cpt;
+uint8_t ntrig;
+int32_t peak;]]></code.declaration>
+      <code.init><![CDATA[index = 129;
+cpt = 0;
+ntrig = 0;
+peak = 0;]]></code.init>
+      <code.krate><![CDATA[if (inlet_record && !ntrig) {
+	index = 0;
+	outlet_end = false;
+	uint8_t i;
+	for (i = 0; i < 128; i++) {
+		disp_scope[i] = 0;
+	}
+	ntrig = 1;
+}
+if (!inlet_record && ntrig) {
+	ntrig = 0;
+}]]></code.krate>
+      <code.srate><![CDATA[uint32_t abs_in = abs(inlet_in);
+if (abs_in > peak) peak = abs_in;
+
+if (index < 128 && cpt >= (param_interval << 4)) {
+	cpt = 0;
+	uint32_t i;
+	disp_scope[index] = (int8_t) __SSAT((peak >> (20 - param_magnify)), 8);
+	index++;
+	peak = 0;
+}
+else if (index == 128) {
+	outlet_end = true;
+}
+cpt++;]]></code.srate>
+   </obj.normal>
+</objdefs>
