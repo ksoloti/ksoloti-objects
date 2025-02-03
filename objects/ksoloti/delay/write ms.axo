@@ -1,0 +1,37 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="write ms" uuid="5de9bfb4-ff1c-4245-a4bc-0c60daf2398b">
+      <sDescription>Writes a 32-bit delay line with arbitrary length expressed in milliseconds.
+Uses memory more efficiently and makes it easier to create synced delays.
+
+* IMPORTANT: Read it with a &quot;ksoloti/delay/read ms&quot; object, referencing the instance name of this object. Other &quot;delay/read&quot; objects will cause an error.*</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>delay ms.axh</helpPatch>
+      <inlets>
+         <frac32buffer name="in" description="audio input"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="size_ms" description="Maximum delay time in milliseconds." MinValue="1" MaxValue="21845" DefaultValue="500"/>
+      </attribs>
+      <code.declaration><![CDATA[//static const uint32_t LENGTHPOW = (1<<25); /* not needed */
+static const uint32_t LENGTH = attr_size__ms * (SAMPLERATE/1000); /* calculate ms via samplerate */
+//static const uint32_t LENGTHMASK = LENGTH - 1; /* not needed */
+
+int32_t *array;
+uint32_t writepos;]]></code.declaration>
+      <code.init><![CDATA[static int32_t _array[attr_poly][LENGTH]  __attribute__ ((section (".sdram")));
+array = &_array[parent->polyIndex][0];
+
+writepos = 0;
+
+int i;
+for (i=0; i<LENGTH; i++) {
+	array[i] = 0;
+}]]></code.init>
+      <code.srate><![CDATA[writepos = (writepos + 1) % LENGTH; /* "%" modulo here instead of "&" bitwise AND */
+array[writepos] = __SSAT(inlet_in, 28);]]></code.srate>
+   </obj.normal>
+</objdefs>
