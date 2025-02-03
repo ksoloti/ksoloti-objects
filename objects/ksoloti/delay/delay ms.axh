@@ -1,0 +1,267 @@
+<patch-1.0 appVersion="1.0.12">
+   <comment type="patch/comment" x="42" y="28" text="&lt;html&gt;&lt;b&gt;A simple MIDI synth. Open Window &gt; Keyboard to play it."/>
+   <comment type="patch/comment" x="378" y="28" text="Volume VCA"/>
+   <comment type="patch/comment" x="476" y="28" text="Attenuate both feedback channels..."/>
+   <comment type="patch/comment" x="686" y="28" text="Write sums to two independent delay lines."/>
+   <obj type="midi/in/keyb" uuid="53b04874696932f38aceaa168bd5d9efb743716d" name="keyb_1" x="42" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env/d" uuid="190ae648e41832b41adbedb465317c18a010aefe" name="d_1" x="154" y="42">
+      <params>
+         <frac32.s.map name="d" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="266" y="42">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_1" x="378" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="&lt;html&gt;&lt;h3&gt;feedback" x="476" y="42">
+      <params>
+         <frac32.u.map name="value" value="56.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_2" x="574" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1 sq" uuid="cf790039775b62697a4b34e7a5389a5a8cc36e30" name="feedback_l" x="686" y="42">
+      <params>
+         <frac32.u.map name="gain1" value="64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/delay/write ms" uuid="5de9bfb4-ff1c-4245-a4bc-0c60daf2398b" name="write_l" x="798" y="42">
+      <params/>
+      <attribs>
+         <spinner attributeName="size_ms" value="500"/>
+      </attribs>
+   </obj>
+   <obj type="math/&gt;&gt;" uuid="d883beaf50b7aae4803ed9941e8f123e87e1e3aa" name="&gt;&gt;_1" x="168" y="126">
+      <params/>
+      <attribs>
+         <spinner attributeName="shift" value="1"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/delay/write ms" uuid="5de9bfb4-ff1c-4245-a4bc-0c60daf2398b" name="write_r" x="798" y="126">
+      <params/>
+      <attribs>
+         <spinner attributeName="size_ms" value="500"/>
+      </attribs>
+   </obj>
+   <obj type="gain/vca" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_3" x="574" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1 sq" uuid="cf790039775b62697a4b34e7a5389a5a8cc36e30" name="feedback_r" x="686" y="140">
+      <params>
+         <frac32.u.map name="gain1" value="64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="42" y="280" text="Left delay time (64.00 equals full delay line, i.e. 500 ms)"/>
+   <comment type="patch/comment" x="350" y="280" text="Read from write_* objects..."/>
+   <comment type="patch/comment" x="532" y="280" text="Pre-mixer allows for cross-feedback"/>
+   <comment type="patch/comment" x="742" y="280" text="Final mixer: in1 = dry, in2 = wet"/>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="&lt;html&gt;&lt;h3&gt;time_L" x="42" y="294">
+      <params>
+         <frac32.u.map name="value" value="64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_1" x="126" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp1" uuid="1b1fd7085e44d2b7b80b59b8d68796b909c1b2cc" name="lp1_1" x="224" y="294">
+      <params>
+         <frac32.s.map name="freq" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/delay/read ms" uuid="480b2eb8-5317-48f0-ba10-72ff509ac8f3" name="read_2" x="350" y="294">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="write_l"/>
+      </attribs>
+   </obj>
+   <obj type="mix/mix 2 sq" uuid="9b03da12a01f39ecd48d16285e7d10acb8e1267c" name="cross_feedback_L" x="532" y="294">
+      <params>
+         <frac32.u.map name="gain1" value="64.0"/>
+         <frac32.u.map name="gain2" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2 sq" uuid="9b03da12a01f39ecd48d16285e7d10acb8e1267c" name="mix_2" x="742" y="294">
+      <params>
+         <frac32.u.map name="gain1" value="64.0"/>
+         <frac32.u.map name="gain2" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="854" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="42" y="406" text="Right delay time (64.00 equals full delay line, i.e. 500 ms)"/>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="&lt;html&gt;&lt;h3&gt;time_R" x="42" y="420">
+      <params>
+         <frac32.u.map name="value" value="48.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_2" x="126" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp1" uuid="1b1fd7085e44d2b7b80b59b8d68796b909c1b2cc" name="lp1_2" x="224" y="420">
+      <params>
+         <frac32.s.map name="freq" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/delay/read ms interp" uuid="8d04632c-58b7-4ca6-b7f3-a555997e5ab3" name="read_1" x="350" y="420">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="write_r"/>
+      </attribs>
+   </obj>
+   <obj type="mix/mix 2 sq" uuid="9b03da12a01f39ecd48d16285e7d10acb8e1267c" name="cross_feedback_R" x="532" y="462">
+      <params>
+         <frac32.u.map name="gain1" value="0.0"/>
+         <frac32.u.map name="gain2" value="64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2 sq" uuid="9b03da12a01f39ecd48d16285e7d10acb8e1267c" name="mix_4" x="742" y="462">
+      <params>
+         <frac32.u.map name="gain1" value="64.0"/>
+         <frac32.u.map name="gain2" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="lp1_2" outlet="out"/>
+         <dest obj="read_1" inlet="time"/>
+      </net>
+      <net>
+         <source obj="lp1_1" outlet="out"/>
+         <dest obj="read_2" inlet="time"/>
+      </net>
+      <net>
+         <source obj="&lt;html&gt;&lt;h3&gt;time_L" outlet="out"/>
+         <dest obj="interp_1" inlet="i"/>
+      </net>
+      <net>
+         <source obj="&lt;html&gt;&lt;h3&gt;time_R" outlet="out"/>
+         <dest obj="interp_2" inlet="i"/>
+      </net>
+      <net>
+         <source obj="interp_2" outlet="o"/>
+         <dest obj="lp1_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="read_2" outlet="out"/>
+         <dest obj="cross_feedback_L" inlet="in1"/>
+         <dest obj="cross_feedback_R" inlet="in1"/>
+         <dest obj="mix_2" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="read_1" outlet="out"/>
+         <dest obj="cross_feedback_L" inlet="in2"/>
+         <dest obj="cross_feedback_R" inlet="in2"/>
+         <dest obj="mix_4" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="lp1_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="feedback_l" outlet="out"/>
+         <dest obj="write_l" inlet="in"/>
+      </net>
+      <net>
+         <source obj="keyb_1" outlet="gate2"/>
+         <dest obj="d_1" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="d_1" outlet="env"/>
+         <dest obj="&gt;&gt;_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="feedback_l" inlet="bus_in"/>
+         <dest obj="feedback_r" inlet="bus_in"/>
+         <dest obj="mix_2" inlet="in1"/>
+         <dest obj="mix_4" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="mix_2" outlet="out"/>
+         <dest obj="out_1" inlet="left"/>
+      </net>
+      <net>
+         <source obj="mix_4" outlet="out"/>
+         <dest obj="out_1" inlet="right"/>
+      </net>
+      <net>
+         <source obj="feedback_r" outlet="out"/>
+         <dest obj="write_r" inlet="in"/>
+      </net>
+      <net>
+         <source obj="&gt;&gt;_1" outlet="result"/>
+         <dest obj="vca_1" inlet="v"/>
+      </net>
+      <net>
+         <source obj="keyb_1" outlet="note"/>
+         <dest obj="sine_1" inlet="pitch"/>
+      </net>
+      <net>
+         <source obj="vca_3" outlet="o"/>
+         <dest obj="feedback_r" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="vca_2" outlet="o"/>
+         <dest obj="feedback_l" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="cross_feedback_L" outlet="out"/>
+         <dest obj="vca_2" inlet="a"/>
+      </net>
+      <net>
+         <source obj="cross_feedback_R" outlet="out"/>
+         <dest obj="vca_3" inlet="a"/>
+      </net>
+      <net>
+         <source obj="&lt;html&gt;&lt;h3&gt;feedback" outlet="out"/>
+         <dest obj="vca_3" inlet="v"/>
+         <dest obj="vca_2" inlet="v"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>240</x>
+      <y>70</y>
+      <width>1090</width>
+      <height>718</height>
+   </windowPos>
+</patch-1.0>
