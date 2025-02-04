@@ -20,7 +20,7 @@ Used to read the delay line from a &quot;delay/write ms&quot; object.
       <attribs>
          <objref name="delayname"/>
       </attribs>
-      <code.srate><![CDATA[/* Scale and clip delay inputs*/
+      <code.srate><![CDATA[/* Sum and clip delay time inputs*/
 uint32_t tmp_d = __USAT(param_time + inlet_time, 27);
 
 /* Number of samples that the read pointer runs behind the write pointer. Effectively defines the delay time. */
