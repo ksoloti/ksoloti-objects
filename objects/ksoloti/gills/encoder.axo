@@ -31,47 +31,60 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
 #define GILLS_ENC_SW_PIN 9
 #endif
 
-int32_t encoder_val = 0;
-int32_t set_last = 0;
+int32_t encoder_val;
+int32_t set_last;
 
-bool_t b = true;
-bool_t b_last = true;]]></code.declaration>
+bool_t b;
+bool_t b_last;
+
+uint8_t counter;]]></code.declaration>
       <code.init><![CDATA[/* Configure encoder pins as input */
 palSetPadMode(GILLS_ENC_PORT, GILLS_ENC_A_PIN, PAL_MODE_INPUT_PULLUP);
 palSetPadMode(GILLS_ENC_PORT, GILLS_ENC_B_PIN, PAL_MODE_INPUT_PULLUP);
 
 /* Configure encoder switch as input */
-palSetPadMode(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
-      <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
-if (inlet_set != set_last) {
-	set_last = encoder_val = inlet_set;
-	/* Limit value to min, max attributes */
-	encoder_val = encoder_val > attr_max ? attr_max : encoder_val;
-	encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
-}
+palSetPadMode(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN, PAL_MODE_INPUT_PULLDOWN);
 
-b = palReadPad(GILLS_ENC_PORT, GILLS_ENC_A_PIN);
+encoder_val = 0;
+set_last = 0;
 
-/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
-if (!b && b_last) {
-	/* If pin B is low but wasn't before, we have caught an event. */
-		
-	if (palReadPad(GILLS_ENC_PORT, GILLS_ENC_B_PIN)) {
-		/* If pin A is currently HIGH it means we're turning counterclockwise */
-		if (encoder_val > attr_min) encoder_val -= 1;
+b = true;
+b_last = true;
+
+counter = 0;]]></code.init>
+      <code.krate><![CDATA[if (!counter) {
+	/* If set inlet has changed, set encoder value directly */
+	if (inlet_set != set_last) {
+		set_last = encoder_val = inlet_set;
+		/* Limit value to min, max attributes */
+		encoder_val = encoder_val > attr_max ? attr_max : encoder_val;
+		encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
 	}
-	else {
-		/* If pin A is currently LOW it means we're turning clockwise */
-		if (encoder_val < attr_max) encoder_val += 1;
+	
+	b = palReadPad(GILLS_ENC_PORT, GILLS_ENC_A_PIN);
+	
+	/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
+	if (!b && b_last) {
+		/* If pin B is low but wasn't before, we have caught an event. */
+			
+		if (palReadPad(GILLS_ENC_PORT, GILLS_ENC_B_PIN)) {
+			/* If pin A is currently HIGH it means we're turning counterclockwise */
+			if (encoder_val > attr_min) encoder_val -= 1;
+		}
+		else {
+			/* If pin A is currently LOW it means we're turning clockwise */
+			if (encoder_val < attr_max) encoder_val += 1;
+		}
 	}
+	
+	/* Register changes */
+	b_last = b;
+	outlet_out = disp_value = encoder_val;
+	
+	
+	/* Now read encoder switch */
+	outlet_sw = disp_switch = palReadPad(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN)<<27;
 }
-
-/* Register changes */
-b_last = b;
-outlet_out = disp_value = encoder_val;
-
-
-/* Now read encoder switch */
-outlet_sw = disp_switch = palReadPad(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN)<<27;]]></code.krate>
+++counter %= 8;]]></code.krate>
    </obj.normal>
 </objdefs>
