@@ -54,11 +54,13 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
 
 #endif
 
-int32_t encoder_val = 0;
-int32_t set_last = 0;
+int32_t encoder_val;
+int32_t set_last;
 
-bool_t b = true;
-bool_t b_last = true;]]></code.declaration>
+bool_t b;
+bool_t b_last;
+
+uint8_t counter;]]></code.declaration>
       <code.init><![CDATA[/* Configure encoder pins as input */
 #if attr_encoder == 1
 palSetPadMode(BIGGENES_ENC1_A_PORT, BIGGENES_ENC1_A_PIN, PAL_MODE_INPUT_PULLUP);
@@ -73,50 +75,59 @@ palSetPadMode(BIGGENES_ENC2_B_PORT, BIGGENES_ENC2_B_PIN, PAL_MODE_INPUT_PULLUP);
 palSetPadMode(BIGGENES_ENC1_SW_PORT, BIGGENES_ENC1_SW_PIN, PAL_MODE_INPUT_PULLDOWN);
 #elif attr_encoder == 2
 palSetPadMode(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN, PAL_MODE_INPUT_PULLDOWN);
-#endif]]></code.init>
-      <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
-if (inlet_set != set_last) {
-	set_last = encoder_val = inlet_set;
-	/* Limit value to min, max attributes */
-	encoder_val = encoder_val > attr_max ? attr_max : encoder_val;
-	encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
-}
-
-#if attr_encoder == 1
-b = palReadPad(BIGGENES_ENC1_B_PORT, BIGGENES_ENC1_B_PIN);
-#elif attr_encoder == 2
-b = palReadPad(BIGGENES_ENC2_B_PORT, BIGGENES_ENC2_B_PIN);
 #endif
 
-/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
-if (!b && b_last) {
-	/* If pin B is low but wasn't before, we have caught an event. */
+encoder_val = 0;
+set_last = 0;
 
+b = true;
+b_last = true;
+
+counter = 0;]]></code.init>
+      <code.krate><![CDATA[if (!counter) {
+	/* If set inlet has changed, set encoder value directly */
+	if (inlet_set != set_last) {
+		set_last = encoder_val = inlet_set;
+		/* Limit value to min, max attributes */
+		encoder_val = encoder_val > attr_max ? attr_max : encoder_val;
+		encoder_val = encoder_val < attr_min ? attr_min : encoder_val;
+	}
+	
+	#if attr_encoder == 1
+	b = palReadPad(BIGGENES_ENC1_B_PORT, BIGGENES_ENC1_B_PIN);
+	#elif attr_encoder == 2
+	b = palReadPad(BIGGENES_ENC2_B_PORT, BIGGENES_ENC2_B_PIN);
+	#endif
+	
+	/* Encoder pins A, B (but not the encoder switch) are pulled up, i.e. LOW means triggered. */
+	if (!b && b_last) {
+		/* If pin B is low but wasn't before, we have caught an event. */
+	
+	#if attr_encoder == 1
+		if (palReadPad(BIGGENES_ENC1_A_PORT, BIGGENES_ENC1_A_PIN)) {
+	#elif attr_encoder == 2
+		if (palReadPad(BIGGENES_ENC2_A_PORT, BIGGENES_ENC2_A_PIN)) {
+	#endif
+			/* If pin A is currently HIGH it means we're turning counterclockwise */
+			if (encoder_val > attr_min) encoder_val -= 1;
+		}
+		else {
+			/* If pin A is currently LOW it means we're turning clockwise */
+			if (encoder_val < attr_max) encoder_val += 1;
+		}
+	}
+	
+	/* Register changes */
+	b_last = b;
+	outlet_out = disp_value = encoder_val;
+
+	/* Now read encoder switch */
 #if attr_encoder == 1
-	if (palReadPad(BIGGENES_ENC1_A_PORT, BIGGENES_ENC1_A_PIN)) {
+	outlet_sw = disp_switch = palReadPad(BIGGENES_ENC1_SW_PORT, BIGGENES_ENC1_SW_PIN)<<27;
 #elif attr_encoder == 2
-	if (palReadPad(BIGGENES_ENC2_A_PORT, BIGGENES_ENC2_A_PIN)) {
+	outlet_sw = disp_switch = palReadPad(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN)<<27;
 #endif
-		/* If pin A is currently HIGH it means we're turning counterclockwise */
-		if (encoder_val > attr_min) encoder_val -= 1;
-	}
-	else {
-		/* If pin A is currently LOW it means we're turning clockwise */
-		if (encoder_val < attr_max) encoder_val += 1;
-	}
 }
-
-/* Register changes */
-b_last = b;
-outlet_out = disp_value = encoder_val;
-
-
-/* Now read encoder switch */
-#if attr_encoder == 1
-outlet_sw = disp_switch = palReadPad(BIGGENES_ENC1_SW_PORT, BIGGENES_ENC1_SW_PIN)<<27;
-#elif attr_encoder == 2
-outlet_sw = disp_switch = palReadPad(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN)<<27;
-#endif]]></code.krate>
-
+++counter %= 8;]]></code.krate>
    </obj.normal>
 </objdefs>
