@@ -79,12 +79,13 @@ counter = 0;]]></code.init>
 	
 	/* Register changes */
 	b_last = b;
-	outlet_out = disp_value = encoder_val;
-	
+	disp_value = encoder_val;
 	
 	/* Now read encoder switch */
 	outlet_sw = disp_switch = palReadPad(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN)<<27;
 }
-++counter %= 8;]]></code.krate>
+++counter %= 8;
+
+outlet_out = encoder_val;]]></code.krate>
    </obj.normal>
 </objdefs>
