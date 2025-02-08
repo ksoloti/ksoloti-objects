@@ -123,9 +123,9 @@ msg_t ThreadX2() {
 			
 			/* 
 			 * Sleeping not necessary, but in reality
-			 * you don't want to read/write too frequently anyway
+			 * you don't want to read/write too frequently
 			 */
-			// chThdSleepMilliseconds(250);
+			chThdSleepMilliseconds(33);
 		}
 		else if (trig_load && !ntrig) {
 			ntrig = 1;
@@ -133,14 +133,14 @@ msg_t ThreadX2() {
 			
 			/* 
 			 * Sleeping not necessary, but in reality
-			 * you don't want to read/write too frequently anyway
+			 * you don't want to read/write too frequently
 			 */
-			// chThdSleepMilliseconds(250);
+			chThdSleepMilliseconds(33);
 		}
 		else if (!trig_save && !trig_load && ntrig) {
 			ntrig = 0;
 		}
-		chThdSleepMilliseconds(10);
+		chThdSleepMicroseconds(333);
 	}
     	chThdExit((msg_t)0);
 }
