@@ -567,9 +567,10 @@
       <attribs/>
    </obj>
    <comment type="patch/comment" x="182" y="3374" text="into the MIDI in jack,"/>
-   <comment type="patch/comment" x="182" y="3388" text="or via a class-compliant"/>
-   <comment type="patch/comment" x="182" y="3402" text="controller at the Host USB port,"/>
-   <comment type="patch/comment" x="182" y="3416" text="you should see stuff happening here. -&gt;"/>
+   <comment type="patch/comment" x="182" y="3388" text="from your computer via the Prog USB port,"/>
+   <comment type="patch/comment" x="182" y="3402" text="or via a class-compliant"/>
+   <comment type="patch/comment" x="182" y="3416" text="controller at the Host USB port,"/>
+   <comment type="patch/comment" x="182" y="3430" text="you should see stuff happening here. -&gt;"/>
    <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_16" x="1218" y="3430">
       <params/>
       <attribs/>
