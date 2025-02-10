@@ -4,7 +4,9 @@
    <comment type="patch/comment" x="350" y="98" text="...are being forwarded to Ksoloti&apos;s hardware audio outputs."/>
    <obj type="ksoloti/usbaudio/in stereo" uuid="97497df749dd47a19a18f4a78ebc58e6" name="usb_1" x="98" y="126">
       <params/>
-      <attribs/>
+      <attribs>
+         <combo attributeName="channelPair" selection="1/2"/>
+      </attribs>
    </obj>
    <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="462" y="126">
       <params/>
@@ -20,7 +22,9 @@
    </obj>
    <obj type="ksoloti/usbaudio/out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9" name="usb_2" x="420" y="294">
       <params/>
-      <attribs/>
+      <attribs>
+         <combo attributeName="channelPair" selection="1/2"/>
+      </attribs>
    </obj>
    <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="154" y="406">
       <params>
@@ -51,9 +55,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>240</x>
-      <y>160</y>
-      <width>705</width>
-      <height>620</height>
+      <x>1323</x>
+      <y>381</y>
+      <width>703</width>
+      <height>646</height>
    </windowPos>
 </patch-1.0>

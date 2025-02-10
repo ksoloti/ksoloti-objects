@@ -16,20 +16,45 @@ Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch 
          <frac32.vu name="vuRight"/>
       </displays>
       <params/>
-      <attribs/>
-      <code.krate><![CDATA[#if FW_USBAUDIO
-int j;
-for (j=0; j<BUFSIZE; j++) {
-	UsbOutputLeft[j] += __SSAT(inlet_left[j], 28);
-	UsbOutputRight[j] += __SSAT(inlet_right[j], 28);
-}
+      <attribs>
+         <combo name="channelPair">
+            <MenuEntries>
+               <string>1/2</string>
+               <string>3/4</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[
+#if FW_USBAUDIO      
+   int j;
+
+   int32_t *destL = nullptr;
+   int32_t *destR = nullptr;
+
+   switch(attr_channelPair) {
+      case 1 : destL = UsbOutputLeft; destR = UsbOutputRight; break;
+   #if USB_AUDIO_CHANNELS == 4
+      case 2 : destL = UsbOutput2Left; destR = UsbOutput2Right; break;
+   #endif
+   }
+
+   if(destL and destR) {
+      for(j=0;j<BUFSIZE;j++){
+         destL[j] += __SSAT(inlet_left[j],28);
+         destR[j] += __SSAT(inlet_right[j],28);
+      }
+   }
 #elif !defined(FW_USBAUDIO_WARNED)
-#define FW_USBAUDIO_WARNED
-#warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
-#warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
-#endif
-disp_vuLeft = inlet_left[0];
-disp_vuRight = inlet_right[0];
+   #define FW_USBAUDIO_WARNED
+   #warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
+#endif // FW_USBAUDIO
+
+disp_vuLeft=inlet_left[0];
+disp_vuRight=inlet_right[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

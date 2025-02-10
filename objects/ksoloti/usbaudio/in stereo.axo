@@ -16,26 +16,59 @@ Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch 
          <frac32.vu name="vuRight"/>
       </displays>
       <params/>
-      <attribs/>
+      <attribs>
+         <combo name="channelPair">
+            <MenuEntries>
+               <string>1/2</string>
+               <string>3/4</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+            </CEntries>
+         </combo>
+      </attribs>
       <code.krate><![CDATA[
 int j;
-for (j=0; j<BUFSIZE; j++) {
 #if FW_USBAUDIO
-	outlet_left[j] = UsbInputLeft[j];
-	outlet_right[j] = UsbInputRight[j];
+   int32_t *sourceL = nullptr;
+   int32_t *sourceR = nullptr;
+
+   switch(attr_channelPair) {
+      case 1 : sourceL = UsbInputLeft; sourceR = UsbInputRight; break;
+   #if USB_AUDIO_CHANNELS == 4
+      case 2 : sourceL = UsbInput2Left; sourceR = UsbInput2Right; break;
+   #endif // USB_AUDIO_CHANNELS
+   }
+
+   if(sourceL && sourceR) {
+      for(j=0;j<BUFSIZE;j++){
+         outlet_left[j] = sourceL[j];
+         outlet_right[j] = sourceR[j];
+      }
+   }
+   else {
+      for(j=0;j<BUFSIZE;j++){
+         outlet_left[j]  = 0;
+         outlet_right[j] = 0;
+      }
+   }
+
+   disp_vuLeft=outlet_left[0];
+   disp_vuRight=outlet_right[0];
 #else
-	outlet_left[j] = 0;
-	outlet_right[j] = 0;
-#endif
-}
+   for(j=0;j<BUFSIZE;j++){
+      outlet_left[j]  = 0;
+      outlet_right[j] = 0;
+   }
+   #if !defined(FW_USBAUDIO_WARNED)
+      #define FW_USBAUDIO_WARNED
+      #warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
+   #endif // FW_USBAUDIO_WARNED
+#endif // FW_USBAUDIO
 
-#if !defined(FW_USBAUDIO) && !defined(FW_USBAUDIO_WARNED)
-#define FW_USBAUDIO_WARNED
-#warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
-#endif
-
-disp_vuLeft = outlet_left[0];
-disp_vuRight = outlet_right[0];
+disp_vuLeft=outlet_left[0];
+disp_vuRight=outlet_right[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

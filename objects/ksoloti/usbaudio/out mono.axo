@@ -1,0 +1,56 @@
+<objdefs>
+   <obj.normal id="usb out mono" uuid="c150f515c32b4a71bbe7e3d86f990161">
+      <sDescription>Usb output, single mono channel</sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="wave" description="Left channel"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.vu name="vu" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs>
+         <combo name="channel">
+            <MenuEntries>
+               <string>1/Left</string>
+               <string>2/Right</string>
+               <string>3/Left</string>
+               <string>4/Right</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.krate><![CDATA[int j;
+#if FW_USBAUDIO      
+   int32_t *dest = nullptr;
+
+   switch(attr_channel) {
+      case 1 : dest = UsbOutputLeft; break;
+      case 2 : dest = UsbOutputRight; break;
+   #if USB_AUDIO_CHANNELS == 4
+      case 3 : dest = UsbOutput2Left; break;
+      case 4 : dest = UsbOutput2Right; break;
+   #endif
+   }
+
+   if(dest) {
+      for(j=0;j<BUFSIZE;j++){
+         dest[j] += __SSAT(inlet_wave[j],28);
+      }
+   }
+#elif !defined(FW_USBAUDIO_WARNED)
+   #define FW_USBAUDIO_WARNED
+   #warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
+#endif // FW_USBAUDIO
+   
+disp_vu=inlet_wave[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

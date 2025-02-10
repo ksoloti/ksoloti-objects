@@ -1,0 +1,57 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="in quad" uuid="9baf3860bd0a4915992b5cbea8b26c64">
+      <sDescription>USB audio input, 4 channels.
+Requires &quot;+ USBAudio&quot; firmware mode (set in Preferences) or the patch will throw an error!      
+      </sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <helpPatch>usbaudio_4chan.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="ch1" description="Channel 1/Left"/>
+         <frac32buffer name="ch2" description="Channel 2/Right"/>
+         <frac32buffer name="ch3" description="Channel 3/Left"/>
+         <frac32buffer name="ch4" description="Channel 4/Right"/>
+      </outlets>
+      <displays>
+         <frac32.vu name="vuChannel1"/>
+         <frac32.vu name="vuChannel2"/>
+         <frac32.vu name="vuChannel3"/>
+         <frac32.vu name="vuChannel4"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+#if FW_USBAUDIO
+   for(j=0;j<BUFSIZE;j++){
+      outlet_ch1[j] = UsbInputLeft[j];
+      outlet_ch2[j] = UsbInputRight[j];
+      #if USB_AUDIO_CHANNELS == 2
+         outlet_ch3[j] = 0;
+         outlet_ch4[j] = 0;
+      #elif USB_AUDIO_CHANNELS == 4
+         outlet_ch3[j] = UsbInput2Left[j];
+         outlet_ch4[j] = UsbInput2Right[j];
+      #endif // USB_AUDIO_CHANNELS
+   }
+#else
+   for(j=0;j<BUFSIZE;j++){
+      outlet_ch1[j] = 0;
+      outlet_ch2[j] = 0;
+      outlet_ch3[j] = 0;
+      outlet_ch4[j] = 0;
+   }
+
+   #if !defined(FW_USBAUDIO_WARNED)
+      #define FW_USBAUDIO_WARNED
+      #warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
+   #endif // FW_USBAUDIO_WARNED
+#endif // FW_USBAUDIO
+
+disp_vuChannel1=outlet_ch1[0];
+disp_vuChannel2=outlet_ch2[0];
+disp_vuChannel3=outlet_ch3[0];
+disp_vuChannel4=outlet_ch4[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>
