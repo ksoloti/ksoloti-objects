@@ -193,7 +193,7 @@
       <params/>
       <attribs>
          <spinner attributeName="min" value="0"/>
-         <spinner attributeName="max" value="127"/>
+         <spinner attributeName="max" value="2"/>
       </attribs>
    </obj>
    <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_1" x="896" y="896">
@@ -207,7 +207,7 @@
    <comment type="patch/comment" x="462" y="924" text="use the &quot;set&quot; inlet to jump to a value --&gt;"/>
    <obj type="ctrl/i" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_3" x="504" y="938">
       <params>
-         <int32 name="value" value="0"/>
+         <int32 name="value" value="1"/>
       </params>
       <attribs/>
    </obj>
@@ -499,9 +499,10 @@
       <attribs/>
    </obj>
    <comment type="patch/comment" x="28" y="3150" text="into the MIDI in DIN jack,"/>
-   <comment type="patch/comment" x="28" y="3164" text="or via a class-compliant"/>
-   <comment type="patch/comment" x="28" y="3178" text="controller at the Host USB port,"/>
-   <comment type="patch/comment" x="28" y="3192" text="you should see stuff happening here. -&gt;"/>
+   <comment type="patch/comment" x="28" y="3164" text="from your computer via the Prog USB port,"/>
+   <comment type="patch/comment" x="28" y="3178" text="or via a class-compliant"/>
+   <comment type="patch/comment" x="28" y="3192" text="controller at the Host USB port,"/>
+   <comment type="patch/comment" x="28" y="3206" text="you should see stuff happening here. -&gt;"/>
    <obj type="disp/dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_16" x="1064" y="3206">
       <params/>
       <attribs/>
