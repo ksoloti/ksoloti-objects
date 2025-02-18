@@ -82,10 +82,11 @@ counter = 0;]]></code.init>
 	disp_value = encoder_val;
 	
 	/* Now read encoder switch */
-	outlet_sw = disp_switch = palReadPad(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN)<<27;
+	disp_switch = palReadPad(GILLS_ENC_SW_PORT, GILLS_ENC_SW_PIN)<<27;
 }
 ++counter %= 8;
 
+outlet_sw  = disp_switch;
 outlet_out = encoder_val;]]></code.krate>
    </obj.normal>
 </objdefs>
