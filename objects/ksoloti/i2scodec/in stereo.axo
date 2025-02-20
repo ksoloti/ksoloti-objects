@@ -1,0 +1,44 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="in stereo" uuid="e5eedf09-86a5-4322-b61e-480cd57736e8">
+      <sDescription>External I2S codec audio input, stereo.
+Requires &quot;+ I2SCodec&quot; firmware mode (set in Preferences) or the patch will throw an error!
+
+Connect an I2S-capable board that does not require external MCLK to:
+LRCLK: PA15
+BCLK: PB3
+SDIN (Ksoloti data in): PB4
+SDOUT (Ksoloti data out): PD6</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <helpPatch>i2scodec.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="left" description="Left channel"/>
+         <frac32buffer name="right" description="Right channel"/>
+      </outlets>
+      <displays>
+         <frac32.vu.horizontal name="L"/>
+         <frac32.vu.horizontal name="R"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for (j=0; j<BUFSIZE; j++) {
+#ifdef FW_I2SCODEC
+	outlet_left[j] = i2sInputLeft[j];
+	outlet_right[j] = i2sInputRight[j];
+#else
+	outlet_left[j] = 0;
+	outlet_right[j] = 0;
+#endif
+}
+
+#if !defined(FW_I2SCODEC) && !defined(FW_I2SCODEC_WARNED)
+#define FW_I2SCODEC_WARNED
+#warning "This patch contains I2SCodec objects, but the device is not running I2SCodec firmware! The objects in question have been muted."
+#endif
+
+disp_L = outlet_left[0];
+disp_R = outlet_right[0];]]></code.krate>
+   </obj.normal>
+</objdefs>
