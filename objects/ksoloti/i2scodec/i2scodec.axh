@@ -53,7 +53,7 @@
    </obj>
    <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="504" y="308">
       <params>
-         <frac32.s.map name="pitch" value="4.0"/>
+         <frac32.s.map name="pitch" value="5.0"/>
       </params>
       <attribs/>
    </obj>
