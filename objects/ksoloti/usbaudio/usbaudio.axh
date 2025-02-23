@@ -1,36 +1,38 @@
 <patch-1.0 appVersion="1.1.0">
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;div style=&quot;font-size:2em; color:#808000;&quot;&gt;You must flash your Core with the USBAudio firmware&lt;br&gt; (set in Preferences) for this patch to run!"/>
-   <comment type="patch/comment" x="14" y="98" text="The signals the host sends out to the Ksoloti USB audio inputs..."/>
-   <comment type="patch/comment" x="350" y="98" text="...are being forwarded to Ksoloti&apos;s hardware audio outputs."/>
-   <obj type="ksoloti/usbaudio/in stereo" uuid="97497df749dd47a19a18f4a78ebc58e6" name="usb_1" x="98" y="126">
+   <comment type="patch/comment" x="14" y="98" text="&lt;html&gt;&lt;div width=&quot;480px&quot; style=&quot;font-size:1.5em;&quot;&gt;On Windows, you may have to go to Device Manager, find both &quot;Ksoloti Core&quot; and &quot;Ksoloti  Bulk Interface&quot;, right-click-&gt;&quot;Uninstall&quot; them, and reconnect Ksoloti Core. This will force-update the drivers to enable USB audio. Do the same when switching back to other firmware modes."/>
+   <comment type="patch/comment" x="14" y="210" text="&lt;html&gt;&lt;div width=&quot;480px&quot; style=&quot;font-size:1.5em;&quot;&gt;On Linux, you will have to run &apos;platform_linux/add_udev_rules.sh&apos; to update the udev rules. Ksoloti Core in USBAudio mode uses a different PID."/>
+   <comment type="patch/comment" x="14" y="322" text="The signals the host sends out to the Ksoloti USB audio inputs..."/>
+   <comment type="patch/comment" x="350" y="322" text="...are being forwarded to Ksoloti&apos;s hardware audio outputs."/>
+   <obj type="ksoloti/usbaudio/in stereo" uuid="97497df749dd47a19a18f4a78ebc58e6" name="usb_1" x="14" y="350">
       <params/>
       <attribs>
          <combo attributeName="channelPair" selection="1/2"/>
       </attribs>
    </obj>
-   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="462" y="126">
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="560" y="350">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="126" y="266" text="Two sine wave test signals from Ksoloti..."/>
-   <comment type="patch/comment" x="350" y="266" text="...are being sent to the DAW&apos;s (host&apos;s) USB audio inputs."/>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="154" y="294">
+   <comment type="patch/comment" x="14" y="490" text="Two sine wave test signals from Ksoloti..."/>
+   <comment type="patch/comment" x="364" y="490" text="...are being sent to the DAW&apos;s (host&apos;s) USB audio inputs."/>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="14" y="518">
       <params>
          <frac32.s.map name="pitch" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/usbaudio/out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9" name="usb_2" x="420" y="294">
-      <params/>
-      <attribs>
-         <combo attributeName="channelPair" selection="1/2"/>
-      </attribs>
-   </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="154" y="406">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="126" y="518">
       <params>
          <frac32.s.map name="pitch" value="-7.0"/>
       </params>
       <attribs/>
+   </obj>
+   <obj type="ksoloti/usbaudio/out stereo" uuid="f39f2910bf8342d18afd9b09bcf110c9" name="usb_2" x="518" y="518">
+      <params/>
+      <attribs>
+         <combo attributeName="channelPair" selection="1/2"/>
+      </attribs>
    </obj>
    <nets>
       <net>
@@ -55,9 +57,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>1323</x>
-      <y>381</y>
+      <x>341</x>
+      <y>94</y>
       <width>703</width>
-      <height>646</height>
+      <height>741</height>
    </windowPos>
 </patch-1.0>

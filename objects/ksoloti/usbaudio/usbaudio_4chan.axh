@@ -1,43 +1,45 @@
 <patch-1.0 appVersion="1.1.0">
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;div style=&quot;font-size:2em; color:#808000;&quot;&gt;You must flash your Core with the USBAudio firmware&lt;br&gt; (set in Preferences) for this patch to run!"/>
-   <comment type="patch/comment" x="14" y="98" text="The signals the host sends out to the Ksoloti USB audio inputs..."/>
-   <comment type="patch/comment" x="350" y="98" text="...are being forwarded to the Ksoloti&apos;s USB audio outputs."/>
-   <obj type="ksoloti/usbaudio/in quad" uuid="9baf3860bd0a4915992b5cbea8b26c64" name="in_1" x="112" y="126">
+   <comment type="patch/comment" x="14" y="98" text="&lt;html&gt;&lt;div width=&quot;480px&quot; style=&quot;font-size:1.5em;&quot;&gt;On Windows, you may have to go to Device Manager, find both &quot;Ksoloti Core&quot; and &quot;Ksoloti  Bulk Interface&quot;, right-click-&gt;&quot;Uninstall&quot; them, and reconnect Ksoloti Core. This will force-update the drivers to enable USB audio. Do the same when switching back to other firmware modes."/>
+   <comment type="patch/comment" x="14" y="210" text="&lt;html&gt;&lt;div width=&quot;480px&quot; style=&quot;font-size:1.5em;&quot;&gt;On Linux, you will have to run &apos;platform_linux/add_udev_rules.sh&apos; to update the udev rules. Ksoloti Core in USBAudio mode uses a different PID."/>
+   <comment type="patch/comment" x="14" y="294" text="The signals the host sends out to the Ksoloti USB audio inputs..."/>
+   <comment type="patch/comment" x="350" y="294" text="...are being forwarded to the Ksoloti&apos;s USB audio outputs."/>
+   <obj type="ksoloti/usbaudio/in quad" uuid="9baf3860bd0a4915992b5cbea8b26c64" name="in_1" x="14" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/usbaudio/out quad" uuid="eb3117727a8b4b629bf0e7a935d90424" name="out_2" x="434" y="126">
+   <obj type="ksoloti/usbaudio/out quad" uuid="eb3117727a8b4b629bf0e7a935d90424" name="out_2" x="518" y="322">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="56" y="364" text="Four wave test signals from Ksoloti..."/>
-   <comment type="patch/comment" x="280" y="364" text="...are being sent to the DAW&apos;s (host&apos;s) USB audio inputs."/>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="84" y="392">
+   <comment type="patch/comment" x="14" y="546" text="Four wave test signals from Ksoloti..."/>
+   <comment type="patch/comment" x="350" y="546" text="...are being sent to the DAW&apos;s (host&apos;s) USB audio inputs."/>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="14" y="574">
       <params>
          <frac32.s.map name="pitch" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/usbaudio/out quad" uuid="eb3117727a8b4b629bf0e7a935d90424" name="out_3" x="364" y="392">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="84" y="504">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="126" y="574">
       <params>
          <frac32.s.map name="pitch" value="-7.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="84" y="616">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="238" y="574">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_4" x="84" y="728">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_4" x="350" y="574">
       <params>
          <frac32.s.map name="pitch" value="12.0"/>
       </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/usbaudio/out quad" uuid="eb3117727a8b4b629bf0e7a935d90424" name="out_3" x="518" y="574">
+      <params/>
       <attribs/>
    </obj>
    <nets>
@@ -79,9 +81,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>693</x>
-      <y>174</y>
+      <x>0</x>
+      <y>0</y>
       <width>702</width>
-      <height>994</height>
+      <height>882</height>
    </windowPos>
 </patch-1.0>
