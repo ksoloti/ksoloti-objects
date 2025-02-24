@@ -1,75 +1,78 @@
 <patch-1.0 appVersion="1.1.0">
-   <comment type="patch/comment" x="14" y="14" text="Regular  audio inputs..."/>
-   <comment type="patch/comment" x="896" y="14" text="Regular audio outputs..."/>
-   <obj type="audio/in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" name="in_2" x="14" y="28">
+   <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;div style=&quot;font-size:2em; color:#808000;&quot;&gt;You must flash your Core with the USBAudio firmware&lt;br&gt; (set in Preferences) for this patch to run!"/>
+   <comment type="patch/comment" x="574" y="14" text="&lt;html&gt;&lt;div width=&quot;320px&quot; style=&quot;font-size:1.2em;&quot;&gt;PA15: WS &quot;Word Select&quot; aka LRCLK, FSYNC, &quot;Frame Select&quot; (48 kHz)&lt;br&gt;PB3: BCLK &quot;Bit Clock&quot; aka SCLK (3.072 Mhz)&lt;br&gt;PB4: DIN &quot;Data in from ADC&quot;, aka SDIN, RX&lt;br&gt;PD6: DOUT &quot;Data out to DAC&quot;, aka SDOUT, TX"/>
+   <comment type="patch/comment" x="14" y="98" text="&lt;html&gt;&lt;div width=&quot;640px&quot; style=&quot;font-size:1.25em;&quot;&gt;Get a suitable I2S ADC, DAC, or codec board that can be powered with 3.3V or 5V and takes &quot;BCLK&quot;, &quot;WS&quot;, &quot;DIN&quot; and/or &quot;DOUT&quot; signals. Unfortunately the I2S  system on Ksoloti Core does not directly support chips that require &quot;MCLK&quot;  Master Clock input."/>
+   <comment type="patch/comment" x="14" y="168" text="Regular  audio inputs..."/>
+   <comment type="patch/comment" x="896" y="168" text="Regular audio outputs..."/>
+   <obj type="audio/in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" name="in_2" x="14" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="154" y="28">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="154" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="294" y="28">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="294" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="504" y="28">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="504" y="182">
       <params>
          <frac32.s.map name="pitch" value="-19.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_5" x="616" y="28">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_5" x="616" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_6" x="756" y="28">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_6" x="756" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_2" x="938" y="28">
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_2" x="938" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="504" y="140">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="504" y="294">
       <params>
          <frac32.s.map name="pitch" value="-7.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="14" y="294" text="... and two additional inputs via a suitable I2S breakout board."/>
-   <comment type="patch/comment" x="700" y="294" text="... and two additional outputs via a suitable I2S breakout board."/>
-   <obj type="ksoloti/i2scodec/in stereo" uuid="e5eedf09-86a5-4322-b61e-480cd57736e8" name="in_1" x="14" y="308">
+   <comment type="patch/comment" x="14" y="448" text="... and two additional inputs via a suitable I2S breakout board."/>
+   <comment type="patch/comment" x="700" y="448" text="... and two additional outputs via a suitable I2S breakout board."/>
+   <obj type="ksoloti/i2scodec/in stereo" uuid="e5eedf09-86a5-4322-b61e-480cd57736e8" name="in_1" x="14" y="462">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="154" y="308">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="154" y="462">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_4" x="294" y="308">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_4" x="294" y="462">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="504" y="308">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="504" y="462">
       <params>
          <frac32.s.map name="pitch" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_7" x="616" y="308">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_7" x="616" y="462">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_8" x="756" y="308">
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_8" x="756" y="462">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ksoloti/i2scodec/out stereo" uuid="ef9e71ce-7d64-4733-aa5a-1ad88a9dd83c" name="out_1" x="910" y="308">
+   <obj type="ksoloti/i2scodec/out stereo" uuid="ef9e71ce-7d64-4733-aa5a-1ad88a9dd83c" name="out_1" x="910" y="462">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_4" x="504" y="420">
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_4" x="504" y="574">
       <params>
          <frac32.s.map name="pitch" value="17.0"/>
       </params>
@@ -119,8 +122,8 @@
    <notes><![CDATA[]]></notes>
    <windowPos>
       <x>202</x>
-      <y>160</y>
+      <y>23</y>
       <width>1067</width>
-      <height>650</height>
+      <height>786</height>
    </windowPos>
 </patch-1.0>
