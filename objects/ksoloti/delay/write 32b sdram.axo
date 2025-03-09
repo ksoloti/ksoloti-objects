@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="write sdram 32b" uuid="7cb03c9a-39bd-4f73-bf89-60d41d9d5322">
+   <obj.normal id="write 32b sdram" uuid="7cb03c9a-39bd-4f73-bf89-60d41d9d5322">
       <sDescription>delayline definition, 32-bit samples. Read it with &quot;delay/read&quot; objects referencing the instance name of this object</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
