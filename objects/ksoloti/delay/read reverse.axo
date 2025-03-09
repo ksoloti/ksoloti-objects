@@ -1,0 +1,148 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="read reverse" uuid="05e1535a-e27a-47de-a64c-9868be7a5be3">
+      <sDescription>Loosely based on Adam Fulford&apos;s reverse delay code for Daisy:
+https://github.com/AdamFulford/Veno-Echo/blob/main/Veno-Echo/delayline_reverse.h</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="time" description="Delay time, modulatable at audio-rate"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="outrev" description="Reversed delay signal"/>
+         <frac32buffer name="outfwd" description="Standard forward delay signal, useful for feedback"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="time" description="Delay time (Non-interpolated. Use the red &quot;time&quot; inlet to get smooth, pitch-shifting type delays)"/>
+      </params>
+      <attribs>
+         <objref name="delayname" description="Point to delay write or table"/>
+         <combo name="fadetime" description="Adjust if using a very short or very long delay write buffer">
+            <MenuEntries>
+               <string>medium</string>
+               <string>very slow</string>
+               <string>slow</string>
+               <string>fast</string>
+               <string>very fast</string>
+            </MenuEntries>
+            <CEntries>
+               <string>3</string>
+               <string>1</string>
+               <string>2</string>
+               <string>4</string>
+               <string>5</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[bool is_head1_playing;
+bool is_fading;
+
+uint32_t delaytime_smps; /* Delay time in samples */
+uint32_t read_ptr1, read_ptr2;
+uint32_t head_offs;
+
+uint32_t nfadesamples; /* Calculated from delay time at init */
+uint32_t fade_incr;
+
+int32_t fadepos_1to2; /* Fade progress between heads 1 and 2 */
+
+/* Reverse delay time must be half or less than forward delay time. */
+const uint32_t REV_LENGTHMASK = attr_delayname.LENGTHMASK>>1; 
+
+/* Sets the delay time in samples */
+void SetDelayTime(uint32_t smps) {
+	delaytime_smps = smps > REV_LENGTHMASK ? REV_LENGTHMASK : smps;
+}
+
+
+/* Advances the fade position and read pointers */
+void UpdateDelay() {
+
+	/* Increment head difference */
+	head_offs = (head_offs + 1) % delaytime_smps;
+
+	/* Advance read ptrs in reverse direction */
+	read_ptr1 = (attr_delayname.LENGTH + read_ptr1 - 1) % attr_delayname.LENGTH;
+	read_ptr2 = (attr_delayname.LENGTH + read_ptr2 - 1) % attr_delayname.LENGTH;
+
+	if (head_offs >= (__USAT(delaytime_smps - nfadesamples - 1, 25))) {
+		/* Start crossfade region */
+		if (!is_fading) {
+			is_fading = true; 	/* Start fading */
+
+			if (is_head1_playing) {
+				/* Jump ptr2 to fadetime beyond write position */
+				read_ptr2 = (attr_delayname.writepos - 1) & attr_delayname.LENGTHMASK;
+			}
+			else {
+				/* Jump ptr1 to fadetime beyond write position */
+				read_ptr1 = (attr_delayname.writepos - 1) & attr_delayname.LENGTHMASK;
+			}
+		}
+	}
+
+	if (is_fading) {
+		if (is_head1_playing) {
+			/* head1 is playing */
+			fadepos_1to2 += fade_incr; 		/* fade 1 to 2: increment up to 0x3FFFFFFF */
+			if (fadepos_1to2 >= 0x3FFFFFFF) {
+				fadepos_1to2 = 0x3FFFFFFF; 	/* arrived at pos2 */
+				is_fading = false;    		/* stop fading */
+				is_head1_playing = false;	/* (only) head2 is playing */
+			}
+		}
+		else {
+			/* head2 is playing */
+			fadepos_1to2 -= fade_incr; 		/* fade 2 to 1: decrement down to 0 */
+			if (fadepos_1to2 <= 0) {
+				fadepos_1to2 = 0;	   		/* arrived at pos1 */
+				is_fading = false;			/* stop fading */
+				is_head1_playing = true;		/* (only) head1 is playing */
+			}
+		}
+	}
+}
+
+
+/* Returns the next sample in the delay line */
+int32_t ReadDelayRev() {
+
+	/* Fetch samples at the two delay heads */
+	int32_t a1 = attr_delayname.array[read_ptr1];
+	int32_t a2 = attr_delayname.array[read_ptr2];
+
+	/* Calculate Hann transision */
+	uint32_t scalar1 = hann_q31(0x7FFFFFFF - (fadepos_1to2 << 1));
+	uint32_t scalar2 = hann_q31(fadepos_1to2 << 1);
+
+	/* Return crossfade mix */
+	return (___SMMUL(a1, scalar1) + ___SMMUL(a2, scalar2)) << 1; 
+}]]></code.declaration>
+      <code.init><![CDATA[is_head1_playing = true;
+is_fading = false;
+
+read_ptr1 = 0;
+read_ptr2 = 0;
+head_offs = 0;
+fadepos_1to2 = 0;
+
+nfadesamples = attr_delayname.LENGTH >> attr_fadetime;
+nfadesamples = nfadesamples < 256 ? 256 : nfadesamples; /* Very short delay buffers neither supported nor useful */
+fade_incr = (1<<30) / nfadesamples;]]></code.init>
+      <code.srate><![CDATA[/* Sum and clip delay time inputs*/
+uint32_t tmp_d = __USAT(param_time + inlet_time, 27) >> (27 - attr_delayname.LENGTHPOW);
+
+/* Read pointer for forward delay. Runs behind the write pointer. Effectively defines the delay time. */
+uint32_t readpos = attr_delayname.writepos - tmp_d - BUFSIZE + buffer_index;
+
+/* Spit out forward delay sample */
+outlet_outfwd = attr_delayname.array[readpos & attr_delayname.LENGTHMASK];
+
+/* Reverse delay time must be half or less than forward delay time, to avoid read pointers crossing the write position. */
+SetDelayTime(tmp_d >> 1);
+
+UpdateDelay();
+
+outlet_outrev = ReadDelayRev();]]></code.srate>
+   </obj.normal>
+</objdefs>
