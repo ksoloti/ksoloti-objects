@@ -338,7 +338,7 @@
          <table attributeName="str" table="The quick brown fox j"/>
       </attribs>
    </obj>
-   <obj type="ksoloti/gills/display" uuid="d21f1023-b829-4934-b142-5eedb601a570" name="display_1" x="672" y="1918">
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="672" y="1918">
       <params/>
       <attribs>
          <combo attributeName="useScope" selection="on"/>
@@ -383,7 +383,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/gills/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd1" name="cv_1" x="420" y="2408">
+   <obj type="ksoloti/gills/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfccf" name="cv_1" x="420" y="2408">
       <params/>
       <attribs>
          <combo attributeName="output" selection="CV1 (PA4)"/>
@@ -396,7 +396,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="ksoloti/gills/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfcd1" name="cv_2" x="728" y="2408">
+   <obj type="ksoloti/gills/cv out b" uuid="28629cd3-e124-4434-8179-a9b0c40cfccf" name="cv_2" x="728" y="2408">
       <params/>
       <attribs>
          <combo attributeName="output" selection="CV2 (PA5)"/>
