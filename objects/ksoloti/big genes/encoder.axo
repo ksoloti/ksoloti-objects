@@ -128,7 +128,7 @@ counter = 0;]]></code.init>
 	disp_switch = palReadPad(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN)<<27;
 #endif
 }
-++counter %= 8;
+++counter %= 4;
 
 outlet_sw = disp_switch;
 outlet_out = encoder_val;]]></code.krate>
