@@ -25,8 +25,8 @@
             <CEntries>
                <string>-1</string>
                <string>MIDI_DEVICE_DIN</string>
-               <string> MIDI_DEVICE_USB_HOST</string>
-               <string> MIDI_DEVICE_USB_DEVICE</string>
+               <string>MIDI_DEVICE_USB_HOST</string>
+               <string>MIDI_DEVICE_USB_DEVICE</string>
             </CEntries>
          </combo>
          <spinner name="maxlength" description="Maximum length of the longest sysex string to be received." MinValue="3" MaxValue="256" DefaultValue="8"/>
