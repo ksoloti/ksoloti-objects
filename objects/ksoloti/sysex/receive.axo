@@ -1,0 +1,147 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="receive" uuid="2d1b7abf-5db6-45be-997a-af22d113e1df">
+      <sDescription>Receives incoming midi sysex data and stores it in a table.</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <bool32 name="hasMessage" description="Sends a trigger when a valid message has been received."/>
+      </outlets>
+      <displays>
+         <bool32 name="listening" description="A sysex start message (F0) has been detected - waiting for end message (F7). Will time out after a few seconds."/>
+         <bool32 name="success" description="Lights up when a proper sysex string has been sucessfully received."/>
+         <bool32 name="error" description="&lt;html&gt;Lights up when either of the below happens:&lt;br&gt;- a malformed sysex string was received&lt;br&gt;- a sysex transmission timed out/was aborted&lt;br&gt;- the currently selected buffer maxlength is too small for the most recent message."/>
+         <int32.label name="length" description="Shows the length of the most recent successfully received sysex string."/>
+      </displays>
+      <params/>
+      <attribs>
+         <combo name="device">
+            <MenuEntries>
+               <string>Omni</string>
+               <string>DIN MIDI</string>
+               <string>USB host MIDI</string>
+               <string>USB device MIDI</string>
+            </MenuEntries>
+            <CEntries>
+               <string>-1</string>
+               <string>MIDI_DEVICE_DIN</string>
+               <string>MIDI_DEVICE_USB_HOST</string>
+               <string>MIDI_DEVICE_USB_DEVICE</string>
+            </CEntries>
+         </combo>
+         <spinner name="maxlength" description="Maximum length of the longest sysex string to be received." MinValue="3" MaxValue="256" DefaultValue="8"/>
+         <objref name="table" description="The most recent successfully received sysex string will be stored in this table. Make sure the table is large enough to hold the entire string."/>
+      </attribs>
+      <code.declaration><![CDATA[uint16_t sysex_listening, sysex_success, sysex_error;
+uint8_t sysex_array[attr_maxlength];
+uint16_t index;
+
+void clear_array() {
+	int i; for (i=0; i<attr_maxlength; ++i) {
+		sysex_array[i] = 0;
+	}
+	index = 0;
+}
+
+void reset_flags() {
+	sysex_listening = 0;
+	sysex_success = 0;
+	sysex_error = 0;
+}
+
+void sysex_start_listening() {
+	clear_array();
+	reset_flags();
+	sysex_listening = 1;
+}
+
+void sysex_done() {
+	reset_flags();
+	sysex_success = 1;
+	if (index > attr_maxlength) return;
+	int i; for (i=0; i<attr_maxlength; ++i) {
+		attr_table.array[__USAT(i, attr_table.LENGTHPOW)] = sysex_array[i];
+	}
+}
+
+void sysex_abort() {
+	reset_flags();
+	sysex_error = 1;
+}
+
+void put(uint8_t byte) {
+	if (index >= attr_maxlength) 	return;
+	sysex_array[index++] = byte;
+}]]></code.declaration>
+      <code.init><![CDATA[clear_array();
+reset_flags();]]></code.init>
+      <code.krate><![CDATA[if (sysex_success > 0) {
+	/* start counting */
+	if (++sysex_success > 0x1FF) {
+		/* turn off success LED and reset */
+		reset_flags();
+	}
+}
+
+if (sysex_listening > 0) {
+	/* start counting */
+	if (++sysex_listening > 0xFFF) {
+		/* timeout if no "F7" end byte received in time */
+		sysex_abort();
+	}
+}
+
+if (sysex_error > 0) {
+	/* start counting */
+	if (++sysex_error > 0x1FF) {
+		/* turn off error LED and reset */
+		reset_flags();
+		clear_array();
+	}
+}
+
+disp_listening = sysex_listening;
+disp_success = sysex_success;
+disp_length = index;
+disp_error = sysex_error;
+
+outlet_hasMessage = sysex_success;]]></code.krate>
+      <code.midihandler><![CDATA[#if attr_device > -1
+if (dev == attr_device) {
+#endif
+
+	uint8_t tmp[3] = {status, data1, data2};
+	
+	uint8_t b;
+	for (b = 0; b < 3; ++b) {
+
+		if (tmp[b] == MIDI_SYSEX_START) {
+			sysex_start_listening();
+			put(tmp[b]);
+		}
+		else if (sysex_listening > 0) {
+			if (index >= attr_maxlength) {
+				sysex_abort();
+				return;
+			}
+			if (tmp[b] == MIDI_SYSEX_END) {
+				put(tmp[b]);
+				sysex_done();
+				return;
+			}
+			else if (tmp[b] > 0x7F) {
+				sysex_abort();
+				return;
+			}
+			else {
+				put(tmp[b]);
+			}
+		}
+	}
+
+#if attr_device > -1
+}
+#endif
+/* bug in 1.0.12! do not remove this comment. */]]></code.midihandler>
+   </obj.normal>
+</objdefs>
