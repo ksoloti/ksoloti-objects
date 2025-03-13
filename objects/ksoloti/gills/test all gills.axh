@@ -1,4 +1,4 @@
-<patch-1.0 appVersion="1.0.12">
+<patch-1.0 appVersion="1.1.0">
    <comment type="patch/comment" x="14" y="0" text="&lt;html&gt;&lt;div width=440px&gt;&lt;h1&gt;Make sure Gills is connected to the Patcher (main window)."/>
    <comment type="patch/comment" x="14" y="70" text="&lt;html&gt;&lt;div width=280px&gt;&lt;h1&gt;^ then click &quot;Live&quot; (or press CTRL+E)"/>
    <comment type="patch/comment" x="406" y="140" text="&lt;html&gt;&lt;h1&gt;Scroll down to get to know your Gills."/>
@@ -516,7 +516,7 @@
    <comment type="patch/comment" x="784" y="3304" text="&lt;html&gt;&lt;h3&gt;Change &quot;device&quot; to send MIDI elsewhere:"/>
    <comment type="patch/comment" x="784" y="3360" text="(din): Traditional DIN or TRS MIDI connector."/>
    <comment type="patch/comment" x="784" y="3388" text="(usb host port x): Send MIDI to a device connected at the USB host port."/>
-   <comment type="patch/comment" x="784" y="3416" text="(internal port x): Send MIDI back to midi/in objects inside this patch itself!"/>
+   <comment type="patch/comment" x="784" y="3416" text="(internal port x): Send MIDI back to midi/in objects inside the patch itself!"/>
    <comment type="patch/comment" x="784" y="3430" text="(Caution: This might create an infinite feedback loop.)"/>
    <comment type="patch/comment" x="784" y="3458" text="(usb device port 1): Send MIDI to a host (DAW) via the USB prog port."/>
    <comment type="patch/comment" x="14" y="3570" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1 style=&quot;font-size:84px; color: #808080;&quot;&gt;^ &lt;span style=&quot;color: #80a080;&quot;&gt;S&lt;/span&gt;croll to the &lt;span style=&quot;color: #a08080;&quot;&gt;T&lt;/span&gt;op ^"/>
