@@ -594,7 +594,7 @@
    <comment type="patch/comment" x="182" y="3612" text="or use special objects to listen to a specified"/>
    <comment type="patch/comment" x="938" y="3612" text="(usb host port x): Send MIDI to a device connected at the USB host port."/>
    <comment type="patch/comment" x="182" y="3626" text="channel, e.g. ksoloti/midi/in/keyb ch"/>
-   <comment type="patch/comment" x="938" y="3640" text="(internal port x): Send MIDI back to midi/in objects inside this patch itself!"/>
+   <comment type="patch/comment" x="938" y="3640" text="(internal port x): Send MIDI back to midi/in objects inside the patch itself!"/>
    <comment type="patch/comment" x="938" y="3654" text="(Caution: This might create an infinite feedback loop.)"/>
    <comment type="patch/comment" x="938" y="3682" text="(usb device port 1): Send MIDI to a host (DAW) via the USB prog port."/>
    <comment type="patch/comment" x="168" y="3794" text="&lt;html&gt;&lt;div width=900px align=center&gt;&lt;h1 style=&quot;font-size:84px; color: #808080;&quot;&gt;^ &lt;span style=&quot;color: #80a080;&quot;&gt;S&lt;/span&gt;croll to the &lt;span style=&quot;color: #a08080;&quot;&gt;T&lt;/span&gt;op ^"/>
