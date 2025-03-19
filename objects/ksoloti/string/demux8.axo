@@ -1,0 +1,108 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="demux8" uuid="fcfc5c4c-8c27-415b-bb4b-edf7987a7cd7">
+      <sDescription>String demultiplexer
+The sel inlet wraps around.</sDescription>
+      <author>Ksoloti</author>
+      <license>LGPL</license>
+      <inlets>
+         <charptr32 name="in"/>
+         <int32.positive name="sel"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="o1" description="string"/>
+         <charptr32 name="o2" description="string"/>
+         <charptr32 name="o3" description="string"/>
+         <charptr32 name="o4" description="string"/>
+         <charptr32 name="o5" description="string"/>
+         <charptr32 name="o6" description="string"/>
+         <charptr32 name="o7" description="string"/>
+         <charptr32 name="o8" description="string"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[char* empty = "";]]></code.declaration>
+      <code.krate><![CDATA[switch (inlet_sel & 7) {
+	case 0: default:
+		outlet_o1 = (char *)inlet_in;
+		outlet_o2 = (char *)empty;
+		outlet_o3 = (char *)empty;
+		outlet_o4 = (char *)empty;
+		outlet_o5 = (char *)empty;
+		outlet_o6 = (char *)empty;
+		outlet_o7 = (char *)empty;
+		outlet_o8 = (char *)empty;
+		break;
+	case 1:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)inlet_in;
+		outlet_o3 = (char *)empty;
+		outlet_o4 = (char *)empty;
+		outlet_o5 = (char *)empty;
+		outlet_o6 = (char *)empty;
+		outlet_o7 = (char *)empty;
+		outlet_o8 = (char *)empty;
+		break;
+	case 2:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)empty;
+		outlet_o3 = (char *)inlet_in;
+		outlet_o4 = (char *)empty;
+		outlet_o5 = (char *)empty;
+		outlet_o6 = (char *)empty;
+		outlet_o7 = (char *)empty;
+		outlet_o8 = (char *)empty;
+		break;
+	case 3:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)empty;
+		outlet_o3 = (char *)empty;
+		outlet_o4 = (char *)inlet_in;
+		outlet_o5 = (char *)empty;
+		outlet_o6 = (char *)empty;
+		outlet_o7 = (char *)empty;
+		outlet_o8 = (char *)empty;
+		break;
+	case 4:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)empty;
+		outlet_o3 = (char *)empty;
+		outlet_o4 = (char *)empty;
+		outlet_o5 = (char *)inlet_in;
+		outlet_o6 = (char *)empty;
+		outlet_o7 = (char *)empty;
+		outlet_o8 = (char *)empty;
+		break;
+	case 5:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)empty;
+		outlet_o3 = (char *)empty;
+		outlet_o4 = (char *)empty;
+		outlet_o5 = (char *)empty;
+		outlet_o6 = (char *)inlet_in;
+		outlet_o7 = (char *)empty;
+		outlet_o8 = (char *)empty;
+		break;
+	case 6:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)empty;
+		outlet_o3 = (char *)empty;
+		outlet_o4 = (char *)empty;
+		outlet_o5 = (char *)empty;
+		outlet_o6 = (char *)empty;
+		outlet_o7 = (char *)inlet_in;
+		outlet_o8 = (char *)empty;
+		break;
+	case 7:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)empty;
+		outlet_o3 = (char *)empty;
+		outlet_o4 = (char *)empty;
+		outlet_o5 = (char *)empty;
+		outlet_o6 = (char *)empty;
+		outlet_o7 = (char *)empty;
+		outlet_o8 = (char *)inlet_in;
+		break;
+}]]></code.krate>
+   </obj.normal>
+</objdefs>
