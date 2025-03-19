@@ -156,26 +156,6 @@ void cmd(uint8_t c1, uint8_t c2, uint8_t c3) {
 }
 
 
-void fill(uint8_t v) {
-    i2cAcquireBus(&I2CD1);
-
-    cmd(COLUMNADDR, 0, 127); /* Column start end */
-    cmd(PAGEADDR, 0, 7);     /* Page start end */
-
-    txbuf[0] = 0x40;
-
-    uint8_t i; for (i = 1; i < 129; i++) {
-        txbuf[i] = v;
-    }
-
-    uint8_t p; for (p = 0; p < 8; p++) {
-        i2cMasterTransmitTimeout(&I2CD1, __I2C_ADDR, txbuf, 129, rxbuf, 0, 30);
-    }
-
-    i2cReleaseBus(&I2CD1);
-}
-
-
 /* returns i */
 int drawTxt(int i, int NBC, uint8_t *tb, int page, uint8_t *tPage) {
     int nc; for (nc = 0; nc < NBC; nc++) {
