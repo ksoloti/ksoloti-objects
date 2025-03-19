@@ -1,0 +1,30 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="demux2" uuid="432b1e46-7cfe-4aad-932b-7da663d3aa81">
+      <sDescription>String demultiplexer
+The sel inlet wraps around.</sDescription>
+      <author>Ksoloti</author>
+      <license>LGPL</license>
+      <inlets>
+         <charptr32 name="in"/>
+         <int32.positive name="sel"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="o1" description="string"/>
+         <charptr32 name="o2" description="string"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[char* empty = "";]]></code.declaration>
+      <code.krate><![CDATA[switch (inlet_sel & 1) {
+	case 0: default:
+		outlet_o1 = (char *)inlet_in;
+		outlet_o2 = (char *)empty;
+		break;
+	case 1:
+		outlet_o1 = (char *)empty;
+		outlet_o2 = (char *)inlet_in;
+		break;
+}]]></code.krate>
+   </obj.normal>
+</objdefs>
