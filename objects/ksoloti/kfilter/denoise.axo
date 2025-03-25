@@ -16,7 +16,7 @@ Too low a threshold will lead to flickering values, too high a threshold might c
       <displays/>
       <params/>
       <attribs>
-         <spinner name="threshold" MinValue="0" MaxValue="128" DefaultValue="12"/>
+         <spinner name="threshold" MinValue="0" MaxValue="128" DefaultValue="8"/>
       </attribs>
       <code.declaration><![CDATA[class ResponsiveAnalogRead {
 	public:
@@ -56,13 +56,13 @@ Too low a threshold will lead to flickering values, too high a threshold might c
 		errorEMA += ___SMMUL(((newValue - smoothValue) - errorEMA), 0x40000000);
 
 		/* Recalculate sleeping status */
-		is_sleeping = abs(errorEMA) < activity_threshold;
+		isSleeping = abs(errorEMA) < activity_threshold;
 
 		/*
 		 * If sleeping,then don't update responsiveValue in this k-cycle,
 		 * just output the existing responsiveValue.
 		 */
-		if (is_sleeping) {
+		if (isSleeping) {
 			return smoothValue;
 		}
 
@@ -92,7 +92,7 @@ Too low a threshold will lead to flickering values, too high a threshold might c
 	int32_t smoothValue = 0;
 	int32_t errorEMA = 0;
 
-	bool_t is_sleeping = false;
+	bool_t isSleeping = false;
 };
 
 
