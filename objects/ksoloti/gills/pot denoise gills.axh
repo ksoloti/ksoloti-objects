@@ -4,7 +4,7 @@
    <obj type="ksoloti/gills/pot denoise b" uuid="272c7491-a4b5-4d79-b8cc-1110e858446e" name="pot_1" x="168" y="98">
       <params/>
       <attribs>
-         <combo attributeName="pin" selection="1"/>
+         <combo attributeName="pot" selection="1"/>
          <spinner attributeName="threshold" value="12"/>
       </attribs>
    </obj>
@@ -25,7 +25,7 @@
    <obj type="ksoloti/gills/pot denoise p" uuid="ff8498a6-7d87-40b1-b51c-8a6f6ea791ff" name="pot_2" x="168" y="182">
       <params/>
       <attribs>
-         <combo attributeName="pin" selection="1"/>
+         <combo attributeName="pot" selection="1"/>
          <spinner attributeName="threshold" value="12"/>
       </attribs>
    </obj>

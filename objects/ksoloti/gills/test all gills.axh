@@ -148,7 +148,7 @@
       <params/>
       <attribs>
          <combo attributeName="pot" selection="1"/>
-         <spinner attributeName="threshold" value="12"/>
+         <spinner attributeName="threshold" value="8"/>
       </attribs>
    </obj>
    <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_17" x="154" y="658">
@@ -159,7 +159,7 @@
       <params/>
       <attribs>
          <combo attributeName="pot" selection="2"/>
-         <spinner attributeName="threshold" value="12"/>
+         <spinner attributeName="threshold" value="8"/>
       </attribs>
    </obj>
    <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_18" x="434" y="658">
@@ -170,7 +170,7 @@
       <params/>
       <attribs>
          <combo attributeName="pot" selection="3"/>
-         <spinner attributeName="threshold" value="12"/>
+         <spinner attributeName="threshold" value="8"/>
       </attribs>
    </obj>
    <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_19" x="714" y="658">
@@ -181,7 +181,7 @@
       <params/>
       <attribs>
          <combo attributeName="pot" selection="4"/>
-         <spinner attributeName="threshold" value="12"/>
+         <spinner attributeName="threshold" value="8"/>
       </attribs>
    </obj>
    <obj type="disp/dial p" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_20" x="1008" y="658">
