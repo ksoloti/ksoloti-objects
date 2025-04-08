@@ -1,0 +1,24 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="time waster (NOP)" uuid="e4c48b9c7f8d4216b24cb80766645702">
+      <sDescription>Waste Time (NOP).</sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <helpPatch></helpPatch>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params>
+         <int32 name="nops" description="How many NOPS per k-rate cycle (333 microseconds) will you waste?">
+            <MinValue i="0"/>
+            <MaxValue i="32768"/>
+         </int32>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[uint32_t Phase;
+uint32_t r;]]></code.declaration>
+      <code.krate><![CDATA[{
+	for(int i = 0; i < param_nops; i++)
+		__NOP();
+}]]></code.krate>
+   </obj.normal>
+</objdefs>
