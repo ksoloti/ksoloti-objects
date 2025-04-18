@@ -1,0 +1,16 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="Usb Audio Resample" uuid="775d31565016417c9f8ff8d8257fa641">
+      <sDescription>Usb Audio Resampling Switch.</sDescription>
+      <author>Andrew Capon</author>
+      <license>BSD</license>
+      <helpPatch></helpPatch>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params>
+         <bool32.tgl name="Resample"/>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[usbAudioResample = param_Resample;]]></code.krate>
+   </obj.normal>
+</objdefs>
