@@ -1,0 +1,18 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="vu h" uuid="698870c8-15f5-4fdc-adce-0e8de7eda7ef">
+      <sDescription>cheap vu meter display, horizontal</sDescription>
+      <author>Ksoloti</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.vu.horizontal name="v" nolabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[disp_v=inlet_in[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>
