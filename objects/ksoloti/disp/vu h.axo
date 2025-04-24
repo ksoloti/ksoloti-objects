@@ -8,7 +8,7 @@
       </inlets>
       <outlets/>
       <displays>
-         <frac32.vu.horizontal name="v" nolabel="true"/>
+         <frac32.vu.horizontal name="v" noLabel="true"/>
       </displays>
       <params/>
       <attribs/>
