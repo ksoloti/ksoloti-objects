@@ -2,6 +2,7 @@
    <obj.normal id="read ms interp" uuid="8d04632c-58b7-4ca6-b7f3-a555997e5ab3">
       <sDescription>Delay read, 32-bit, linear interpolated.
 Used to read the delay line from a &quot;delay/write ms&quot; object.
+Delay time in milliseconds is at the 'ms' outlet.
 
 * IMPORTANT: This object can only read the &quot;ksoloti/delay/write ms&quot; object. Other &quot;delay/write&quot; objects will cause an error. *</sDescription>
       <author>Ksoloti</author>
@@ -12,14 +13,17 @@ Used to read the delay line from a &quot;delay/write ms&quot; object.
       </inlets>
       <outlets>
          <frac32buffer name="out" description="audio output"/>
+         <int32 name="ms" description="delay time in milliseconds"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="time" noLabel="true"/>
+         <frac32.u.map name="time"/>
       </params>
       <attribs>
          <objref name="delayname"/>
       </attribs>
+      <code.krate><![CDATA[float factor = q27_to_float(__USAT(param_time + inlet_time[0], 27)) / 48.0f;
+outlet_ms = __SSAT((uint32_t)(attr_delayname.LENGTH * factor), 31);]]></code.krate> 
       <code.srate><![CDATA[/* Sum and clip delay time inputs*/
 uint32_t tmp_d = __USAT(param_time + inlet_time, 27);
 
