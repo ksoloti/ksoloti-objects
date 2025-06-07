@@ -43,7 +43,7 @@ For example, &quot;-0.99&quot; has 5 digits.</sDescription>
          </combo>
       </attribs>
       <includes>
-         <include>../chibios/os/hal/lib/streams/chprintf.h</include>
+         <include>chibios/os/hal/lib/streams/chprintf.h</include>
       </includes>
       <code.declaration><![CDATA[char c[attr_digits]; /* digits + null terminator */]]></code.declaration>
       <code.init><![CDATA[int i; for (i = 0; i < attr_digits; i++) {
