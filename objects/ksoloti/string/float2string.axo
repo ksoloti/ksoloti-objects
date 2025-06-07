@@ -8,6 +8,7 @@ If you&apos;re expecting negative values, keep in mind that the &quot;-&quot; wi
 For example, &quot;-0.99&quot; has 5 digits.</sDescription>
       <author>Ksoloti</author>
       <license>GPLv3</license>
+      <helpPatch>int2string_float2string.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="in" description="float input"/>
       </inlets>
