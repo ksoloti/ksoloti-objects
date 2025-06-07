@@ -1,0 +1,49 @@
+<objdefs appVersion="1.0.12">
+   <obj.normal id="int2string" uuid="681351bf-ba17-4cda-98c2-44fb3c62db1b">
+      <sDescription>Convert a bipolar integer (green) value to a string.
+
+&quot;digits&quot;: set the number of reserved digits.
+If you&apos;re expecting negative values, keep in mind that the &quot;-&quot; will occupy one of the digits!
+
+&quot;align&quot;: set the alignment.
+    right: string will be right-justified and always occupies &quot;digits&quot; spaces.
+    left: string will be left-justified and only as long as necessary.</sDescription>
+      <author>Ksoloti</author>
+      <license>GPLv3</license>
+      <inlets>
+         <int32.bipolar name="in" description="integer input"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="str" description="string output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="digits" description="&lt;html&gt;Set the number of reserved digits.&lt;br&gt;If you&apos;re expecting negative values, keep in mind that the &quot;-&quot; will occupy one of the digits!" MinValue="1" MaxValue="12" DefaultValue="3"/>
+         <combo name="align" description="&lt;html&gt;Set the alignment.&lt;br&gt;      right: string will be right-justified and always occupies &quot;digits&quot; spaces.&lt;br&gt;     left: string will be left-justified and only as long as necessary.">
+            <MenuEntries>
+               <string>right</string>
+               <string>left</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <includes>
+         <include>chibios/os/various/chprintf.h</include>
+      </includes>
+      <code.declaration><![CDATA[char c[attr_digits]; /* digits + null terminator */]]></code.declaration>
+      <code.init><![CDATA[int i; for (i = 0; i < attr_digits; i++) {
+	c[i] = 0;
+}]]></code.init>
+      <code.krate><![CDATA[#if attr_align == 0
+chsnprintf(c, attr_digits+1, "%attr_digitsd", inlet_in);
+#elif attr_align == 1
+chsnprintf(c, attr_digits+1, "%d", inlet_in);
+#endif
+
+outlet_str = &c[0];]]></code.krate>
+   </obj.normal>
+</objdefs>
