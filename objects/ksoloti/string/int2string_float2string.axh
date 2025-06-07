@@ -1,0 +1,248 @@
+<patch-1.0 appVersion="1.1.0">
+   <obj type="ksoloti/gills/pot denoise p" uuid="ff8498a6-7d87-40b1-b51c-8a6f6ea791ff" name="pot_1" x="14" y="14">
+      <params/>
+      <attribs>
+         <spinner attributeName="threshold" value="10"/>
+         <combo attributeName="pot" selection="1"/>
+      </attribs>
+   </obj>
+   <obj type="math/gain" uuid="6b4dd3da49f98e54900f6c20031f38f4624fa364" name="gain_1" x="140" y="14">
+      <params>
+         <frac32.u.map name="amp" value="4.00499963760376"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ksoloti/delay/write ms" uuid="5de9bfb4-ff1c-4245-a4bc-0c60daf2398b" name="write_1" x="252" y="14">
+      <params/>
+      <attribs>
+         <spinner attributeName="size_ms" value="1000"/>
+      </attribs>
+   </obj>
+   <obj type="mux/mux 2" uuid="777491e645978e331fcbab6610f52c1aaa5ade0e" name="mux_1" x="672" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="tiar/string/concat2" uuid="cc32098b-df43-4664-9692-81f5b66cbe5f" name="concat2_1" x="770" y="70">
+      <params/>
+      <attribs>
+         <spinner attributeName="size" value="16"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="float" x="588" y="84">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_1" x="112" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" name="interp_1" x="168" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="237849b1-9ea5-4fdb-83c1-ca607ad14479" name="read_1" x="252" y="112">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="write_1"/>
+      </attribs>
+      <object id="patch/object" uuid="237849b1-9ea5-4fdb-83c1-ca607ad14479">
+         <sDescription>Delay read, 32-bit, non-interpolated.
+Used to read the delay line from a &quot;delay/write ms&quot; object.
+
+* IMPORTANT: This object can only read the &quot;ksoloti/delay/write ms&quot; object. Other &quot;delay/write&quot; objects will cause an error. *</sDescription>
+         <author>Ksoloti</author>
+         <license>BSD</license>
+         <helpPatch>delay ms.axh</helpPatch>
+         <inlets>
+            <frac32buffer name="time" description="delay time (fraction of total delayline size)"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="out" description="audio output"/>
+            <int32 name="ms" description="delay time in milliseconds"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.u.map name="time"/>
+         </params>
+         <attribs>
+            <objref name="delayname"/>
+         </attribs>
+         <includes/>
+         <code.krate><![CDATA[float factor = q27_to_float(__USAT(param_time + inlet_time[0], 27)) / 48.0f;
+outlet_ms = __SSAT((uint32_t)(attr_delayname.LENGTH * factor), 31);]]></code.krate>
+         <code.srate><![CDATA[/* Number of samples that the read pointer runs behind the write pointer. Effectively defines the delay time. */
+uint32_t read_offs = ___SMMUL(__USAT(param_time + inlet_time, 27), (attr_delayname.LENGTH - BUFSIZE) << 5); 
+
+/* Subtract read offset from the current write pointer to get read pointer position. Also some "buffer size VS running sample within the buffer" juggling. */ 
+uint32_t delay1 = attr_delayname.LENGTH + attr_delayname.writepos - read_offs - BUFSIZE + buffer_index;
+
+
+/* Spit out sample at current read pointer*/
+outlet_out = attr_delayname.array[delay1 % attr_delayname.LENGTH];]]></code.srate>
+      </object>
+   </patchobj>
+   <obj type="disp/i" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_1" x="420" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_2" x="588" y="140">
+      <params/>
+      <attribs>
+         <table attributeName="str" table=" ms"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/string/int2string" uuid="681351bf-ba17-4cda-98c2-44fb3c62db1b" name="int2string_1" x="420" y="168">
+      <params/>
+      <attribs>
+         <spinner attributeName="digits" value="4"/>
+         <combo attributeName="align" selection="right"/>
+      </attribs>
+   </obj>
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="770" y="168">
+      <params/>
+      <attribs>
+         <combo attributeName="narrowFont" selection="off"/>
+         <combo attributeName="useScope" selection="off"/>
+         <objref attributeName="scope" obj=""/>
+      </attribs>
+   </obj>
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="588" y="210">
+      <params/>
+      <attribs>
+         <table attributeName="str" table="delay:"/>
+      </attribs>
+   </obj>
+   <patchobj type="patch/object" uuid="f8014377-eeaf-40c0-bea6-adbc3647715e" name="read_2" x="252" y="266">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="write_1"/>
+      </attribs>
+      <object id="patch/object" uuid="f8014377-eeaf-40c0-bea6-adbc3647715e">
+         <sDescription>Delay read, 32-bit, linear interpolated.
+Used to read the delay line from a &quot;delay/write ms&quot; object.
+
+* IMPORTANT: This object can only read the &quot;ksoloti/delay/write ms&quot; object. Other &quot;delay/write&quot; objects will cause an error. *</sDescription>
+         <author>Ksoloti</author>
+         <license>BSD</license>
+         <helpPatch>delay ms.axh</helpPatch>
+         <inlets>
+            <frac32buffer name="time" description="delay time (fraction of total delayline size)"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="out" description="audio output"/>
+            <int32 name="ms" description="delay time in milliseconds"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.u.map name="time" noLabel="true"/>
+         </params>
+         <attribs>
+            <objref name="delayname"/>
+         </attribs>
+         <includes/>
+         <code.krate><![CDATA[float factor = q27_to_float(__USAT(param_time + inlet_time[0], 27)) / 48.0f;
+outlet_ms = __SSAT((uint32_t)(attr_delayname.LENGTH * factor), 31);]]></code.krate>
+         <code.srate><![CDATA[/* Sum and clip delay time inputs*/
+uint32_t tmp_d = __USAT(param_time + inlet_time, 27);
+
+/* Number of samples that the read pointer runs behind the write pointer. Effectively defines the delay time. */
+uint32_t read_offs = ___SMMUL(tmp_d, (attr_delayname.LENGTH - BUFSIZE) << 5); 
+
+/* Subtract read offset from the current write pointer to get read pointer position. Also some "buffer size VS running sample within the buffer" juggling. */ 
+uint32_t delay1 = attr_delayname.LENGTH + attr_delayname.writepos - read_offs - BUFSIZE + buffer_index - 1;
+
+/* Calculate relative magnitudes depending on fraction of read pointer */ 
+uint32_t tmp_mult = attr_delayname.LENGTH << 3;
+uint32_t tmp_w1 = (tmp_d * tmp_mult) & 0x7FFFFFFF;
+uint32_t tmp_w2 = 0x7FFFFFFF - tmp_w1;
+
+/* Get two adjacent samples at current read pointer */
+int32_t tmp_a1 = attr_delayname.array[delay1 % attr_delayname.LENGTH];
+int32_t tmp_a2 = attr_delayname.array[(delay1 + 1) % attr_delayname.LENGTH];
+
+
+/* Cross-fade the two samples */
+int32_t tmp_r = ___SMMUL(tmp_a1, tmp_w1);
+tmp_r = ___SMMLA(tmp_a2, tmp_w2, tmp_r);
+
+/* Spit out sample */
+outlet_out = tmp_r << 1;]]></code.srate>
+      </object>
+   </patchobj>
+   <obj type="ksoloti/string/float2string" uuid="7eebdcdf-7782-40ed-a971-d2925e97aa7c" name="float2string_1" x="420" y="280">
+      <params/>
+      <attribs>
+         <combo attributeName="digits" selection="4"/>
+      </attribs>
+   </obj>
+   <nets>
+      <net>
+         <source obj="c_1" outlet="out"/>
+         <dest obj="display_1" inlet="line1"/>
+      </net>
+      <net>
+         <source obj="c_2" outlet="out"/>
+         <dest obj="concat2_1" inlet="str2"/>
+      </net>
+      <net>
+         <source obj="concat2_1" outlet="out"/>
+         <dest obj="display_1" inlet="line2"/>
+      </net>
+      <net>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="read_1" inlet="time"/>
+         <dest obj="read_2" inlet="time"/>
+      </net>
+      <net>
+         <source obj="pot_1" outlet="out"/>
+         <dest obj="gain_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="gain_1" outlet="out"/>
+         <dest obj="*_1" inlet="a"/>
+         <dest obj="*_1" inlet="b"/>
+      </net>
+      <net>
+         <source obj="*_1" outlet="result"/>
+         <dest obj="interp_1" inlet="i"/>
+         <dest obj="float2string_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="read_1" outlet="ms"/>
+         <dest obj="i_1" inlet="in"/>
+         <dest obj="int2string_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="concat2_1" inlet="str1"/>
+      </net>
+      <net>
+         <source obj="float2string_1" outlet="str"/>
+         <dest obj="mux_1" inlet="i2"/>
+      </net>
+      <net>
+         <source obj="int2string_1" outlet="str"/>
+         <dest obj="mux_1" inlet="i1"/>
+      </net>
+      <net>
+         <source obj="float" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>70</x>
+      <y>160</y>
+      <width>950</width>
+      <height>620</height>
+   </windowPos>
+</patch-1.0>
