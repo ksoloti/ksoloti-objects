@@ -30,11 +30,11 @@ const uint8_t font5x8_offset[96*5] = {
     0b01111110, // XXXXXXXXXXXX
     0b00100100, //   XX    XX
 
-    // $ 36                      <---------------------
-    0b01111111, // XXXXXXXXXXXXXXXX
-    0b00100110, //   XX    XXXX
-    0b00101000, //   XX  XX
-    0b00011000, //     XX
+    // ♭ 36
+    0b01111111, // XXXXXXXXXXXXXX
+    0b01001000, // XX    XX
+    0b00100100, //   XX    XX
+    0b00011100, //     XXXXXX
     0b00000000, //
 
     // % 37
