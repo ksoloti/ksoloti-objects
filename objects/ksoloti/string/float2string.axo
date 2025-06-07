@@ -1,0 +1,57 @@
+<objdefs appVersion="1.1.0">
+   <obj.normal id="float2string" uuid="7eebdcdf-7782-40ed-a971-d2925e97aa7c">
+      <sDescription>Converts a bipolar float value to a string.
+
+&quot;digits&quot;: set the number of reserved digits including the floating &quot;.&quot; dot.
+For example, the formats &quot;0.000&quot; and &quot;10.00&quot; each have 5 digits.
+If you&apos;re expecting negative values, keep in mind that the &quot;-&quot; will occupy one of the digits!
+For example, &quot;-0.99&quot; has 5 digits.</sDescription>
+      <author>Ksoloti</author>
+      <license>GPLv3</license>
+      <helpPatch>frac2string.axh</helpPatch>
+      <inlets>
+         <frac32.bipolar name="in" description="float input"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="str" description="output string"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="digits" description="&lt;html&gt;Set the number of reserved digits including the floating &quot;.&quot; dot.&lt;br&gt;For example, the formats &quot;0.000&quot; and &quot;10.00&quot; each have 5 digits.&lt;br&gt;If you&apos;re expecting negative values, keep in mind that the &quot;-&quot; will occupy one of the digits!&lt;br&gt;For example, &quot;-0.99&quot; has 5 digits.">
+            <MenuEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+            </MenuEntries>
+            <CEntries>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <includes>
+         <include>../chibios/os/hal/lib/streams/chprintf.h</include>
+      </includes>
+      <code.declaration><![CDATA[char c[attr_digits]; /* digits + null terminator */]]></code.declaration>
+      <code.init><![CDATA[int i; for (i = 0; i < attr_digits; i++) {
+	c[i] = 0;
+}]]></code.init>
+      <code.krate><![CDATA[chsnprintf(c, attr_digits, "%attr_digitsf", q27_to_float(inlet_in));
+
+outlet_str = &c[0];]]></code.krate>
+   </obj.normal>
+</objdefs>
