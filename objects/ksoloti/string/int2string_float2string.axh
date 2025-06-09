@@ -18,20 +18,14 @@
          <spinner attributeName="size_ms" value="1000"/>
       </attribs>
    </obj>
-   <obj type="mux/mux 2" uuid="777491e645978e331fcbab6610f52c1aaa5ade0e" name="mux_1" x="672" y="56">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="tiar/string/concat2" uuid="cc32098b-df43-4664-9692-81f5b66cbe5f" name="concat2_1" x="770" y="70">
-      <params/>
-      <attribs>
-         <spinner attributeName="size" value="16"/>
-      </attribs>
-   </obj>
-   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="float" x="588" y="84">
+   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="&lt;html&gt;&lt;h2 style=&quot;color:#008000&quot;&gt;float" x="560" y="56">
       <params>
          <bool32.tgl name="b" value="0"/>
       </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 2" uuid="777491e645978e331fcbab6610f52c1aaa5ade0e" name="mux_1" x="644" y="56">
+      <params/>
       <attribs/>
    </obj>
    <obj type="math/*" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_1" x="112" y="112">
@@ -54,10 +48,20 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_2" x="588" y="140">
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_2" x="560" y="140">
       <params/>
       <attribs>
          <table attributeName="str" table=" ms"/>
+      </attribs>
+   </obj>
+   <obj type="mux/mux 2" uuid="777491e645978e331fcbab6610f52c1aaa5ade0e" name="mux_2" x="728" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="tiar/string/concat2" uuid="cc32098b-df43-4664-9692-81f5b66cbe5f" name="concat2_1" x="812" y="140">
+      <params/>
+      <attribs>
+         <spinner attributeName="size" value="16"/>
       </attribs>
    </obj>
    <obj type="ksoloti/string/int2string" uuid="681351bf-ba17-4cda-98c2-44fb3c62db1b" name="int2string_1" x="420" y="168">
@@ -67,24 +71,30 @@
          <combo attributeName="align" selection="right"/>
       </attribs>
    </obj>
-   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="770" y="168">
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_3" x="560" y="210">
       <params/>
       <attribs>
-         <combo attributeName="useScope" selection="off"/>
-         <objref attributeName="scope" obj=""/>
-         <combo attributeName="narrowFont" selection="off"/>
+         <table attributeName="str" table=" s"/>
       </attribs>
    </obj>
-   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="588" y="210">
+   <obj type="ksoloti/string/float2string" uuid="7eebdcdf-7782-40ed-a971-d2925e97aa7c" name="float2string_1" x="406" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="digits" selection="7"/>
+      </attribs>
+   </obj>
+   <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="728" y="252">
       <params/>
       <attribs>
          <table attributeName="str" table="delay:"/>
       </attribs>
    </obj>
-   <obj type="ksoloti/string/float2string" uuid="7eebdcdf-7782-40ed-a971-d2925e97aa7c" name="float2string_1" x="420" y="280">
+   <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="896" y="252">
       <params/>
       <attribs>
-         <combo attributeName="digits" selection="4"/>
+         <combo attributeName="narrowFont" selection="off"/>
+         <combo attributeName="useScope" selection="off"/>
+         <objref attributeName="scope" obj=""/>
       </attribs>
    </obj>
    <nets>
@@ -94,7 +104,7 @@
       </net>
       <net>
          <source obj="c_2" outlet="out"/>
-         <dest obj="concat2_1" inlet="str2"/>
+         <dest obj="mux_2" inlet="i1"/>
       </net>
       <net>
          <source obj="concat2_1" outlet="out"/>
@@ -136,8 +146,17 @@
          <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source obj="float" outlet="o"/>
+         <source obj="&lt;html&gt;&lt;h2 style=&quot;color:#008000&quot;&gt;float" outlet="o"/>
          <dest obj="mux_1" inlet="s"/>
+         <dest obj="mux_2" inlet="s"/>
+      </net>
+      <net>
+         <source obj="c_3" outlet="out"/>
+         <dest obj="mux_2" inlet="i2"/>
+      </net>
+      <net>
+         <source obj="mux_2" outlet="o"/>
+         <dest obj="concat2_1" inlet="str2"/>
       </net>
    </nets>
    <settings>
@@ -147,7 +166,7 @@
    <windowPos>
       <x>70</x>
       <y>160</y>
-      <width>950</width>
+      <width>1061</width>
       <height>620</height>
    </windowPos>
 </patch-1.0>
