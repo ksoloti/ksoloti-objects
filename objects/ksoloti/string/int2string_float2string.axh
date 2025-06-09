@@ -18,9 +18,9 @@
          <spinner attributeName="size_ms" value="1000"/>
       </attribs>
    </obj>
-   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="&lt;html&gt;&lt;h2 style=&quot;color:#008000&quot;&gt;float" x="560" y="56">
+   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="&lt;html&gt;&lt;h2&gt;float" x="560" y="56">
       <params>
-         <bool32.tgl name="b" value="0"/>
+         <bool32.tgl name="b" value="1"/>
       </params>
       <attribs/>
    </obj>
@@ -80,7 +80,7 @@
    <obj type="ksoloti/string/float2string" uuid="7eebdcdf-7782-40ed-a971-d2925e97aa7c" name="float2string_1" x="406" y="252">
       <params/>
       <attribs>
-         <combo attributeName="digits" selection="7"/>
+         <combo attributeName="digits" selection="6"/>
       </attribs>
    </obj>
    <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="c_1" x="728" y="252">
@@ -92,9 +92,9 @@
    <obj type="ksoloti/gills/display" uuid="0c083e83-0280-4cf2-b747-8a00859bb904" name="display_1" x="896" y="252">
       <params/>
       <attribs>
-         <combo attributeName="narrowFont" selection="off"/>
          <combo attributeName="useScope" selection="off"/>
          <objref attributeName="scope" obj=""/>
+         <combo attributeName="narrowFont" selection="off"/>
       </attribs>
    </obj>
    <nets>
@@ -146,7 +146,7 @@
          <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source obj="&lt;html&gt;&lt;h2 style=&quot;color:#008000&quot;&gt;float" outlet="o"/>
+         <source obj="&lt;html&gt;&lt;h2&gt;float" outlet="o"/>
          <dest obj="mux_1" inlet="s"/>
          <dest obj="mux_2" inlet="s"/>
       </net>
