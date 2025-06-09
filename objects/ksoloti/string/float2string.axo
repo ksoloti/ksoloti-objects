@@ -5,7 +5,8 @@
 &quot;digits&quot;: set the number of reserved digits including the floating &quot;.&quot; dot.
 For example, the formats &quot;0.000&quot; and &quot;10.00&quot; each have 5 digits.
 If you&apos;re expecting negative values, keep in mind that the &quot;-&quot; will occupy one of the digits!
-For example, &quot;-0.99&quot; has 5 digits.</sDescription>
+For example, &quot;-0.99&quot; has 5 digits.
+Patcher v1.0.12 only: It seems like the old ChibiOS version (2.6.9) this Patcher is using limits the decimal precision after the dot to 4. Upgrade to v1.1.0 or later if this is important to you.</sDescription>
       <author>Ksoloti</author>
       <license>GPLv3</license>
       <helpPatch>int2string_float2string.axh</helpPatch>
