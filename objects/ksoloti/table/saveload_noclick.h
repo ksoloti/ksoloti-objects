@@ -4,7 +4,7 @@
 static bool_t saveload_noclick_busy = false;
 
 void wait_busy(void) {
-	volatile uint32_t count = 60000; 
+	volatile uint32_t count = 600000; /* 10 minutes */
 	while (saveload_noclick_busy && count) {
 		count--;
 		chThdSleepMilliseconds(1);
