@@ -29,7 +29,7 @@ template <typename T> __attribute__((noinline)) static void save_sd(const char* 
 		return;
 	}
 	
-	int rem_sz = sizeof(array) * LENGTH; /* length of table in bytes */
+	int rem_sz = sizeof(array[0]) * LENGTH; /* length of table in bytes */
 	int offset = 0;
 	
 	while (rem_sz > 0) {
@@ -78,7 +78,7 @@ template <typename T> __attribute__((noinline)) static void load_sd(const char* 
 		return;
 	}
 	
-	int rem_sz = sizeof(array) * LENGTH;	/* length of table in bytes */
+	int rem_sz = sizeof(array[0]) * LENGTH;	/* length of table in bytes */
 	int offset = 0;
 	
 	while (rem_sz > 0) {
