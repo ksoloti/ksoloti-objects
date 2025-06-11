@@ -19,6 +19,9 @@ The object has a &quot;busy&quot; light, giving feedback if loading or writing h
       <attribs>
          <objref name="table"/>
       </attribs>
+      <includes>
+         <include>./saveload_noclick.h</include>
+      </includes>
       <depends>
          <depend>fatfs</depend>
       </depends>
@@ -27,99 +30,11 @@ The object has a &quot;busy&quot; light, giving feedback if loading or writing h
 /* You could also hard-code the file name here */
 const char* fname;
 
-void save_sd() {
-
-	FIL FileObject;
-	FRESULT err;
-	UINT bytes_written;
-
-	// codec_clearbuffer(); /* no longer necessary! */
-	
-	err = f_open(&FileObject, fname, FA_WRITE | FA_CREATE_ALWAYS);
-	if (err != FR_OK) { 				/* getting error? */
-		report_fatfs_error(err, fname);
-		return;
-	}
-	
-	int rem_sz = sizeof(*attr_table.array) * attr_table.LENGTH; /* length of table in bytes */
-	int offset = 0;
-	
-	while (rem_sz > 0) {
-		if (rem_sz > sizeof(fbuff)) { 	/* fbuff is a firmware-internal, general-purpose SD card buffer */
-			memcpy((char*) fbuff, (char*) (&attr_table.array[0]) + offset, sizeof(fbuff));
-			err = f_write(&FileObject, fbuff, sizeof(fbuff), &bytes_written);
-			rem_sz -= sizeof(fbuff);
-			offset += sizeof(fbuff);
-		} else {
-			memcpy((char*) fbuff, (char*) (&attr_table.array[0]) + offset, rem_sz);
-			err = f_write(&FileObject, fbuff, rem_sz, &bytes_written);
-			rem_sz = 0;
-		}
-	}
-	if (err != FR_OK) { 				/* getting error? */
-		report_fatfs_error(err, fname);
-		return;
-	}
-	
-	err = f_close(&FileObject);
-	if (err != FR_OK) { 				/* getting error? */
-		report_fatfs_error(err, fname);
-		return;
-	}
-}
-
-
-void load_sd() {
-	
-	FIL FileObject;
-	FRESULT err;
-	UINT bytes_read;
-
-	// codec_clearbuffer(); /* no longer necessary! */
-	
-	err = f_open(&FileObject, fname, FA_READ | FA_OPEN_EXISTING); /* open file */
-	if (err != FR_OK) { 				/* getting error? */
-		report_fatfs_error(err, fname);
-		return;
-	}
-	
-	int rem_sz = sizeof(*attr_table.array)*attr_table.LENGTH;	/* length of table in bytes */
-	int offset = 0;
-	
-	while (rem_sz > 0) {
-		if (rem_sz > sizeof(fbuff)) { 	/* fbuff is a firmware-internal, general-purpose SD card buffer */
-			err = f_read(&FileObject, fbuff, sizeof(fbuff), &bytes_read);
-			if (bytes_read == 0) {
-				break;
-			}
-			memcpy((char*) (&attr_table.array[0]) + offset, (char*) fbuff, bytes_read);
-			rem_sz -= bytes_read;
-			offset += bytes_read;
-		} else {
-			err = f_read(&FileObject, fbuff, rem_sz, &bytes_read);
-			memcpy((char*) (&attr_table.array[0]) + offset, (char*) fbuff, bytes_read);
-			rem_sz = 0;
-		}
-	}
-	if (err != FR_OK) { 				/* getting error? */
-		report_fatfs_error(err, fname);
-		return;
-	}
-	
-	err = f_close(&FileObject); 
-	if (err != FR_OK) { 				/* getting error? */
-		report_fatfs_error(err, fname);
-		return;
-	}
-}
-
-
-
-msg_t ThreadX2() {
+__attribute__((noinline)) msg_t ThreadNoClick2() {
 	while (!chThdShouldTerminate()) {
 		if (trig_save && !ntrig) {
 			ntrig = 1;
-			save_sd();
+			save_sd(fname, attr_table.array, attr_table.LENGTH);
 			
 			/* 
 			 * Sleeping not necessary, but in reality
@@ -129,7 +44,7 @@ msg_t ThreadX2() {
 		}
 		else if (trig_load && !ntrig) {
 			ntrig = 1;
-			load_sd();
+			load_sd(fname, attr_table.array, attr_table.LENGTH);
 			
 			/* 
 			 * Sleeping not necessary, but in reality
@@ -146,17 +61,16 @@ msg_t ThreadX2() {
 }
 
 
-static msg_t ThreadX(void *arg) {
-    ((attr_parent *)arg)->ThreadX2();
+static msg_t ThreadNoClick(void *arg) {
+    ((attr_parent *)arg)->ThreadNoClick2();
 }
 
 
-
-WORKING_AREA(waThreadX, 1024); /* 750 is not enough, try 1024 or more */
+WORKING_AREA(waThreadNoClick, 1024); /* 750 is not enough, try 1024 or more */
 Thread *Thd;]]></code.declaration>
       <code.init><![CDATA[trig_load = trig_save = ntrig = 0;
 
-Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), LOWPRIO, (tfunc_t)ThreadX, (void *)this);]]></code.init>
+Thd = chThdCreateStatic(waThreadNoClick, sizeof(waThreadNoClick), LOWPRIO, (tfunc_t)ThreadNoClick, (void *)this);]]></code.init>
       <code.dispose><![CDATA[chThdTerminate( Thd );
 chThdWait( Thd );]]></code.dispose>
       <code.krate><![CDATA[trig_load = inlet_load;
