@@ -43,10 +43,10 @@ WORKING_AREA(waThreadX, 32);
 Thread *Thd;]]></code.declaration>
       <code.init><![CDATA[/* INIT CODE */
 
-#ifndef __I2C_CONFIGURED
-#define __I2C_CONFIGURED
-palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(4) | PAL_STM32_PUDR_PULLUP| PAL_STM32_OTYPE_OPENDRAIN);// SCL
-palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(4) | PAL_STM32_PUDR_PULLUP| PAL_STM32_OTYPE_OPENDRAIN);// SDA
+#ifndef __I2C1_CONFIGURED
+#define __I2C1_CONFIGURED
+palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(4) | PAL_STM32_PUDR_PULLUP | PAL_STM32_OTYPE_OPENDRAIN);// SCL
+palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(4) | PAL_STM32_PUDR_PULLUP | PAL_STM32_OTYPE_OPENDRAIN);// SDA
 
 static const I2CConfig i2cfg = {
     OPMODE_I2C,
@@ -61,8 +61,8 @@ Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (tfunc_t)Threa
       <code.dispose><![CDATA[chThdTerminate( Thd );
 chThdWait( Thd );
 
-#ifdef __I2C_CONFIGURED
-#undef __I2C_CONFIGURED
+#ifdef __I2C1_CONFIGURED
+#undef __I2C1_CONFIGURED
 i2cStop(&I2CD1);
 palSetPadMode(GPIOB, 8, PAL_MODE_INPUT_ANALOG);
 palSetPadMode(GPIOB, 9, PAL_MODE_INPUT_ANALOG);
