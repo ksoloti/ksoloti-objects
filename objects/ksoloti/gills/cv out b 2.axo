@@ -24,6 +24,20 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
                <string>(1&lt;&lt;22)</string>
             </CEntries>
          </combo>
+         <combo name="when_stopped" description="&lt;html&gt;Which value should the CV rest at whenever the patch is stopped.&lt;br&gt;&apos;deinit&apos; means the DAC is stopped and the GPIO settings are cleared.">
+            <MenuEntries>
+               <string>center</string>
+               <string>low</string>
+               <string>high</string>
+               <string>deinit</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+            </CEntries>
+         </combo>
       </attribs>
       <code.declaration><![CDATA[int calc_cv_bipolar(int in, int offs) {
 	int val = -((in >> 1) + offs) + (1<<26);
@@ -33,10 +47,25 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
 palSetPadMode(GPIOA, 5, PAL_MODE_OUTPUT_OPENDRAIN);
 RCC->APB1ENR |= 0x20000000;
 DAC->CR |= 0x00010001;]]></code.init>
-      <code.dispose><![CDATA[DAC->CR = 0x0;
+      <code.dispose><![CDATA[#if attr_when__stopped == 0
+/* CV rests at center when patch is stopped */
+DAC->DHR12R1 = 0x800; /* 2048, half of 12-bit max 4095 */
+DAC->DHR12R2 = 0x800;
+#elif attr_when__stopped == 1
+/* CV rests at low when patch is stopped */
+DAC->DHR12R1 = 0xFFF; /* Gills outputs invert the signal */
+DAC->DHR12R2 = 0xFFF;
+#elif attr_when__stopped == 2
+/* CV rests at high when patch is stopped */
+DAC->DHR12R1 = 0; /* Gills outputs invert the signal */
+DAC->DHR12R2 = 0;
+#elif attr_when__stopped == 3
+/* Deinit: stop DAC and clear GPIO (CV will likely go high or low!) */
+DAC->CR = 0x0;
 RCC->APB1ENR &= ~0x20000000;
 palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
-palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);]]></code.dispose>
+palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+#endif]]></code.dispose>
       <code.krate><![CDATA[DAC->DHR12R1 = calc_cv_bipolar(inlet_cv1, attr_offset)>>15;
 DAC->DHR12R2 = calc_cv_bipolar(inlet_cv2, attr_offset)>>15;]]></code.krate>
    </obj.normal>

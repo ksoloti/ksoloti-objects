@@ -33,6 +33,20 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
                <string>(1&lt;&lt;22)</string>
             </CEntries>
          </combo>
+         <combo name="when_stopped" description="&lt;html&gt;Which value should the CV rest at whenever the patch is stopped.&lt;br&gt;&apos;deinit&apos; means the DAC is stopped and the GPIO settings are cleared.">
+            <MenuEntries>
+               <string>center</string>
+               <string>low</string>
+               <string>high</string>
+               <string>deinit</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+            </CEntries>
+         </combo>
       </attribs>
       <code.declaration><![CDATA[int calc_cv_bipolar(int in, int offs) {
 	int val = -((in >> 1) + offs) + (1<<26);
@@ -51,13 +65,40 @@ DAC->CR |= 0x00000001;
 #elif attr_output == 1
 DAC->CR |= 0x00010000;
 #endif]]></code.init>
-      <code.dispose><![CDATA[DAC->CR = 0x0;
+      <code.dispose><![CDATA[#if attr_output == 0
+#if attr_when__stopped == 0
+/* CV rests at center when patch is stopped */
+DAC->DHR12R1 = 0x800; /* 2048, half of 12-bit max 4095 */
+#elif attr_when__stopped == 1
+/* CV rests at low when patch is stopped */
+DAC->DHR12R1 = 0xFFF; /* Big Genes outputs invert the signal */
+#elif attr_when__stopped == 2
+/* CV rests at high when patch is stopped */
+DAC->DHR12R1 = 0; /* Big Genes outputs invert the signal */
+#elif attr_when__stopped == 3
+/* Deinit: stop DAC and clear GPIO (CV will likely go high or low!) */
+DAC->CR = 0x0;
 RCC->APB1ENR &= ~0x20000000;
-
-#if attr_output == 0
 palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+#endif
+
 #elif attr_output == 1
+#if attr_when__stopped == 0
+/* CV rests at center when patch is stopped */
+DAC->DHR12R2 = 0x800; /* 2048, half of 12-bit max 4095 */
+#elif attr_when__stopped == 1
+/* CV rests at low when patch is stopped */
+DAC->DHR12R2 = 0xFFF; /* Big Genes outputs invert the signal */
+#elif attr_when__stopped == 2
+/* CV rests at high when patch is stopped */
+DAC->DHR12R2 = 0; /* Big Genes outputs invert the signal */
+#elif attr_when__stopped == 3
+/* Deinit: stop DAC and clear GPIO (CV will likely go high or low!) */
+DAC->CR = 0x0;
+RCC->APB1ENR &= ~0x20000000;
 palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+#endif
+
 #endif]]></code.dispose>
       <code.krate><![CDATA[#if attr_output == 0
 DAC->DHR12R1 = calc_cv_bipolar(inlet_cv, attr_offset)>>15;
