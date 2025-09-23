@@ -8,7 +8,7 @@ Uses memory more efficiently and makes it easier to create synced delays.
       <license>BSD</license>
       <helpPatch>delay ms.axh</helpPatch>
       <inlets>
-         <frac32buffer name="in" description="audio input"/>
+         <frac32buffer name="in" description="audio input" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

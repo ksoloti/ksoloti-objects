@@ -7,7 +7,7 @@ When the &quot;set&quot; inlet changes, the value is set directly (good for sett
       <license>BSD</license>
       <helpPatch>logic.axh</helpPatch>
       <inlets>
-         <int32.bipolar name="set" description="Set value directly. Useful for presets, modulation"/>
+         <int32.bipolar name="set" description="Set value directly. Useful for presets, modulation" noLabel="true"/>
       </inlets>
       <outlets>
          <int32.bipolar name="out" description="encoder value"/>

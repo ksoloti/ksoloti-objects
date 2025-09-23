@@ -12,7 +12,7 @@ LED4 (dual-color, PB6 and PB7) using hardware timer 4</sDescription>
       <license>BSD</license>
       <helpPatch>led big genes.axh</helpPatch>
       <inlets>
-         <frac32.positive name="in" description="pwm ratio"/>
+         <frac32.positive name="in" description="pwm ratio" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

@@ -10,7 +10,7 @@ LED2 (red, PC6) using hardware timer 8</sDescription>
       <license>BSD</license>
       <helpPatch>led pwm.axh</helpPatch>
       <inlets>
-         <frac32.positive name="in" description="pwm ratio"/>
+         <frac32.positive name="in" description="pwm ratio" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

@@ -9,7 +9,7 @@ PA7, PB0, PB1, PC4, PC5.</sDescription>
       <helpPatch>pot gills.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32.positive name="out"/>
+         <frac32.positive name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

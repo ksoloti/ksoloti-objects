@@ -12,7 +12,7 @@ SDOUT (Ksoloti data out): PD6</sDescription>
       <license>BSD</license>
       <helpPatch>i2scodec.axh</helpPatch>
       <inlets>
-         <frac32buffer name="wave" description="Right channel"/>
+         <frac32buffer name="wave" description="Right channel" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays>

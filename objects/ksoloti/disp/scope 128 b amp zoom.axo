@@ -13,7 +13,7 @@ The logic &quot;end&quot; outlet sends a pulse when one full sampling cycle has 
          <bool32.rising name="record" description="Start recording."/>
       </inlets>
       <outlets>
-         <bool32 name="end" description="&lt;html&gt;end: Sends a pulse when the recording is finished (reaches the end of the display).&lt;br/&gt;Patch this outlet back in the record inlet to have the display record continuously.&lt;br/&gt;Patch this outlet into the recording inlet of another recorder to record longer periods."/>
+         <bool32 name="end" description="&lt;html&gt;end: Sends a pulse when the recording is finished (reaches the end of the display).&lt;br/&gt;Patch this outlet back in the record inlet to have the display record continuously.&lt;br/&gt;Patch this outlet into the recording inlet of another recorder to record longer periods." noLabel="true"/>
       </outlets>
       <displays>
          <uint8array128.vbar name="scope" noLabel="true"/>

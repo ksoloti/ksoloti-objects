@@ -10,10 +10,10 @@ For example, &quot;-0.99&quot; has 5 digits.</sDescription>
       <license>GPLv3</license>
       <helpPatch>int2string_float2string.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="in" description="float input"/>
+         <frac32.bipolar name="in" description="float input" noLabel="true"/>
       </inlets>
       <outlets>
-         <charptr32 name="str" description="output string"/>
+         <charptr32 name="str" description="output string" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

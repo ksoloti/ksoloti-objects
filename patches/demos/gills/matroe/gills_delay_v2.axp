@@ -729,7 +729,7 @@ Fmoving=0;]]></code.krate>
     <attribs/>
     <object id="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9">
       <inlets>
-        <bool32 name="i1"/>
+        <bool32 name="i1" noLabel="true"/>
       </inlets>
       <outlets>
         <bool32 name="o1"/>
@@ -780,7 +780,7 @@ xtrig=0;]]></code.krate>
     <attribs/>
     <object id="patch/object" uuid="c602fd2b-38f0-4097-bef8-2a6759c291e9">
       <inlets>
-        <bool32 name="i1"/>
+        <bool32 name="i1" noLabel="true"/>
       </inlets>
       <outlets>
         <bool32 name="o1"/>
@@ -1135,7 +1135,7 @@ if (cctrig){
       <author>robert schirmer</author>
       <license>who cares</license>
       <inlets>
-        <int32 name="offset" description="sets an offset for writing to the table"/>
+        <int32 name="offset" description="sets an offset for writing to the table" noLabel="true"/>
       </inlets>
       <outlets>
         <frac32 name="v1"/>
@@ -1387,7 +1387,7 @@ save=0;]]></code.krate>
         <int32 name="setvalue"/>
       </inlets>
       <outlets>
-        <int32 name="out"/>
+        <int32 name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params>
@@ -1783,10 +1783,10 @@ else if (status == MIDI_PROGRAM_CHANGE + (attr_channel-1)) {
     <attribs/>
     <object id="patch/object" uuid="e5baf153-5a7f-4fad-adb1-398431ae9cfa">
       <inlets>
-        <bool32 name="i1"/>
+        <bool32 name="i1" noLabel="true"/>
       </inlets>
       <outlets>
-        <bool32 name="o1"/>
+        <bool32 name="o1" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>
@@ -2641,10 +2641,10 @@ bartrig=0;]]></code.krate>
     <attribs/>
     <object id="patch/object" uuid="6335dc26-2200-40fa-b55d-37427445ce2e">
       <inlets>
-        <int32 name="in"/>
+        <int32 name="in" noLabel="true"/>
       </inlets>
       <outlets>
-        <int32 name="out"/>
+        <int32 name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params>
@@ -3765,7 +3765,7 @@ outlet_out=outB;
         <frac32.positive name="c" description="control"/>
       </inlets>
       <outlets>
-        <frac32 name="o" description="output"/>
+        <frac32 name="o" description="output" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>
@@ -4229,10 +4229,10 @@ It can be used to shape saw LFOs, enveloppes and many other control signals such
       <helpPatch>u8u.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets>
-        <frac32 name="in"/>
+        <frac32 name="in" noLabel="true"/>
       </inlets>
       <outlets>
-        <frac32 name="out"/>
+        <frac32 name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>
@@ -4305,7 +4305,7 @@ outlet_out= ___SMMUL(out<<3,(16<<21)<<2);]]></code.krate>
         <bool32.risingfalling name="off"/>
       </inlets>
       <outlets>
-        <frac32 name="mod" description="output"/>
+        <frac32 name="mod" description="output" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>
@@ -4917,7 +4917,7 @@ outlet_value=value;
         <int32 name="step"/>
       </inlets>
       <outlets>
-        <frac32.positive name="delaytime"/>
+        <frac32.positive name="delaytime" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>
@@ -5124,7 +5124,7 @@ else if (inlet_width==0){
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
-        <bool32.rising name="detect"/>
+        <bool32.rising name="detect" noLabel="true"/>
       </inlets>
       <outlets>
         <frac32buffer name="left" description="Left channel"/>
@@ -5264,7 +5264,7 @@ outlet_clipping=t;]]></code.krate>
       <helpPatch>i.axh</helpPatch>
       <inlets/>
       <outlets>
-        <bool32 name="out"/>
+        <bool32 name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params>
@@ -6139,7 +6139,7 @@ outlet_timeB=timeB;
         <frac32buffer name="right" description="Right channel"/>
       </inlets>
       <outlets>
-        <bool32 name="clipping"/>
+        <bool32 name="clipping" noLabel="true"/>
       </outlets>
       <displays>
         <frac32.vu name="vuLeft"/>

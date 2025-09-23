@@ -9,7 +9,7 @@ Delay time in milliseconds is at the 'ms' outlet.
       <license>BSD</license>
       <helpPatch>delay ms.axh</helpPatch>
       <inlets>
-         <frac32buffer name="time" description="delay time (fraction of total delayline size)"/>
+         <frac32buffer name="time" description="delay time (fraction of total delayline size)" noLabel="true"/>
       </inlets>
       <outlets>
          <frac32buffer name="out" description="audio output"/>

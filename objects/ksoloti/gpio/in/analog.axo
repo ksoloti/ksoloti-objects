@@ -6,7 +6,7 @@
       <helpPatch>in analog.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32 name="out" description="external analog control voltage input"/>
+         <frac32 name="out" description="external analog control voltage input" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

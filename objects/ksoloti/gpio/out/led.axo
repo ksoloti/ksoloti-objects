@@ -6,7 +6,7 @@ LED2: red, PC6</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets>
-         <bool32 name="in" description="positive = true"/>
+         <bool32 name="in" description="positive = true" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

@@ -8,7 +8,7 @@ PA0, PA1, PA2, PA3.</sDescription>
       <helpPatch>pot.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32.positive name="out"/>
+         <frac32.positive name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

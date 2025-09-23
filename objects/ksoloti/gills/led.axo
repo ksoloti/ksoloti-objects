@@ -9,7 +9,7 @@ LED4: dual-color, PB6 and PB7</sDescription>
       <license>BSD</license>
 	  <helpPatch>led gills.axh</helpPatch>
       <inlets>
-         <bool32 name="in" description="positive = true"/>
+         <bool32 name="in" description="positive = true" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

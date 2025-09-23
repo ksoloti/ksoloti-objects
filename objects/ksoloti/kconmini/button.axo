@@ -6,7 +6,7 @@ Pins: PA9, PC1.</sDescription>
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <bool32 name="out" description="switch value, pressed = HIGH"/>
+         <bool32 name="out" description="switch value, pressed = HIGH" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

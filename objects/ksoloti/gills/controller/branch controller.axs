@@ -22,7 +22,7 @@ If the index is out of range, the sdcard startup patch is loaded instead.
          <author>Johannes Taelman</author>
          <license>BSD</license>
          <inlets>
-            <bool32.rising name="trig" description="trigger"/>
+            <bool32.rising name="trig" description="trigger" noLabel="true"/>
          </inlets>
          <outlets/>
          <displays/>

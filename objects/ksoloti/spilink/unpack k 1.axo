@@ -8,7 +8,7 @@ Requires &quot;+ SPILink&quot; firmware mode (set in Preferences) or the patch w
       <helpPatch>spilink.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32 name="out"/>
+         <frac32 name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

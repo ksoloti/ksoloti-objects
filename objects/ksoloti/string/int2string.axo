@@ -12,10 +12,10 @@ If you&apos;re expecting negative values, keep in mind that the &quot;-&quot; wi
       <license>GPLv3</license>
       <helpPatch>int2string_float2string.axh</helpPatch>
       <inlets>
-         <int32.bipolar name="in" description="integer input"/>
+         <int32.bipolar name="in" description="integer input" noLabel="true"/>
       </inlets>
       <outlets>
-         <charptr32 name="str" description="string output"/>
+         <charptr32 name="str" description="string output" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

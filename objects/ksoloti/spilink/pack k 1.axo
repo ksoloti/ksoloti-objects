@@ -7,7 +7,7 @@ Requires &quot;+ SPILink&quot; firmware mode (set in Preferences) or the patch w
       <license>GPL</license>
       <helpPatch>spilink.axh</helpPatch>
       <inlets>
-         <frac32 name="in"/>
+         <frac32 name="in" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

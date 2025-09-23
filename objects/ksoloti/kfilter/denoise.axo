@@ -8,10 +8,10 @@ Too low a threshold will lead to flickering values, too high a threshold might c
       <author>Ksoloti</author>
       <license>GPL 3.0</license>
       <inlets>
-         <frac32 name="in"/>
+         <frac32 name="in" noLabel="true"/>
       </inlets>
       <outlets>
-         <frac32 name="out"/>
+         <frac32 name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

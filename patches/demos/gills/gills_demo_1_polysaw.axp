@@ -127,7 +127,7 @@
                   <frac32.bipolar name="r"/>
                </inlets>
                <outlets>
-                  <frac32.positive name="env" description="envelope output"/>
+                  <frac32.positive name="env" description="envelope output" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>

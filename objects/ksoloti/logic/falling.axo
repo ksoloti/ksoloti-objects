@@ -5,10 +5,10 @@ This is the logical opposite of tiar/logic/rising.</sDescription>
       <author>Ksoloti</author>
       <license>BSD</license>
       <inlets>
-         <bool32 name="in"/>
+         <bool32 name="in" noLabel="true"/>
       </inlets>
       <outlets>
-         <bool32.pulse name="trig"/>
+         <bool32.pulse name="trig" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

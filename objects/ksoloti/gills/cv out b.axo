@@ -7,7 +7,7 @@ Bipolar input (-64...64). Suitable for bipolar LFOs, to create 1V/oct pitch CV, 
       <license>BSD</license>
 	   <helpPatch>cv out gills.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="cv"/>
+         <frac32.bipolar name="cv" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

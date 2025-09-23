@@ -8,7 +8,7 @@ PA6, PA7, PB0, PB1, PC1, PC4</sDescription>
       <helpPatch>analog.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32.positive name="out"/>
+         <frac32.positive name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

@@ -7,10 +7,10 @@ Exact same function like conv/unipolar2bipolar, only the name is shortened.
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets>
-         <frac32 name="i" description="input"/>
+         <frac32 name="i" description="input" noLabel="true"/>
       </inlets>
       <outlets>
-         <frac32 name="o" description="output"/>
+         <frac32 name="o" description="output" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>
@@ -25,10 +25,10 @@ Exact same function like conv/unipolar2bipolar, only the name is shortened.
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets>
-         <frac32buffer name="i" description="input"/>
+         <frac32buffer name="i" description="input" noLabel="true"/>
       </inlets>
       <outlets>
-         <frac32buffer name="o" description="output"/>
+         <frac32buffer name="o" description="output" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

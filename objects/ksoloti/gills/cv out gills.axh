@@ -27,10 +27,10 @@
                <license>BSD</license>
                <helpPatch>mux.axh</helpPatch>
                <inlets>
-                  <int32.positive name="in" description="select"/>
+                  <int32.positive name="in" description="select" noLabel="true"/>
                </inlets>
                <outlets>
-                  <frac32 name="out" description="output"/>
+                  <frac32 name="out" description="output" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>
@@ -89,7 +89,7 @@ outlet_out = (val * 12)<<21;]]></code.krate>
          <helpPatch>ctrl.axh</helpPatch>
          <inlets/>
          <outlets>
-            <int32.positive name="out" description="output"/>
+            <int32.positive name="out" description="output" noLabel="true"/>
          </outlets>
          <displays/>
          <params>

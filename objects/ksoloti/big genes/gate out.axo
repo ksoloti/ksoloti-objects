@@ -6,7 +6,7 @@ Gate 2: PD4</sDescription>
       <author>Johannes Taelman, Ksoloti</author>
       <license>BSD</license>
       <inlets>
-         <bool32 name="in" description="positive = true"/>
+         <bool32 name="in" description="positive = true" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

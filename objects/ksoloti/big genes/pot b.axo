@@ -11,7 +11,7 @@ Values from pots 1-4 are summed with the CV input jacks P1-4.</sDescription>
       <helpPatch>pot big genes.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32.bipolar name="out"/>
+         <frac32.bipolar name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

@@ -8,7 +8,7 @@ NOT for creating 1V/oct pitch CV.</sDescription>
       <license>BSD</license>
 	   <helpPatch>out analog.axh</helpPatch>
       <inlets>
-         <frac32.positive name="cv"/>
+         <frac32.positive name="cv" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

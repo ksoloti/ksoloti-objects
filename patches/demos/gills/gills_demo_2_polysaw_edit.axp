@@ -80,10 +80,10 @@
                <license>BSD</license>
                <helpPatch>lfo.axh</helpPatch>
                <inlets>
-                  <bool32.rising name="reset" description="reset phase"/>
+                  <bool32.rising name="reset" description="reset phase" noLabel="true"/>
                </inlets>
                <outlets>
-                  <frac32.bipolar name="wave" description="sine wave"/>
+                  <frac32.bipolar name="wave" description="sine wave" noLabel="true"/>
                </outlets>
                <displays/>
                <params>
@@ -175,7 +175,7 @@
                   <frac32buffer name="in1" description="input 1"/>
                </inlets>
                <outlets>
-                  <frac32buffer name="out" description="mix out"/>
+                  <frac32buffer name="out" description="mix out" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>
@@ -199,7 +199,7 @@
                   <frac32 name="reso" description="filter resonance"/>
                </inlets>
                <outlets>
-                  <frac32buffer name="lp24"/>
+                  <frac32buffer name="lp24" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>
@@ -306,7 +306,7 @@ for(int i = 0; i < BUFSIZE; i++){
                   <frac32.bipolar name="r"/>
                </inlets>
                <outlets>
-                  <frac32.positive name="env" description="envelope output"/>
+                  <frac32.positive name="env" description="envelope output" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>
@@ -364,7 +364,7 @@ outlet_env = val>>4;]]></code.krate>
                   <frac32 name="in2" description="input 2"/>
                </inlets>
                <outlets>
-                  <frac32 name="out" description="mix out"/>
+                  <frac32 name="out" description="mix out" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>

@@ -7,10 +7,10 @@
       <license>GPL</license>
       <helpPatch>frac2string.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="in"/>
+         <frac32.bipolar name="in" noLabel="true"/>
       </inlets>
       <outlets>
-         <charptr32 name="str"/>
+         <charptr32 name="str" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

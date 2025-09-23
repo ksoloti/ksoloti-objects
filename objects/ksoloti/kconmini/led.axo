@@ -10,7 +10,7 @@ LEDRGB: blue, PA6</sDescription>
       <license>BSD</license>
       <helpPatch>led.axh</helpPatch>
       <inlets>
-         <bool32 name="in" description="positive = ON"/>
+         <bool32 name="in" description="positive = ON" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

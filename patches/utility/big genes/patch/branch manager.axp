@@ -108,7 +108,7 @@ outlet_sw = disp_switch = palReadPad(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN
                <author>Ksoloti</author>
                <license>GPL</license>
                <inlets>
-                  <int32.positive name="patchToLoad"/>
+                  <int32.positive name="patchToLoad" noLabel="true"/>
                </inlets>
                <outlets>
                   <charptr32 name="patchNameAtIndex"/>
@@ -266,10 +266,10 @@ outlet_numpatches = ndirs_with_patch;]]></code.krate>
                <author>Johannes Taelman</author>
                <license>BSD</license>
                <inlets>
-                  <int32 name="index" description="index"/>
+                  <int32 name="index" description="index" noLabel="true"/>
                </inlets>
                <outlets>
-                  <charptr32 name="out" description="string"/>
+                  <charptr32 name="out" description="string" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>
@@ -322,10 +322,10 @@ outlet_out = &c[0];]]></code.krate>
                <author>Johannes Taelman</author>
                <license>BSD</license>
                <inlets>
-                  <int32 name="index" description="index"/>
+                  <int32 name="index" description="index" noLabel="true"/>
                </inlets>
                <outlets>
-                  <charptr32 name="out" description="string"/>
+                  <charptr32 name="out" description="string" noLabel="true"/>
                </outlets>
                <displays/>
                <params/>

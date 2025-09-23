@@ -12,7 +12,7 @@ The patcher will display a warning but does not prevent you from going live.</sD
       <author>Johannes Taelman, Ksoloti</author>
       <license>GPL v3</license>
       <inlets>
-         <frac32.positive name="in" description="pwm ratio"/>
+         <frac32.positive name="in" description="pwm ratio" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

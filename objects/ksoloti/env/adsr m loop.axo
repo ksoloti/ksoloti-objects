@@ -13,7 +13,7 @@
          <frac32.bipolar name="r" description="release time modulation"/>
       </inlets>
       <outlets>
-         <frac32.positive name="env" description="envelope output"/>
+         <frac32.positive name="env" description="envelope output" noLabel="true"/>
       </outlets>
       <displays/>
       <params>

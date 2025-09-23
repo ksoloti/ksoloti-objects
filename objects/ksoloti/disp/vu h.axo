@@ -4,7 +4,7 @@
       <author>Ksoloti</author>
       <license>BSD</license>
       <inlets>
-         <frac32buffer name="in" description="input"/>
+         <frac32buffer name="in" description="input" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays>

@@ -5,7 +5,7 @@ https://github.com/AdamFulford/Veno-Echo/blob/main/Veno-Echo/delayline_reverse.h
       <author>Ksoloti</author>
       <license>BSD</license>
       <inlets>
-         <frac32buffer name="time" description="Delay time, modulatable at audio-rate"/>
+         <frac32buffer name="time" description="Delay time, modulatable at audio-rate" noLabel="true"/>
       </inlets>
       <outlets>
          <frac32buffer name="outrev" description="Reversed delay signal"/>

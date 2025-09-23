@@ -19,7 +19,7 @@ The patcher will display a warning but does not prevent you from going live.</sD
       <license>BSD</license>
       <helpPatch>led.axh</helpPatch>
       <inlets>
-         <frac32.positive name="in" description="pwm ratio"/>
+         <frac32.positive name="in" description="pwm ratio" noLabel="true"/>
       </inlets>
       <outlets/>
       <displays/>

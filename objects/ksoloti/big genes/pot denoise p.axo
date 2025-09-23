@@ -16,7 +16,7 @@ Values from pots 1-4 are summed with the CV input jacks P1-4.</sDescription>
       <helpPatch>pot denoise big genes.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32.positive name="out"/>
+         <frac32.positive name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

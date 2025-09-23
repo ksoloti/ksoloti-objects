@@ -7,7 +7,7 @@ An attempt at an arguably better-sounding white noise.</sDescription>
       <license>GPL 3.0</license>
       <inlets/>
       <outlets>
-         <frac32buffer.bipolar name="out"/>
+         <frac32buffer.bipolar name="out" noLabel="true"/>
       </outlets>
       <displays/>
       <params/>

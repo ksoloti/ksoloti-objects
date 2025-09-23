@@ -740,7 +740,7 @@ LED4: dual-color, PB6 and PB7</sDescription>
          <license>BSD</license>
          <helpPatch>led.axh</helpPatch>
          <inlets>
-            <bool32 name="in" description="positive = true"/>
+            <bool32 name="in" description="positive = true" noLabel="true"/>
          </inlets>
          <outlets/>
          <displays/>
@@ -1099,7 +1099,7 @@ outlet_bankoffset=bankoffset;]]></code.krate>
          <author>robert schirmer</author>
          <license>who cares</license>
          <inlets>
-            <int32 name="offset" description="sets an offset for writing to the table"/>
+            <int32 name="offset" description="sets an offset for writing to the table" noLabel="true"/>
          </inlets>
          <outlets>
             <frac32 name="v1"/>
@@ -1675,7 +1675,7 @@ else if (status == MIDI_PROGRAM_CHANGE + (attr_channel-1)) {
          <author>robert schirmer</author>
          <license>who cares</license>
          <inlets>
-            <int32 name="offset" description="sets an offset for writing to the table"/>
+            <int32 name="offset" description="sets an offset for writing to the table" noLabel="true"/>
          </inlets>
          <outlets>
             <frac32 name="v1"/>
@@ -3129,7 +3129,7 @@ idchange=0;
          <license>BSD</license>
          <helpPatch>math.axh</helpPatch>
          <inlets>
-            <frac32 name="drywet" description="a"/>
+            <frac32 name="drywet" description="a" noLabel="true"/>
          </inlets>
          <outlets>
             <frac32 name="dry"/>
@@ -3150,7 +3150,7 @@ outlet_wet= (__SSAT((inlet_drywet<<1),28));]]></code.krate>
       <attribs/>
       <object id="patch/object" uuid="091253d4-8b54-4808-939f-dbf8c4270355">
          <inlets>
-            <int32 name="in"/>
+            <int32 name="in" noLabel="true"/>
          </inlets>
          <outlets>
             <int32 name="range"/>
@@ -3199,7 +3199,7 @@ else if (inlet_in<9){
             <bool32 name="tap"/>
          </inlets>
          <outlets>
-            <frac32 name="out"/>
+            <frac32 name="out" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -3246,7 +3246,7 @@ outlet_out=out;]]></code.krate>
             <bool32 name="bypass"/>
          </inlets>
          <outlets>
-            <frac32 name="out"/>
+            <frac32 name="out" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -3391,7 +3391,7 @@ outlet_clipping=t;]]></code.krate>
          <helpPatch>ctrl.axh</helpPatch>
          <inlets/>
          <outlets>
-            <bool32 name="o" description="output"/>
+            <bool32 name="o" description="output" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -5684,7 +5684,7 @@ if (player && (xfade<0x07FFFFFF)){
             <frac32 name="indense"/>
          </inlets>
          <outlets>
-            <frac32 name="attenuate"/>
+            <frac32 name="attenuate" noLabel="true"/>
          </outlets>
          <displays/>
          <params>
@@ -5779,7 +5779,7 @@ outlet_attenuate=atX;]]></code.krate>
             <bool32 name="bypass"/>
          </inlets>
          <outlets>
-            <frac32 name="out"/>
+            <frac32 name="out" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -5874,7 +5874,7 @@ outlet_b1 =  ___SMMUL(inlet_a1,ib)<<5;
             <bool32 name="kill2"/>
          </inlets>
          <outlets>
-            <frac32buffer name="out" description="out"/>
+            <frac32buffer name="out" description="out" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -5902,7 +5902,7 @@ else {
             <bool32 name="kill2"/>
          </inlets>
          <outlets>
-            <frac32buffer name="out" description="out"/>
+            <frac32buffer name="out" description="out" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -5940,7 +5940,7 @@ else {
             <frac32 name="b" description="input"/>
          </inlets>
          <outlets>
-            <frac32 name="result" description="output"/>
+            <frac32 name="result" description="output" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -6021,7 +6021,7 @@ outlet_b1 =  ___SMMUL(inlet_a1,ib)<<5;
             <bool32 name="kill2"/>
          </inlets>
          <outlets>
-            <frac32buffer name="out" description="out"/>
+            <frac32buffer name="out" description="out" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
@@ -6049,7 +6049,7 @@ else {
             <bool32 name="kill2"/>
          </inlets>
          <outlets>
-            <frac32buffer name="out" description="out"/>
+            <frac32buffer name="out" description="out" noLabel="true"/>
          </outlets>
          <displays/>
          <params/>
