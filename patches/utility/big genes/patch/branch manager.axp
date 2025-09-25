@@ -1,39 +1,39 @@
 <patch-1.0 appVersion="1.0.12">
-   <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1 style=&quot;font-size:36;&quot;&gt;Big Genes - Branch Manager"/>
+  <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;h1 style=&quot;font-size:36;&quot;&gt;Big Genes - Branch Manager"/>
    <patcher type="patch/patcher" uuid="6dbf9ef8-4265-40fb-b0df-11ace70c2cd2" name="internals" x="532" y="14">
-      <params/>
-      <attribs/>
-      <subpatch appVersion="1.0.12">
-         <patchobj type="patch/object" uuid="23f6ec14-b93c-4daf-8b0b-06de46d1d5c6" name="genes_encoder2" x="98" y="14">
-            <params/>
-            <attribs>
-               <spinner attributeName="min" value="0"/>
-            </attribs>
-            <object id="patch/object" uuid="23f6ec14-b93c-4daf-8b0b-06de46d1d5c6">
-               <sDescription>Reads a rotary encoder on Ksoloti Big Genes.
+    <params/>
+    <attribs/>
+    <subpatch appVersion="1.0.12">
+      <patchobj type="patch/object" uuid="23f6ec14-b93c-4daf-8b0b-06de46d1d5c6" name="genes_encoder2" x="98" y="14">
+        <params/>
+        <attribs>
+          <spinner attributeName="min" value="0"/>
+        </attribs>
+        <object id="patch/object" uuid="23f6ec14-b93c-4daf-8b0b-06de46d1d5c6">
+          <sDescription>Reads a rotary encoder on Ksoloti Big Genes.
 &quot;min&quot;, &quot;max&quot; set the range. Default is 0 to 127.
 When the &quot;set&quot; inlet changes, the value is set directly (good for setting init or preset values, modulation).</sDescription>
-               <author>Gavin, Ksoloti</author>
-               <license>BSD</license>
-               <helpPatch>logic.axh</helpPatch>
-               <inlets>
-                  <int32.bipolar name="set" description="Set value directly. Useful for presets, modulation"/>
-                  <int32.positive name="max" description="Override max value attribute"/>
-               </inlets>
-               <outlets>
-                  <int32.bipolar name="out" description="encoder value"/>
-                  <bool32 name="sw" description="switch output"/>
-               </outlets>
-               <displays>
-                  <int32.label name="value" description="encoder value"/>
-                  <bool32 name="switch" description="switch output"/>
-               </displays>
-               <params/>
-               <attribs>
-                  <spinner name="min" MinValue="-65536" MaxValue="65535" DefaultValue="0"/>
-               </attribs>
-               <includes/>
-               <code.declaration><![CDATA[#ifndef BIGGENES_ENC1_A_PORT /* Check for this one define to represent all below. */
+          <author>Gavin, Ksoloti</author>
+          <license>BSD</license>
+          <helpPatch>logic.axh</helpPatch>
+          <inlets>
+            <int32.bipolar name="set" description="Set value directly. Useful for presets, modulation"/>
+            <int32.positive name="max" description="Override max value attribute"/>
+          </inlets>
+          <outlets>
+            <int32.bipolar name="out" description="encoder value"/>
+            <bool32 name="sw" description="switch output"/>
+          </outlets>
+          <displays>
+            <int32.label name="value" description="encoder value"/>
+            <bool32 name="switch" description="switch output"/>
+          </displays>
+          <params/>
+          <attribs>
+            <spinner name="min" MinValue="-65536" MaxValue="65535" DefaultValue="0"/>
+          </attribs>
+          <includes/>
+          <code.declaration><![CDATA[#ifndef BIGGENES_ENC1_A_PORT /* Check for this one define to represent all below. */
 
 #define BIGGENES_ENC1_A_PORT GPIOG
 #define BIGGENES_ENC1_A_PIN 11
@@ -60,13 +60,13 @@ int32_t set_last = 0;
 
 bool_t b = true;
 bool_t b_last = true;]]></code.declaration>
-               <code.init><![CDATA[/* Configure encoder pins as input */
+          <code.init><![CDATA[/* Configure encoder pins as input */
 palSetPadMode(BIGGENES_ENC2_A_PORT, BIGGENES_ENC2_A_PIN, PAL_MODE_INPUT_PULLUP);
 palSetPadMode(BIGGENES_ENC2_B_PORT, BIGGENES_ENC2_B_PIN, PAL_MODE_INPUT_PULLUP);
 
 /* Configure encoder switch as input */
 palSetPadMode(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN, PAL_MODE_INPUT_PULLDOWN);]]></code.init>
-               <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
+          <code.krate><![CDATA[/* If set inlet has changed, set encoder value directly */
 if (inlet_set != set_last) {
 	set_last = encoder_val = inlet_set;
 	/* Limit value to min, max attributes */
@@ -98,35 +98,35 @@ outlet_out = disp_value = encoder_val;
 
 /* Now read encoder switch */
 outlet_sw = disp_switch = palReadPad(BIGGENES_ENC2_SW_PORT, BIGGENES_ENC2_SW_PIN)<<27;]]></code.krate>
-            </object>
-         </patchobj>
-         <patchobj type="patch/object" uuid="6b7b49f2-dec3-414d-9aa0-b37fc62f086f" name="get_patchnames" x="196" y="14">
-            <params/>
-            <attribs/>
-            <object id="patch/object" uuid="6b7b49f2-dec3-414d-9aa0-b37fc62f086f">
-               <sDescription>For use with the &quot;Branch Manager&quot; system</sDescription>
-               <author>Ksoloti</author>
-               <license>GPL</license>
-               <inlets>
-                  <int32.positive name="patchToLoad" noLabel="true"/>
-               </inlets>
-               <outlets>
-                  <charptr32 name="patchNameAtIndex"/>
-                  <charptr32 name="patchNameAtIndexLine2"/>
-                  <charptr32 name="patchNameAtIndexShort"/>
-                  <int32 name="numpatches"/>
-               </outlets>
-               <displays>
-                  <int32.label name="ndirs"/>
-                  <int32.label name="ndirsWithPatch"/>
-               </displays>
-               <params/>
-               <attribs/>
-               <includes/>
-               <depends>
-                  <depend>fatfs</depend>
-               </depends>
-               <code.declaration><![CDATA[char f_buff[256];
+        </object>
+      </patchobj>
+      <patchobj type="patch/object" uuid="6b7b49f2-dec3-414d-9aa0-b37fc62f086f" name="get_patchnames" x="196" y="14">
+        <params/>
+        <attribs/>
+        <object id="patch/object" uuid="6b7b49f2-dec3-414d-9aa0-b37fc62f086f">
+          <sDescription>For use with the &quot;Branch Manager&quot; system</sDescription>
+          <author>Ksoloti</author>
+          <license>GPL</license>
+          <inlets>
+            <int32.positive name="patchToLoad" noLabel="true"/>
+          </inlets>
+          <outlets>
+            <charptr32 name="patchNameAtIndex"/>
+            <charptr32 name="patchNameAtIndexLine2"/>
+            <charptr32 name="patchNameAtIndexShort"/>
+            <int32 name="numpatches"/>
+          </outlets>
+          <displays>
+            <int32.label name="ndirs"/>
+            <int32.label name="ndirsWithPatch"/>
+          </displays>
+          <params/>
+          <attribs/>
+          <includes/>
+          <depends>
+            <depend>fatfs</depend>
+          </depends>
+          <code.declaration><![CDATA[char f_buff[256];
 char p_name[256*128];
 char p_name_short[32*128];
 char p[512];
@@ -207,6 +207,7 @@ FRESULT scan_files_for_patchbin(char* path, char* path_short) {
 
 
 msg_t ThreadX2() {
+	chThdSleepMilliseconds(10);
 	codec_clearbuffer();
 	scan_files_for_patchbin(p, p_short);
 	while (!chThdShouldTerminate()) {
@@ -223,7 +224,7 @@ static msg_t ThreadX(void *arg) {
 
 WORKING_AREA(waThreadX, 4096);
 Thread *Thd;]]></code.declaration>
-               <code.init><![CDATA[sdcard_unmount();
+          <code.init><![CDATA[//sdcard_unmount();
 sdcard_attemptMountIfUnmounted();  
 
 codec_clearbuffer();
@@ -234,9 +235,9 @@ Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX), NORMALPRIO, (tfunc_t)Threa
 
 disp_ndirsWithPatch = ndirs_with_patch;
 disp_ndirs = ndirs;]]></code.init>
-               <code.dispose><![CDATA[chThdTerminate( Thd );
+          <code.dispose><![CDATA[chThdTerminate( Thd );
 chThdWait( Thd );]]></code.dispose>
-               <code.krate><![CDATA[patchToLoad = inlet_patchToLoad > ndirs_with_patch ? ndirs_with_patch : inlet_patchToLoad; 	/* Limit to total found number of patches */
+          <code.krate><![CDATA[patchToLoad = inlet_patchToLoad > ndirs_with_patch ? ndirs_with_patch : inlet_patchToLoad; 	/* Limit to total found number of patches */
 
 if (_patchToLoad != patchToLoad) {											/* If patch just started or inlet has changed*/
 	_patchToLoad = patchToLoad;
@@ -248,39 +249,39 @@ outlet_patchNameAtIndexLine2 = &p_name[256 * patchToLoad + 21];
 
 
 outlet_numpatches = ndirs_with_patch;]]></code.krate>
-            </object>
-         </patchobj>
-         <obj type="math/-1" uuid="5fd46bab471bb6509ae83de702dea72933683a98" name="-1_1" x="28" y="28">
-            <params/>
-            <attribs/>
-         </obj>
-         <obj type="math/+1" uuid="13c1a4574bb81783beb8839e81782b9a34e3fc17" name="+1_1" x="294" y="168">
-            <params/>
-            <attribs/>
-         </obj>
-         <patchobj type="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698" name="selected_num" x="364" y="168">
-            <params/>
-            <attribs/>
-            <object id="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698">
-               <sDescription>generates string: prefix000suffix</sDescription>
-               <author>Johannes Taelman</author>
-               <license>BSD</license>
-               <inlets>
-                  <int32 name="index" description="index" noLabel="true"/>
-               </inlets>
-               <outlets>
-                  <charptr32 name="out" description="string" noLabel="true"/>
-               </outlets>
-               <displays/>
-               <params/>
-               <attribs/>
-               <includes/>
-               <code.declaration><![CDATA[char c[16];
+        </object>
+      </patchobj>
+      <obj type="math/-1" uuid="5fd46bab471bb6509ae83de702dea72933683a98" name="-1_1" x="28" y="28">
+        <params/>
+        <attribs/>
+      </obj>
+      <obj type="math/+1" uuid="13c1a4574bb81783beb8839e81782b9a34e3fc17" name="+1_1" x="294" y="168">
+        <params/>
+        <attribs/>
+      </obj>
+      <patchobj type="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698" name="selected_num" x="364" y="168">
+        <params/>
+        <attribs/>
+        <object id="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698">
+          <sDescription>generates string: prefix000suffix</sDescription>
+          <author>Johannes Taelman</author>
+          <license>BSD</license>
+          <inlets>
+            <int32 name="index" description="index" noLabel="true"/>
+          </inlets>
+          <outlets>
+            <charptr32 name="out" description="string" noLabel="true"/>
+          </outlets>
+          <displays/>
+          <params/>
+          <attribs/>
+          <includes/>
+          <code.declaration><![CDATA[char c[16];
 int offset;
 int pval;]]></code.declaration>
-               <code.init><![CDATA[strcpy(&c[0],"000");
+          <code.init><![CDATA[strcpy(&c[0],"000");
 pval = 0;]]></code.init>
-               <code.krate><![CDATA[if (inlet_index != pval) {
+          <code.krate><![CDATA[if (inlet_index != pval) {
 	pval = inlet_index;
    	int i = inlet_index;
    	int i0 = i/10;
@@ -292,51 +293,51 @@ pval = 0;]]></code.init>
 }
 
 outlet_out = &c[0];]]></code.krate>
-            </object>
-         </patchobj>
-         <obj type="lokki/string/concat" uuid="dccfcd5c-7f7d-4bf5-9885-bbac0a558926" name="concat_1" x="462" y="168">
-            <params/>
-            <attribs>
-               <spinner attributeName="size" value="15"/>
-            </attribs>
-         </obj>
-         <obj type="ksoloti/big genes/display" uuid="d21f1023-b829-4934-b142-5eedb601a570" name="display_1" x="588" y="168">
-            <params/>
-            <attribs>
-               <combo attributeName="useScope" selection="off"/>
-               <objref attributeName="scope" obj=""/>
+        </object>
+      </patchobj>
+      <obj type="lokki/string/concat" uuid="dccfcd5c-7f7d-4bf5-9885-bbac0a558926" name="concat_1" x="462" y="168">
+        <params/>
+        <attribs>
+          <spinner attributeName="size" value="15"/>
+        </attribs>
+      </obj>
+      <obj type="ksoloti/big genes/display" uuid="d21f1023-b829-4934-b142-5eedb601a570" name="display_1" x="588" y="168">
+        <params/>
+        <attribs>
+          <combo attributeName="useScope" selection="off"/>
+          <objref attributeName="scope" obj=""/>
                <combo attributeName="narrowFont" selection="on"/>
-            </attribs>
-         </obj>
-         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="slash" x="294" y="238">
-            <params/>
-            <attribs>
-               <table attributeName="str" table="/"/>
-            </attribs>
-         </obj>
-         <patchobj type="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698" name="total_num" x="364" y="308">
-            <params/>
-            <attribs/>
-            <object id="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698">
-               <sDescription>generates string: prefix000suffix</sDescription>
-               <author>Johannes Taelman</author>
-               <license>BSD</license>
-               <inlets>
-                  <int32 name="index" description="index" noLabel="true"/>
-               </inlets>
-               <outlets>
-                  <charptr32 name="out" description="string" noLabel="true"/>
-               </outlets>
-               <displays/>
-               <params/>
-               <attribs/>
-               <includes/>
-               <code.declaration><![CDATA[char c[16];
+        </attribs>
+      </obj>
+      <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="slash" x="294" y="238">
+        <params/>
+        <attribs>
+          <table attributeName="str" table="/"/>
+        </attribs>
+      </obj>
+      <patchobj type="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698" name="total_num" x="364" y="308">
+        <params/>
+        <attribs/>
+        <object id="patch/object" uuid="e6925123-4d72-442f-ad19-65f10711f698">
+          <sDescription>generates string: prefix000suffix</sDescription>
+          <author>Johannes Taelman</author>
+          <license>BSD</license>
+          <inlets>
+            <int32 name="index" description="index" noLabel="true"/>
+          </inlets>
+          <outlets>
+            <charptr32 name="out" description="string" noLabel="true"/>
+          </outlets>
+          <displays/>
+          <params/>
+          <attribs/>
+          <includes/>
+          <code.declaration><![CDATA[char c[16];
 int offset;
 int pval;]]></code.declaration>
-               <code.init><![CDATA[strcpy(&c[0],"000");
+          <code.init><![CDATA[strcpy(&c[0],"000");
 pval = 0;]]></code.init>
-               <code.krate><![CDATA[if (inlet_index != pval) {
+          <code.krate><![CDATA[if (inlet_index != pval) {
 	pval = inlet_index;
    	int i = inlet_index;
    	int i0 = i/10;
@@ -348,39 +349,39 @@ pval = 0;]]></code.init>
 }
 
 outlet_out = &c[0];]]></code.krate>
-            </object>
-         </patchobj>
-         <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="line4" x="294" y="378">
-            <params/>
-            <attribs>
-               <table attributeName="str" table="       BRANCH MANAGER"/>
-            </attribs>
-         </obj>
-         <patchobj type="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf" name="loadpatch_1" x="560" y="392">
-            <params/>
-            <attribs>
-               <objref attributeName="clear_oled" obj="display_1"/>
-            </attribs>
-            <object id="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf">
-               <sDescription>load a patch from sdcard
+        </object>
+      </patchobj>
+      <obj type="string/c" uuid="4aa90a90c435a742ddfa152d232883fc5b2f1b3" name="line4" x="294" y="378">
+        <params/>
+        <attribs>
+          <table attributeName="str" table="       BRANCH MANAGER"/>
+        </attribs>
+      </obj>
+      <patchobj type="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf" name="loadpatch_1" x="560" y="392">
+        <params/>
+        <attribs>
+          <objref attributeName="clear_oled" obj="display_1"/>
+        </attribs>
+        <object id="patch/object" uuid="ab367107-d25a-4eac-b1c1-0333d8ffedbf">
+          <sDescription>load a patch from sdcard
 Edits for use with &quot;Branch Manager&quot; system</sDescription>
-               <author>Johannes Taelman, Ksoloti</author>
-               <license>BSD</license>
-               <inlets>
-                  <bool32.rising name="trig" description="trigger"/>
-                  <charptr32 name="fn" description="filename"/>
-               </inlets>
-               <outlets/>
-               <displays/>
-               <params/>
-               <attribs>
-                  <objref name="clear_oled"/>
-               </attribs>
-               <includes/>
-               <code.declaration><![CDATA[char filename[256+12];
+          <author>Johannes Taelman, Ksoloti</author>
+          <license>BSD</license>
+          <inlets>
+            <bool32.rising name="trig" description="trigger"/>
+            <charptr32 name="fn" description="filename"/>
+          </inlets>
+          <outlets/>
+          <displays/>
+          <params/>
+          <attribs>
+            <objref name="clear_oled"/>
+          </attribs>
+          <includes/>
+          <code.declaration><![CDATA[char filename[256+12];
 int ntrig;]]></code.declaration>
-               <code.init><![CDATA[ntrig = 1;]]></code.init>
-               <code.krate><![CDATA[if (inlet_trig && !ntrig) {
+          <code.init><![CDATA[ntrig = 1;]]></code.init>
+          <code.krate><![CDATA[if (inlet_trig && !ntrig) {
 	i2cAcquireBus(&I2CD1);
 	attr_clear__oled.cmd(0xAE); /* disable oled */
 	chThdSleepMilliseconds(1);
@@ -408,92 +409,92 @@ int ntrig;]]></code.declaration>
 else if (!inlet_trig) {
 	ntrig = 0;
 }]]></code.krate>
-            </object>
-         </patchobj>
-         <nets>
-            <net>
-               <source obj="get_patchnames" outlet="numpatches"/>
-               <dest obj="-1_1" inlet="a"/>
-               <dest obj="total_num" inlet="index"/>
-            </net>
-            <net>
-               <source obj="selected_num" outlet="out"/>
-               <dest obj="concat_1" inlet="str1"/>
-            </net>
-            <net>
-               <source obj="slash" outlet="out"/>
-               <dest obj="concat_1" inlet="str2"/>
-            </net>
-            <net>
-               <source obj="total_num" outlet="out"/>
-               <dest obj="concat_1" inlet="str3"/>
-            </net>
-            <net>
-               <source obj="get_patchnames" outlet="patchNameAtIndexShort"/>
-               <dest obj="loadpatch_1" inlet="fn"/>
-            </net>
-            <net>
-               <source obj="get_patchnames" outlet="patchNameAtIndex"/>
-               <dest obj="display_1" inlet="line2"/>
-            </net>
-            <net>
-               <source obj="get_patchnames" outlet="patchNameAtIndexLine2"/>
-               <dest obj="display_1" inlet="line3"/>
-            </net>
-            <net>
-               <source obj="-1_1" outlet="result"/>
-               <dest obj="genes_encoder2" inlet="max"/>
-            </net>
-            <net>
-               <source obj="+1_1" outlet="result"/>
-               <dest obj="selected_num" inlet="index"/>
-            </net>
-            <net>
-               <source obj="concat_1" outlet="out"/>
-               <dest obj="display_1" inlet="line1"/>
-            </net>
-            <net>
-               <source obj="line4" outlet="out"/>
-               <dest obj="display_1" inlet="line4"/>
-            </net>
-            <net>
-               <source obj="genes_encoder2" outlet="sw"/>
-               <dest obj="loadpatch_1" inlet="trig"/>
-            </net>
-            <net>
-               <source obj="genes_encoder2" outlet="out"/>
-               <dest obj="+1_1" inlet="a"/>
-               <dest obj="get_patchnames" inlet="patchToLoad"/>
-            </net>
-         </nets>
-         <settings>
-            <subpatchmode>no</subpatchmode>
-         </settings>
-         <notes><![CDATA[]]></notes>
-         <windowPos>
-            <x>0</x>
-            <y>0</y>
-            <width>780</width>
-            <height>620</height>
-         </windowPos>
-      </subpatch>
-   </patcher>
-   <comment type="patch/comment" x="14" y="98" text="&lt;html&gt;&lt;h1 width=750px&gt;1. Go to File -&amp;gt; Preferences..., enable the checkmark next  to &quot;Controller Object&quot;, and paste this in the text field:"/>
-   <comment type="patch/comment" x="14" y="168" text="&lt;html&gt;&lt;h2&gt;copy paste ---&gt;"/>
-   <comment type="patch/comment" x="140" y="182" text="ksoloti/big genes/controller/branch controller"/>
-   <comment type="patch/comment" x="14" y="224" text="&lt;html&gt;&lt;h1 width=750px&gt;2. Upload this patch to SD card as startup. &lt;i&gt;[Patch -&amp;gt; Upload to SD Card as Startup]&lt;/i&gt;.&lt;br&gt;(Upload this patch window as it is. Ignore the patch/patcher above.)"/>
-   <comment type="patch/comment" x="14" y="308" text="&lt;html&gt;&lt;h1 width=750px&gt;3. Open any patch you want to be in your list and select &lt;i&gt;[Patch -&amp;gt; Upload to SD Card]&lt;/i&gt;.&lt;br&gt;(Don&apos;t upload these &quot;as Startup&quot;!) Since v1.1.0 you can also batch-upload patches using the Patchbank window."/>
-   <comment type="patch/comment" x="14" y="392" text="&lt;html&gt;&lt;h1 width=750px&gt;4. From now on, you can long-press encoder2 (1+ sec) to return to the Branch Manager and select a new patch."/>
-   <comment type="patch/comment" x="14" y="462" text="&lt;html&gt;&lt;h1 width=750px&gt;Known Issues:&lt;ul style=&quot;font-size:12px;&quot;&gt;&lt;li&gt;Each time you return to the Branch Manager, it will point to the first patch in the list.&lt;br&gt;It does not remember which patch you have seleted before.&lt;/li&gt;&lt;li&gt;Patches you had uploaded before you set up the &quot;Branch Controller&quot; in the Preferences will not be able to trigger&lt;br&gt;the Branch Manager. You will have to re-upload them so they get the Branch Controller feature.&lt;/li&gt;&lt;li&gt;The display is cleared after you select a new patch. If the selected patch does not make use of any display objects, it will stay black.&lt;/li&gt;"/>
-   <nets/>
-   <settings>
-      <subpatchmode>no</subpatchmode>
-   </settings>
-   <notes><![CDATA[]]></notes>
-   <windowPos>
-      <x>318</x>
-      <y>134</y>
-      <width>1051</width>
-      <height>782</height>
-   </windowPos>
+        </object>
+      </patchobj>
+      <nets>
+        <net>
+          <source obj="get_patchnames" outlet="numpatches"/>
+          <dest obj="-1_1" inlet="a"/>
+          <dest obj="total_num" inlet="index"/>
+        </net>
+        <net>
+          <source obj="selected_num" outlet="out"/>
+          <dest obj="concat_1" inlet="str1"/>
+        </net>
+        <net>
+          <source obj="slash" outlet="out"/>
+          <dest obj="concat_1" inlet="str2"/>
+        </net>
+        <net>
+          <source obj="total_num" outlet="out"/>
+          <dest obj="concat_1" inlet="str3"/>
+        </net>
+        <net>
+          <source obj="get_patchnames" outlet="patchNameAtIndexShort"/>
+          <dest obj="loadpatch_1" inlet="fn"/>
+        </net>
+        <net>
+          <source obj="get_patchnames" outlet="patchNameAtIndex"/>
+          <dest obj="display_1" inlet="line2"/>
+        </net>
+        <net>
+          <source obj="get_patchnames" outlet="patchNameAtIndexLine2"/>
+          <dest obj="display_1" inlet="line3"/>
+        </net>
+        <net>
+          <source obj="-1_1" outlet="result"/>
+          <dest obj="genes_encoder2" inlet="max"/>
+        </net>
+        <net>
+          <source obj="+1_1" outlet="result"/>
+          <dest obj="selected_num" inlet="index"/>
+        </net>
+        <net>
+          <source obj="concat_1" outlet="out"/>
+          <dest obj="display_1" inlet="line1"/>
+        </net>
+        <net>
+          <source obj="line4" outlet="out"/>
+          <dest obj="display_1" inlet="line4"/>
+        </net>
+        <net>
+          <source obj="genes_encoder2" outlet="sw"/>
+          <dest obj="loadpatch_1" inlet="trig"/>
+        </net>
+        <net>
+          <source obj="genes_encoder2" outlet="out"/>
+          <dest obj="+1_1" inlet="a"/>
+          <dest obj="get_patchnames" inlet="patchToLoad"/>
+        </net>
+      </nets>
+      <settings>
+        <subpatchmode>no</subpatchmode>
+      </settings>
+      <notes><![CDATA[]]></notes>
+      <windowPos>
+        <x>0</x>
+        <y>0</y>
+        <width>780</width>
+        <height>620</height>
+      </windowPos>
+    </subpatch>
+  </patcher>
+  <comment type="patch/comment" x="14" y="98" text="&lt;html&gt;&lt;h1 width=750px&gt;1. Go to File -&amp;gt; Preferences..., enable the checkmark next  to &quot;Controller Object&quot;, and paste this in the text field:"/>
+  <comment type="patch/comment" x="14" y="168" text="&lt;html&gt;&lt;h2&gt;copy paste ---&gt;"/>
+  <comment type="patch/comment" x="140" y="182" text="ksoloti/big genes/controller/branch controller"/>
+  <comment type="patch/comment" x="14" y="224" text="&lt;html&gt;&lt;h1 width=750px&gt;2. Upload this patch to SD card as startup. &lt;i&gt;[Patch -&amp;gt; Upload to SD Card as Startup]&lt;/i&gt;.&lt;br&gt;(Upload this patch window as it is. Ignore the patch/patcher above.)"/>
+  <comment type="patch/comment" x="14" y="308" text="&lt;html&gt;&lt;h1 width=750px&gt;3. Open any patch you want to be in your list and select &lt;i&gt;[Patch -&amp;gt; Upload to SD Card]&lt;/i&gt;.&lt;br&gt;(Don&apos;t upload these &quot;as Startup&quot;!) Since v1.1.0 you can also batch-upload patches using the Patchbank window."/>
+  <comment type="patch/comment" x="14" y="392" text="&lt;html&gt;&lt;h1 width=750px&gt;4. From now on, you can long-press encoder2 (1+ sec) to return to the Branch Manager and select a new patch."/>
+  <comment type="patch/comment" x="14" y="462" text="&lt;html&gt;&lt;h1 width=750px&gt;Known Issues:&lt;ul style=&quot;font-size:12px;&quot;&gt;&lt;li&gt;Each time you return to the Branch Manager, it will point to the first patch in the list.&lt;br&gt;It does not remember which patch you have seleted before.&lt;/li&gt;&lt;li&gt;Patches you had uploaded before you set up the &quot;Branch Controller&quot; in the Preferences will not be able to trigger&lt;br&gt;the Branch Manager. You will have to re-upload them so they get the Branch Controller feature.&lt;/li&gt;&lt;li&gt;The display is cleared after you select a new patch. If the selected patch does not make use of any display objects, it will stay black.&lt;/li&gt;"/>
+  <nets/>
+  <settings>
+    <subpatchmode>no</subpatchmode>
+  </settings>
+  <notes><![CDATA[]]></notes>
+  <windowPos>
+    <x>318</x>
+    <y>134</y>
+    <width>1051</width>
+    <height>782</height>
+  </windowPos>
 </patch-1.0>
