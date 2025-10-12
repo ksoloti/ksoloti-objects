@@ -1,5 +1,5 @@
 <objdefs appVersion="1.0.12">
-   <obj.normal id="display_xy" uuid="0c083e83-0280-4cf2-b747-8a00859bb905">
+   <obj.normal id="display xy" uuid="0c083e83-0280-4cf2-b747-8a00859bb905">
       <sDescription>Interfaces with the OLED display on Ksoloti Gills.
 Note that you do NOT need to place a gpio/i2c/config object in your patch anymore for this object to function.</sDescription>
       <author>Ksoloti</author>
