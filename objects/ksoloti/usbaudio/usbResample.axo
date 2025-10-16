@@ -11,6 +11,13 @@
          <bool32.tgl name="Resample"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[usbAudioResample = param_Resample;]]></code.krate>
+      <code.krate><![CDATA[#if FW_USBAUDIO
+usbAudioResample = param_Resample;
+#endif
+
+#if !defined(FW_USBAUDIO) && !defined(FW_USBAUDIO_WARNED)
+#define FW_USBAUDIO_WARNED
+#warning "This patch contains USBAudio objects, but the device is not running USBAudio firmware! The objects in question have been muted."
+#endif]]></code.krate>
    </obj.normal>
 </objdefs>
