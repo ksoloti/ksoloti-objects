@@ -1,0 +1,61 @@
+<objdefs appVersion="1.1.0">
+  <obj.normal id="tri slow" uuid="49a63d86-1d50-4991-888f-c8fa8b395b3a">
+    <sDescription>triangle wave LFO, pitch input. Time divisor allows for very slow cycles. Note that the frequency display will only display the base frequency and not the one after time division.</sDescription>
+    <author>Peter Witzel, Ksoloti</author>
+    <license>CC0</license>
+    <helpPatch></helpPatch>
+    <inlets>
+      <frac32.bipolar name="pitch" description="pitch"/>
+      <bool32.rising name="reset" description="reset phase"/>
+    </inlets>
+    <outlets>
+      <frac32.bipolar name="wave" description="triangle wave" noLabel="true"/>
+    </outlets>
+    <displays/>
+    <params>
+      <frac32.s.map.lfopitch name="pitch" noLabel="true"/>
+    </params>
+    <attribs>
+      <combo name="divisor" description="LFO is slowed down by this divisor. /2 means half as fast etc.">
+        <MenuEntries>
+          <string>/1 (7.83 s)</string>
+          <string>/2 (15.66 s)</string>
+          <string>/4 (31.32 s)</string>
+          <string>/8 (62.64 s)</string>
+          <string>/16 (125.28 s)</string>
+          <string>/32 (250.56 s)</string>
+        </MenuEntries>
+        <CEntries>
+          <string>2</string>
+          <string>3</string>
+          <string>4</string>
+          <string>5</string>
+          <string>6</string>
+          <string>7</string>
+        </CEntries>
+      </combo>
+    </attribs>
+    <code.declaration><![CDATA[int32_t phase;
+uint32_t r;
+]]></code.declaration>
+    <code.init><![CDATA[phase = 3<<30;
+   r = 1;
+]]></code.init>
+    <code.krate><![CDATA[   {
+      if (inlet_reset && r) {
+         phase = 3<<30;
+         r = 0;
+      } else {
+         if (!inlet_reset) r = 1;
+         uint32_t freq;
+         MTOFEXTENDED(param_pitch + inlet_pitch,freq);
+         phase += freq >> attr_divisor;
+      }
+      if (phase>0){
+         outlet_wave = ((1<<30)-(phase))>>3;
+      } else {
+         outlet_wave = (phase+(1<<30))>>3;
+      }
+   }]]></code.krate>
+  </obj.normal>
+</objdefs>
