@@ -1,129 +1,139 @@
 <patch-1.0 appVersion="1.1.0">
-   <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;div style=&quot;font-size:2em; color:#808000;&quot;&gt;You must flash your Core with the I2SCodec firmware&lt;br&gt; (set in Preferences) for this patch to run!"/>
-   <comment type="patch/comment" x="574" y="14" text="&lt;html&gt;&lt;div width=&quot;320px&quot; style=&quot;font-size:1.2em;&quot;&gt;PA15: WS &quot;Word Select&quot; aka LRCLK, FSYNC, &quot;Frame Select&quot; (48 kHz)&lt;br&gt;PB3: BCLK &quot;Bit Clock&quot; aka SCLK (3.072 Mhz)&lt;br&gt;PB4: DIN &quot;Data in from ADC&quot;, aka SDIN, RX&lt;br&gt;PD6: DOUT &quot;Data out to DAC&quot;, aka SDOUT, TX"/>
-   <comment type="patch/comment" x="14" y="98" text="&lt;html&gt;&lt;div width=&quot;640px&quot; style=&quot;font-size:1.25em;&quot;&gt;Get a suitable I2S ADC, DAC, or codec board that can be powered with 3.3V or 5V, and that takes &quot;BCLK&quot;, &quot;WS&quot;, &quot;DIN&quot; and/or &quot;DOUT&quot; signals. Unfortunately the I2S  system on Ksoloti Core does not directly support chips that require &quot;MCLK&quot;  Master Clock input."/>
-   <comment type="patch/comment" x="14" y="168" text="Regular  audio inputs..."/>
-   <comment type="patch/comment" x="896" y="168" text="Regular audio outputs..."/>
-   <obj type="audio/in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" name="in_2" x="14" y="182">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="154" y="182">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="294" y="182">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="504" y="182">
-      <params>
-         <frac32.s.map name="pitch" value="-19.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_5" x="616" y="182">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_6" x="756" y="182">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_2" x="938" y="182">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="504" y="294">
-      <params>
-         <frac32.s.map name="pitch" value="-7.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <comment type="patch/comment" x="14" y="448" text="... and two additional inputs via a suitable I2S breakout board."/>
-   <comment type="patch/comment" x="700" y="448" text="... and two additional outputs via a suitable I2S breakout board."/>
-   <obj type="ksoloti/i2scodec/in stereo" uuid="e5eedf09-86a5-4322-b61e-480cd57736e8" name="in_1" x="14" y="462">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="154" y="462">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_4" x="294" y="462">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="504" y="462">
-      <params>
-         <frac32.s.map name="pitch" value="5.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_7" x="616" y="462">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_8" x="756" y="462">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="ksoloti/i2scodec/out stereo" uuid="ef9e71ce-7d64-4733-aa5a-1ad88a9dd83c" name="out_1" x="910" y="462">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_4" x="504" y="574">
-      <params>
-         <frac32.s.map name="pitch" value="17.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <nets>
-      <net>
-         <source obj="in_2" outlet="left"/>
-         <dest obj="scope_1" inlet="in"/>
-      </net>
-      <net>
-         <source obj="in_2" outlet="right"/>
-         <dest obj="scope_2" inlet="in"/>
-      </net>
-      <net>
-         <source obj="in_1" outlet="left"/>
-         <dest obj="scope_3" inlet="in"/>
-      </net>
-      <net>
-         <source obj="in_1" outlet="right"/>
-         <dest obj="scope_4" inlet="in"/>
-      </net>
-      <net>
-         <source obj="sine_1" outlet="wave"/>
-         <dest obj="out_2" inlet="left"/>
-         <dest obj="scope_5" inlet="in"/>
-      </net>
-      <net>
-         <source obj="sine_2" outlet="wave"/>
-         <dest obj="out_2" inlet="right"/>
-         <dest obj="scope_6" inlet="in"/>
-      </net>
-      <net>
-         <source obj="sine_3" outlet="wave"/>
-         <dest obj="scope_7" inlet="in"/>
-         <dest obj="out_1" inlet="left"/>
-      </net>
-      <net>
-         <source obj="sine_4" outlet="wave"/>
-         <dest obj="scope_8" inlet="in"/>
-         <dest obj="out_1" inlet="right"/>
-      </net>
-   </nets>
-   <settings>
-      <subpatchmode>no</subpatchmode>
-   </settings>
-   <notes><![CDATA[]]></notes>
-   <windowPos>
-      <x>0</x>
-      <y>27</y>
-      <width>1067</width>
-      <height>786</height>
-   </windowPos>
+  <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;div style=&quot;font-size:2em; color:#808000;&quot;&gt;You must flash your Core with the I2SCodec firmware&lt;br&gt; (set in Preferences) for this patch to run!"/>
+  <comment type="patch/comment" x="574" y="14" text="&lt;html&gt;&lt;div width=&quot;320px&quot; style=&quot;font-size:1.2em;&quot;&gt;PA15: WS &quot;Word Select&quot; aka LRCLK, FSYNC, &quot;Frame Select&quot; (48 kHz)&lt;br&gt;PB3: BCLK &quot;Bit Clock&quot; aka SCLK (3.072 Mhz)&lt;br&gt;PB4: DIN &quot;Data in from ADC&quot;, aka SDIN, RX&lt;br&gt;PD6: DOUT &quot;Data out to DAC&quot;, aka SDOUT, TX"/>
+  <comment type="patch/comment" x="14" y="98" text="&lt;html&gt;&lt;div width=&quot;640px&quot; style=&quot;font-size:1.25em;&quot;&gt;Get a suitable I2S ADC, DAC, or codec board that can be powered with 3.3V or 5V, and that takes &quot;BCLK&quot;, &quot;WS&quot;, &quot;DIN&quot; and/or &quot;DOUT&quot; signals. Unfortunately the I2S  system on Ksoloti Core does not directly support chips that require &quot;MCLK&quot;  Master Clock input."/>
+  <comment type="patch/comment" x="14" y="168" text="Regular  audio inputs..."/>
+  <comment type="patch/comment" x="1022" y="168" text="Regular audio outputs..."/>
+  <obj type="audio/in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" name="in_2" x="14" y="182">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="154" y="182">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_2" x="294" y="182">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="504" y="182">
+    <params>
+      <frac32.s.map name="pitch" value="12.0"/>
+    </params>
+    <attribs/>
+  </obj>
+  <obj type="math/&gt;&gt;" uuid="5d748ad90476b3ecc3970cde6622af97cf3cf4ac" name="&gt;&gt;_1" x="602" y="182">
+    <params/>
+    <attribs>
+      <spinner attributeName="shift" value="1"/>
+    </attribs>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_5" x="742" y="182">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_6" x="882" y="182">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_2" x="1064" y="182">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="osc/tri" uuid="905879afa8256b0ca207557d656949e476ca6f16" name="tri_1" x="504" y="294">
+    <params>
+      <frac32.s.map name="pitch" value="12.0"/>
+    </params>
+    <attribs/>
+  </obj>
+  <comment type="patch/comment" x="14" y="448" text="... and two additional inputs via a suitable I2S breakout board."/>
+  <comment type="patch/comment" x="700" y="448" text="... and two additional outputs via a suitable I2S breakout board."/>
+  <obj type="ksoloti/i2scodec/in stereo" uuid="e5eedf09-86a5-4322-b61e-480cd57736e8" name="in_1" x="14" y="462">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_3" x="154" y="462">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_4" x="294" y="462">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="osc/saw" uuid="739ecc36017ef3249479b8f01716b8bbfba9abc1" name="saw_1" x="504" y="462">
+    <params>
+      <frac32.s.map name="pitch" value="12.0"/>
+    </params>
+    <attribs/>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_7" x="728" y="462">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_8" x="882" y="462">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="ksoloti/i2scodec/out stereo" uuid="ef9e71ce-7d64-4733-aa5a-1ad88a9dd83c" name="out_1" x="1064" y="462">
+    <params/>
+    <attribs/>
+  </obj>
+  <obj type="osc/square" uuid="aa9592566d3673fe64dcaede132e9ebd45d2202f" name="square_1" x="504" y="574">
+    <params>
+      <frac32.s.map name="pitch" value="12.0"/>
+    </params>
+    <attribs/>
+  </obj>
+  <nets>
+    <net>
+      <source obj="in_2" outlet="left"/>
+      <dest obj="scope_1" inlet="in"/>
+    </net>
+    <net>
+      <source obj="in_2" outlet="right"/>
+      <dest obj="scope_2" inlet="in"/>
+    </net>
+    <net>
+      <source obj="in_1" outlet="left"/>
+      <dest obj="scope_3" inlet="in"/>
+    </net>
+    <net>
+      <source obj="in_1" outlet="right"/>
+      <dest obj="scope_4" inlet="in"/>
+    </net>
+    <net>
+      <source obj="saw_1" outlet="wave"/>
+      <dest obj="out_1" inlet="left"/>
+      <dest obj="scope_7" inlet="in"/>
+    </net>
+    <net>
+      <source obj="square_1" outlet="wave"/>
+      <dest obj="out_1" inlet="right"/>
+      <dest obj="scope_8" inlet="in"/>
+    </net>
+    <net>
+      <source obj="sine_1" outlet="wave"/>
+      <dest obj="&gt;&gt;_1" inlet="a"/>
+    </net>
+    <net>
+      <source obj="&gt;&gt;_1" outlet="result"/>
+      <dest obj="scope_5" inlet="in"/>
+      <dest obj="out_2" inlet="left"/>
+    </net>
+    <net>
+      <source obj="tri_1" outlet="wave"/>
+      <dest obj="out_2" inlet="right"/>
+      <dest obj="scope_6" inlet="in"/>
+    </net>
+  </nets>
+  <settings>
+    <subpatchmode>no</subpatchmode>
+  </settings>
+  <notes><![CDATA[]]></notes>
+  <windowPos>
+    <x>0</x>
+    <y>0</y>
+    <width>1222</width>
+    <height>786</height>
+  </windowPos>
 </patch-1.0>
