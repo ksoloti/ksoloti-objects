@@ -1,3 +1,3 @@
 #!/bin/sh
-git checkout 1.1.0
+git checkout 1.2.0
 git push
