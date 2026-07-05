@@ -140,7 +140,7 @@ uint16_t _patchToLoad = 0xFFFF;	/* Set to nonsense value so that update is trigg
 
 FRESULT scan_files_for_patchbin(char* path, char* path_short) {
 	FRESULT res;
-	static FILINFO fno; /* This must be static or your Ksoloti will explode. */
+	static FILINFO fno; /* This must be static. */
 	DIR dir;
 	int i;
 	char* fn;
