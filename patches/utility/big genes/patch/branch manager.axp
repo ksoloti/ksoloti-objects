@@ -146,8 +146,8 @@ FRESULT scan_files_for_patchbin(char* path, char* path_short) {
 	char* fn;
 	char* fn_short;
 	
-	fno.lfname = &((char*)f_buff)[0];
-	fno.lfsize = 256;
+	strcpy(fno.fname, (char*)f_buff);
+	fno.fsize = 256;
 
 	res = f_opendir(&dir, path);
 
@@ -159,12 +159,8 @@ FRESULT scan_files_for_patchbin(char* path, char* path_short) {
 			if (res != FR_OK || fno.fname[0] == 0) break;
 			if (fno.fname[0] == '.') continue;
 
-#if _USE_LFN
-			fn = *fno.lfname ? fno.lfname : fno.fname;
-#else
 			fn = fno.fname;
-#endif
-			fn_short = fno.fname;
+			fn_short = fno.altname;
 
 			if (fn[0] == '.') continue;
 			if (fno.fattrib & AM_HID) continue;
